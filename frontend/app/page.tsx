@@ -11,7 +11,7 @@ export default function Home() {
           <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg"></div>
           <span className="text-xl font-semibold text-gray-900">KeywordAI</span>
         </div>
-        <Button variant="outline" className="border-blue-200 text-blue-600 hover:bg-blue-50">
+        <Button variant="outline" size="lg" className="border-blue-200 text-blue-600 hover:bg-blue-50 px-6 py-2">
           Get Started
         </Button>
       </nav>
@@ -35,14 +35,14 @@ export default function Home() {
           and generate optimized SEO strategies using advanced Helium 10 data intelligence.
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg">
-            Start Research
-          </Button>
-          <Button variant="outline" className="border-gray-300 text-gray-700 px-8 py-3 text-lg">
-            View Demo
-          </Button>
-        </div>
+                 <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+           <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg h-12">
+             Start Research
+           </Button>
+           <Button variant="outline" size="lg" className="border-gray-300 text-gray-700 px-8 py-4 text-lg h-12">
+             View Demo
+           </Button>
+         </div>
 
         <div className="mt-16 relative">
           <div className="bg-gradient-to-t from-blue-50 to-transparent p-8 rounded-2xl border border-blue-100">
@@ -241,14 +241,14 @@ export default function Home() {
             Join sellers who are already using AI-powered keyword research to improve their 
             Amazon performance and increase sales.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 text-lg">
-              Start Your Research
-            </Button>
-            <Button variant="outline" className="border-gray-300 text-gray-700 px-8 py-3 text-lg">
-              Schedule Demo
-            </Button>
-          </div>
+                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
+             <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg h-12">
+               Start Your Research
+             </Button>
+             <Button variant="outline" size="lg" className="border-gray-300 text-gray-700 px-8 py-4 text-lg h-12">
+               Schedule Demo
+             </Button>
+           </div>
         </div>
       </section>
 
