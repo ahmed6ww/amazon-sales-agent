@@ -3,6 +3,7 @@ from scrapy.crawler import CrawlerProcess
 import sys
 import re
 import json
+import textwrap # Imported for better text formatting in the output
 
 
 # --- Moved Pipeline to Top Level ---
@@ -392,6 +393,17 @@ class AmazonProductSpider(scrapy.Spider):
         self.scraped_data["product_information_sections"] = (
             self.extract_product_information(response)
         )
+        
+        # --- NEW: Extract AI-generated customer summary ---
+        ai_summary_text = self._get_first(
+            response,
+            [
+                # This selector is specific to the "Customers say" section
+                'div#product-summary[data-hook="cr-insights-widget-summary"] p.a-spacing-small span::text',
+            ],
+        )
+        self.scraped_data["ai_summary"] = ai_summary_text or "AI summary not found"
+
 
     def extract_product_information(self, response):
         """
@@ -595,6 +607,14 @@ def display_results(result):
             for key, value in specs.items():
                 display_value = str(value)
                 print(f"   - {key}: {display_value}")
+
+        # --- NEW: AI-Generated Summary display ---
+        ai_summary = result.get("ai_summary")
+        if ai_summary and ai_summary != "AI summary not found":
+            print(f"\n🤖 CUSTOMER REVIEWS SUMMARY:")
+            # Use textwrap to format the paragraph nicely in the console
+            wrapped_summary = textwrap.fill(ai_summary, width=80, initial_indent="   ", subsequent_indent="   ")
+            print(wrapped_summary)
 
         # Structured Information with better formatting
         sections = result.get("product_information_sections", {})
