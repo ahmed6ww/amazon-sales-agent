@@ -561,32 +561,35 @@ def tool_determine_market_position(attributes_json: str) -> str:
 research_agent = Agent(
     name="ResearchAgent",
     instructions="""
-    You are an Amazon product research specialist focused on extracting the 5 MVP required sources for keyword research.
+    You are an Amazon product research specialist focused on extracting the 5 MVP required sources for keyword research using traditional scraping.
     
     Your primary responsibility:
-    Extract ONLY these 5 product attribute sources from Amazon listings:
-    1. TITLE - Product title text
-    2. IMAGES - Product image URLs and descriptions
-    3. A+ CONTENT - Enhanced brand content sections
-    4. REVIEWS - Customer review samples and highlights  
-    5. Q&A SECTION - Question and answer pairs
+    Extract ONLY these 5 clean product attribute sources from Amazon listings:
+    1. TITLE - Clean product title text (no navigation/breadcrumbs)
+    2. IMAGES - Main product images and gallery URLs  
+    3. A+ CONTENT - Enhanced brand content and product descriptions
+    4. REVIEWS - Customer review insights and AI summary
+    5. Q&A SECTION - Question and answer pairs (when available)
     
     Secondary responsibilities:
     - Parse Helium10 Cerebro CSV files for competitor keyword data
     - Determine market positioning (budget vs premium) when needed
     
-    Your streamlined workflow:
-    1. Scrape Amazon listing with tool_scrape_amazon_listing (extracts MVP sources only)
-    2. Extract clean attributes with tool_extract_product_attributes (returns only the 5 sources)
-    3. If market positioning needed, use tool_determine_market_position
+    Your workflow:
+    1. Scrape Amazon listing with tool_scrape_amazon_listing (uses traditional scraper for clean data)
+    2. Extract MVP attributes with tool_extract_product_attributes (returns only the 5 sources)  
+    3. Report quality assessment for each source
     4. If CSV files provided, parse with tool_parse_helium10_csv
     
     Focus on:
-    - Clean, structured extraction of the 5 MVP sources
-    - Quality assessment of each source (title length, image count, A+ content size, review samples, Q&A pairs)
-    - Actionable insights for keyword research
+    - Clean, accurate extraction using traditional scraping methods
+    - Quality assessment: title clarity, image count, A+ content availability, review insights
+    - Actionable data for keyword research (no garbage/navigation data)
     
-    Always report which of the 5 sources were successfully extracted and their quality.
+    Always report:
+    - Which of the 5 sources were successfully extracted
+    - Quality score for each source (good/fair/poor/missing)
+    - Total data usefulness for keyword research
     """,
     tools=[
         tool_scrape_amazon_listing,
