@@ -496,15 +496,15 @@ def determine_market_position(attributes: Dict[str, Any], competitor_data: List[
 @function_tool
 def tool_scrape_amazon_listing(asin_or_url: str) -> str:
     """
-    Scrape an Amazon product listing to extract MVP required sources: title, images, A+ content, reviews, Q&A section.
+    Scrape an Amazon product listing to extract clean MVP required sources: title, images, A+ content, reviews, Q&A section.
     
     Args:
         asin_or_url: Either an ASIN (e.g., B08KT2Z93D) or full Amazon URL
         
     Returns:
-        JSON string containing MVP product data
+        JSON string containing clean MVP product data
     """
-    result = scrape_amazon_listing_with_firecrawl(asin_or_url)
+    result = scrape_amazon_listing_with_traditional_scraper(asin_or_url)
     return json.dumps(result, indent=2)
 
 @function_tool
