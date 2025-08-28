@@ -7,4 +7,5 @@ requires-python = ">=3.13"
 dependencies = [
     "openai-agents>=0.2.9",
     "scrapy>=2.13.3",
+    "firecrawl-py>=2.0.0",
 ]

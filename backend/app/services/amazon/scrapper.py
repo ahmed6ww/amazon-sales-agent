@@ -513,17 +513,32 @@ class AmazonProductSpider(scrapy.Spider):
         return sections
 
 
-def scrape_url(url):
+def scrape_url(url: str):
     """
-    Sets up and runs the Scrapy crawler process for a given URL.
-    Returns the scraped data.
+    Run a one-off scrape and return the collected data.
     """
     process = CrawlerProcess(
         settings={
-            "USER_AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "USER_AGENT": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
             "ROBOTSTXT_OBEY": False,
             "LOG_LEVEL": "ERROR",  # Reduce noise so the heading is the first output
-            "DOWNLOAD_DELAY": 1,
+            "DOWNLOAD_DELAY": 0.75,
+            "COOKIES_ENABLED": True,
+            "RETRY_ENABLED": True,
+            "RETRY_TIMES": 2,
+            "DOWNLOAD_TIMEOUT": 30,
+            "REFERER_ENABLED": True,
+            "DEFAULT_REQUEST_HEADERS": {
+                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+                "Accept-Language": "en-US,en;q=0.9",
+                "Cache-Control": "no-cache",
+                "Pragma": "no-cache",
+                "DNT": "1",
+                "Upgrade-Insecure-Requests": "1",
+            },
+            "AUTOTHROTTLE_ENABLED": True,
+            "AUTOTHROTTLE_START_DELAY": 0.5,
+            "AUTOTHROTTLE_MAX_DELAY": 10.0,
             "ITEM_PIPELINES": {
                 __name__ + ".DataCollectorPipeline": 300,
             },
