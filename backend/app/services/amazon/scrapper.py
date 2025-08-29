@@ -404,7 +404,6 @@ class AmazonProductSpider(scrapy.Spider):
         )
         self.scraped_data["ai_summary"] = ai_summary_text or "AI summary not found"
 
-
     def extract_product_information(self, response):
         """
         Extracts key sections like 'About this item', 'Product Description', etc.
@@ -430,7 +429,7 @@ class AmazonProductSpider(scrapy.Spider):
                 if item and len(item) > 10 and not item.startswith("See more"):
                     cleaned_content.append(item)
             if cleaned_content:
-                sections["About this item"] = {
+                sections["About This Item"] = {
                     "type": "list",
                     "content": cleaned_content,
                 }
@@ -444,16 +443,16 @@ class AmazonProductSpider(scrapy.Spider):
                 brand_content_parts.extend([h.strip() for h in brand_headers])
             if brand_paras:
                 brand_content_parts.extend([p.strip() for p in brand_paras])
-            sections["From the brand/manufacturer"] = {
+            sections["From The Brand/Manufacturer"] = {
                 "type": "paragraphs",
                 "content": [part for part in brand_content_parts if part],
             }
 
         # 3. Product Description
         description_header = (
-            self._get_first(response, ["#productDescription h2::text"])
-            or "Product Description"
-        )
+            self._get_first(response, ["#productDescription h2::text"]) or "Product Description"
+        ).strip()
+        description_header = description_header.title()
         description_content = self._get_all(
             response,
             ["#productDescription p span::text", "#productDescription p::text"],
@@ -466,13 +465,17 @@ class AmazonProductSpider(scrapy.Spider):
 
         # 4. Product details
         details_header = (
-            self._get_first(response, ["#productDetails h2::text"]) or "Product details"
-        )
+            self._get_first(response, ["#productDetails h2::text"]) or "Product Details"
+        ).strip()
+        details_header = details_header.title()
         details_content = self._get_all(
             response,
             [
                 "#productDetails .a-list-item::text",
                 "#detailBullets_feature_div .a-list-item::text",
+                "#prodDetails .a-list-item::text",
+                "#prodDetails td::text",
+                "#prodDetails th::text",
             ],
         )
         if details_content:
@@ -486,6 +489,11 @@ class AmazonProductSpider(scrapy.Spider):
                     continue
                 if re.search(r"^#\d+\s+in\b", text):
                     continue
+                if text.lower().startswith("see more"):
+                    continue
+                # drop dangling open parentheses without closing
+                if text.endswith("(") and not text.endswith(")"):
+                    continue
                 cleaned_details.append(text)
             if cleaned_details:
                 sections[details_header] = {
@@ -495,9 +503,9 @@ class AmazonProductSpider(scrapy.Spider):
 
         # 5. Important information
         important_info_header = (
-            self._get_first(response, ["#important-information h2::text"])
-            or "Important information"
-        )
+            self._get_first(response, ["#important-information h2::text"]) or "Important Information"
+        ).strip()
+        important_info_header = important_info_header.title()
         important_info_content = {}
         for section in response.css("#important-information .a-section"):
             sub_heading = self._get_first(section, ["h4::text"])
@@ -509,6 +517,23 @@ class AmazonProductSpider(scrapy.Spider):
                 "type": "sub-sections",
                 "content": important_info_content,
             }
+
+        # 6. Product Facts
+        product_facts_parts = self._get_all(
+            response,
+            [
+                '#productFactsDesktopExpander ::text',
+            ],
+        )
+        if product_facts_parts:
+            # join, then clean repeating spaces and remove 'See more'
+            product_facts_text = re.sub(r"\s+", " ", " ".join(product_facts_parts)).strip()
+            product_facts_text = re.sub(r"\bSee more\b.*$", "", product_facts_text, flags=re.IGNORECASE).strip()
+            if product_facts_text:
+                sections["Product Facts"] = {
+                    "type": "paragraphs",
+                    "content": [product_facts_text],
+                }
 
         return sections
 
@@ -575,19 +600,31 @@ def display_results(result):
         price = result.get("price", "Not found")
         original_price = result.get("original_price", "No original price")
 
-        if price != "Not found":
-            if original_price != "No original price":
-                print(f"   💰 Current Price:    ${price}")
-                print(f"   💸 Original Price:   ${original_price}")
-                try:
-                    savings = float(original_price) - float(price)
-                    print(f"   💸 You Save:         ${savings:.2f}")
-                except (ValueError, TypeError):
-                    pass
-            else:
-                print(f"   💰 Price:            ${price}")
+        def _is_number(val):
+            try:
+                float(str(val))
+                return True
+            except (TypeError, ValueError):
+                return False
+
+        price_is_num = _is_number(price)
+        orig_is_num = _is_number(original_price)
+
+        if price_is_num:
+            print(f"   💰 Current Price:    ${float(price):g}")
         else:
             print(f"   💰 Price:            Not available")
+
+        if orig_is_num:
+            print(f"   💸 Original Price:   ${float(original_price):g}")
+
+        if price_is_num and orig_is_num:
+            try:
+                savings = float(original_price) - float(price)
+                if savings > 0:
+                    print(f"   💸 You Save:         ${savings:.2f}")
+            except (ValueError, TypeError):
+                pass
 
         rating = result.get("rating", "Not available")
         review_count = result.get("review_count", "Not available")
@@ -645,7 +682,8 @@ def display_results(result):
                         print(f" - {item}")
                 elif data["type"] == "paragraphs":
                     for para in content:
-                        print(f" {para}")
+                        wrapped_para = textwrap.fill(para, width=80, initial_indent="   ", subsequent_indent="   ")
+                        print(wrapped_para)
                 elif data["type"] == "sub-sections":
                     for sub_head, text in content.items():
                         print(f" - {sub_head}: {text}")
