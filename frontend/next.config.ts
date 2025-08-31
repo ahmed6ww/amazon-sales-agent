@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import path from "path";
 
 const nextConfig: NextConfig = {
   /* config options here */
@@ -19,7 +20,7 @@ const nextConfig: NextConfig = {
     // Ensure proper path resolution for @ alias
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@': '.',
+      '@': path.resolve(__dirname, '.'),
     };
     return config;
   },
