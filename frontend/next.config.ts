@@ -16,7 +16,11 @@ const nextConfig: NextConfig = {
   
   // Webpack configuration for better builds
   webpack: (config) => {
-    // Add any custom webpack configurations here
+    // Ensure proper path resolution for @ alias
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': '.',
+    };
     return config;
   },
   
