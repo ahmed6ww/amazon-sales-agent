@@ -1,3 +1,4 @@
+import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.endpoints import upload, scraper, test, analyze
@@ -8,14 +9,16 @@ app = FastAPI(
     version="0.1.0"
 )
 
+# Configure CORS origins from environment variables
+CORS_ORIGINS = os.getenv(
+    "CORS_ORIGINS", 
+    "http://localhost:3000,https://amazon-sales-agent.vercel.app,https://amazon-sales-agent.onrender.com"
+).split(",")
+
 # Add CORS middleware for frontend testing
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",  # Local development
-        "https://amazon-sales-agent.vercel.app",  # Vercel production
-        "https://amazon-sales-agent.onrender.com"  # If backend is also frontend
-    ],
+    allow_origins=CORS_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
