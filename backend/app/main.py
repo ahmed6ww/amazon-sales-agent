@@ -11,7 +11,11 @@ app = FastAPI(
 # Add CORS middleware for frontend testing
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000","https://amazon-sales-agent.onrender.com"],  # Next.js default port
+    allow_origins=[
+        "http://localhost:3000",  # Local development
+        "https://amazon-sales-agent.vercel.app",  # Vercel production
+        "https://amazon-sales-agent.onrender.com"  # If backend is also frontend
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
