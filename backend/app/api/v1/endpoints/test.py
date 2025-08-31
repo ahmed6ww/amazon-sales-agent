@@ -1,13 +1,14 @@
+"""
+Test endpoints for the Amazon Sales Agent API.
+
+These endpoints are for testing and development purposes only.
+"""
+
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
-import logging
-
-from app.local_agents.keyword.runner import KeywordRunner
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
+from app.local_agents.keyword import KeywordRunner
+from app.local_agents.scoring import ScoringRunner
 
 router = APIRouter()
 
@@ -15,110 +16,219 @@ router = APIRouter()
 class KeywordAgentTestRequest(BaseModel):
     csv_data: List[Dict[str, Any]]
     asin: Optional[str] = None
+
+
+class ScoringAgentTestRequest(BaseModel):
+    csv_data: List[Dict[str, Any]]
+    asin: Optional[str] = None
     product_attributes: Optional[Dict[str, Any]] = None
+    competitor_data: Optional[Dict[str, Any]] = None
 
 
 @router.post("/test/keyword-agent")
 async def test_keyword_agent(request: KeywordAgentTestRequest):
     """
-    Test endpoint for the Keyword Agent.
-    Accepts CSV data and returns keyword analysis results.
+    Test the keyword agent with provided CSV data.
     """
     try:
-        logger.info(f"Testing Keyword Agent with {len(request.csv_data)} keywords")
-        
-        # Initialize the keyword runner
-        runner = KeywordRunner()
+        # Initialize keyword runner
+        keyword_runner = KeywordRunner()
         
         # Run direct processing (faster for testing)
-        result = runner.run_direct_processing(request.csv_data)
+        result = keyword_runner.run_direct_processing(request.csv_data)
         
-        if not result["success"]:
-            logger.error(f"Keyword Agent processing failed: {result['error']}")
-            raise HTTPException(status_code=500, detail=f"Keyword processing failed: {result['error']}")
+        # Check if keyword analysis was successful
+        if not result.get("success", False):
+            raise HTTPException(status_code=500, detail=f"Keyword analysis failed: {result.get('error', 'Unknown error')}")
         
-        # Convert the result to a JSON-serializable format
-        analysis_result = result["result"]
+        # Extract the KeywordAnalysisResult object
+        keyword_analysis = result["result"]
         
-        # Convert enum values to strings and format the response
-        formatted_result = {
-            "total_keywords": analysis_result.total_keywords,
-            "processed_keywords": analysis_result.processed_keywords,
-            "filtered_keywords": analysis_result.filtered_keywords,
-            "processing_time": analysis_result.processing_time,
-            "data_quality_score": analysis_result.data_quality_score,
-            "warnings": analysis_result.warnings,
-            "top_opportunities": analysis_result.top_opportunities,
-            "coverage_gaps": analysis_result.coverage_gaps,
-            "recommended_focus_areas": analysis_result.recommended_focus_areas,
-            "category_stats": {
-                category.value: {
-                    "keyword_count": stats.keyword_count,
-                    "total_search_volume": stats.total_search_volume,
-                    "avg_relevancy_score": stats.avg_relevancy_score,
-                    "avg_intent_score": stats.avg_intent_score,
-                    "top_keywords": stats.top_keywords
+        # Convert result to dict for JSON response
+        # Extract all keywords from categories
+        all_keywords = []
+        for category, keywords in keyword_analysis.keywords_by_category.items():
+            for kw in keywords:
+                all_keywords.append({
+                    "keyword_phrase": kw.keyword_phrase,
+                    "category": kw.category or (kw.final_category.value if kw.final_category else category.value),
+                    "search_volume": getattr(kw, 'search_volume', None),
+                    "relevancy_score": getattr(kw, 'relevancy_score', 0.0),
+                    "title_density": getattr(kw, 'title_density', None),
+                    "top_10_competitors": len([r for r in kw.competitor_rankings.values() if r <= 10]) if hasattr(kw, 'competitor_rankings') else 0,
+                    "total_competitors": len([r for r in kw.competitor_rankings.values() if r > 0]) if hasattr(kw, 'competitor_rankings') else 0,
+                    "root_word": getattr(kw, 'root_word', ''),
+                    "root_volume": getattr(kw, 'root_volume', None)
+                })
+        
+        response_data = {
+            "success": True,
+            "total_keywords": keyword_analysis.total_keywords,
+            "processing_timestamp": getattr(keyword_analysis, 'processing_timestamp', ''),
+            "keywords": all_keywords,
+            "category_stats": [
+                {
+                    "category": category.value,
+                    "count": stats.keyword_count,
+                    "avg_search_volume": stats.total_search_volume / max(stats.keyword_count, 1),
+                    "avg_relevancy": stats.avg_relevancy_score,
+                    "total_volume": stats.total_search_volume
                 }
-                for category, stats in analysis_result.category_stats.items()
-            },
-            "keywords_by_category": {
-                category.value: [
-                    {
-                        "keyword_phrase": kw.keyword_phrase,
-                        "category": kw.category,
-                        "final_category": kw.final_category.value if kw.final_category else None,
-                        "search_volume": kw.search_volume,
-                        "relevancy_score": kw.relevancy_score,
-                        "title_density": kw.title_density,
-                        "cpr": kw.cpr,
-                        "root_word": kw.root_word,
-                        "broad_search_volume": kw.broad_search_volume,
-                        "is_zero_title_density": kw.is_zero_title_density,
-                        "is_derivative": kw.is_derivative,
-                        "intent_score": kw.intent_score,
-                        "cerebro_iq_score": kw.cerebro_iq_score,
-                        "competing_products": kw.competing_products
-                    }
-                    for kw in keywords
-                ]
-                for category, keywords in analysis_result.keywords_by_category.items()
-            },
+                for category, stats in keyword_analysis.category_stats.items()
+            ],
             "root_word_analysis": [
                 {
                     "root_word": rwa.root_word,
                     "related_keywords": rwa.related_keywords,
                     "total_search_volume": rwa.total_search_volume,
-                    "avg_relevancy_score": rwa.avg_relevancy_score,
-                    "keyword_count": rwa.keyword_count,
-                    "best_keyword": rwa.best_keyword,
-                    "categories_present": [cat.value for cat in rwa.categories_present]
+                    "keyword_count": rwa.keyword_count
                 }
-                for rwa in analysis_result.root_word_analysis
-            ]
+                for rwa in keyword_analysis.root_word_analysis
+            ],
+            "summary": {
+                "total_keywords": keyword_analysis.total_keywords,
+                "processed_keywords": keyword_analysis.processed_keywords,
+                "filtered_keywords": keyword_analysis.filtered_keywords,
+                "processing_time": keyword_analysis.processing_time,
+                "data_quality_score": keyword_analysis.data_quality_score
+            }
         }
         
-        logger.info(f"Keyword Agent test completed successfully. Processed {analysis_result.processed_keywords} keywords in {analysis_result.processing_time:.3f}s")
-        
-        return {
-            "success": True,
-            "result": formatted_result,
-            "processing_details": result["processing_details"]
-        }
+        return response_data
         
     except Exception as e:
-        logger.exception(f"Unexpected error in keyword agent test: {str(e)}")
-        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Keyword agent test failed: {str(e)}")
+
+
+@router.post("/test/scoring-agent")
+async def test_scoring_agent(request: ScoringAgentTestRequest):
+    """
+    Test the scoring agent with provided CSV data.
+    """
+    try:
+        # Step 1: Run keyword analysis first
+        keyword_runner = KeywordRunner()
+        keyword_result = keyword_runner.run_direct_processing(request.csv_data)
+        
+        # Check if keyword analysis was successful
+        if not keyword_result.get("success", False):
+            raise HTTPException(status_code=500, detail=f"Keyword analysis failed: {keyword_result.get('error', 'Unknown error')}")
+        
+        # Extract the KeywordAnalysisResult object
+        keyword_analysis = keyword_result["result"]
+        
+        # Step 2: Run scoring analysis
+        scoring_runner = ScoringRunner()
+        scoring_result = scoring_runner.run_direct_processing(keyword_analysis)
+        
+        # Convert result to dict for JSON response
+        response_data = {
+            "success": True,
+            "total_keywords_analyzed": scoring_result.total_keywords_analyzed,
+            "processing_timestamp": scoring_result.processing_timestamp,
+            
+            # Priority distribution
+            "priority_distribution": {
+                "critical": len(scoring_result.critical_keywords),
+                "high": len(scoring_result.high_priority_keywords),
+                "medium": len(scoring_result.medium_priority_keywords),
+                "low": len(scoring_result.low_priority_keywords),
+                "filtered": len(scoring_result.filtered_keywords)
+            },
+            
+            # Top keywords by priority
+            "critical_keywords": [
+                {
+                    "keyword_phrase": kw.keyword_phrase,
+                    "category": kw.category,
+                    "intent_score": int(kw.intent_score),
+                    "priority_score": kw.priority_score,
+                    "search_volume": kw.competition_metrics.search_volume,
+                    "relevancy_score": kw.relevancy_score,
+                    "competition_level": kw.competition_metrics.competition_level,
+                    "opportunity_score": kw.competition_metrics.opportunity_score,
+                    "business_value": kw.business_value,
+                    "opportunity_type": kw.opportunity_type,
+                    "root_word": kw.root_word
+                }
+                for kw in scoring_result.critical_keywords
+            ],
+            
+            "high_priority_keywords": [
+                {
+                    "keyword_phrase": kw.keyword_phrase,
+                    "category": kw.category,
+                    "intent_score": int(kw.intent_score),
+                    "priority_score": kw.priority_score,
+                    "search_volume": kw.competition_metrics.search_volume,
+                    "relevancy_score": kw.relevancy_score,
+                    "competition_level": kw.competition_metrics.competition_level,
+                    "opportunity_score": kw.competition_metrics.opportunity_score,
+                    "business_value": kw.business_value,
+                    "opportunity_type": kw.opportunity_type,
+                    "root_word": kw.root_word
+                }
+                for kw in scoring_result.high_priority_keywords
+            ],
+            
+            # Top opportunities
+            "top_opportunities": [
+                {
+                    "keyword_phrase": kw.keyword_phrase,
+                    "category": kw.category,
+                    "intent_score": int(kw.intent_score),
+                    "priority_score": kw.priority_score,
+                    "search_volume": kw.competition_metrics.search_volume,
+                    "opportunity_score": kw.competition_metrics.opportunity_score,
+                    "opportunity_type": kw.opportunity_type,
+                    "competition_level": kw.competition_metrics.competition_level,
+                    "business_value": kw.business_value
+                }
+                for kw in scoring_result.top_opportunities
+            ],
+            
+            # Category performance
+            "category_stats": [
+                {
+                    "category_name": stat.category_name,
+                    "total_keywords": stat.total_keywords,
+                    "avg_intent_score": stat.avg_intent_score,
+                    "avg_priority_score": stat.avg_priority_score,
+                    "total_search_volume": stat.total_search_volume,
+                    "high_priority_count": stat.high_priority_count,
+                    "critical_priority_count": stat.critical_priority_count
+                }
+                for stat in scoring_result.category_stats
+            ],
+            
+            # Summary statistics
+            "summary": scoring_result.summary,
+            
+            # Additional insights
+            "insights": {
+                "avg_priority_score": sum(kw.priority_score for kw in scoring_result.scored_keywords) / len(scoring_result.scored_keywords) if scoring_result.scored_keywords else 0,
+                "high_value_keywords": len([kw for kw in scoring_result.scored_keywords if kw.priority_score > 70]),
+                "quick_wins": len([kw for kw in scoring_result.scored_keywords if kw.competition_metrics.opportunity_score > 80 and kw.competition_metrics.competition_level == "low"]),
+                "total_search_volume": sum(kw.competition_metrics.search_volume or 0 for kw in scoring_result.scored_keywords)
+            }
+        }
+        
+        return response_data
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Scoring agent test failed: {str(e)}")
 
 
 @router.get("/test/status")
 async def test_status():
     """
-    Simple status endpoint to check if the test API is working.
+    Check the status of test endpoints.
     """
     return {
-        "status": "ok",
-        "message": "Test API is working",
+        "status": "healthy",
         "available_tests": [
-            "keyword-agent"
-        ]
+            "keyword-agent",
+            "scoring-agent"
+        ],
+        "message": "Test endpoints are ready"
     } 

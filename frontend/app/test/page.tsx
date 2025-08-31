@@ -1,71 +1,107 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import React, { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
-interface KeywordData {
+interface KeywordResult {
   keyword_phrase: string;
-  final_category: string;
-  search_volume: number;
+  category: string;
+  search_volume?: number;
   relevancy_score: number;
-  title_density: number;
+  title_density?: number;
+  top_10_competitors: number;
+  total_competitors: number;
   root_word: string;
-  broad_search_volume: number;
-  is_zero_title_density: boolean;
+  root_volume?: number;
 }
 
-interface CategoryStats {
-  keyword_count: number;
+interface ScoredKeyword {
+  keyword_phrase: string;
+  category: string;
+  intent_score: number;
+  priority_score: number;
+  search_volume?: number;
+  relevancy_score: number;
+  competition_level: string;
+  opportunity_score: number;
+  business_value: string;
+  opportunity_type: string;
+  root_word: string;
+}
+
+interface CategoryStat {
+  category_name: string;
+  total_keywords: number;
+  avg_intent_score: number;
+  avg_priority_score: number;
   total_search_volume: number;
-  avg_relevancy_score: number;
-  top_keywords: string[];
+  high_priority_count: number;
+  critical_priority_count: number;
 }
 
-interface TestResults {
+interface KeywordTestResults {
   success: boolean;
-  result?: {
-    total_keywords: number;
-    processed_keywords: number;
-    filtered_keywords: number;
-    processing_time: number;
-    data_quality_score: number;
-    category_stats: Record<string, CategoryStats>;
-    keywords_by_category: Record<string, KeywordData[]>;
-    top_opportunities: string[];
-    coverage_gaps: string[];
-    warnings: string[];
+  total_keywords: number;
+  keywords: KeywordResult[];
+  category_stats: any[];
+  summary: any;
+}
+
+interface ScoringTestResults {
+  success: boolean;
+  total_keywords_analyzed: number;
+  priority_distribution: {
+    critical: number;
+    high: number;
+    medium: number;
+    low: number;
+    filtered: number;
   };
-  error?: string;
+  critical_keywords: ScoredKeyword[];
+  high_priority_keywords: ScoredKeyword[];
+  top_opportunities: ScoredKeyword[];
+  category_stats: CategoryStat[];
+  summary: any;
+  insights: {
+    avg_priority_score: number;
+    high_value_keywords: number;
+    quick_wins: number;
+    total_search_volume: number;
+  };
 }
 
 export default function TestPage() {
   const [file, setFile] = useState<File | null>(null);
-  const [asin, setAsin] = useState("");
+  const [asin, setAsin] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState<TestResults | null>(null);
+  const [keywordResults, setKeywordResults] = useState<KeywordTestResults | null>(null);
+  const [scoringResults, setScoringResults] = useState<ScoringTestResults | null>(null);
+  const [activeTest, setActiveTest] = useState<'keyword' | 'scoring' | null>(null);
 
-  const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0];
-    if (selectedFile && selectedFile.name.endsWith('.csv')) {
+    if (selectedFile && selectedFile.type === 'text/csv') {
       setFile(selectedFile);
     } else {
-      alert('Please select a CSV file');
+      alert('Please select a valid CSV file');
     }
   };
 
   const testKeywordAgent = async () => {
     if (!file) {
-      alert('Please upload a CSV file first');
+      alert('Please select a CSV file first');
       return;
     }
 
     setIsLoading(true);
-    setResults(null);
+    setActiveTest('keyword');
+    setKeywordResults(null);
+    setScoringResults(null);
 
     try {
-      // First upload the CSV file
+      // Upload CSV first
       const formData = new FormData();
       formData.append('file', file);
 
@@ -82,9 +118,9 @@ export default function TestPage() {
       console.log('CSV uploaded successfully:', uploadData);
 
       // Test the keyword agent with the uploaded data (limit to first 50 rows for testing)
-      const limitedData = uploadData.data.slice(0, 50); // Limit data for testing
+      const limitedData = uploadData.data.slice(0, 50);
       console.log('Testing with', limitedData.length, 'keywords');
-      
+
       const testResponse = await fetch('http://localhost:8000/api/v1/test/keyword-agent', {
         method: 'POST',
         headers: {
@@ -103,278 +139,585 @@ export default function TestPage() {
       }
 
       const testData = await testResponse.json();
-      setResults(testData);
+      setKeywordResults(testData);
 
     } catch (error) {
       console.error('Error testing keyword agent:', error);
-      setResults({
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error occurred'
+      alert(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const testScoringAgent = async () => {
+    if (!file) {
+      alert('Please select a CSV file first');
+      return;
+    }
+
+    setIsLoading(true);
+    setActiveTest('scoring');
+    setKeywordResults(null);
+    setScoringResults(null);
+
+    try {
+      // Upload CSV first
+      const formData = new FormData();
+      formData.append('file', file);
+
+      const uploadResponse = await fetch('http://localhost:8000/api/v1/upload/csv', {
+        method: 'POST',
+        body: formData,
       });
+
+      if (!uploadResponse.ok) {
+        throw new Error(`Upload failed: ${uploadResponse.statusText}`);
+      }
+
+      const uploadData = await uploadResponse.json();
+      console.log('CSV uploaded successfully:', uploadData);
+
+      // Test the scoring agent with the uploaded data (limit to first 30 rows for testing)
+      const limitedData = uploadData.data.slice(0, 30);
+      console.log('Testing scoring agent with', limitedData.length, 'keywords');
+
+      const testResponse = await fetch('http://localhost:8000/api/v1/test/scoring-agent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          csv_data: limitedData,
+          asin: asin || null
+        }),
+      });
+
+      if (!testResponse.ok) {
+        const errorText = await testResponse.text();
+        console.error('Backend error response:', errorText);
+        throw new Error(`Test failed (${testResponse.status}): ${errorText}`);
+      }
+
+      const testData = await testResponse.json();
+      setScoringResults(testData);
+
+    } catch (error) {
+      console.error('Error testing scoring agent:', error);
+      alert(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
     } finally {
       setIsLoading(false);
     }
   };
 
   const downloadResults = () => {
-    if (!results?.result) return;
+    const results = activeTest === 'keyword' ? keywordResults : scoringResults;
+    if (!results) return;
 
-    const csvContent = generateCSV(results.result);
-    const blob = new Blob([csvContent], { type: 'text/csv' });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'keyword_analysis_results.csv';
-    a.click();
-    window.URL.revokeObjectURL(url);
+    const dataStr = JSON.stringify(results, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    const exportFileDefaultName = `${activeTest}_agent_results.json`;
+    
+    const linkElement = document.createElement('a');
+    linkElement.setAttribute('href', dataUri);
+    linkElement.setAttribute('download', exportFileDefaultName);
+    linkElement.click();
   };
 
-  const generateCSV = (result: any) => {
-    const headers = [
-      'Keyword',
-      'Category',
-      'Search Volume',
-      'Relevancy Score',
-      'Title Density',
-      'Root Word',
-      'Broad Search Volume',
-      'Zero Title Density'
-    ];
+  const generateCSV = () => {
+    if (activeTest === 'keyword' && keywordResults) {
+      const csvContent = [
+        ['Keyword Phrase', 'Category', 'Search Volume', 'Relevancy Score', 'Title Density', 'Top 10 Competitors', 'Total Competitors', 'Root Word'].join(','),
+        ...keywordResults.keywords.map(kw => [
+          `"${kw.keyword_phrase}"`,
+          kw.category,
+          kw.search_volume || '',
+          kw.relevancy_score,
+          kw.title_density || '',
+          kw.top_10_competitors,
+          kw.total_competitors,
+          kw.root_word
+        ].join(','))
+      ].join('\n');
 
-    let csvContent = headers.join(',') + '\n';
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('hidden', '');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'keyword_analysis_results.csv');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    } else if (activeTest === 'scoring' && scoringResults) {
+      const allKeywords = [
+        ...scoringResults.critical_keywords,
+        ...scoringResults.high_priority_keywords
+      ];
+      
+      const csvContent = [
+        ['Keyword Phrase', 'Category', 'Intent Score', 'Priority Score', 'Search Volume', 'Relevancy Score', 'Competition Level', 'Opportunity Score', 'Business Value', 'Opportunity Type', 'Root Word'].join(','),
+        ...allKeywords.map(kw => [
+          `"${kw.keyword_phrase}"`,
+          kw.category,
+          kw.intent_score,
+          kw.priority_score.toFixed(1),
+          kw.search_volume || '',
+          kw.relevancy_score,
+          kw.competition_level,
+          kw.opportunity_score.toFixed(1),
+          `"${kw.business_value}"`,
+          kw.opportunity_type,
+          kw.root_word
+        ].join(','))
+      ].join('\n');
 
-    Object.entries(result.keywords_by_category).forEach(([category, keywords]) => {
-      (keywords as KeywordData[]).forEach(keyword => {
-        const row = [
-          `"${keyword.keyword_phrase}"`,
-          category,
-          keyword.search_volume,
-          keyword.relevancy_score.toFixed(2),
-          keyword.title_density,
-          keyword.root_word || '',
-          keyword.broad_search_volume,
-          keyword.is_zero_title_density ? 'Yes' : 'No'
-        ];
-        csvContent += row.join(',') + '\n';
-      });
-    });
+      const blob = new Blob([csvContent], { type: 'text/csv' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.setAttribute('hidden', '');
+      a.setAttribute('href', url);
+      a.setAttribute('download', 'scoring_analysis_results.csv');
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  };
 
-    return csvContent;
+  const getPriorityBadgeColor = (score: number) => {
+    if (score >= 80) return 'bg-red-500';
+    if (score >= 60) return 'bg-orange-500';
+    if (score >= 40) return 'bg-yellow-500';
+    return 'bg-green-500';
+  };
+
+  const getIntentBadgeColor = (score: number) => {
+    if (score === 3) return 'bg-purple-500';
+    if (score === 2) return 'bg-blue-500';
+    if (score === 1) return 'bg-gray-500';
+    return 'bg-red-500';
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            🧪 Keyword Agent Test Page
-          </h1>
-          <p className="text-gray-600">
-            Test the keyword categorization and analysis workflow with Helium10 CSV data
-          </p>
-        </div>
-
-        {/* Input Section */}
-        <Card className="p-6 mb-6">
-          <h2 className="text-xl font-semibold mb-4">📁 Input Data</h2>
+    <div className="container mx-auto p-6 max-w-6xl">
+      <h1 className="text-3xl font-bold mb-6">🧪 Agentic Workflow Test Page</h1>
+      
+      {/* Input Section */}
+      <Card className="mb-6">
+        <CardHeader>
+          <CardTitle>Test Configuration</CardTitle>
+          <CardDescription>Upload a Helium10 CSV file and test the agents</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              CSV File (Helium10 Cerebro format)
+            </label>
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleFileChange}
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            />
+          </div>
           
-          <div className="space-y-4">
-            {/* ASIN Input */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                ASIN or Product URL (Optional)
-              </label>
-              <input
-                type="text"
-                value={asin}
-                onChange={(e) => setAsin(e.target.value)}
-                placeholder="B00O64QJOC or https://amazon.com/dp/B00O64QJOC"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-            </div>
-
-            {/* File Upload */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Helium10 Cerebro CSV File
-              </label>
-              <input
-                type="file"
-                accept=".csv"
-                onChange={handleFileUpload}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              />
-              {file && (
-                <p className="text-sm text-green-600 mt-1">
-                  ✅ {file.name} selected
-                </p>
-              )}
-            </div>
-
-            {/* Test Button */}
-            <Button
+          <div>
+            <label className="block text-sm font-medium mb-2">
+              ASIN (Optional)
+            </label>
+            <input
+              type="text"
+              value={asin}
+              onChange={(e) => setAsin(e.target.value)}
+              placeholder="B00O64QJOC"
+              className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+          
+          <div className="flex gap-4">
+            <Button 
               onClick={testKeywordAgent}
               disabled={!file || isLoading}
-              className="w-full bg-blue-600 hover:bg-blue-700"
+              className="flex-1"
             >
-              {isLoading ? (
-                <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                  Testing Keyword Agent...
-                </>
-              ) : (
-                '🚀 Test Keyword Agent (First 50 Keywords)'
-              )}
+              {isLoading && activeTest === 'keyword' ? 'Testing Keyword Agent...' : '🔍 Test Keyword Agent'}
             </Button>
             
-            <p className="text-sm text-gray-500 mt-2">
-              ℹ️ For testing purposes, only the first 50 keywords will be processed
-            </p>
+            <Button 
+              onClick={testScoringAgent}
+              disabled={!file || isLoading}
+              className="flex-1"
+              variant="secondary"
+            >
+              {isLoading && activeTest === 'scoring' ? 'Testing Scoring Agent...' : '🎯 Test Scoring Agent'}
+            </Button>
           </div>
-        </Card>
+          
+          {file && (
+            <p className="text-sm text-gray-600">
+              Selected file: {file.name} ({(file.size / 1024).toFixed(1)} KB)
+              <br />
+              <span className="text-xs text-gray-500">
+                Note: Processing limited to first {activeTest === 'scoring' ? '30' : '50'} keywords for testing
+              </span>
+            </p>
+          )}
+        </CardContent>
+      </Card>
 
-        {/* Results Section */}
-        {results && (
-          <Card className="p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold">📊 Test Results</h2>
-              {results.success && results.result && (
-                <Button onClick={downloadResults} variant="outline">
-                  📥 Download CSV
+      {/* Keyword Agent Results */}
+      {keywordResults && activeTest === 'keyword' && (
+        <Card className="mb-6">
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              🔍 Keyword Agent Results
+              <div className="flex gap-2">
+                <Button onClick={generateCSV} variant="outline" size="sm">
+                  📊 Download CSV
                 </Button>
-              )}
+                <Button onClick={downloadResults} variant="outline" size="sm">
+                  💾 Download JSON
+                </Button>
+              </div>
+            </CardTitle>
+            <CardDescription>
+              Processed {keywordResults.total_keywords} keywords with categorization and analysis
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+              <div className="bg-blue-50 p-4 rounded-lg">
+                <div className="text-2xl font-bold text-blue-600">{keywordResults.total_keywords}</div>
+                <div className="text-sm text-blue-800">Total Keywords</div>
+              </div>
+              <div className="bg-green-50 p-4 rounded-lg">
+                <div className="text-2xl font-bold text-green-600">{keywordResults.category_stats?.length || 0}</div>
+                <div className="text-sm text-green-800">Categories Found</div>
+              </div>
+              <div className="bg-purple-50 p-4 rounded-lg">
+                <div className="text-2xl font-bold text-purple-600">
+                  {keywordResults.keywords.filter(k => k.relevancy_score > 50).length}
+                </div>
+                <div className="text-sm text-purple-800">High Relevancy</div>
+              </div>
+              <div className="bg-orange-50 p-4 rounded-lg">
+                <div className="text-2xl font-bold text-orange-600">
+                  {keywordResults.keywords.filter(k => (k.search_volume || 0) > 500).length}
+                </div>
+                <div className="text-sm text-orange-800">High Volume</div>
+              </div>
             </div>
 
-            {results.success && results.result ? (
-              <div className="space-y-6">
-                {/* Summary Stats */}
-                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                  <div className="bg-blue-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-blue-600">
-                      {results.result.total_keywords}
-                    </div>
-                    <div className="text-sm text-gray-600">Total Keywords</div>
-                  </div>
-                  <div className="bg-green-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-green-600">
-                      {results.result.processed_keywords}
-                    </div>
-                    <div className="text-sm text-gray-600">Processed</div>
-                  </div>
-                  <div className="bg-yellow-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-yellow-600">
-                      {results.result.filtered_keywords}
-                    </div>
-                    <div className="text-sm text-gray-600">Filtered</div>
-                  </div>
-                  <div className="bg-purple-50 p-4 rounded-lg">
-                    <div className="text-2xl font-bold text-purple-600">
-                      {results.result.data_quality_score.toFixed(1)}%
-                    </div>
-                    <div className="text-sm text-gray-600">Quality Score</div>
-                  </div>
-                </div>
+            <div className="overflow-x-auto">
+              <table className="min-w-full table-auto">
+                <thead>
+                  <tr className="bg-gray-50">
+                    <th className="px-4 py-2 text-left">Keyword</th>
+                    <th className="px-4 py-2 text-left">Category</th>
+                    <th className="px-4 py-2 text-left">Volume</th>
+                    <th className="px-4 py-2 text-left">Relevancy</th>
+                    <th className="px-4 py-2 text-left">Title Density</th>
+                    <th className="px-4 py-2 text-left">Root Word</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {keywordResults.keywords.slice(0, 20).map((keyword, index) => (
+                    <tr key={index} className="border-b">
+                      <td className="px-4 py-2 font-medium">{keyword.keyword_phrase}</td>
+                      <td className="px-4 py-2">
+                        <Badge variant="outline">{keyword.category}</Badge>
+                      </td>
+                      <td className="px-4 py-2">{keyword.search_volume?.toLocaleString() || 'N/A'}</td>
+                      <td className="px-4 py-2">{keyword.relevancy_score.toFixed(1)}%</td>
+                      <td className="px-4 py-2">{keyword.title_density?.toFixed(1) || 'N/A'}%</td>
+                      <td className="px-4 py-2">{keyword.root_word}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
-                {/* Category Distribution */}
-                <div>
-                  <h3 className="text-lg font-semibold mb-3">📈 Category Distribution</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {Object.entries(results.result.category_stats).map(([category, stats]) => (
-                      <div key={category} className="bg-white border rounded-lg p-4">
-                        <div className="flex justify-between items-center mb-2">
-                          <Badge className="capitalize">
-                            {category.replace('_', ' ')}
-                          </Badge>
-                          <span className="font-bold">{stats.keyword_count}</span>
+      {/* Scoring Agent Results */}
+      {scoringResults && activeTest === 'scoring' && (
+        <div className="space-y-6">
+          {/* Summary Stats */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center justify-between">
+                🎯 Scoring Agent Results
+                <div className="flex gap-2">
+                  <Button onClick={generateCSV} variant="outline" size="sm">
+                    📊 Download CSV
+                  </Button>
+                  <Button onClick={downloadResults} variant="outline" size="sm">
+                    💾 Download JSON
+                  </Button>
+                </div>
+              </CardTitle>
+              <CardDescription>
+                Analyzed {scoringResults.total_keywords_analyzed} keywords with intent scoring and prioritization
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+                <div className="bg-red-50 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-red-600">{scoringResults.priority_distribution.critical}</div>
+                  <div className="text-sm text-red-800">Critical</div>
+                </div>
+                <div className="bg-orange-50 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-orange-600">{scoringResults.priority_distribution.high}</div>
+                  <div className="text-sm text-orange-800">High Priority</div>
+                </div>
+                <div className="bg-yellow-50 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-yellow-600">{scoringResults.priority_distribution.medium}</div>
+                  <div className="text-sm text-yellow-800">Medium</div>
+                </div>
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-green-600">{scoringResults.priority_distribution.low}</div>
+                  <div className="text-sm text-green-800">Low Priority</div>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="text-2xl font-bold text-gray-600">{scoringResults.priority_distribution.filtered}</div>
+                  <div className="text-sm text-gray-800">Filtered</div>
+                </div>
+              </div>
+
+              {/* Insights */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <div className="text-xl font-bold text-blue-600">{scoringResults.insights.avg_priority_score.toFixed(1)}</div>
+                  <div className="text-sm text-blue-800">Avg Priority Score</div>
+                </div>
+                <div className="bg-purple-50 p-4 rounded-lg">
+                  <div className="text-xl font-bold text-purple-600">{scoringResults.insights.high_value_keywords}</div>
+                  <div className="text-sm text-purple-800">High Value Keywords</div>
+                </div>
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <div className="text-xl font-bold text-green-600">{scoringResults.insights.quick_wins}</div>
+                  <div className="text-sm text-green-800">Quick Wins</div>
+                </div>
+                <div className="bg-indigo-50 p-4 rounded-lg">
+                  <div className="text-xl font-bold text-indigo-600">{scoringResults.insights.total_search_volume.toLocaleString()}</div>
+                  <div className="text-sm text-indigo-800">Total Volume</div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Critical Keywords */}
+          {scoringResults.critical_keywords.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>🏆 Critical Keywords ({scoringResults.critical_keywords.length})</CardTitle>
+                <CardDescription>Must-target keywords with highest commercial intent</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full table-auto">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="px-4 py-2 text-left">Keyword</th>
+                        <th className="px-4 py-2 text-left">Intent</th>
+                        <th className="px-4 py-2 text-left">Priority</th>
+                        <th className="px-4 py-2 text-left">Volume</th>
+                        <th className="px-4 py-2 text-left">Competition</th>
+                        <th className="px-4 py-2 text-left">Opportunity</th>
+                        <th className="px-4 py-2 text-left">Business Value</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {scoringResults.critical_keywords.slice(0, 10).map((keyword, index) => (
+                        <tr key={index} className="border-b">
+                          <td className="px-4 py-2 font-medium">{keyword.keyword_phrase}</td>
+                          <td className="px-4 py-2">
+                            <Badge className={getIntentBadgeColor(keyword.intent_score)}>
+                              {keyword.intent_score}/3
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-2">
+                            <Badge className={getPriorityBadgeColor(keyword.priority_score)}>
+                              {keyword.priority_score.toFixed(1)}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-2">{keyword.search_volume?.toLocaleString() || 'N/A'}</td>
+                          <td className="px-4 py-2">
+                            <Badge variant={keyword.competition_level === 'low' ? 'default' : keyword.competition_level === 'medium' ? 'secondary' : 'destructive'}>
+                              {keyword.competition_level}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-2">{keyword.opportunity_score.toFixed(1)}</td>
+                          <td className="px-4 py-2 text-sm max-w-xs truncate" title={keyword.business_value}>
+                            {keyword.business_value}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* High Priority Keywords */}
+          {scoringResults.high_priority_keywords.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>🎯 High Priority Keywords ({scoringResults.high_priority_keywords.length})</CardTitle>
+                <CardDescription>Important keywords for market positioning</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full table-auto">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="px-4 py-2 text-left">Keyword</th>
+                        <th className="px-4 py-2 text-left">Intent</th>
+                        <th className="px-4 py-2 text-left">Priority</th>
+                        <th className="px-4 py-2 text-left">Volume</th>
+                        <th className="px-4 py-2 text-left">Competition</th>
+                        <th className="px-4 py-2 text-left">Opportunity</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {scoringResults.high_priority_keywords.slice(0, 10).map((keyword, index) => (
+                        <tr key={index} className="border-b">
+                          <td className="px-4 py-2 font-medium">{keyword.keyword_phrase}</td>
+                          <td className="px-4 py-2">
+                            <Badge className={getIntentBadgeColor(keyword.intent_score)}>
+                              {keyword.intent_score}/3
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-2">
+                            <Badge className={getPriorityBadgeColor(keyword.priority_score)}>
+                              {keyword.priority_score.toFixed(1)}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-2">{keyword.search_volume?.toLocaleString() || 'N/A'}</td>
+                          <td className="px-4 py-2">
+                            <Badge variant={keyword.competition_level === 'low' ? 'default' : keyword.competition_level === 'medium' ? 'secondary' : 'destructive'}>
+                              {keyword.competition_level}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-2">{keyword.opportunity_score.toFixed(1)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Top Opportunities */}
+          {scoringResults.top_opportunities.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>🚀 Top Opportunities ({scoringResults.top_opportunities.length})</CardTitle>
+                <CardDescription>Best opportunities for quick wins and growth</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="min-w-full table-auto">
+                    <thead>
+                      <tr className="bg-gray-50">
+                        <th className="px-4 py-2 text-left">Keyword</th>
+                        <th className="px-4 py-2 text-left">Opportunity Type</th>
+                        <th className="px-4 py-2 text-left">Opportunity Score</th>
+                        <th className="px-4 py-2 text-left">Volume</th>
+                        <th className="px-4 py-2 text-left">Competition</th>
+                        <th className="px-4 py-2 text-left">Priority</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {scoringResults.top_opportunities.slice(0, 10).map((keyword, index) => (
+                        <tr key={index} className="border-b">
+                          <td className="px-4 py-2 font-medium">{keyword.keyword_phrase}</td>
+                          <td className="px-4 py-2">
+                            <Badge variant="outline">{keyword.opportunity_type.replace('_', ' ')}</Badge>
+                          </td>
+                          <td className="px-4 py-2">
+                            <Badge className="bg-green-500">{keyword.opportunity_score.toFixed(1)}</Badge>
+                          </td>
+                          <td className="px-4 py-2">{keyword.search_volume?.toLocaleString() || 'N/A'}</td>
+                          <td className="px-4 py-2">
+                            <Badge variant={keyword.competition_level === 'low' ? 'default' : 'secondary'}>
+                              {keyword.competition_level}
+                            </Badge>
+                          </td>
+                          <td className="px-4 py-2">{keyword.priority_score.toFixed(1)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {/* Category Performance */}
+          {scoringResults.category_stats.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>📊 Category Performance</CardTitle>
+                <CardDescription>Performance analysis by keyword category</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {scoringResults.category_stats.map((stat, index) => (
+                    <div key={index} className="border rounded-lg p-4">
+                      <h4 className="font-semibold text-lg mb-2">{stat.category_name}</h4>
+                      <div className="space-y-2 text-sm">
+                        <div className="flex justify-between">
+                          <span>Total Keywords:</span>
+                          <span className="font-medium">{stat.total_keywords}</span>
                         </div>
-                        <div className="text-sm text-gray-600">
-                          <div>Volume: {stats.total_search_volume.toLocaleString()}</div>
-                          <div>Avg Relevancy: {stats.avg_relevancy_score.toFixed(1)}%</div>
+                        <div className="flex justify-between">
+                          <span>Avg Intent Score:</span>
+                          <span className="font-medium">{stat.avg_intent_score.toFixed(1)}/3</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Avg Priority:</span>
+                          <span className="font-medium">{stat.avg_priority_score.toFixed(1)}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Critical Count:</span>
+                          <span className="font-medium text-red-600">{stat.critical_priority_count}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>High Priority:</span>
+                          <span className="font-medium text-orange-600">{stat.high_priority_count}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>Total Volume:</span>
+                          <span className="font-medium">{stat.total_search_volume.toLocaleString()}</span>
                         </div>
                       </div>
-                    ))}
-                  </div>
+                    </div>
+                  ))}
                 </div>
+              </CardContent>
+            </Card>
+          )}
+        </div>
+      )}
 
-                {/* Top Opportunities */}
-                {results.result.top_opportunities.length > 0 && (
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3">🎯 Top Opportunities</h3>
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                      <ul className="space-y-1">
-                        {results.result.top_opportunities.map((opportunity, index) => (
-                          <li key={index} className="text-green-800">
-                            • {opportunity}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                )}
-
-                {/* Coverage Gaps */}
-                {results.result.coverage_gaps.length > 0 && (
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3">⚠️ Coverage Gaps</h3>
-                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                      <ul className="space-y-1">
-                        {results.result.coverage_gaps.map((gap, index) => (
-                          <li key={index} className="text-yellow-800">
-                            • {gap}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                )}
-
-                {/* Warnings */}
-                {results.result.warnings.length > 0 && (
-                  <div>
-                    <h3 className="text-lg font-semibold mb-3">🚨 Warnings</h3>
-                    <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                      <ul className="space-y-1">
-                        {results.result.warnings.map((warning, index) => (
-                          <li key={index} className="text-red-800">
-                            • {warning}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                )}
-
-                {/* Processing Info */}
-                <div className="bg-gray-50 rounded-lg p-4">
-                  <h3 className="text-lg font-semibold mb-2">⚡ Processing Info</h3>
-                  <div className="text-sm text-gray-600">
-                    <p>Processing Time: {results.result.processing_time.toFixed(3)}s</p>
-                    <p>Data Quality Score: {results.result.data_quality_score.toFixed(2)}%</p>
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <h3 className="text-lg font-semibold text-red-800 mb-2">❌ Error</h3>
-                <p className="text-red-700">{results.error}</p>
-              </div>
-            )}
-          </Card>
-        )}
-
-        {/* Instructions */}
-        <Card className="p-6 mt-6 bg-blue-50 border-blue-200">
-          <h3 className="text-lg font-semibold text-blue-800 mb-2">📋 Instructions</h3>
-          <div className="text-blue-700 space-y-2">
-            <p>1. Upload a Helium10 Cerebro CSV file (like the sample file in the backend)</p>
-            <p>2. Optionally enter an ASIN or product URL for context</p>
-            <p>3. Click "Test Keyword Agent" to run the analysis</p>
-            <p>4. Review the categorized keywords and download results as CSV</p>
-            <p>5. Check the browser console for detailed logs</p>
-          </div>
+      {/* Loading State */}
+      {isLoading && (
+        <Card>
+          <CardContent className="flex items-center justify-center py-8">
+            <div className="text-center">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+              <p className="text-gray-600">
+                {activeTest === 'keyword' ? 'Testing Keyword Agent...' : 'Testing Scoring Agent...'}
+              </p>
+              <p className="text-sm text-gray-500 mt-2">This may take a few moments</p>
+            </div>
+          </CardContent>
         </Card>
-      </div>
+      )}
     </div>
   );
 } 
