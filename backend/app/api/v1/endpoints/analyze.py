@@ -37,6 +37,7 @@ class AnalysisStatus(BaseModel):
     started_at: str
     completed_at: Optional[str] = None
     error: Optional[str] = None
+    results: Optional[Dict[str, Any]] = None
 
 
 @router.post("/analyze")
@@ -124,7 +125,11 @@ async def get_analysis_results(analysis_id: str):
             detail=f"Analysis not completed. Current status: {status.status}"
         )
     
-    return status
+    # Return just the results object, not the entire status
+    if hasattr(status, 'results') and status.results:
+        return {"success": True, "results": status.results}
+    else:
+        raise HTTPException(status_code=404, detail="Results not found")
 
 
 async def run_complete_analysis(
