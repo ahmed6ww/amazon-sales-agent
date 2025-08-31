@@ -15,7 +15,7 @@ interface AnalysisStatus {
   started_at: string;
   completed_at?: string;
   error?: string;
-  results?: any;
+  results?: AnalysisResults;
 }
 
 interface AnalysisResults {
@@ -27,7 +27,19 @@ interface AnalysisResults {
     revenue_keywords_count: number;
     design_keywords_count: number;
   };
-  research_analysis: any;
+  research_analysis: {
+    success: boolean;
+    asin: string;
+    marketplace: string;
+    main_keyword?: string;
+    revenue_competitors: number;
+    design_competitors: number;
+    product_attributes: {
+      category: string;
+      brand: string;
+      title: string;
+    };
+  };
   keyword_analysis: {
     total_keywords: number;
     processed_keywords: number;
@@ -94,7 +106,7 @@ export default function ResearchPage() {
   const [mainKeyword, setMainKeyword] = useState('')
   const [revenueFile, setRevenueFile] = useState<File | null>(null)
   const [designFile, setDesignFile] = useState<File | null>(null)
-  const [isAnalyzing, setIsAnalyzing] = useState(false)
+  const [, setIsAnalyzing] = useState(false)
   const [currentAnalysis, setCurrentAnalysis] = useState<AnalysisStatus | null>(null)
   const [results, setResults] = useState<AnalysisResults | null>(null)
   const [analysisId, setAnalysisId] = useState<string | null>(null)

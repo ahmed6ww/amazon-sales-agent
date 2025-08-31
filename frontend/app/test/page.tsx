@@ -45,8 +45,17 @@ interface KeywordTestResults {
   success: boolean;
   total_keywords: number;
   keywords: KeywordResult[];
-  category_stats: any[];
-  summary: any;
+  category_stats: {
+    category: string;
+    count: number;
+    percentage: number;
+  }[];
+  summary: {
+    processing_time: number;
+    data_quality_score: number;
+    top_10_competitors: string[];
+    total_competitors: number;
+  };
 }
 
 interface ScoringTestResults {
@@ -63,7 +72,12 @@ interface ScoringTestResults {
   high_priority_keywords: ScoredKeyword[];
   top_opportunities: ScoredKeyword[];
   category_stats: CategoryStat[];
-  summary: any;
+  summary: {
+    processing_time: number;
+    confidence_score: number;
+    actionable_keywords: number;
+    quick_wins: number;
+  };
   insights: {
     avg_priority_score: number;
     high_value_keywords: number;
