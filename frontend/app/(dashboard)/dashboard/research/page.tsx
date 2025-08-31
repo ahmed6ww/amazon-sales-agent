@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, ArrowRight, Upload, Search, BarChart3, FileText } from "lucide-react"
+import { getFullApiUrl } from '@/lib/config';
 
 interface AnalysisStatus {
   analysis_id: string;
@@ -123,14 +124,14 @@ export default function ResearchPage() {
     if (analysisId && (currentAnalysis?.status === 'processing' || currentAnalysis?.status === 'pending')) {
       const interval = setInterval(async () => {
         try {
-          const response = await fetch(`http://localhost:8000/api/v1/analyze/${analysisId}/status`);
+          const response = await fetch(getFullApiUrl(`/api/v1/analyze/${analysisId}/status`));
           if (response.ok) {
             const status = await response.json();
             setCurrentAnalysis(status);
             
             if (status.status === 'completed') {
               // Fetch results
-              const resultsResponse = await fetch(`http://localhost:8000/api/v1/analyze/${analysisId}/results`);
+              const resultsResponse = await fetch(getFullApiUrl(`/api/v1/analyze/${analysisId}/results`));
               if (resultsResponse.ok) {
                 const resultsData = await resultsResponse.json();
                 setResults(resultsData.results);
@@ -196,7 +197,7 @@ export default function ResearchPage() {
       formData.append('revenue_csv', revenueFile);
       formData.append('design_csv', designFile);
 
-      const response = await fetch('http://localhost:8000/api/v1/analyze', {
+      const response = await fetch(getFullApiUrl('/api/v1/analyze'), {
         method: 'POST',
         body: formData,
       });
@@ -522,29 +523,42 @@ export default function ResearchPage() {
 
       {currentStep === "results" && results && (
         <div className="space-y-8">
+          {/* Debug: Show results structure in development */}
+          {process.env.NODE_ENV === 'development' && (
+            <Card className="border-yellow-200 bg-yellow-50">
+              <CardHeader>
+                <CardTitle className="text-yellow-800">🐛 Debug: Results Structure</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <pre className="text-xs bg-white p-2 rounded overflow-auto max-h-40">
+                  {JSON.stringify(results, null, 2)}
+                </pre>
+              </CardContent>
+            </Card>
+          )}
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <Card>
               <CardContent className="p-6">
-                <div className="text-2xl font-bold text-blue-600">{results.summary.actionable_keywords}</div>
+                <div className="text-2xl font-bold text-blue-600">{results.summary?.actionable_keywords || 0}</div>
                 <div className="text-sm text-gray-600">Actionable Keywords</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6">
-                <div className="text-2xl font-bold text-green-600">{results.summary.quick_wins}</div>
+                <div className="text-2xl font-bold text-green-600">{results.summary?.quick_wins || 0}</div>
                 <div className="text-sm text-gray-600">Quick Wins</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6">
-                <div className="text-2xl font-bold text-purple-600">{results.summary.confidence_score}%</div>
+                <div className="text-2xl font-bold text-purple-600">{results.summary?.confidence_score || 0}%</div>
                 <div className="text-sm text-gray-600">Confidence Score</div>
               </CardContent>
             </Card>
             <Card>
               <CardContent className="p-6">
-                <div className="text-2xl font-bold text-orange-600">{results.keyword_analysis.total_keywords}</div>
+                <div className="text-2xl font-bold text-orange-600">{results.keyword_analysis?.total_keywords || 0}</div>
                 <div className="text-sm text-gray-600">Total Keywords</div>
               </CardContent>
             </Card>
@@ -559,23 +573,23 @@ export default function ResearchPage() {
             <CardContent>
               <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                 <div className="bg-red-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-red-600">{results.scoring_analysis.priority_distribution.critical}</div>
+                  <div className="text-2xl font-bold text-red-600">{results.scoring_analysis?.priority_distribution?.critical || 0}</div>
                   <div className="text-sm text-red-800">Critical</div>
                 </div>
                 <div className="bg-orange-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-orange-600">{results.scoring_analysis.priority_distribution.high}</div>
+                  <div className="text-2xl font-bold text-orange-600">{results.scoring_analysis?.priority_distribution?.high || 0}</div>
                   <div className="text-sm text-orange-800">High Priority</div>
                 </div>
                 <div className="bg-yellow-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-yellow-600">{results.scoring_analysis.priority_distribution.medium}</div>
+                  <div className="text-2xl font-bold text-yellow-600">{results.scoring_analysis?.priority_distribution?.medium || 0}</div>
                   <div className="text-sm text-yellow-800">Medium</div>
                 </div>
                 <div className="bg-green-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-green-600">{results.scoring_analysis.priority_distribution.low}</div>
+                  <div className="text-2xl font-bold text-green-600">{results.scoring_analysis?.priority_distribution?.low || 0}</div>
                   <div className="text-sm text-green-800">Low Priority</div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-gray-600">{results.scoring_analysis.priority_distribution.filtered}</div>
+                  <div className="text-2xl font-bold text-gray-600">{results.scoring_analysis?.priority_distribution?.filtered || 0}</div>
                   <div className="text-sm text-gray-800">Filtered</div>
                 </div>
               </div>
@@ -583,7 +597,7 @@ export default function ResearchPage() {
           </Card>
 
           {/* Critical Keywords */}
-          {results.scoring_analysis.top_critical_keywords.length > 0 && (
+          {results.scoring_analysis?.top_critical_keywords?.length > 0 && (
             <Card>
               <CardHeader>
                 <CardTitle>🏆 Critical Keywords</CardTitle>
@@ -602,7 +616,7 @@ export default function ResearchPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {results.scoring_analysis.top_critical_keywords.map((keyword, index) => (
+                      {results.scoring_analysis?.top_critical_keywords?.map((keyword, index) => (
                         <tr key={index} className="border-b">
                           <td className="px-4 py-2 font-medium">{keyword.keyword}</td>
                           <td className="px-4 py-2">
