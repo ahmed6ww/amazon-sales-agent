@@ -11,6 +11,18 @@ const nextConfig: NextConfig = {
   
   // Webpack configuration for path aliases
   webpack: (config, { isServer }) => {
+    // Debug info for Vercel logs
+    try {
+      // eslint-disable-next-line no-console
+      console.log('[next.config] cwd=', process.cwd());
+      // eslint-disable-next-line no-console
+      console.log('[next.config] __dirname=', __dirname);
+      // eslint-disable-next-line @typescript-eslint/no-var-requires
+      const fs = require('fs');
+      // eslint-disable-next-line no-console
+      console.log('[next.config] has lib/config.ts =', fs.existsSync(path.resolve(__dirname, 'lib', 'config.ts')));
+    } catch {}
+
     // Ensure proper path resolution for both client and server
     config.resolve.alias = {
       ...config.resolve.alias,
@@ -18,10 +30,12 @@ const nextConfig: NextConfig = {
       '@/lib': path.resolve(__dirname, 'lib'),
       '@/components': path.resolve(__dirname, 'components'),
       '@/app': path.resolve(__dirname, 'app'),
+      // Direct mapping for problematic import
+      '@/lib/config': path.resolve(__dirname, 'lib', 'config.ts'),
     };
     
     // Add explicit module resolution for TypeScript files
-    config.resolve.extensions = ['.tsx', '.ts', '.js', '.jsx', ...config.resolve.extensions];
+    config.resolve.extensions = ['.tsx', '.ts', '.js', '.jsx', ...(config.resolve.extensions || [])];
     
     return config;
   },
