@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { CheckCircle, ArrowRight, Upload, Search, BarChart3, FileText } from "lucide-react"
-import { getFullApiUrl } from '@/lib/config';
+import { getFullApiUrl } from '../../../../lib/config';
 
 interface AnalysisStatus {
   analysis_id: string;

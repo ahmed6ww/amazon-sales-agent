@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { getFullApiUrl, testUrlGeneration, getConfigInfo } from '@/lib/config';
+import { getFullApiUrl, testUrlGeneration, getConfigInfo } from '../../lib/config';
 
 export default function DebugPage() {
   useEffect(() => {
