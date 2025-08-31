@@ -136,6 +136,3 @@ case $choice in
         ;;
 esac
 
-echo
-echo "✨ Setup complete! Check the ENV_SETUP.md file for detailed documentation."
-echo 
