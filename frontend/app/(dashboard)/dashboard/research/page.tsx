@@ -158,7 +158,7 @@ export default function ResearchPage() {
   const handleProductSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (asinOrUrl.trim()) {
-      setCurrentStep("upload")
+    setCurrentStep("upload")
     }
   }
 
@@ -279,7 +279,7 @@ export default function ResearchPage() {
               const isActive = index === currentIndex
               const isCompleted = index < currentIndex
               const StepIcon = step.icon
-
+              
               return (
                 <div key={step.id} className="flex items-center">
                   <div className="flex items-center">
@@ -313,7 +313,7 @@ export default function ResearchPage() {
       </Card>
 
       {/* Step Content */}
-      {currentStep === "input" && (
+        {currentStep === "input" && (
         <Card>
           <CardHeader>
             <CardTitle>Product Information</CardTitle>
@@ -368,8 +368,8 @@ export default function ResearchPage() {
                   onChange={(e) => setMainKeyword(e.target.value)}
                   placeholder="changing pad"
                   className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
+            />
+          </div>
 
               <Button type="submit" className="w-full">
                 Continue to File Upload
@@ -688,9 +688,9 @@ export default function ResearchPage() {
                     <span>Coverage improvement: {results.seo_recommendations.backend_keywords.coverage_improvement}</span>
                   </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+                </div>
+              </CardContent>
+            </Card>
 
           {/* Action Buttons */}
           <div className="flex gap-4">

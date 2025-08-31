@@ -39,8 +39,10 @@ def optimize_product_title(
     # Build optimized title structure
     title_parts = []
     
-    # Add brand if available and not in primary keyword
-    if brand and brand.lower() not in primary_keyword.lower():
+    # Add brand if available and not in primary keyword (skip generic brands)
+    if (brand and 
+        brand.lower() not in primary_keyword.lower() and 
+        brand.lower() not in ['unknown', 'premium brand', 'amazon brand', 'generic']):
         title_parts.append(brand)
     
     # Add primary keyword (most important)
