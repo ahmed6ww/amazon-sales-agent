@@ -238,7 +238,11 @@ async def run_complete_analysis(
             medium_priority_keywords=[kw.keyword_phrase for kw in scoring_result.medium_priority_keywords[:10]],
             opportunity_keywords=[kw.keyword_phrase for kw in scoring_result.top_opportunities[:10]],
             keyword_analysis={"total_keywords": keyword_analysis.total_keywords},
-            scoring_analysis={"critical_keywords": scoring_result.critical_keywords},
+            scoring_analysis={
+                "critical_keywords": [kw.keyword_phrase for kw in scoring_result.critical_keywords],
+                "high_priority_keywords": [kw.keyword_phrase for kw in scoring_result.high_priority_keywords],
+                "opportunity_keywords": [kw.keyword_phrase for kw in scoring_result.top_opportunities]
+            },
             competitor_data={}
         )
         

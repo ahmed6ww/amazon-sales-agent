@@ -221,27 +221,24 @@ def _parse_csv_row_to_keyword_data(row: Dict[str, Any]) -> KeywordData:
     asin_columns = [col for col in row.keys() if col.startswith('B0') and len(col) == 10]
     
     for asin_col in asin_columns:
-        try:
-            ranking = int(row.get(asin_col, 0))
-            if ranking > 0:
-                competitor_rankings[asin_col] = ranking
-        except (ValueError, TypeError):
-            continue
+        ranking = _safe_int(row.get(asin_col, 0))
+        if ranking and ranking > 0:
+            competitor_rankings[asin_col] = ranking
     
     return KeywordData(
         keyword_phrase=str(row.get('Keyword Phrase', '')),
         category=str(row.get('Category (R for relevant, D for design specific, I for irrelevant and B for branded, S for Spanish, O for Outlier)', '')),
-        search_volume=int(row.get('Search Volume', 0)),
+        search_volume=_safe_int(row.get('Search Volume', 0)) or 0,
         search_volume_trend=_safe_int(row.get('Search Volume Trend')),
-        relevancy=int(row.get('Relevancy', 0)),
-        title_density=int(row.get('Title Density', 0)),
-        cpr=int(row.get('CPR', 0)),
-        cerebro_iq_score=int(row.get('Cerebro IQ Score', 0)),
-        h10_ppc_sugg_bid=float(row.get('H10 PPC Sugg. Bid', 0)),
-        h10_ppc_sugg_min_bid=float(row.get('H10 PPC Sugg. Min Bid', 0)),
-        h10_ppc_sugg_max_bid=float(row.get('H10 PPC Sugg. Max Bid', 0)),
-        competing_products=int(row.get('Competing Products', 0)),
-        sponsored_asins=int(row.get('Sponsored ASINs', 0)),
+        relevancy=_safe_int(row.get('Relevancy', 0)) or 0,
+        title_density=_safe_int(row.get('Title Density', 0)) or 0,
+        cpr=_safe_int(row.get('CPR', 0)) or 0,
+        cerebro_iq_score=_safe_int(row.get('Cerebro IQ Score', 0)) or 0,
+        h10_ppc_sugg_bid=_safe_float(row.get('H10 PPC Sugg. Bid', 0)),
+        h10_ppc_sugg_min_bid=_safe_float(row.get('H10 PPC Sugg. Min Bid', 0)),
+        h10_ppc_sugg_max_bid=_safe_float(row.get('H10 PPC Sugg. Max Bid', 0)),
+        competing_products=_safe_int(row.get('Competing Products', 0)) or 0,
+        sponsored_asins=_safe_int(row.get('Sponsored ASINs', 0)) or 0,
         competitor_rankings=competitor_rankings
     )
 

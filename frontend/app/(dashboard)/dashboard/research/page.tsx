@@ -120,7 +120,7 @@ export default function ResearchPage() {
 
   // Poll for status updates
   useEffect(() => {
-    if (analysisId && currentAnalysis?.status === 'processing') {
+    if (analysisId && (currentAnalysis?.status === 'processing' || currentAnalysis?.status === 'pending')) {
       const interval = setInterval(async () => {
         try {
           const response = await fetch(`http://localhost:8000/api/v1/analyze/${analysisId}/status`);
