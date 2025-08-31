@@ -10,7 +10,8 @@ const nextConfig: NextConfig = {
   },
   
   // Webpack configuration for path aliases
-  webpack: (config) => {
+  webpack: (config, { isServer }) => {
+    // Ensure proper path resolution for both client and server
     config.resolve.alias = {
       ...config.resolve.alias,
       '@': path.resolve(__dirname),
@@ -18,6 +19,10 @@ const nextConfig: NextConfig = {
       '@/components': path.resolve(__dirname, 'components'),
       '@/app': path.resolve(__dirname, 'app'),
     };
+    
+    // Add explicit module resolution for TypeScript files
+    config.resolve.extensions = ['.tsx', '.ts', '.js', '.jsx', ...config.resolve.extensions];
+    
     return config;
   },
   
