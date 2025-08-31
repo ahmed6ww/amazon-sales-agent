@@ -20,6 +20,115 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Environment Configuration
+
+This project uses environment-based configuration to handle different deployment environments (development, staging, production).
+
+### Setup Instructions
+
+1. **Copy the environment template:**
+   ```bash
+   cp env.example .env.local
+   ```
+
+2. **Configure your environment variables:**
+   ```bash
+   # Required for production
+   NEXT_PUBLIC_API_URL=https://amazon-sales-agent.onrender.com
+   
+   # Optional environment specification
+   NEXT_PUBLIC_ENVIRONMENT=production
+   ```
+
+### Environment Variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `NEXT_PUBLIC_API_URL` | Production/Staging | `http://localhost:8000` | Backend API URL |
+| `NEXT_PUBLIC_ENVIRONMENT` | No | Inferred from NODE_ENV | Environment: development, staging, production |
+| `NEXT_PUBLIC_DEBUG_MODE` | No | `true` in dev, `false` in prod | Enable debug logging |
+| `NEXT_PUBLIC_ENABLE_ANALYTICS` | No | `false` in dev, `true` in prod | Enable analytics |
+
+### Configuration Usage
+
+The application includes a centralized configuration system:
+
+```typescript
+import { config, getApiUrl, api } from '@/lib/config';
+
+// Get the full API URL for a specific endpoint
+const analyzeUrl = getApiUrl('analyze');
+
+// Use the API client
+const response = await api.startAnalysis({
+  asin_or_url: 'B00EXAMPLE',
+  marketplace: 'US',
+  revenue_csv: file1,
+  design_csv: file2
+});
+```
+
+### API Client
+
+The application includes a complete API client (`@/lib/api`) with:
+
+- Automatic environment-based URL configuration
+- Error handling and timeout management
+- TypeScript support with proper types
+- Debug logging in development
+- Support for file uploads and JSON requests
+
+### Environment-Specific Behavior
+
+- **Development**: Uses `http://localhost:8000`, enables debug mode, disables analytics
+- **Staging**: Uses staging API URL, production-like settings with optional debug
+- **Production**: Uses production API URL, disables debug mode, enables analytics
+
+## Deployment
+
+### Vercel (Recommended)
+
+1. Set environment variables in Vercel dashboard:
+   ```
+   NEXT_PUBLIC_API_URL=https://amazon-sales-agent.onrender.com
+   NEXT_PUBLIC_ENVIRONMENT=production
+   ```
+
+2. Deploy:
+   ```bash
+   npm run build
+   npm run start
+   ```
+
+### Docker
+
+1. Build the container:
+   ```bash
+   docker build -t amazon-sales-agent-frontend .
+   ```
+
+2. Run with environment variables:
+   ```bash
+   docker run -p 3000:3000 \
+     -e NEXT_PUBLIC_API_URL=https://amazon-sales-agent.onrender.com \
+     -e NEXT_PUBLIC_ENVIRONMENT=production \
+     amazon-sales-agent-frontend
+   ```
+
+### Manual Deployment
+
+1. Build the application:
+   ```bash
+   npm run build
+   ```
+
+2. Set environment variables and start:
+   ```bash
+   export NEXT_PUBLIC_API_URL=https://amazon-sales-agent.onrender.com
+   export NEXT_PUBLIC_ENVIRONMENT=production
+   npm run start
+   ```
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

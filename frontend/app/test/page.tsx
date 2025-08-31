@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-
+import { getFullApiUrl } from "@/lib/config";
 interface KeywordResult {
   keyword_phrase: string;
   category: string;
@@ -119,7 +119,7 @@ export default function TestPage() {
       const formData = new FormData();
       formData.append('file', file);
 
-      const uploadResponse = await fetch('http://localhost:8000/api/v1/upload/csv', {
+      const uploadResponse = await fetch(getFullApiUrl('/api/v1/upload/csv'), {
         method: 'POST',
         body: formData,
       });
@@ -135,7 +135,7 @@ export default function TestPage() {
       const limitedData = uploadData.data.slice(0, 50);
       console.log('Testing with', limitedData.length, 'keywords');
 
-      const testResponse = await fetch('http://localhost:8000/api/v1/test/keyword-agent', {
+      const testResponse = await fetch(getFullApiUrl('/api/v1/test/keyword-agent'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -179,7 +179,7 @@ export default function TestPage() {
       const formData = new FormData();
       formData.append('file', file);
 
-      const uploadResponse = await fetch('http://localhost:8000/api/v1/upload/csv', {
+      const uploadResponse = await fetch(getFullApiUrl('/api/v1/upload/csv'), {
         method: 'POST',
         body: formData,
       });
@@ -195,7 +195,7 @@ export default function TestPage() {
       const limitedData = uploadData.data.slice(0, 30);
       console.log('Testing scoring agent with', limitedData.length, 'keywords');
 
-      const testResponse = await fetch('http://localhost:8000/api/v1/test/scoring-agent', {
+      const testResponse = await fetch(getFullApiUrl('/api/v1/test/scoring-agent'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
