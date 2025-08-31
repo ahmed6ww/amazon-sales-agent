@@ -1,5 +1,6 @@
 from fastapi import FastAPI
-from app.api.v1.endpoints import upload, scraper
+from fastapi.middleware.cors import CORSMiddleware
+from app.api.v1.endpoints import upload, scraper, test
 
 app = FastAPI(
     title="Amazon Sales Agent API",
@@ -7,9 +8,19 @@ app = FastAPI(
     version="0.1.0"
 )
 
+# Add CORS middleware for frontend testing
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # Next.js default port
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 # Include the router from the upload endpoint
 app.include_router(upload.router, prefix="/api/v1", tags=["upload"])
 app.include_router(scraper.router, prefix="/api/v1", tags=["scraper"])
+app.include_router(test.router, prefix="/api/v1", tags=["test"])
 
 @app.get("/")
 def read_root():
