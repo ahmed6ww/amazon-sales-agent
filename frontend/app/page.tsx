@@ -11,9 +11,11 @@ export default function Home() {
           <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-blue-600 rounded-lg"></div>
           <span className="text-xl font-semibold text-gray-900">KeywordAI</span>
         </div>
-        <Button variant="outline" size="lg" className="border-blue-200 text-blue-600 hover:bg-blue-50 px-6 py-2">
-          Get Started
-        </Button>
+        <a href="/dashboard">
+          <Button variant="outline" size="lg" className="border-blue-200 text-blue-600 hover:bg-blue-50 px-6 py-2">
+            Get Started
+          </Button>
+        </a>
       </nav>
 
       {/* Hero Section */}
@@ -36,12 +38,16 @@ export default function Home() {
         </p>
 
                  <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-           <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg h-12">
-             Start Research
-           </Button>
-           <Button variant="outline" size="lg" className="border-gray-300 text-gray-700 px-8 py-4 text-lg h-12">
-             View Demo
-           </Button>
+           <a href="/dashboard">
+             <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg h-12">
+               Start Research
+             </Button>
+           </a>
+           <a href="/test">
+             <Button variant="outline" size="lg" className="border-gray-300 text-gray-700 px-8 py-4 text-lg h-12">
+               View Demo
+             </Button>
+           </a>
          </div>
 
         <div className="mt-16 relative">
@@ -242,12 +248,16 @@ export default function Home() {
             Amazon performance and increase sales.
           </p>
                      <div className="flex flex-col sm:flex-row gap-4 justify-center">
-             <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg h-12">
-               Start Your Research
-             </Button>
-             <Button variant="outline" size="lg" className="border-gray-300 text-gray-700 px-8 py-4 text-lg h-12">
-               Schedule Demo
-             </Button>
+             <a href="/dashboard">
+               <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 text-lg h-12">
+                 Start Your Research
+               </Button>
+             </a>
+             <a href="/test">
+               <Button variant="outline" size="lg" className="border-gray-300 text-gray-700 px-8 py-4 text-lg h-12">
+                 Schedule Demo
+               </Button>
+             </a>
            </div>
         </div>
       </section>

@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.v1.endpoints import upload, scraper, test
+from app.api.v1.endpoints import upload, scraper, test, analyze
 
 app = FastAPI(
     title="Amazon Sales Agent API",
@@ -21,6 +21,7 @@ app.add_middleware(
 app.include_router(upload.router, prefix="/api/v1", tags=["upload"])
 app.include_router(scraper.router, prefix="/api/v1", tags=["scraper"])
 app.include_router(test.router, prefix="/api/v1", tags=["test"])
+app.include_router(analyze.router, prefix="/api/v1", tags=["analyze"])
 
 @app.get("/")
 def read_root():
