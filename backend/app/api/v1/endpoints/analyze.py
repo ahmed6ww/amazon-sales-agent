@@ -15,6 +15,7 @@ from datetime import datetime
 from app.local_agents.research import ResearchRunner
 from app.local_agents.keyword import KeywordRunner
 from app.local_agents.scoring import ScoringRunner
+from app.local_agents.seo import SEORunner
 from app.services.file_processing.csv_processor import parse_csv_bytes
 
 router = APIRouter()
@@ -222,11 +223,45 @@ async def run_complete_analysis(
         analysis_results[analysis_id].progress = 80
         analysis_results[analysis_id].message = "Generating SEO optimization recommendations"
         
-        # Step 5: SEO Agent - Generate recommendations (placeholder for now)
-        seo_recommendations = generate_seo_recommendations(
-            scoring_result, 
-            research_result.get("product_attributes", {})
+        # Step 5: SEO Agent - Generate comprehensive recommendations
+        seo_runner = SEORunner()
+        seo_analysis = seo_runner.run_direct_optimization(
+            current_listing={
+                "title": research_result.get("product_attributes", {}).get("title", "Premium Product Title"),
+                "bullets": [],
+                "features": ["high-quality", "durable", "versatile"],
+                "brand": research_result.get("product_attributes", {}).get("brand", "Premium Brand"),
+                "category": research_result.get("product_attributes", {}).get("category", "baby_products")
+            },
+            critical_keywords=[kw.keyword_phrase for kw in scoring_result.critical_keywords[:5]],
+            high_priority_keywords=[kw.keyword_phrase for kw in scoring_result.high_priority_keywords[:8]],
+            medium_priority_keywords=[kw.keyword_phrase for kw in scoring_result.medium_priority_keywords[:10]],
+            opportunity_keywords=[kw.keyword_phrase for kw in scoring_result.top_opportunities[:10]],
+            keyword_analysis={"total_keywords": keyword_analysis.total_keywords},
+            scoring_analysis={"critical_keywords": scoring_result.critical_keywords},
+            competitor_data={}
         )
+        
+        # Convert SEO analysis to response format
+        seo_recommendations = {
+            "title_optimization": {
+                "current_title": seo_analysis.title_optimization.current_title,
+                "recommended_title": seo_analysis.title_optimization.recommended_title,
+                "keywords_added": seo_analysis.title_optimization.keywords_added,
+                "improvement_score": seo_analysis.title_optimization.improvement_score
+            },
+            "bullet_points": {
+                "recommended_bullets": seo_analysis.bullet_optimization.recommended_bullets,
+                "keywords_coverage": seo_analysis.bullet_optimization.keywords_coverage
+            },
+            "backend_keywords": {
+                "recommended_keywords": seo_analysis.backend_optimization.recommended_keywords,
+                "character_count": seo_analysis.backend_optimization.character_count,
+                "coverage_improvement": seo_analysis.backend_optimization.coverage_improvement
+            },
+            "content_gaps": [gap.recommended_content for gap in seo_analysis.content_gaps[:5]],
+            "competitive_advantages": [adv.description for adv in seo_analysis.competitive_advantages[:3]]
+        }
         
         # Update status
         analysis_results[analysis_id].current_step = "finalizing"

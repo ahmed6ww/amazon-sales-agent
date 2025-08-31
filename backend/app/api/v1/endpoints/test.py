@@ -9,6 +9,7 @@ from pydantic import BaseModel
 from typing import List, Dict, Any, Optional
 from app.local_agents.keyword import KeywordRunner
 from app.local_agents.scoring import ScoringRunner
+from app.local_agents.seo import SEORunner
 
 router = APIRouter()
 
@@ -23,6 +24,12 @@ class ScoringAgentTestRequest(BaseModel):
     asin: Optional[str] = None
     product_attributes: Optional[Dict[str, Any]] = None
     competitor_data: Optional[Dict[str, Any]] = None
+
+
+class SEOAgentTestRequest(BaseModel):
+    csv_data: List[Dict[str, Any]]
+    current_listing: Optional[Dict[str, Any]] = None
+    asin: Optional[str] = None
 
 
 @router.post("/test/keyword-agent")
@@ -219,6 +226,120 @@ async def test_scoring_agent(request: ScoringAgentTestRequest):
         raise HTTPException(status_code=500, detail=f"Scoring agent test failed: {str(e)}")
 
 
+@router.post("/test/seo-agent")
+async def test_seo_agent(request: SEOAgentTestRequest):
+    """
+    Test the SEO Agent with CSV data and current listing information.
+    """
+    try:
+        # Step 1: Run keyword analysis
+        keyword_runner = KeywordRunner()
+        keyword_result = keyword_runner.run_direct_processing(request.csv_data)
+        
+        if not keyword_result.get("success"):
+            raise HTTPException(status_code=400, detail=f"Keyword analysis failed: {keyword_result.get('error')}")
+        
+        keyword_analysis = keyword_result["result"]
+        
+        # Step 2: Run scoring analysis
+        scoring_runner = ScoringRunner()
+        scoring_result = scoring_runner.run_direct_processing(keyword_analysis)
+        
+        # Step 3: Extract keywords for SEO optimization
+        critical_keywords = [kw.keyword_phrase for kw in scoring_result.critical_keywords[:5]]
+        high_priority_keywords = [kw.keyword_phrase for kw in scoring_result.high_priority_keywords[:8]]
+        medium_priority_keywords = [kw.keyword_phrase for kw in scoring_result.medium_priority_keywords[:10]]
+        opportunity_keywords = [kw.keyword_phrase for kw in scoring_result.top_opportunities[:10]]
+        
+        # Step 4: Prepare current listing data
+        current_listing = request.current_listing or {
+            "title": "Baby Changing Pad - Waterproof Portable Diaper Changing Mat",
+            "bullets": [
+                "Waterproof and easy to clean surface",
+                "Portable design for travel convenience", 
+                "Safe and comfortable for baby"
+            ],
+            "features": ["waterproof", "portable", "safe", "comfortable"],
+            "brand": "BabyBrand",
+            "category": "baby_products"
+        }
+        
+        # Step 5: Run SEO optimization
+        seo_runner = SEORunner()
+        seo_optimization = seo_runner.run_direct_optimization(
+            current_listing=current_listing,
+            critical_keywords=critical_keywords,
+            high_priority_keywords=high_priority_keywords,
+            medium_priority_keywords=medium_priority_keywords,
+            opportunity_keywords=opportunity_keywords,
+            keyword_analysis={"total_keywords": keyword_analysis.total_keywords},
+            scoring_analysis={
+                "critical_keywords": critical_keywords,
+                "high_priority_keywords": high_priority_keywords,
+                "opportunity_keywords": opportunity_keywords
+            },
+            competitor_data={}
+        )
+        
+        # Format response
+        return {
+            "success": True,
+            "seo_optimization": {
+                "title_optimization": {
+                    "current_title": seo_optimization.title_optimization.current_title,
+                    "recommended_title": seo_optimization.title_optimization.recommended_title,
+                    "improvement_score": seo_optimization.title_optimization.improvement_score,
+                    "keywords_added": seo_optimization.title_optimization.keywords_added,
+                    "character_count": seo_optimization.title_optimization.character_count
+                },
+                "bullet_optimization": {
+                    "recommended_bullets": seo_optimization.bullet_optimization.recommended_bullets,
+                    "keywords_coverage": seo_optimization.bullet_optimization.keywords_coverage,
+                    "character_efficiency": seo_optimization.bullet_optimization.character_efficiency
+                },
+                "backend_optimization": {
+                    "recommended_keywords": seo_optimization.backend_optimization.recommended_keywords,
+                    "character_count": seo_optimization.backend_optimization.character_count,
+                    "coverage_improvement": seo_optimization.backend_optimization.coverage_improvement,
+                    "opportunity_keywords": seo_optimization.backend_optimization.opportunity_keywords
+                },
+                "seo_score": {
+                    "overall_score": seo_optimization.seo_score.overall_score,
+                    "title_score": seo_optimization.seo_score.title_score,
+                    "bullets_score": seo_optimization.seo_score.bullets_score,
+                    "backend_score": seo_optimization.seo_score.backend_score,
+                    "improvement_potential": seo_optimization.seo_score.improvement_potential
+                },
+                "content_gaps": [
+                    {
+                        "section": gap.section.value,
+                        "recommended_content": gap.recommended_content,
+                        "priority": gap.priority.value,
+                        "estimated_impact": gap.estimated_impact
+                    }
+                    for gap in seo_optimization.content_gaps
+                ],
+                "competitive_advantages": [
+                    {
+                        "advantage_type": adv.advantage_type,
+                        "description": adv.description,
+                        "strength_score": adv.strength_score
+                    }
+                    for adv in seo_optimization.competitive_advantages
+                ],
+                "quick_wins": seo_optimization.quick_wins,
+                "long_term_strategy": seo_optimization.long_term_strategy
+            },
+            "keywords_processed": len(request.csv_data),
+            "critical_keywords_count": len(critical_keywords),
+            "high_priority_keywords_count": len(high_priority_keywords),
+            "opportunity_keywords_count": len(opportunity_keywords)
+        }
+        
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"SEO agent test failed: {str(e)}")
+
+
 @router.get("/test/status")
 async def test_status():
     """
@@ -228,7 +349,8 @@ async def test_status():
         "status": "healthy",
         "available_tests": [
             "keyword-agent",
-            "scoring-agent"
+            "scoring-agent",
+            "seo-agent"
         ],
         "message": "Test endpoints are ready"
     } 

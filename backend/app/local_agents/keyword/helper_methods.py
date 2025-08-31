@@ -540,4 +540,14 @@ def _safe_int(value: Any) -> Optional[int]:
     try:
         return int(float(value))
     except (ValueError, TypeError):
-        return None 
+        return None
+
+
+def _safe_float(value: Any) -> float:
+    """Safely convert value to float, return 0.0 if conversion fails."""
+    if value is None or value == '' or value == '-':
+        return 0.0
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        return 0.0 
