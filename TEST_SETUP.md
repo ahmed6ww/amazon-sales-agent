@@ -15,7 +15,7 @@ This document explains how to test the Keyword Agent implementation using the de
 1. **Start Backend Server:**
 ```bash
 cd backend
-uv run uvicorn app.main:app --reload --port 8000
+uv run python -m uvicorn app.main:app --reload --port 8000
 ```
 
 2. **Start Frontend Server:**
@@ -67,7 +67,7 @@ With the sample CSV file, you should see:
 curl http://localhost:8000/api/v1/test/status
 
 # Check backend logs
-cd backend && uv run uvicorn app.main:app --reload --port 8000
+cd backend && uv run python -m uvicorn app.main:app --reload --port 8000
 ```
 
 ### Frontend Issues

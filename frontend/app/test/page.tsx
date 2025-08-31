@@ -81,20 +81,25 @@ export default function TestPage() {
       const uploadData = await uploadResponse.json();
       console.log('CSV uploaded successfully:', uploadData);
 
-      // Test the keyword agent with the uploaded data
+      // Test the keyword agent with the uploaded data (limit to first 50 rows for testing)
+      const testData = uploadData.data.slice(0, 50); // Limit data for testing
+      console.log('Testing with', testData.length, 'keywords');
+      
       const testResponse = await fetch('http://localhost:8000/api/v1/test/keyword-agent', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          csv_data: uploadData.data,
+          csv_data: testData,
           asin: asin || null
         }),
       });
 
       if (!testResponse.ok) {
-        throw new Error(`Test failed: ${testResponse.statusText}`);
+        const errorText = await testResponse.text();
+        console.error('Backend error response:', errorText);
+        throw new Error(`Test failed (${testResponse.status}): ${errorText}`);
       }
 
       const testData = await testResponse.json();
@@ -219,9 +224,13 @@ export default function TestPage() {
                   Testing Keyword Agent...
                 </>
               ) : (
-                '🚀 Test Keyword Agent'
+                '🚀 Test Keyword Agent (First 50 Keywords)'
               )}
             </Button>
+            
+            <p className="text-sm text-gray-500 mt-2">
+              ℹ️ For testing purposes, only the first 50 keywords will be processed
+            </p>
           </div>
         </Card>
 

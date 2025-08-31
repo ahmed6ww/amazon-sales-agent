@@ -24,7 +24,7 @@ sleep 2
 echo "🔧 Starting Backend Server (FastAPI)..."
 cd backend
 if check_port 8000; then
-    uv run uvicorn app.main:app --reload --port 8000 --host 0.0.0.0 &
+    uv run python -m uvicorn app.main:app --reload --port 8000 --host 0.0.0.0 &
     BACKEND_PID=$!
     echo "✅ Backend server starting on http://localhost:8000"
     echo "   PID: $BACKEND_PID"
