@@ -82,8 +82,8 @@ export default function TestPage() {
       console.log('CSV uploaded successfully:', uploadData);
 
       // Test the keyword agent with the uploaded data (limit to first 50 rows for testing)
-      const testData = uploadData.data.slice(0, 50); // Limit data for testing
-      console.log('Testing with', testData.length, 'keywords');
+      const limitedData = uploadData.data.slice(0, 50); // Limit data for testing
+      console.log('Testing with', limitedData.length, 'keywords');
       
       const testResponse = await fetch('http://localhost:8000/api/v1/test/keyword-agent', {
         method: 'POST',
@@ -91,7 +91,7 @@ export default function TestPage() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          csv_data: testData,
+          csv_data: limitedData,
           asin: asin || null
         }),
       });
