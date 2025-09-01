@@ -62,8 +62,8 @@ async def start_analysis(
     This endpoint orchestrates all agents in sequence:
     1. Research Agent: Analyze product listing and CSVs
     2. Keyword Agent: Categorize and analyze keywords
-    3. Scoring Agent: Score and prioritize keywords
-    4. SEO Agent: Generate optimization recommendations
+    3. Scoring Agent: Score and prioritize keywords (COMMENTED OUT)
+    4. SEO Agent: Generate optimization recommendations (COMMENTED OUT)
     """
     
     # Generate unique analysis ID
@@ -150,7 +150,7 @@ async def run_complete_analysis(
     design_filename: str
 ):
     """
-    Run the complete analysis workflow with all agents.
+    Run the complete analysis workflow with Research + Keyword agents only.
     """
     
     try:
@@ -210,7 +210,6 @@ async def run_complete_analysis(
                 
                 # Handle asyncio properly for FastAPI context
                 import asyncio
-                import concurrent.futures
                 
                 def run_agent_analysis():
                     """Run agent analysis in a separate thread with its own event loop"""
@@ -257,6 +256,7 @@ async def run_complete_analysis(
                             1 if mvp_summary["qa_questions"] > 0 else 0
                         ])
                     }
+                    
                 else:
                     raise Exception(f"Research Agent analysis failed: {research_ai_result.get('error')}")
                     
@@ -309,7 +309,11 @@ async def run_complete_analysis(
         if settings.openai_configured and settings.USE_AI_AGENTS:
             logger.info(f"Using AI Scoring Agent for {keyword_analysis.total_keywords} keywords")
             try:
-                scoring_result = scoring_runner.run_full_scoring_analysis(keyword_analysis)
+                scoring_result = scoring_runner.run_full_scoring_analysis(
+                    keyword_analysis=keyword_analysis,
+                    product_attributes=research_result.get("product_attributes", {}),
+                    business_context={"main_keyword": main_keyword}
+                )
                 if not scoring_result:
                     raise Exception("AI Scoring analysis returned empty result")
             except Exception as e:
@@ -319,158 +323,54 @@ async def run_complete_analysis(
             logger.info("Using direct scoring processing")
             scoring_result = scoring_runner.run_direct_processing(keyword_analysis)
         
-        # Update status
-        analysis_results[analysis_id].current_step = "seo_optimization"
-        analysis_results[analysis_id].progress = 80
-        analysis_results[analysis_id].message = "Generating SEO optimization recommendations"
+        # 🎯 STEP-BY-STEP: Stop here after Research + Keyword + Scoring analysis
+        logger.info("✅ Research + Keyword + Scoring analysis completed - returning results")
         
-        # Step 5: SEO Agent - Generate comprehensive recommendations
-        seo_runner = SEORunner()
-        
-        # Prepare SEO optimization data
-        current_listing = {
-            "title": research_result.get("product_attributes", {}).get("title", main_keyword.title() if main_keyword else "Premium Product Title"),
-            "bullets": [],
-            "features": ["high-quality", "durable", "versatile"],
-            "brand": research_result.get("product_attributes", {}).get("brand", "Premium Brand"),
-            "category": research_result.get("product_attributes", {}).get("category", "general")
-        }
-        
-        # Use AI SEO Agent if configured, otherwise use direct optimization
-        if settings.openai_configured and settings.USE_AI_AGENTS:
-            logger.info("Using AI SEO Agent for optimization recommendations")
-            try:
-                seo_analysis = seo_runner.run_full_seo_optimization(
-                    product_info=current_listing,
-                    keyword_analysis=keyword_analysis.__dict__,
-                    scoring_analysis=scoring_result.__dict__
-                )
-                if not seo_analysis:
-                    raise Exception("AI SEO analysis returned empty result")
-            except Exception as e:
-                logger.warning(f"AI SEO Agent failed: {e}, falling back to direct optimization")
-                seo_analysis = seo_runner.run_direct_optimization(
-                    current_listing=current_listing,
-                    critical_keywords=[kw.keyword_phrase for kw in scoring_result.critical_keywords[:5]],
-                    high_priority_keywords=[kw.keyword_phrase for kw in scoring_result.high_priority_keywords[:8]],
-                    medium_priority_keywords=[kw.keyword_phrase for kw in scoring_result.medium_priority_keywords[:10]],
-                    opportunity_keywords=[kw.keyword_phrase for kw in scoring_result.top_opportunities[:10]],
-                    keyword_analysis={"total_keywords": keyword_analysis.total_keywords},
-                    scoring_analysis={
-                        "critical_keywords": [kw.keyword_phrase for kw in scoring_result.critical_keywords],
-                        "high_priority_keywords": [kw.keyword_phrase for kw in scoring_result.high_priority_keywords],
-                        "opportunity_keywords": [kw.keyword_phrase for kw in scoring_result.top_opportunities]
-                    },
-                    competitor_data={}
-                )
-        else:
-            logger.info("Using direct SEO optimization")
-            seo_analysis = seo_runner.run_direct_optimization(
-                current_listing=current_listing,
-                critical_keywords=[kw.keyword_phrase for kw in scoring_result.critical_keywords[:5]],
-                high_priority_keywords=[kw.keyword_phrase for kw in scoring_result.high_priority_keywords[:8]],
-                medium_priority_keywords=[kw.keyword_phrase for kw in scoring_result.medium_priority_keywords[:10]],
-                opportunity_keywords=[kw.keyword_phrase for kw in scoring_result.top_opportunities[:10]],
-                keyword_analysis={"total_keywords": keyword_analysis.total_keywords},
-                scoring_analysis={
-                    "critical_keywords": [kw.keyword_phrase for kw in scoring_result.critical_keywords],
-                    "high_priority_keywords": [kw.keyword_phrase for kw in scoring_result.high_priority_keywords],
-                    "opportunity_keywords": [kw.keyword_phrase for kw in scoring_result.top_opportunities]
-                },
-                competitor_data={}
-            )
-        
-        # Convert SEO analysis to response format
-        seo_recommendations = {
-            "title_optimization": {
-                "current_title": seo_analysis.title_optimization.current_title,
-                "recommended_title": seo_analysis.title_optimization.recommended_title,
-                "keywords_added": seo_analysis.title_optimization.keywords_added,
-                "improvement_score": seo_analysis.title_optimization.improvement_score
-            },
-            "bullet_points": {
-                "recommended_bullets": seo_analysis.bullet_optimization.recommended_bullets,
-                "keywords_coverage": seo_analysis.bullet_optimization.keywords_coverage
-            },
-            "backend_keywords": {
-                "recommended_keywords": seo_analysis.backend_optimization.recommended_keywords,
-                "character_count": seo_analysis.backend_optimization.character_count,
-                "coverage_improvement": seo_analysis.backend_optimization.coverage_improvement
-            },
-            "content_gaps": [gap.recommended_content for gap in seo_analysis.content_gaps[:5]],
-            "competitive_advantages": [adv.description for adv in seo_analysis.competitive_advantages[:3]]
-        }
-        
-        # Update status
-        analysis_results[analysis_id].current_step = "finalizing"
-        analysis_results[analysis_id].progress = 95
-        analysis_results[analysis_id].message = "Finalizing results"
-        
-        # Compile final results
-        final_results = {
+        # Update status to complete with scoring results
+        analysis_results[analysis_id].status = "completed"
+        analysis_results[analysis_id].current_step = "scoring_complete"
+        analysis_results[analysis_id].progress = 100
+        analysis_results[analysis_id].message = f"Research, keyword, and scoring analysis completed"
+        analysis_results[analysis_id].completed_at = datetime.now().isoformat()
+        analysis_results[analysis_id].results = {
             "analysis_id": analysis_id,
-            "input": {
-                "asin_or_url": asin_or_url,
-                "marketplace": marketplace,
-                "main_keyword": main_keyword,
-                "revenue_keywords_count": len(revenue_data),
-                "design_keywords_count": len(design_data)
-            },
             "research_analysis": research_result,
             "keyword_analysis": {
                 "total_keywords": keyword_analysis.total_keywords,
-                "processed_keywords": keyword_analysis.processed_keywords,
-                "categories_found": len(keyword_analysis.category_stats),
-                "processing_time": keyword_analysis.processing_time,
-                "data_quality_score": keyword_analysis.data_quality_score
+                "keywords_by_category": {k.value: len(v) for k, v in keyword_analysis.keywords_by_category.items()},
+                "top_opportunities": keyword_analysis.top_opportunities[:10],
+                "recommended_focus_areas": keyword_analysis.recommended_focus_areas,
+                "processing_method": keyword_result.get("processing_method", "unknown")
             },
             "scoring_analysis": {
-                "total_analyzed": scoring_result.total_keywords_analyzed,
+                "total_analyzed": getattr(scoring_result, 'total_keywords_analyzed', 0),
                 "priority_distribution": {
-                    "critical": len(scoring_result.critical_keywords),
-                    "high": len(scoring_result.high_priority_keywords),
-                    "medium": len(scoring_result.medium_priority_keywords),
-                    "low": len(scoring_result.low_priority_keywords),
-                    "filtered": len(scoring_result.filtered_keywords)
+                    "critical": len(getattr(scoring_result, 'critical_keywords', [])),
+                    "high": len(getattr(scoring_result, 'high_priority_keywords', [])),
+                    "medium": len(getattr(scoring_result, 'medium_priority_keywords', [])),
+                    "low": len(getattr(scoring_result, 'low_priority_keywords', [])),
+                    "filtered": len(getattr(scoring_result, 'filtered_keywords', []))
                 },
                 "top_critical_keywords": [
                     {
-                        "keyword": kw.keyword_phrase,
-                        "intent_score": int(kw.intent_score),
-                        "priority_score": kw.priority_score,
-                        "search_volume": kw.competition_metrics.search_volume,
-                        "opportunity_score": kw.competition_metrics.opportunity_score
+                        "keyword": getattr(kw, 'keyword_phrase', str(kw)),
+                        "intent_score": getattr(kw, 'intent_score', 0),
+                        "priority_score": getattr(kw, 'priority_score', 0),
+                        "search_volume": getattr(getattr(kw, 'competition_metrics', None), 'search_volume', 0),
+                        "opportunity_score": getattr(getattr(kw, 'competition_metrics', None), 'opportunity_score', 0)
                     }
-                    for kw in scoring_result.critical_keywords[:10]
+                    for kw in getattr(scoring_result, 'critical_keywords', [])[:10]
                 ],
-                "top_opportunities": [
-                    {
-                        "keyword": kw.keyword_phrase,
-                        "opportunity_score": kw.competition_metrics.opportunity_score,
-                        "opportunity_type": kw.opportunity_type,
-                        "search_volume": kw.competition_metrics.search_volume
-                    }
-                    for kw in scoring_result.top_opportunities[:10]
-                ]
+                "processing_method": "ai_scoring" if settings.openai_configured and settings.USE_AI_AGENTS else "direct_processing"
             },
-            "seo_recommendations": seo_recommendations,
-            "summary": {
-                "total_processing_time": "2.5 minutes",  # Would be calculated
-                "confidence_score": 85,  # Would be calculated
-                "actionable_keywords": len(scoring_result.critical_keywords) + len(scoring_result.high_priority_keywords),
-                "quick_wins": len([kw for kw in scoring_result.top_opportunities if kw.competition_metrics.opportunity_score > 80])
-            }
+            "timestamp": datetime.utcnow().isoformat(),
+            "next_steps": [
+                "SEO Optimization (commented out for testing)"
+            ]
         }
         
-        # Complete successfully
-        analysis_results[analysis_id].status = "completed"
-        analysis_results[analysis_id].current_step = "completed"
-        analysis_results[analysis_id].progress = 100
-        analysis_results[analysis_id].message = "Analysis completed successfully"
-        analysis_results[analysis_id].completed_at = datetime.now().isoformat()
-        
-        # Store results (in production, save to database)
-        analysis_results[analysis_id].results = final_results
+        # 🚫 SEO AGENT COMMENTED OUT FOR STEP-BY-STEP TESTING
+        # TODO: Uncomment SEO section once scoring works
         
     except Exception as e:
         # Handle errors
@@ -478,49 +378,6 @@ async def run_complete_analysis(
         analysis_results[analysis_id].error = str(e)
         analysis_results[analysis_id].message = f"Analysis failed: {str(e)}"
         analysis_results[analysis_id].completed_at = datetime.now().isoformat()
-
-
-def generate_seo_recommendations(scoring_result, product_attributes: Dict[str, Any]) -> Dict[str, Any]:
-    """
-    Generate SEO optimization recommendations based on scoring results.
-    This is a placeholder - will be replaced with proper SEO Agent.
-    """
-    
-    critical_keywords = [kw.keyword_phrase for kw in scoring_result.critical_keywords[:5]]
-    high_priority_keywords = [kw.keyword_phrase for kw in scoring_result.high_priority_keywords[:10]]
-    
-    return {
-        "title_optimization": {
-            "current_title": product_attributes.get("title", "Current Product Title"),
-            "recommended_title": f"Optimized Title with {', '.join(critical_keywords[:3])}",
-            "keywords_added": critical_keywords[:3],
-            "improvement_score": 85
-        },
-        "bullet_points": {
-            "recommended_bullets": [
-                f"Premium quality featuring {critical_keywords[0] if critical_keywords else 'key features'}",
-                f"Perfect for {critical_keywords[1] if len(critical_keywords) > 1 else 'your needs'}",
-                f"Includes {critical_keywords[2] if len(critical_keywords) > 2 else 'essential features'}",
-                f"Compatible with {high_priority_keywords[0] if high_priority_keywords else 'various uses'}",
-                f"Easy to use {high_priority_keywords[1] if len(high_priority_keywords) > 1 else 'design'}"
-            ],
-            "keywords_coverage": len(critical_keywords) + len(high_priority_keywords[:5])
-        },
-        "backend_keywords": {
-            "recommended_keywords": high_priority_keywords[:20],
-            "character_count": sum(len(kw) + 1 for kw in high_priority_keywords[:20]),
-            "coverage_improvement": "45%"
-        },
-        "content_gaps": [
-            f"Add content about {kw.keyword_phrase}" 
-            for kw in scoring_result.top_opportunities[:5]
-        ],
-        "competitive_advantages": [
-            "Focus on high-opportunity keywords with low competition",
-            "Target design-specific features for differentiation",
-            "Leverage untapped market opportunities"
-        ]
-    }
 
 
 @router.delete("/analyze/{analysis_id}")
@@ -531,94 +388,52 @@ async def delete_analysis(analysis_id: str):
         raise HTTPException(status_code=404, detail="Analysis not found")
     
     del analysis_results[analysis_id]
-    
     return {"success": True, "message": "Analysis deleted successfully"}
 
 
-@router.get("/analyze")
-async def list_analyses():
-    """List all analyses (for admin/debugging)."""
+def _create_fallback_research_result(asin_or_url: str, marketplace: str, main_keyword: str, revenue_data: List[Dict], design_data: List[Dict]) -> Dict[str, Any]:
+    """
+    Create a fallback research result when AI agents are not available.
+    This uses inference to provide basic analysis.
+    """
     
-    return {
-        "analyses": [
-            {
-                "analysis_id": aid,
-                "status": status.status,
-                "current_step": status.current_step,
-                "progress": status.progress,
-                "started_at": status.started_at,
-                "completed_at": status.completed_at
-            }
-            for aid, status in analysis_results.items()
-        ]
-    }
-
-
-@router.get("/analyze/status")
-async def get_system_status():
-    """Get system status and configuration for debugging."""
+    # Extract all keywords for analysis
+    all_keywords = []
+    for row in revenue_data + design_data:
+        keyword = row.get('Keyword Phrase', '').lower().strip()
+        if keyword:
+            all_keywords.append(keyword)
     
-    return {
-        "ai_configuration": {
-            "openai_configured": settings.openai_configured,
-            "openai_api_key_present": bool(settings.OPENAI_API_KEY),
-            "openai_api_key_length": len(settings.OPENAI_API_KEY) if settings.OPENAI_API_KEY else 0,
-            "use_ai_agents": settings.USE_AI_AGENTS,
-            "fallback_to_direct": settings.FALLBACK_TO_DIRECT,
-            "openai_model": settings.OPENAI_MODEL,
-            "openai_temperature": settings.OPENAI_TEMPERATURE
-        },
-        "agent_status": {
-            "research_agent": "AI enabled" if settings.openai_configured and settings.USE_AI_AGENTS else "Direct processing only",
-            "keyword_agent": "AI enabled" if settings.openai_configured and settings.USE_AI_AGENTS else "Direct processing only", 
-            "scoring_agent": "AI enabled" if settings.openai_configured and settings.USE_AI_AGENTS else "Direct processing only",
-            "seo_agent": "AI enabled" if settings.openai_configured and settings.USE_AI_AGENTS else "Direct processing only"
-        },
-        "current_analyses": len(analysis_results),
-        "cors_origins": settings.get_cors_origins()
-    }
-
-
-def _create_fallback_research_result(asin_or_url: str, marketplace: str, main_keyword: str, revenue_data: list, design_data: list) -> dict:
-    """Create fallback research result when AI agent is not available"""
-    
-    # Infer product category from keywords dynamically
+    # Infer product category from keywords
     inferred_category = "general"
-    if revenue_data:
-        # Analyze keywords to determine product category
-        all_keywords = " ".join([row.get('Keyword Phrase', '').lower() for row in revenue_data[:20]])
-        
-        # Category inference logic based on keyword patterns
-        if any(word in all_keywords for word in ['baby', 'infant', 'toddler', 'newborn', 'nursery']):
-            inferred_category = "baby_products"
-        elif any(word in all_keywords for word in ['kitchen', 'cooking', 'food', 'recipe', 'utensil']):
-            inferred_category = "kitchen_dining"
-        elif any(word in all_keywords for word in ['home', 'house', 'decor', 'furniture', 'living']):
-            inferred_category = "home_garden"
-        elif any(word in all_keywords for word in ['beauty', 'skincare', 'makeup', 'cosmetic', 'hair']):
-            inferred_category = "beauty_personal_care"
-        elif any(word in all_keywords for word in ['electronic', 'tech', 'device', 'gadget', 'computer']):
-            inferred_category = "electronics"
-        elif any(word in all_keywords for word in ['clothing', 'shirt', 'dress', 'pants', 'fashion']):
-            inferred_category = "clothing_shoes_jewelry"
-        elif any(word in all_keywords for word in ['sport', 'fitness', 'exercise', 'workout', 'athletic']):
-            inferred_category = "sports_outdoors"
-        elif any(word in all_keywords for word in ['book', 'read', 'novel', 'author', 'literature']):
-            inferred_category = "books"
-        elif any(word in all_keywords for word in ['toy', 'game', 'play', 'children', 'kids']):
-            inferred_category = "toys_games"
-        elif any(word in all_keywords for word in ['health', 'supplement', 'vitamin', 'wellness', 'medical']):
-            inferred_category = "health_household"
+    if any(word in all_keywords for word in ['baby', 'infant', 'toddler', 'newborn', 'nursery']):
+        inferred_category = "baby_products"
+    elif any(word in all_keywords for word in ['kitchen', 'cooking', 'food', 'recipe', 'utensil']):
+        inferred_category = "kitchen_dining"
+    elif any(word in all_keywords for word in ['home', 'house', 'decor', 'furniture', 'living']):
+        inferred_category = "home_garden"
+    elif any(word in all_keywords for word in ['beauty', 'skincare', 'makeup', 'cosmetic', 'hair']):
+        inferred_category = "beauty_personal_care"
+    elif any(word in all_keywords for word in ['electronic', 'tech', 'device', 'gadget', 'computer']):
+        inferred_category = "electronics"
+    elif any(word in all_keywords for word in ['clothing', 'shirt', 'dress', 'pants', 'fashion']):
+        inferred_category = "clothing_shoes_jewelry"
+    elif any(word in all_keywords for word in ['sport', 'fitness', 'exercise', 'workout', 'athletic']):
+        inferred_category = "sports_outdoors"
+    elif any(word in all_keywords for word in ['book', 'read', 'novel', 'author', 'literature']):
+        inferred_category = "books"
     
-    # Create product title based on main keyword
+    # Infer product title from main keyword
     if main_keyword:
-        inferred_title = f"{main_keyword.title()} - High Quality Amazon Product"
+        inferred_title = main_keyword.title() + " - Premium Quality Product"
     else:
-        inferred_title = "Premium Amazon Product - High Quality"
+        inferred_title = "Premium Product"
     
-    # Try to infer brand from ASIN pattern or use generic
-    inferred_brand = "Premium Brand"
-    if asin_or_url.startswith('B0'):
+    # Infer brand
+    brand_keywords = [kw for kw in all_keywords if len(kw.split()) == 1 and kw.isalpha() and len(kw) > 3]
+    if brand_keywords:
+        inferred_brand = brand_keywords[0].title()
+    else:
         inferred_brand = "Amazon Brand"
     
     return {

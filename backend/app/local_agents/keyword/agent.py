@@ -37,6 +37,7 @@ load_dotenv(find_dotenv())  # Load environment variables from .env file
 keyword_agent = Agent(
     name="KeywordAgent",
     instructions=KEYWORD_AGENT_INSTRUCTIONS,
+    model="gpt-4o",  # Using gpt-4o for better tool stability
     tools=[
         tool_categorize_keywords,
         tool_calculate_relevancy_scores,

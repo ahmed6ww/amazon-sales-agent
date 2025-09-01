@@ -21,6 +21,7 @@ load_dotenv(find_dotenv())  # Load environment variables from .env file
 research_agent = Agent(
     name="ResearchAgent",
     instructions=RESEARCH_AGENT_INSTRUCTIONS,
+    model="gpt-4o",  # Using gpt-4o for better stability
     tools=[
             # No tools needed - using Pythonic approach
     ],

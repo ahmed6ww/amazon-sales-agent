@@ -40,6 +40,7 @@ load_dotenv(find_dotenv())  # Load environment variables from .env file
 seo_agent = Agent(
     name="SEOAgent",
     instructions=SEO_AGENT_INSTRUCTIONS,
+    model="gpt-4o",  # Using gpt-4o for better tool stability
     tools=[
         tool_optimize_title,
         tool_optimize_bullet_points,
