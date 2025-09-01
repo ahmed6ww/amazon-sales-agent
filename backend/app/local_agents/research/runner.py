@@ -116,7 +116,7 @@ class ResearchRunner:
         5. Q&A SECTION - Question and answer pairs
         
         Workflow:
-        1. Scrape the listing with tool_scrape_amazon_listing
+        1. Analyze pre-fetched product data from MVP scraper
         2. Extract clean attributes with tool_extract_product_attributes
         3. Report extraction quality for each of the 5 sources
         

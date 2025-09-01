@@ -11,7 +11,8 @@ from .agent import (
     research_agent
 )
 from .schemas import ScrapeResult, CSVParseResult, ProductAttributes, MarketPosition
-from .tools import tool_scrape_amazon_listing, tool_parse_helium10_csv, tool_determine_market_position
+# Function tools no longer used - using Pythonic approach
+# from .tools import tool_scrape_amazon_listing, tool_parse_helium10_csv, tool_determine_market_position
 from .prompts import RESEARCH_AGENT_INSTRUCTIONS
 from .helper_methods import (
     scrape_amazon_listing_with_mvp_scraper,
@@ -35,8 +36,6 @@ __all__ = [
     "CSVParseResult",
     "ProductAttributes",
     "MarketPosition",
-    "tool_scrape_amazon_listing",
-    "tool_parse_helium10_csv",
-    "tool_determine_market_position",
+    # Function tools no longer used - using Pythonic approach
     "RESEARCH_AGENT_INSTRUCTIONS"
 ] 
