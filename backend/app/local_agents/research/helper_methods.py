@@ -17,15 +17,16 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())  # Load environment variables from .env file
 
 
-def scrape_amazon_listing_with_traditional_scraper(asin_or_url: str) -> Dict[str, Any]:
+def scrape_amazon_listing_with_mvp_scraper(asin_or_url: str) -> Dict[str, Any]:
     """
-    Scrape an Amazon product listing using traditional scraper to extract clean MVP data.
+    Scrape an Amazon product listing using MVP scraper via subprocess isolation.
+    This completely avoids any reactor conflicts with FastAPI/OpenAI agents.
 
     Args:
         asin_or_url: Either an ASIN (e.g., B08KT2Z93D) or full Amazon URL
 
     Returns:
-        Dict containing clean scraped product data with MVP sources
+        Dict containing MVP scraped data (title, images, A+ content, reviews, Q&A)
     """
     try:
         # Convert ASIN to full URL if needed
@@ -38,176 +39,117 @@ def scrape_amazon_listing_with_traditional_scraper(asin_or_url: str) -> Dict[str
             asin_match = re.search(r'/dp/([A-Z0-9]{10})', url)
             asin = asin_match.group(1) if asin_match else ""
 
-        # Use traditional scraper for clean data
-        from app.services.amazon.scrapper import scrape_url
-        scraped_data = scrape_url(url)
-
-        if not scraped_data:
+        # Use subprocess to run scraper in isolation
+        import subprocess
+        import json
+        import sys
+        from pathlib import Path
+        
+        # Get the path to the standalone MVP scraper
+        current_file = Path(__file__)
+        app_dir = current_file.parent.parent.parent
+        backend_dir = app_dir.parent  # Go up one level from app to backend
+        scraper_script = app_dir / "services" / "amazon" / "standalone_mvp_scraper.py"
+        
+        # Run the MVP scraper in a separate process
+        result = subprocess.run(
+            [sys.executable, str(scraper_script), url],
+            capture_output=True,
+            text=True,
+            timeout=120,  # 2 minute timeout
+            cwd=str(backend_dir)
+        )
+        
+        if result.returncode != 0:
             return {
                 "success": False,
-                "error": "Traditional scraper returned no data",
+                "error": f"MVP scraper process failed: {result.stderr}",
+                "data": {},
+                "url": url
+            }
+        
+        # Parse JSON output (extract only the JSON part, ignore debug output)
+        try:
+            # Look for the JSON object in the output
+            stdout_lines = result.stdout.strip().split('\n')
+            json_line = None
+            
+            # Find the line that starts with '{' (the JSON output)
+            for line in stdout_lines:
+                line = line.strip()
+                if line.startswith('{'):
+                    json_line = line
+                    break
+            
+            if json_line:
+                subprocess_result = json.loads(json_line)
+            else:
+                # If no JSON found, try parsing the entire output
+                subprocess_result = json.loads(result.stdout)
+                
+        except json.JSONDecodeError as e:
+            return {
+                "success": False,
+                "error": f"Failed to parse MVP scraper output: {str(e)}. Output: {result.stdout[:200]}",
+                "data": {},
+                "url": url
+            }
+        
+        # Check if subprocess scraping was successful
+        if not subprocess_result.get("success"):
+            return {
+                "success": False,
+                "error": subprocess_result.get("error", "Unknown subprocess error"),
+                "data": {},
+                "url": url
+            }
+        
+        scraped_data = subprocess_result.get("data", {})
+        
+        # Check if scraping was blocked or failed
+        if "error" in scraped_data:
+            return {
+                "success": False,
+                "error": f"Scraping blocked: {scraped_data.get('error')}",
+                "blocked_reason": scraped_data.get("blocked_reason", "Unknown"),
+                "data": {},
+                "url": url
+            }
+        
+        if not scraped_data or not scraped_data.get("asin"):
+            return {
+                "success": False,
+                "error": "No valid product data extracted - Amazon may be blocking requests",
                 "data": {},
                 "url": url
             }
 
-        # Extract only MVP required sources from clean scraped data
-        mvp_data = extract_mvp_sources_from_traditional_data(scraped_data, asin, url)
-
+        # MVP scraper already returns clean data in the right format
         return {
             "success": True,
-            "data": mvp_data,
+            "data": scraped_data,
             "url": url
         }
 
-    except Exception as e:
+    except subprocess.TimeoutExpired:
         return {
             "success": False,
-            "error": f"Error scraping with traditional scraper: {str(e)}",
+            "error": "MVP scraper process timed out (120 seconds)",
+            "data": {},
+            "url": url if 'url' in locals() else asin_or_url
+        }
+    except Exception as e:
+        import traceback
+        error_details = f"Error in MVP subprocess scraping: {str(e)}\nTraceback: {traceback.format_exc()}"
+        return {
+            "success": False,
+            "error": error_details,
             "data": {},
             "url": url if 'url' in locals() else asin_or_url
         }
 
 
-def extract_mvp_sources_from_traditional_data(scraped_data: Dict[str, Any], asin: str, url: str) -> Dict[str, Any]:
-    """
-    Extract the 5 MVP required sources from clean traditional scraper data.
-
-    Args:
-        scraped_data: Clean data from traditional Amazon scraper
-        asin: Product ASIN
-        url: Product URL
-
-    Returns:
-        Dict with only the 5 MVP sources: title, images, aplus_content, reviews, qa_section
-    """
-
-    # ===== 1. TITLE EXTRACTION =====
-    title = scraped_data.get("product_title", "")
-
-    # ===== 2. IMAGES EXTRACTION =====
-    main_image = scraped_data.get("main_image", "")
-    all_images = scraped_data.get("all_images", [])
-
-    images = {
-        "main_image": main_image,
-        "all_images": all_images,
-        "image_count": len(all_images)
-    }
-
-    # ===== 3. A+ CONTENT EXTRACTION =====
-    product_sections = scraped_data.get("product_information_sections", {})
-
-    # Normalize keys for case-insensitive lookup
-    def _find_section_key(target: str) -> Optional[str]:
-        t = target.strip().lower()
-        for k in product_sections.keys():
-            if k.strip().lower() == t:
-                return k
-        return None
-
-    # Extract A+ content blocks
-    content_blocks: List[Dict[str, Any]] = []
-
-    # 3a. From the brand/manufacturer (paragraphs)
-    brand_key = _find_section_key("From the brand/manufacturer")
-    brand_section = product_sections.get(brand_key, {}) if brand_key else {}
-    if brand_section and brand_section.get("type") == "paragraphs":
-        content = brand_section.get("content", [])
-        if content:
-            content_blocks.append({
-                "heading": brand_key,
-                "paragraphs": content
-            })
-
-    # 3b. Product Description (paragraphs)
-    desc_key = _find_section_key("Product Description") or _find_section_key("Product Description".title())
-    desc_section = product_sections.get(desc_key, {}) if desc_key else {}
-    if desc_section and desc_section.get("type") == "paragraphs":
-        content = desc_section.get("content", [])
-        if content:
-            content_blocks.append({
-                "heading": desc_key,
-                "paragraphs": content
-            })
-
-    # 3c. ABOUT THIS ITEM (list)
-    about_key = _find_section_key("About this item")
-    about_section = product_sections.get(about_key, {}) if about_key else {}
-    if about_section and about_section.get("type") == "list":
-        about_items = about_section.get("content", [])
-        if about_items:
-            content_blocks.append({
-                "heading": about_key,
-                "items": about_items
-            })
-
-    # 3d. IMPORTANT INFORMATION (sub-sections)
-    important_key = _find_section_key("Important information")
-    important_section = product_sections.get(important_key, {}) if important_key else {}
-    if important_section and important_section.get("type") == "sub-sections":
-        important_content: Dict[str, str] = important_section.get("content", {}) or {}
-        if important_content:
-            content_blocks.append({
-                "heading": important_key,
-                "items": [f"{k}: {v}" for k, v in important_content.items()]
-            })
-
-    # Calculate total length from the structured blocks
-    total_length = 0
-    for block in content_blocks:
-        if "paragraphs" in block:
-            total_length += sum(len(p) for p in block["paragraphs"])
-        if "items" in block:
-            total_length += sum(len(i) for i in block["items"])
-
-    # Finalize A+ content payload
-    aplus_content = {
-        "sections": content_blocks,
-        "total_length": total_length
-    }
-
-    # ===== 4. REVIEWS EXTRACTION =====
-    # The traditional scraper has AI summary, use that as review content
-    ai_summary = scraped_data.get("ai_summary", "")
-
-    # Create sample reviews from AI summary
-    sample_reviews = []
-    if ai_summary and ai_summary != "AI summary not found":
-        # Split AI summary into review-like segments
-        sentences = ai_summary.split('. ')
-        sample_reviews = [f"{sentence.strip()}." for sentence in sentences if len(sentence.strip()) > 20][:5]
-
-    # Extract review highlights from rating and review count
-    review_highlights = []
-    rating = scraped_data.get("rating", "")
-    review_count = scraped_data.get("review_count", "")
-
-    if rating != "Rating not found":
-        review_highlights.append(f"rating {rating}")
-    if review_count != "Review count not found":
-        review_highlights.append(f"{review_count} reviews")
-
-    reviews = {
-        "sample_reviews": sample_reviews,
-        "review_highlights": review_highlights
-    }
-
-    # ===== 5. Q&A SECTION EXTRACTION =====
-    # Traditional scraper doesn't extract Q&A, so we'll create empty structure
-    qa_section = {
-        "qa_pairs": [],
-        "questions": []
-    }
-
-    # Return only the 5 MVP sources
-    return {
-        "asin": asin,
-        "title": title,
-        "images": images,
-        "aplus_content": aplus_content,
-        "reviews": reviews,
-        "qa_section": qa_section
-    }
+# Function removed - MVP scraper already returns properly structured data
 
 
 def parse_helium10_csv(file_path: str) -> Dict[str, Any]:

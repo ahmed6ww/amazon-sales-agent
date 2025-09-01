@@ -1,7 +1,7 @@
-import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.v1.endpoints import upload, scraper, test, analyze
+from app.api.v1.endpoints import upload, test, analyze, test_research, scrape_mvp
+from app.core.config import settings
 
 app = FastAPI(
     title="Amazon Sales Agent API",
@@ -9,26 +9,21 @@ app = FastAPI(
     version="0.1.0"
 )
 
-# Configure CORS origins from environment variables
-CORS_ORIGINS = os.getenv(
-    "CORS_ORIGINS", 
-    "http://localhost:3000,https://amazon-sales-agent.vercel.app,https://amazon-sales-agent.onrender.com"
-).split(",")
-
 # Add CORS middleware for frontend testing
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
+    allow_origins=settings.get_cors_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Include the router from the upload endpoint
+# Include the routers from all endpoints
 app.include_router(upload.router, prefix="/api/v1", tags=["upload"])
-app.include_router(scraper.router, prefix="/api/v1", tags=["scraper"])
 app.include_router(test.router, prefix="/api/v1", tags=["test"])
 app.include_router(analyze.router, prefix="/api/v1", tags=["analyze"])
+app.include_router(test_research.router, prefix="/api/v1", tags=["test-research"]) 
+app.include_router(scrape_mvp.router, prefix="/api/v1", tags=["scrape-mvp"])
 
 @app.get("/")
 def read_root():
