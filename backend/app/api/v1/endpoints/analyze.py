@@ -186,34 +186,82 @@ async def run_complete_analysis(
             keyword_phrases = [row.get('Keyword Phrase', '').lower().strip() for row in revenue_data[:10] if row.get('Keyword Phrase')]
             main_keyword = keyword_phrases[0] if keyword_phrases else None
         
-        # Use AI Research Agent with Pythonic approach if OpenAI is configured
+        # 🚀 Production-Ready MVP Scraper → Research Agent Pipeline
         if settings.openai_configured and settings.USE_AI_AGENTS:
-            logger.info(f"Using Pythonic AI Research Agent for {asin_or_url}")
+            logger.info(f"🚀 Using Production MVP Scraper → Research Agent Pipeline for {asin_or_url}")
             try:
-                # Import the new Pythonic runner
+                # Step 1: Get clean MVP data using our production scraper
+                from app.local_agents.research.helper_methods import scrape_amazon_listing_with_mvp_scraper
+                
+                logger.info(f"📊 Step 1: Scraping MVP data...")
+                scrape_result = scrape_amazon_listing_with_mvp_scraper(asin_or_url)
+                
+                if not scrape_result.get("success"):
+                    raise Exception(f"MVP scraping failed: {scrape_result.get('error')}")
+                
+                scraped_data = scrape_result.get("data", {})
+                logger.info(f"✅ MVP data extracted: {scraped_data.get('title', 'No title')[:50]}...")
+                
+                # Step 2: Pass clean data to Research Agent
                 from app.local_agents.research.pythonic_runner import PythonicResearchRunner
                 
+                logger.info(f"🤖 Step 2: Running Research Agent analysis...")
                 pythonic_runner = PythonicResearchRunner()
-                research_ai_result = pythonic_runner.run_research_analysis_sync(asin_or_url)
+                
+                # Handle asyncio properly for FastAPI context
+                import asyncio
+                import concurrent.futures
+                
+                def run_agent_analysis():
+                    """Run agent analysis in a separate thread with its own event loop"""
+                    return pythonic_runner.analyze_prefetched_data_sync(
+                        raw_data=scraped_data,
+                        source_url=asin_or_url
+                    )
+                
+                # Run in thread pool to avoid event loop conflicts
+                loop = asyncio.get_event_loop()
+                research_ai_result = await loop.run_in_executor(
+                    None, run_agent_analysis
+                )
                 
                 if research_ai_result.get("success"):
+                    logger.info(f"✅ Research Agent analysis completed successfully")
+                    
+                    # Extract MVP data summary for response
+                    mvp_summary = {
+                        "title_extracted": bool(scraped_data.get("title", "").strip()),
+                        "images_count": scraped_data.get("images", {}).get("image_count", 0),
+                        "aplus_sections": len(scraped_data.get("aplus_content", {}).get("sections", [])),
+                        "reviews_count": len(scraped_data.get("reviews", {}).get("sample_reviews", [])),
+                        "qa_questions": len(scraped_data.get("qa_section", {}).get("questions", []))
+                    }
+                    
                     research_result = {
                         "success": True,
-                        "asin": asin_or_url,
+                        "asin": scraped_data.get("asin", asin_or_url),
                         "marketplace": marketplace,
                         "main_keyword": main_keyword,
                         "revenue_competitors": len(revenue_data),
                         "design_competitors": len(design_data),
                         "ai_analysis": research_ai_result.get("analysis", "Analysis completed"),
-                        "raw_data": research_ai_result.get("raw_data", {}),
-                        "structured_data": research_ai_result.get("structured_data", {}),
-                        "agent_used": research_ai_result.get("agent_used", "Pythonic Research Agent"),
-                        "source": "pythonic_ai_agent"
+                        "mvp_data_summary": mvp_summary,
+                        "product_title": scraped_data.get("title", "Title not found"),
+                        "agent_used": research_ai_result.get("agent_used", "ResearchAnalyst"),
+                        "source": "production_mvp_pipeline",
+                        "data_quality_score": sum([
+                            1 if mvp_summary["title_extracted"] else 0,
+                            1 if mvp_summary["images_count"] > 0 else 0,
+                            1 if mvp_summary["aplus_sections"] > 0 else 0,
+                            1 if mvp_summary["reviews_count"] > 0 else 0,
+                            1 if mvp_summary["qa_questions"] > 0 else 0
+                        ])
                     }
                 else:
-                    raise Exception(f"Pythonic Research failed: {research_ai_result.get('error')}")
+                    raise Exception(f"Research Agent analysis failed: {research_ai_result.get('error')}")
+                    
             except Exception as e:
-                logger.warning(f"Pythonic Research Agent failed: {e}, falling back to inference")
+                logger.warning(f"🔧 Production pipeline failed: {e}, falling back to inference")
                 research_result = _create_fallback_research_result(asin_or_url, marketplace, main_keyword, revenue_data, design_data)
         else:
             logger.info("OpenAI not configured or AI agents disabled, using inference-based research")
