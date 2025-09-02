@@ -88,8 +88,8 @@ class ScoringRunner:
                 'keywords': keywords_data,
                 'total_keywords': keyword_analysis.total_keywords,
                 'processing_time': keyword_analysis.processing_time,
-                'category_stats': list(keyword_analysis.category_stats.values()) if hasattr(keyword_analysis.category_stats, 'values') else [],
-                'root_word_analysis': keyword_analysis.root_word_analysis,
+                'category_stats': [stat.dict() for stat in keyword_analysis.category_stats.values()] if hasattr(keyword_analysis.category_stats, 'values') else [],
+                'root_word_analysis': [analysis.dict() for analysis in keyword_analysis.root_word_analysis],
                 'top_opportunities': keyword_analysis.top_opportunities,
                 'recommended_focus_areas': keyword_analysis.recommended_focus_areas
             }
