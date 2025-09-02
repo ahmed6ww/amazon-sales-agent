@@ -337,11 +337,25 @@ def analyze_content_gaps(
     gaps = []
     
     # Missing critical keywords gap
-    critical_keywords = scoring_analysis.get("critical_keywords", [])
-    current_content = (current_listing.get("title", "") + " " + 
-                      " ".join(current_listing.get("bullets", []))).lower()
+    raw_critical = scoring_analysis.get("critical_keywords", [])
+    critical_keywords: List[str] = []
+    if isinstance(raw_critical, list):
+        for kw in raw_critical:
+            value = None
+            if hasattr(kw, 'keyword_phrase'):
+                value = getattr(kw, 'keyword_phrase')
+            elif isinstance(kw, dict):
+                value = kw.get("keyword_phrase") or kw.get("keyword")
+            else:
+                value = kw
+            if value is None:
+                continue
+            critical_keywords.append(str(value))
+
+    current_content = (str(current_listing.get("title", "")) + " " + 
+                      " ".join([str(b) for b in current_listing.get("bullets", [])])).lower()
     
-    missing_critical = [kw for kw in critical_keywords if kw.lower() not in current_content]
+    missing_critical = [kw for kw in critical_keywords if isinstance(kw, str) and kw.lower() not in current_content]
     
     if missing_critical:
         gaps.append(ContentGap(

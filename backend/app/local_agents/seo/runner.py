@@ -154,6 +154,32 @@ class SEORunner:
             SEOOptimization: Complete optimization package
         """
         
+        # Normalize listing fields to strings/lists of strings
+        def _to_text(value: Any) -> str:
+            if isinstance(value, str):
+                return value
+            if isinstance(value, dict):
+                for key in ("text", "value", "content", "title", "name"):
+                    v = value.get(key)
+                    if isinstance(v, str):
+                        return v
+                # Fallback to string representation
+                return str(value)
+            return str(value) if value is not None else ""
+
+        def _to_text_list(values: Any) -> List[str]:
+            if isinstance(values, list):
+                return [_to_text(v) for v in values]
+            return []
+
+        current_listing = {
+            "title": _to_text(current_listing.get("title", "")),
+            "bullets": _to_text_list(current_listing.get("bullets", [])),
+            "features": _to_text_list(current_listing.get("features", [])),
+            "brand": _to_text(current_listing.get("brand", "")),
+            "category": _to_text(current_listing.get("category", "")),
+        }
+
         # 1. Title Optimization
         title_optimization = optimize_product_title(
             current_title=current_listing.get("title", ""),
@@ -229,43 +255,44 @@ class SEORunner:
     
     def _extract_keywords_by_priority(self, scoring_analysis: Dict[str, Any], priority: str) -> List[str]:
         """Extract keywords by priority level from scoring analysis."""
-        keywords = []
+        keywords: List[str] = []
         
-        # Check different possible data structures
-        if f"{priority}_keywords" in scoring_analysis:
-            keyword_objects = scoring_analysis[f"{priority}_keywords"]
-            if isinstance(keyword_objects, list):
-                for kw in keyword_objects:
-                    if hasattr(kw, 'keyword_phrase'):
-                        keywords.append(kw.keyword_phrase)
-                    elif isinstance(kw, dict):
-                        keywords.append(kw.get("keyword", str(kw)))
-                    else:
-                        keywords.append(str(kw))
+        data = scoring_analysis.get(f"{priority}_keywords", [])
+        if isinstance(data, list):
+            for kw in data:
+                # Pydantic object
+                if hasattr(kw, 'keyword_phrase'):
+                    value = getattr(kw, 'keyword_phrase')
+                # Dict from .dict()
+                elif isinstance(kw, dict):
+                    value = kw.get("keyword_phrase") or kw.get("keyword") or kw.get("keyword_phrase", "")
+                else:
+                    value = kw
+                # Coerce to string
+                if value is None:
+                    continue
+                keywords.append(str(value))
         
-        # Fallback: check priority distribution
-        elif "priority_distribution" in scoring_analysis:
-            # This would need to be implemented based on actual data structure
-            pass
-        
-        return keywords[:10]  # Limit to top 10 keywords
+        return keywords[:10]
     
     def _extract_opportunity_keywords(self, scoring_analysis: Dict[str, Any]) -> List[str]:
         """Extract opportunity keywords from scoring analysis."""
-        keywords = []
+        keywords: List[str] = []
         
-        if "top_opportunities" in scoring_analysis:
-            opportunities = scoring_analysis["top_opportunities"]
-            if isinstance(opportunities, list):
-                for opp in opportunities:
-                    if hasattr(opp, 'keyword_phrase'):
-                        keywords.append(opp.keyword_phrase)
-                    elif isinstance(opp, dict):
-                        keywords.append(opp.get("keyword", str(opp)))
-                    else:
-                        keywords.append(str(opp))
+        opportunities = scoring_analysis.get("top_opportunities", [])
+        if isinstance(opportunities, list):
+            for opp in opportunities:
+                if hasattr(opp, 'keyword_phrase'):
+                    value = getattr(opp, 'keyword_phrase')
+                elif isinstance(opp, dict):
+                    value = opp.get("keyword_phrase") or opp.get("keyword") or opp.get("keyword_phrase", "")
+                else:
+                    value = opp
+                if value is None:
+                    continue
+                keywords.append(str(value))
         
-        return keywords[:15]  # Limit to top 15 opportunity keywords
+        return keywords[:15]
     
     def _generate_quick_wins(
         self,

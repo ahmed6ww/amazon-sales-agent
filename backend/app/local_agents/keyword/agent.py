@@ -5,6 +5,7 @@ OpenAI Agents SDK implementation for keyword categorization and analysis.
 """
 
 from agents import Agent, ModelSettings
+from agents.agent_output import AgentOutputSchema
 from dotenv import load_dotenv, find_dotenv
 
 from .schemas import (
@@ -46,6 +47,8 @@ keyword_agent = Agent(
     ],
     model_settings=ModelSettings(
         temperature=0.1,  # Low temperature for consistent categorization
-        max_tokens=4000
-    )
+        max_tokens=4000,
+        tool_choice="required",
+    ),
+    output_type=AgentOutputSchema(KeywordAnalysisResult, strict_json_schema=False)
 ) 

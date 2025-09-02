@@ -43,12 +43,17 @@ class KeywordRunner:
         """
         
         # First try direct processing to avoid asyncio conflicts
-        try:
-            logger.info("Attempting direct keyword processing to avoid asyncio conflicts")
-            return self.run_direct_processing(csv_data)
-        except Exception as direct_error:
-            logger.warning(f"Direct processing failed: {direct_error}, trying agent approach")
-            return self._try_agent_keyword_analysis(csv_data, product_attributes, str(direct_error))
+        # Comment out direct processing to test AI processing
+        # try:
+        #     logger.info("Attempting direct keyword processing to avoid asyncio conflicts")
+        #     return self.run_direct_processing(csv_data)
+        # except Exception as direct_error:
+        #     logger.warning(f"Direct processing failed: {direct_error}, trying agent approach")
+        #     return self._try_agent_keyword_analysis(csv_data, product_attributes, str(direct_error))
+        
+        # Use AI agent processing directly
+        logger.info("Using AI keyword agent processing for testing")
+        return self._try_agent_keyword_analysis(csv_data, product_attributes, "direct_processing_disabled_for_testing")
     
     def _try_agent_keyword_analysis(
         self, 

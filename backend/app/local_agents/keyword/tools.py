@@ -15,8 +15,10 @@ from .helper_methods import (
     group_keywords_by_root
 )
 from .schemas import KeywordData
+from agents.tool import function_tool
 
 
+@function_tool
 def tool_categorize_keywords(csv_data_json: str, product_attributes_json: str = "{}") -> str:
     """
     Tool to categorize keywords from Helium10 CSV data.
@@ -94,6 +96,7 @@ def tool_categorize_keywords(csv_data_json: str, product_attributes_json: str = 
         return json.dumps({"error": f"Failed to categorize keywords: {str(e)}"})
 
 
+@function_tool
 def tool_calculate_relevancy_scores(keywords_json: str, competitor_asins_json: str) -> str:
     """
     Tool to calculate relevancy scores for keywords using MVP formula.
@@ -150,6 +153,7 @@ def tool_calculate_relevancy_scores(keywords_json: str, competitor_asins_json: s
         return json.dumps({"error": f"Failed to calculate relevancy scores: {str(e)}"})
 
 
+@function_tool
 def tool_extract_root_words(keywords_json: str) -> str:
     """
     Tool to extract root words and group keywords for broad search volume analysis.
@@ -201,6 +205,7 @@ def tool_extract_root_words(keywords_json: str) -> str:
         return json.dumps({"error": f"Failed to extract root words: {str(e)}"})
 
 
+@function_tool
 def tool_analyze_title_density(keywords_json: str) -> str:
     """
     Tool to analyze title density patterns according to MVP rules.
