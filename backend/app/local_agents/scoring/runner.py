@@ -41,21 +41,31 @@ class ScoringRunner:
             Complete scoring result with prioritized keywords
         """
         try:
-            # Prepare data for agent
-            keywords_data = []
+            # Prepare data for agent - limit to top keywords to stay under token limits
+            all_keywords = []
             for category, keyword_list in keyword_analysis.keywords_by_category.items():
-                for kw in keyword_list:
-                    keywords_data.append({
-                        'keyword_phrase': kw.keyword_phrase,
-                        'category': kw.category,
-                        'search_volume': kw.search_volume,
-                        'relevancy_score': kw.relevancy_score,
-                        'title_density': kw.title_density,
-                        'top_10_competitors': len([r for r in kw.competitor_rankings.values() if r <= 10]) if hasattr(kw, 'competitor_rankings') else 0,
-                        'total_competitors': len([r for r in kw.competitor_rankings.values() if r > 0]) if hasattr(kw, 'competitor_rankings') else 0,
-                        'root_word': getattr(kw, 'root_word', None),
-                        'root_volume': getattr(kw, 'root_volume', 0)
-                    })
+                all_keywords.extend(keyword_list)
+            
+            # Sort by search volume and relevancy, take top 100 for AI analysis
+            sorted_keywords = sorted(all_keywords, 
+                                   key=lambda kw: (kw.search_volume or 0) * (kw.relevancy_score or 0), 
+                                   reverse=True)[:100]
+            
+            print(f"🎯 Limiting AI analysis to top {len(sorted_keywords)} keywords (from {len(all_keywords)} total) to stay under token limits")
+            
+            keywords_data = []
+            for kw in sorted_keywords:
+                keywords_data.append({
+                    'keyword_phrase': kw.keyword_phrase,
+                    'category': kw.category,
+                    'search_volume': kw.search_volume,
+                    'relevancy_score': kw.relevancy_score,
+                    'title_density': kw.title_density,
+                    'top_10_competitors': len([r for r in kw.competitor_rankings.values() if r <= 10]) if hasattr(kw, 'competitor_rankings') else 0,
+                    'total_competitors': len([r for r in kw.competitor_rankings.values() if r > 0]) if hasattr(kw, 'competitor_rankings') else 0,
+                    'root_word': getattr(kw, 'root_word', None),
+                    'root_volume': getattr(kw, 'root_volume', 0)
+                })
             
             # Step 1: Calculate intent scores
             intent_message = f"""
@@ -87,11 +97,8 @@ class ScoringRunner:
             keyword_analysis_data = {
                 'keywords': keywords_data,
                 'total_keywords': keyword_analysis.total_keywords,
-                'processing_time': keyword_analysis.processing_time,
-                'category_stats': [stat.dict() for stat in keyword_analysis.category_stats.values()] if hasattr(keyword_analysis.category_stats, 'values') else [],
-                'root_word_analysis': [analysis.dict() for analysis in keyword_analysis.root_word_analysis],
-                'top_opportunities': keyword_analysis.top_opportunities,
-                'recommended_focus_areas': keyword_analysis.recommended_focus_areas
+                'top_opportunities': keyword_analysis.top_opportunities[:10],  # Limit to top 10
+                'recommended_focus_areas': keyword_analysis.recommended_focus_areas[:5]  # Limit to top 5
             }
             
             prioritization_message = f"""
@@ -134,16 +141,24 @@ class ScoringRunner:
     ) -> Dict[str, Any]:
         """Run only intent scoring analysis."""
         try:
-            keywords_data = []
+            # Limit to top keywords for AI analysis
+            all_keywords = []
             for category, keyword_list in keyword_analysis.keywords_by_category.items():
-                for kw in keyword_list:
-                    keywords_data.append({
-                        'keyword_phrase': kw.keyword_phrase,
-                        'category': kw.category,
-                        'search_volume': kw.search_volume,
-                        'relevancy_score': kw.relevancy_score,
-                        'title_density': kw.title_density
-                    })
+                all_keywords.extend(keyword_list)
+            
+            sorted_keywords = sorted(all_keywords, 
+                                   key=lambda kw: (kw.search_volume or 0) * (kw.relevancy_score or 0), 
+                                   reverse=True)[:50]  # Even smaller for intent-only analysis
+            
+            keywords_data = []
+            for kw in sorted_keywords:
+                keywords_data.append({
+                    'keyword_phrase': kw.keyword_phrase,
+                    'category': kw.category,
+                    'search_volume': kw.search_volume,
+                    'relevancy_score': kw.relevancy_score,
+                    'title_density': kw.title_density
+                })
             
             message = f"""
             Calculate intent scores (0-3) for these keywords:
@@ -167,18 +182,26 @@ class ScoringRunner:
     ) -> Dict[str, Any]:
         """Run only competition analysis."""
         try:
-            keywords_data = []
+            # Limit to top keywords for AI analysis
+            all_keywords = []
             for category, keyword_list in keyword_analysis.keywords_by_category.items():
-                for kw in keyword_list:
-                    keywords_data.append({
-                        'keyword_phrase': kw.keyword_phrase,
-                        'category': kw.category,
-                        'search_volume': kw.search_volume,
-                        'relevancy_score': kw.relevancy_score,
-                        'title_density': kw.title_density,
-                        'top_10_competitors': len([r for r in kw.competitor_rankings.values() if r <= 10]) if hasattr(kw, 'competitor_rankings') else 0,
-                        'total_competitors': len([r for r in kw.competitor_rankings.values() if r > 0]) if hasattr(kw, 'competitor_rankings') else 0
-                    })
+                all_keywords.extend(keyword_list)
+            
+            sorted_keywords = sorted(all_keywords, 
+                                   key=lambda kw: (kw.search_volume or 0) * (kw.relevancy_score or 0), 
+                                   reverse=True)[:50]
+            
+            keywords_data = []
+            for kw in sorted_keywords:
+                keywords_data.append({
+                    'keyword_phrase': kw.keyword_phrase,
+                    'category': kw.category,
+                    'search_volume': kw.search_volume,
+                    'relevancy_score': kw.relevancy_score,
+                    'title_density': kw.title_density,
+                    'top_10_competitors': len([r for r in kw.competitor_rankings.values() if r <= 10]) if hasattr(kw, 'competitor_rankings') else 0,
+                    'total_competitors': len([r for r in kw.competitor_rankings.values() if r > 0]) if hasattr(kw, 'competitor_rankings') else 0
+                })
             
             message = f"""
             Analyze competition metrics for these keywords:
@@ -219,9 +242,8 @@ class ScoringRunner:
             keyword_analysis_data = {
                 'keywords': keywords_list,
                 'total_keywords': keyword_analysis.total_keywords,
-                'processing_time': keyword_analysis.processing_time,
-                'top_opportunities': keyword_analysis.top_opportunities,
-                'recommended_focus_areas': keyword_analysis.recommended_focus_areas
+                'top_opportunities': keyword_analysis.top_opportunities[:5],
+                'recommended_focus_areas': keyword_analysis.recommended_focus_areas[:3]
             }
             
             message = f"""
