@@ -81,7 +81,6 @@ export default function TestPipeline() {
   const [revenueFile, setRevenueFile] = useState<File | null>(null);
   const [designFile, setDesignFile] = useState<File | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [analysisId, setAnalysisId] = useState<string | null>(null);
   const [status, setStatus] = useState<AnalysisStatus | null>(null);
   const [results, setResults] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -149,7 +148,6 @@ gpu gaming,30000,0.7`;
 
       const data = await response.json();
       console.log('Analysis started, response data:', data);
-      setAnalysisId(data.analysis_id);
 
       // Start polling for status
       pollStatus(data.analysis_id);
@@ -216,7 +214,6 @@ gpu gaming,30000,0.7`;
 
   const resetTest = () => {
     setIsLoading(false);
-    setAnalysisId(null);
     setStatus(null);
     setResults(null);
     setError(null);
