@@ -17,12 +17,6 @@ from .schemas import (
     CompetitiveAdvantage,
     SEOScore
 )
-from .tools import (
-    tool_optimize_title,
-    tool_optimize_bullet_points,
-    tool_optimize_backend_keywords,
-    tool_analyze_seo_gaps
-)
 from .prompts import SEO_AGENT_INSTRUCTIONS
 from .helper_methods import (
     optimize_product_title,
@@ -36,16 +30,12 @@ from .helper_methods import (
 load_dotenv(find_dotenv())  # Load environment variables from .env file
 
 
-# Create the SEO Agent with comprehensive optimization instructions
+# Create the SEO Agent without tools (to avoid SDK conflicts)
 seo_agent = Agent(
     name="SEOAgent",
     instructions=SEO_AGENT_INSTRUCTIONS,
-    tools=[
-        tool_optimize_title,
-        tool_optimize_bullet_points,
-        tool_optimize_backend_keywords,
-        tool_analyze_seo_gaps
-    ],
+    model="gpt-4o",  # Using gpt-4o for better tool stability
+    tools=[],  # No tools to avoid SDK conflicts
     model_settings=ModelSettings(
         temperature=0.2,  # Low temperature for consistent optimization
         max_tokens=4000

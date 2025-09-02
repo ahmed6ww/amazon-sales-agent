@@ -80,6 +80,31 @@ class ResearchRunner:
         Extracts only the 5 required sources: title, images, A+ content, reviews, Q&A section.
         """
         
+        # First try the direct method to avoid any asyncio conflicts
+        try:
+            from .helper_methods import scrape_amazon_listing_with_mvp_scraper
+            
+            # Use subprocess scraping directly
+            scrape_result = scrape_amazon_listing_with_mvp_scraper(asin_or_url)
+            
+            if scrape_result.get("success"):
+                return {
+                    "success": True,
+                    "final_output": f"Successfully extracted MVP data from {asin_or_url}. Found: {', '.join(scrape_result['data'].keys())}",
+                    "scraped_data": scrape_result["data"]
+                }
+            else:
+                # If direct method fails, try the agent approach
+                return self._try_agent_approach(asin_or_url, scrape_result.get("error"))
+                
+        except Exception as e:
+            # If direct method fails, try the agent approach
+            return self._try_agent_approach(asin_or_url, str(e))
+    
+    def _try_agent_approach(self, asin_or_url: str, direct_error: str) -> Dict[str, Any]:
+        """
+        Fallback to agent approach if direct method fails.
+        """
         prompt = f"""
         Extract the 5 MVP required sources from this Amazon product listing: {asin_or_url}
         
@@ -91,7 +116,7 @@ class ResearchRunner:
         5. Q&A SECTION - Question and answer pairs
         
         Workflow:
-        1. Scrape the listing with tool_scrape_amazon_listing
+        1. Analyze pre-fetched product data from MVP scraper
         2. Extract clean attributes with tool_extract_product_attributes
         3. Report extraction quality for each of the 5 sources
         
@@ -109,7 +134,7 @@ class ResearchRunner:
         except Exception as e:
             return {
                 "success": False,
-                "error": str(e),
+                "error": f"Both direct method and agent failed. Direct error: {direct_error}, Agent error: {str(e)}",
                 "final_output": None
             }
     

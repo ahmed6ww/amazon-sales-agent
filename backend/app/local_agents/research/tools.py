@@ -1,7 +1,7 @@
 from agents import function_tool
 import json
 from .schemas import ScrapeResult, CSVParseResult, ProductAttributes, MarketPosition
-from .helper_methods import scrape_amazon_listing_with_traditional_scraper, parse_helium10_csv, determine_market_position
+from .helper_methods import scrape_amazon_listing_with_mvp_scraper, parse_helium10_csv, determine_market_position
 
 
 @function_tool
@@ -15,7 +15,7 @@ def tool_scrape_amazon_listing(asin_or_url: str) -> str:
     Returns:
         JSON string containing clean MVP product data
     """
-    result = scrape_amazon_listing_with_traditional_scraper(asin_or_url)
+    result = scrape_amazon_listing_with_mvp_scraper(asin_or_url)
     return json.dumps(result, indent=2)
 
 

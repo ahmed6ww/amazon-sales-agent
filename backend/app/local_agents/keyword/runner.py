@@ -8,6 +8,9 @@ and provides a clean interface for running keyword analysis tasks.
 from agents import Runner
 from typing import Dict, List, Any, Optional
 import json
+import logging
+
+logger = logging.getLogger(__name__)
 
 from .agent import keyword_agent
 from .helper_methods import categorize_keywords_from_csv
@@ -39,6 +42,23 @@ class KeywordRunner:
             Complete keyword analysis results
         """
         
+        # First try direct processing to avoid asyncio conflicts
+        try:
+            logger.info("Attempting direct keyword processing to avoid asyncio conflicts")
+            return self.run_direct_processing(csv_data)
+        except Exception as direct_error:
+            logger.warning(f"Direct processing failed: {direct_error}, trying agent approach")
+            return self._try_agent_keyword_analysis(csv_data, product_attributes, str(direct_error))
+    
+    def _try_agent_keyword_analysis(
+        self, 
+        csv_data: List[Dict[str, Any]], 
+        product_attributes: Optional[Dict[str, Any]],
+        direct_error: str
+    ) -> Dict[str, Any]:
+        """
+        Fallback to agent approach if direct processing fails.
+        """
         # Construct the analysis prompt
         prompt = f"""
         Please conduct a comprehensive keyword analysis on this Helium10 data:
@@ -71,11 +91,7 @@ class KeywordRunner:
             # Run the agent with the data
             result = Runner.run_sync(
                 keyword_agent, 
-                prompt,
-                context_variables={
-                    "csv_data": csv_data_json,
-                    "product_attributes": product_attributes_json
-                }
+                prompt
             )
             
             return {
@@ -118,8 +134,7 @@ class KeywordRunner:
             
             result = Runner.run_sync(
                 keyword_agent, 
-                prompt,
-                context_variables={"csv_data": csv_data_json}
+                prompt
             )
             
             return {
@@ -167,11 +182,7 @@ class KeywordRunner:
             
             result = Runner.run_sync(
                 keyword_agent, 
-                prompt,
-                context_variables={
-                    "keywords_data": keywords_json,
-                    "competitor_asins": competitor_asins_json
-                }
+                prompt
             )
             
             return {
@@ -257,8 +268,7 @@ class KeywordRunner:
             
             result = Runner.run_sync(
                 keyword_agent, 
-                prompt,
-                context_variables={"keywords_data": keywords_json}
+                prompt
             )
             
             return {
