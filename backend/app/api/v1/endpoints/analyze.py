@@ -290,7 +290,7 @@ async def run_complete_analysis(
                 keyword_result = keyword_runner.run_direct_processing(combined_data)
         else:
             logger.info("Using direct keyword processing")
-            keyword_result = keyword_runner.run_direct_processing(combined_data)
+        keyword_result = keyword_runner.run_direct_processing(combined_data)
         
         if not keyword_result.get("success"):
             raise Exception(f"Keyword analysis failed: {keyword_result.get('error')}")
@@ -305,32 +305,129 @@ async def run_complete_analysis(
         # Step 4: Scoring Agent - Score and prioritize keywords
         scoring_runner = ScoringRunner()
         
-        # Use AI Scoring Agent if configured, otherwise use direct processing
+        # Use AI Scoring Agent with proper asyncio handling
         if settings.openai_configured and settings.USE_AI_AGENTS:
             logger.info(f"Using AI Scoring Agent for {keyword_analysis.total_keywords} keywords")
             try:
-                scoring_result = scoring_runner.run_full_scoring_analysis(
-                    keyword_analysis=keyword_analysis,
-                    product_attributes=research_result.get("product_attributes", {}),
-                    business_context={"main_keyword": main_keyword}
-                )
+                def run_scoring_analysis():
+                    """Run scoring analysis in a separate thread with its own event loop"""
+                    import asyncio
+                    # Create a new event loop for this thread
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+                    try:
+                        return scoring_runner.run_full_scoring_analysis(
+                            keyword_analysis=keyword_analysis,
+                            product_attributes={
+                                "product_title": research_result.get("product_title", ""),
+                                "asin": research_result.get("asin", ""),
+                                "marketplace": research_result.get("marketplace", marketplace),
+                                "ai_analysis": research_result.get("ai_analysis", ""),
+                                "data_quality_score": research_result.get("data_quality_score", 0),
+                                **research_result.get("product_attributes", {})
+                            },
+                            business_context={
+                                "main_keyword": main_keyword,
+                                "revenue_competitors": research_result.get("revenue_competitors", 0),
+                                "design_competitors": research_result.get("design_competitors", 0),
+                                "source": research_result.get("source", "unknown")
+                            }
+                        )
+                    finally:
+                        loop.close()
+                
+                # Run in thread pool to avoid event loop conflicts
+                loop = asyncio.get_event_loop()
+                scoring_result = await loop.run_in_executor(None, run_scoring_analysis)
+                
                 if not scoring_result:
                     raise Exception("AI Scoring analysis returned empty result")
+                    
             except Exception as e:
                 logger.warning(f"AI Scoring Agent failed: {e}, falling back to direct processing")
                 scoring_result = scoring_runner.run_direct_processing(keyword_analysis)
         else:
             logger.info("Using direct scoring processing")
-            scoring_result = scoring_runner.run_direct_processing(keyword_analysis)
+        scoring_result = scoring_runner.run_direct_processing(keyword_analysis)
         
-        # 🎯 STEP-BY-STEP: Stop here after Research + Keyword + Scoring analysis
-        logger.info("✅ Research + Keyword + Scoring analysis completed - returning results")
+        # Update status
+        analysis_results[analysis_id].current_step = "seo_optimization"
+        analysis_results[analysis_id].progress = 80
+        analysis_results[analysis_id].message = f"Generating SEO optimization recommendations"
         
-        # Update status to complete with scoring results
+        # Step 5: SEO Agent - Generate optimization recommendations
+        seo_runner = SEORunner()
+        
+        # Use AI SEO Agent with proper asyncio handling
+        if settings.openai_configured and settings.USE_AI_AGENTS:
+            logger.info("Using AI SEO Agent for optimization recommendations")
+            try:
+                def run_seo_analysis():
+                    """Run SEO analysis in a separate thread with its own event loop"""
+                    import asyncio
+                    # Create a new event loop for this thread
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+                    try:
+                        return seo_runner.run_full_seo_optimization(
+                            product_info={
+                                "title": research_result.get("product_title", ""),
+                                "asin": research_result.get("asin", ""),
+                                "marketplace": research_result.get("marketplace", marketplace),
+                                "ai_analysis": research_result.get("ai_analysis", ""),
+                                "main_keyword": main_keyword,
+                                **research_result
+                            },
+                            keyword_analysis=keyword_analysis.dict() if hasattr(keyword_analysis, 'dict') else {},
+                            scoring_analysis=scoring_result.dict() if hasattr(scoring_result, 'dict') else {},
+                            competitor_data={
+                                "revenue_competitors": research_result.get("revenue_competitors", 0),
+                                "design_competitors": research_result.get("design_competitors", 0),
+                                "total_keywords_analyzed": keyword_analysis.total_keywords
+                            }
+                        )
+                    finally:
+                        loop.close()
+                
+                # Run in thread pool to avoid event loop conflicts
+                loop = asyncio.get_event_loop()
+                seo_result = await loop.run_in_executor(None, run_seo_analysis)
+                
+                if not seo_result:
+                    raise Exception("AI SEO analysis returned empty result")
+                    
+            except Exception as e:
+                logger.warning(f"AI SEO Agent failed: {e}, falling back to direct processing")
+                seo_result = seo_runner.run_direct_optimization(
+                    current_listing=research_result,
+                    critical_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'critical_keywords', [])],
+                    high_priority_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'high_priority_keywords', [])],
+                    medium_priority_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'medium_priority_keywords', [])],
+                    opportunity_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'high_priority_keywords', [])],
+                    keyword_analysis={},
+                    scoring_analysis={},
+                    competitor_data={}
+                )
+        else:
+            logger.info("Using direct SEO processing")
+            seo_result = seo_runner.run_direct_optimization(
+                current_listing=research_result,
+                critical_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'critical_keywords', [])],
+                high_priority_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'high_priority_keywords', [])],
+                medium_priority_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'medium_priority_keywords', [])],
+                opportunity_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'high_priority_keywords', [])],
+                keyword_analysis={},
+                scoring_analysis={},
+            competitor_data={}
+        )
+        
+        logger.info("✅ Complete pipeline analysis finished - Research + Keyword + Scoring + SEO")
+        
+        # Update status to complete with all results
         analysis_results[analysis_id].status = "completed"
-        analysis_results[analysis_id].current_step = "scoring_complete"
+        analysis_results[analysis_id].current_step = "pipeline_complete"
         analysis_results[analysis_id].progress = 100
-        analysis_results[analysis_id].message = f"Research, keyword, and scoring analysis completed"
+        analysis_results[analysis_id].message = f"Complete AI pipeline analysis finished successfully"
         analysis_results[analysis_id].completed_at = datetime.now().isoformat()
         analysis_results[analysis_id].results = {
             "analysis_id": analysis_id,
@@ -363,14 +460,19 @@ async def run_complete_analysis(
                 ],
                 "processing_method": "ai_scoring" if settings.openai_configured and settings.USE_AI_AGENTS else "direct_processing"
             },
+            "seo_analysis": {
+                "optimizations_generated": len(getattr(seo_result, 'optimizations', [])),
+                "title_optimization": getattr(getattr(seo_result, 'title_optimization', None), 'recommended_title', 'No optimization available') if hasattr(seo_result, 'title_optimization') else 'No optimization available',
+                "bullet_optimizations": len(getattr(seo_result, 'bullet_optimizations', [])),
+                "backend_keywords": getattr(getattr(seo_result, 'backend_keywords', None), 'recommended_keywords', []) if hasattr(seo_result, 'backend_keywords') else [],
+                "content_gaps": len(getattr(seo_result, 'content_gaps', [])),
+                "competitive_advantages": len(getattr(seo_result, 'competitive_advantages', [])),
+                "seo_score": getattr(getattr(seo_result, 'overall_seo_score', None), 'total_score', 0) if hasattr(seo_result, 'overall_seo_score') else 0,
+                "processing_method": "ai_seo" if settings.openai_configured and settings.USE_AI_AGENTS else "direct_processing"
+            },
             "timestamp": datetime.utcnow().isoformat(),
-            "next_steps": [
-                "SEO Optimization (commented out for testing)"
-            ]
+            "pipeline_status": "complete"
         }
-        
-        # 🚫 SEO AGENT COMMENTED OUT FOR STEP-BY-STEP TESTING
-        # TODO: Uncomment SEO section once scoring works
         
     except Exception as e:
         # Handle errors

@@ -6,6 +6,7 @@ Manages the execution of scoring agent tasks and workflows.
 
 import json
 from typing import Dict, Any, Optional
+from agents import Runner
 from .agent import scoring_agent
 from .helper_methods import rank_keywords_by_priority, filter_by_thresholds
 from .schemas import ScoringConfig, ScoringResult
@@ -41,20 +42,20 @@ class ScoringRunner:
         """
         try:
             # Prepare data for agent
-            keywords_data = [
-                {
-                    'keyword_phrase': kw.keyword_phrase,
-                    'category': kw.category,
-                    'search_volume': kw.search_volume,
-                    'relevancy_score': kw.relevancy_score,
-                    'title_density': kw.title_density,
-                    'top_10_competitors': kw.top_10_competitors,
-                    'total_competitors': kw.total_competitors,
-                    'root_word': kw.root_word,
-                    'root_volume': kw.root_volume
-                }
-                for kw in keyword_analysis.keywords
-            ]
+            keywords_data = []
+            for category, keyword_list in keyword_analysis.keywords_by_category.items():
+                for kw in keyword_list:
+                    keywords_data.append({
+                        'keyword_phrase': kw.keyword_phrase,
+                        'category': kw.category,
+                        'search_volume': kw.search_volume,
+                        'relevancy_score': kw.relevancy_score,
+                        'title_density': kw.title_density,
+                        'top_10_competitors': len([r for r in kw.competitor_rankings.values() if r <= 10]) if hasattr(kw, 'competitor_rankings') else 0,
+                        'total_competitors': len([r for r in kw.competitor_rankings.values() if r > 0]) if hasattr(kw, 'competitor_rankings') else 0,
+                        'root_word': getattr(kw, 'root_word', None),
+                        'root_volume': getattr(kw, 'root_volume', 0)
+                    })
             
             # Step 1: Calculate intent scores
             intent_message = f"""
@@ -66,8 +67,8 @@ class ScoringRunner:
             Use tool_calculate_intent_scores to analyze commercial intent and assign scores.
             """
             
-            intent_response = self.agent.run(intent_message)
-            print(f"Intent scoring completed: {intent_response.messages[-1].content}")
+            intent_response = Runner.run_sync(self.agent, intent_message)
+            print(f"Intent scoring completed: {intent_response.final_output}")
             
             # Step 2: Analyze competition metrics
             competition_message = f"""
@@ -79,17 +80,18 @@ class ScoringRunner:
             Use tool_analyze_competition_metrics to evaluate ranking difficulty and opportunities.
             """
             
-            competition_response = self.agent.run(competition_message)
-            print(f"Competition analysis completed: {competition_response.messages[-1].content}")
+            competition_response = Runner.run_sync(self.agent, competition_message)
+            print(f"Competition analysis completed: {competition_response.final_output}")
             
             # Step 3: Prioritize keywords
             keyword_analysis_data = {
                 'keywords': keywords_data,
                 'total_keywords': keyword_analysis.total_keywords,
-                'processing_timestamp': keyword_analysis.processing_timestamp,
-                'category_stats': [stat.dict() for stat in keyword_analysis.category_stats],
+                'processing_time': keyword_analysis.processing_time,
+                'category_stats': list(keyword_analysis.category_stats.values()) if hasattr(keyword_analysis.category_stats, 'values') else [],
                 'root_word_analysis': keyword_analysis.root_word_analysis,
-                'summary': keyword_analysis.summary
+                'top_opportunities': keyword_analysis.top_opportunities,
+                'recommended_focus_areas': keyword_analysis.recommended_focus_areas
             }
             
             prioritization_message = f"""
@@ -101,8 +103,8 @@ class ScoringRunner:
             Use tool_prioritize_keywords to create final priority rankings.
             """
             
-            prioritization_response = self.agent.run(prioritization_message)
-            print(f"Keyword prioritization completed: {prioritization_response.messages[-1].content}")
+            prioritization_response = Runner.run_sync(self.agent, prioritization_message)
+            print(f"Keyword prioritization completed: {prioritization_response.final_output}")
             
             # Step 4: Generate final rankings and recommendations
             final_message = f"""
@@ -114,8 +116,8 @@ class ScoringRunner:
             Use tool_generate_final_rankings to provide implementation guidance.
             """
             
-            final_response = self.agent.run(final_message)
-            print(f"Final rankings generated: {final_response.messages[-1].content}")
+            final_response = Runner.run_sync(self.agent, final_message)
+            print(f"Final rankings generated: {final_response.final_output}")
             
             # Use direct processing as fallback for complete result
             return self.run_direct_processing(keyword_analysis)
@@ -132,16 +134,16 @@ class ScoringRunner:
     ) -> Dict[str, Any]:
         """Run only intent scoring analysis."""
         try:
-            keywords_data = [
-                {
-                    'keyword_phrase': kw.keyword_phrase,
-                    'category': kw.category,
-                    'search_volume': kw.search_volume,
-                    'relevancy_score': kw.relevancy_score,
-                    'title_density': kw.title_density
-                }
-                for kw in keyword_analysis.keywords
-            ]
+            keywords_data = []
+            for category, keyword_list in keyword_analysis.keywords_by_category.items():
+                for kw in keyword_list:
+                    keywords_data.append({
+                        'keyword_phrase': kw.keyword_phrase,
+                        'category': kw.category,
+                        'search_volume': kw.search_volume,
+                        'relevancy_score': kw.relevancy_score,
+                        'title_density': kw.title_density
+                    })
             
             message = f"""
             Calculate intent scores (0-3) for these keywords:
@@ -152,8 +154,8 @@ class ScoringRunner:
             Use tool_calculate_intent_scores to analyze commercial intent.
             """
             
-            response = self.agent.run(message)
-            return {"success": True, "response": response.messages[-1].content}
+            response = Runner.run_sync(self.agent, message)
+            return {"success": True, "response": response.final_output}
             
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -165,18 +167,18 @@ class ScoringRunner:
     ) -> Dict[str, Any]:
         """Run only competition analysis."""
         try:
-            keywords_data = [
-                {
-                    'keyword_phrase': kw.keyword_phrase,
-                    'category': kw.category,
-                    'search_volume': kw.search_volume,
-                    'relevancy_score': kw.relevancy_score,
-                    'title_density': kw.title_density,
-                    'top_10_competitors': kw.top_10_competitors,
-                    'total_competitors': kw.total_competitors
-                }
-                for kw in keyword_analysis.keywords
-            ]
+            keywords_data = []
+            for category, keyword_list in keyword_analysis.keywords_by_category.items():
+                for kw in keyword_list:
+                    keywords_data.append({
+                        'keyword_phrase': kw.keyword_phrase,
+                        'category': kw.category,
+                        'search_volume': kw.search_volume,
+                        'relevancy_score': kw.relevancy_score,
+                        'title_density': kw.title_density,
+                        'top_10_competitors': len([r for r in kw.competitor_rankings.values() if r <= 10]) if hasattr(kw, 'competitor_rankings') else 0,
+                        'total_competitors': len([r for r in kw.competitor_rankings.values() if r > 0]) if hasattr(kw, 'competitor_rankings') else 0
+                    })
             
             message = f"""
             Analyze competition metrics for these keywords:
@@ -187,8 +189,8 @@ class ScoringRunner:
             Use tool_analyze_competition_metrics to evaluate difficulty and opportunities.
             """
             
-            response = self.agent.run(message)
-            return {"success": True, "response": response.messages[-1].content}
+            response = Runner.run_sync(self.agent, message)
+            return {"success": True, "response": response.final_output}
             
         except Exception as e:
             return {"success": False, "error": str(e)}
@@ -199,24 +201,27 @@ class ScoringRunner:
     ) -> Dict[str, Any]:
         """Run only keyword prioritization."""
         try:
-            keyword_analysis_data = {
-                'keywords': [
-                    {
+            keywords_list = []
+            for category, keyword_list in keyword_analysis.keywords_by_category.items():
+                for kw in keyword_list:
+                    keywords_list.append({
                         'keyword_phrase': kw.keyword_phrase,
                         'category': kw.category,
                         'search_volume': kw.search_volume,
                         'relevancy_score': kw.relevancy_score,
                         'title_density': kw.title_density,
-                        'top_10_competitors': kw.top_10_competitors,
-                        'total_competitors': kw.total_competitors,
-                        'root_word': kw.root_word,
-                        'root_volume': kw.root_volume
-                    }
-                    for kw in keyword_analysis.keywords
-                ],
+                        'top_10_competitors': len([r for r in kw.competitor_rankings.values() if r <= 10]) if hasattr(kw, 'competitor_rankings') else 0,
+                        'total_competitors': len([r for r in kw.competitor_rankings.values() if r > 0]) if hasattr(kw, 'competitor_rankings') else 0,
+                        'root_word': getattr(kw, 'root_word', None),
+                        'root_volume': getattr(kw, 'root_volume', 0)
+                    })
+            
+            keyword_analysis_data = {
+                'keywords': keywords_list,
                 'total_keywords': keyword_analysis.total_keywords,
-                'processing_timestamp': keyword_analysis.processing_timestamp,
-                'summary': keyword_analysis.summary
+                'processing_time': keyword_analysis.processing_time,
+                'top_opportunities': keyword_analysis.top_opportunities,
+                'recommended_focus_areas': keyword_analysis.recommended_focus_areas
             }
             
             message = f"""
@@ -228,8 +233,8 @@ class ScoringRunner:
             Use tool_prioritize_keywords to create priority rankings.
             """
             
-            response = self.agent.run(message)
-            return {"success": True, "response": response.messages[-1].content}
+            response = Runner.run_sync(self.agent, message)
+            return {"success": True, "response": response.final_output}
             
         except Exception as e:
             return {"success": False, "error": str(e)}

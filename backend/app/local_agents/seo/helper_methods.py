@@ -119,7 +119,7 @@ def optimize_product_title(
         "character_limit": len(recommended_title) <= character_limit,
         "no_promotional_terms": not any(term in recommended_title.lower() 
                                       for term in ["best", "sale", "free shipping", "#1"]),
-        "proper_capitalization": recommended_title.istitle() or recommended_title[0].isupper(),
+        "proper_capitalization": recommended_title.istitle() or (len(recommended_title) > 0 and recommended_title[0].isupper()),
         "no_special_characters": not any(char in recommended_title for char in "!?*"),
     }
     

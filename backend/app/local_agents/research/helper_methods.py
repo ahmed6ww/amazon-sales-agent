@@ -103,7 +103,7 @@ def scrape_amazon_listing_with_mvp_scraper(asin_or_url: str) -> Dict[str, Any]:
                 "data": {},
                 "url": url
             }
-        
+
         scraped_data = subprocess_result.get("data", {})
         
         # Check if scraping was blocked or failed
