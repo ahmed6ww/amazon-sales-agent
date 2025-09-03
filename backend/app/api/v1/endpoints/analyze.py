@@ -277,53 +277,30 @@ async def run_complete_analysis(
         # Combine both CSV datasets for comprehensive analysis
         combined_data = revenue_data + design_data
         
-        # Use AI Keyword Agent if configured, otherwise use direct processing
-        keyword_processing_method = "direct_processing"
-        if settings.openai_configured and settings.USE_AI_AGENTS:
-            logger.info(f"Using AI Keyword Agent for {len(combined_data)} keywords")
-            try:
-                def run_keyword_analysis():
-                    """Run keyword analysis in a separate thread with its own event loop"""
-                    # Create a new event loop for this thread
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
-                    try:
-                        return keyword_runner.run_full_keyword_analysis(combined_data)
-                    finally:
-                        loop.close()
+        # Force AI Keyword Agent processing only (no direct fallback)
+        keyword_processing_method = "ai_keyword"
+        logger.info(f"Using AI Keyword Agent for {len(combined_data)} keywords")
+        try:
+            def run_keyword_analysis():
+                """Run keyword analysis in a separate thread with its own event loop"""
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                try:
+                    return keyword_runner.run_full_keyword_analysis(combined_data)
+                finally:
+                    loop.close()
 
-                # Run in thread pool to avoid event loop conflicts
-                loop = asyncio.get_event_loop()
-                keyword_result = await loop.run_in_executor(None, run_keyword_analysis)
+            # Run in thread pool to avoid event loop conflicts
+            loop = asyncio.get_event_loop()
+            keyword_result = await loop.run_in_executor(None, run_keyword_analysis)
 
-                if not keyword_result.get("success"):
-                    raise Exception(f"AI Keyword analysis failed: {keyword_result.get('error')}")
-                # Determine if the runner actually used direct helper methods
-                processing_details = keyword_result.get("processing_details", {})
-                if processing_details.get("processing_method") == "direct_helper_methods":
-                    keyword_processing_method = "direct_processing"
-                else:
-                    keyword_processing_method = "ai_keyword"
-                # Ensure we have structured 'result' for downstream steps
-                if "result" not in keyword_result:
-                    structured = keyword_runner.run_direct_processing(combined_data)
-                    if not structured.get("success"):
-                        raise Exception(f"Keyword analysis structuring failed: {structured.get('error')}")
-                    keyword_result["result"] = structured["result"]
-                    # Preserve any AI summary while noting structure source
-                    if "processing_details" not in keyword_result:
-                        keyword_result["processing_details"] = {}
-                    if keyword_result.get("final_output"):
-                        keyword_result["processing_details"]["ai_summary"] = keyword_result.get("final_output")
-                    keyword_result["processing_details"]["structured_from"] = "direct_helper_methods"
-            except Exception as e:
-                logger.warning(f"AI Keyword Agent failed: {e}, falling back to direct processing")
-                keyword_result = keyword_runner.run_direct_processing(combined_data)
-                keyword_processing_method = "direct_processing"
-        else:
-            logger.info("Using direct keyword processing")
-            keyword_result = keyword_runner.run_direct_processing(combined_data)
-            keyword_processing_method = "direct_processing"
+            if not keyword_result.get("success"):
+                raise Exception(f"AI Keyword analysis failed: {keyword_result.get('error')}")
+            if "result" not in keyword_result or not keyword_result.get("result"):
+                raise Exception("AI Keyword analysis did not return structured result")
+        except Exception as e:
+            # Hard error if AI fails
+            raise Exception(f"Keyword analysis failed (AI-only mode): {e}")
         
         if not keyword_result.get("success"):
             raise Exception(f"Keyword analysis failed: {keyword_result.get('error')}")
@@ -338,52 +315,42 @@ async def run_complete_analysis(
         # Step 4: Scoring Agent - Score and prioritize keywords
         scoring_runner = ScoringRunner()
         
-        # Use AI Scoring Agent with proper asyncio handling
-        scoring_processing_method = "direct_processing"
-        if settings.openai_configured and settings.USE_AI_AGENTS:
-            logger.info(f"Using AI Scoring Agent for {keyword_analysis.total_keywords} keywords")
-            try:
-                def run_scoring_analysis():
-                    """Run scoring analysis in a separate thread with its own event loop"""
-                    # Create a new event loop for this thread
-                    loop = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop)
-                    try:
-                        return scoring_runner.run_full_scoring_analysis(
-                            keyword_analysis=keyword_analysis,
-                            product_attributes={
-                                "product_title": research_result.get("product_title", ""),
-                                "asin": research_result.get("asin", ""),
-                                "marketplace": research_result.get("marketplace", marketplace),
-                                "ai_analysis": research_result.get("ai_analysis", ""),
-                                "data_quality_score": research_result.get("data_quality_score", 0),
-                                **research_result.get("product_attributes", {})
-                            },
-                            business_context={
-                                "main_keyword": main_keyword,
-                                "revenue_competitors": research_result.get("revenue_competitors", 0),
-                                "design_competitors": research_result.get("design_competitors", 0),
-                                "source": research_result.get("source", "unknown")
-                            }
-                        )
-                    finally:
-                        loop.close()
-                
-                # Run in thread pool to avoid event loop conflicts
-                loop = asyncio.get_event_loop()
-                scoring_result = await loop.run_in_executor(None, run_scoring_analysis)
-                
-                if not scoring_result:
-                    raise Exception("AI Scoring analysis returned empty result")
-                scoring_processing_method = "ai_scoring"
-            except Exception as e:
-                logger.warning(f"AI Scoring Agent failed: {e}, falling back to direct processing")
-                scoring_result = scoring_runner.run_direct_processing(keyword_analysis)
-                scoring_processing_method = "direct_processing"
-        else:
-            logger.info("Using direct scoring processing")
-            scoring_result = scoring_runner.run_direct_processing(keyword_analysis)
-            scoring_processing_method = "direct_processing"
+        # Force AI Scoring Agent (no direct fallback)
+        scoring_processing_method = "ai_scoring"
+        logger.info(f"Using AI Scoring Agent for {keyword_analysis.total_keywords} keywords")
+        try:
+            def run_scoring_analysis():
+                """Run scoring analysis in a separate thread with its own event loop"""
+                loop = asyncio.new_event_loop()
+                asyncio.set_event_loop(loop)
+                try:
+                    return scoring_runner.run_full_scoring_analysis(
+                        keyword_analysis=keyword_analysis,
+                        product_attributes={
+                            "product_title": research_result.get("product_title", ""),
+                            "asin": research_result.get("asin", ""),
+                            "marketplace": research_result.get("marketplace", marketplace),
+                            "ai_analysis": research_result.get("ai_analysis", ""),
+                            "data_quality_score": research_result.get("data_quality_score", 0),
+                            **research_result.get("product_attributes", {})
+                        },
+                        business_context={
+                            "main_keyword": main_keyword,
+                            "revenue_competitors": research_result.get("revenue_competitors", 0),
+                            "design_competitors": research_result.get("design_competitors", 0),
+                            "source": research_result.get("source", "unknown")
+                        }
+                    )
+                finally:
+                    loop.close()
+
+            # Run in thread pool to avoid event loop conflicts
+            loop = asyncio.get_event_loop()
+            scoring_result = await loop.run_in_executor(None, run_scoring_analysis)
+            if not scoring_result:
+                raise Exception("AI Scoring analysis returned empty result")
+        except Exception as e:
+            raise Exception(f"Scoring analysis failed (AI-only mode): {e}")
         
         # Update status
         analysis_results[analysis_id].current_step = "seo_optimization"

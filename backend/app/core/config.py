@@ -5,32 +5,43 @@ Core configuration settings for the Amazon Sales Agent Backend
 import os
 from typing import Optional
 
+from dotenv import find_dotenv, load_dotenv
+
 class Settings:
-    """Application settings from environment variables"""
-    
-    # OpenAI Configuration
-    OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
-    OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4")
-    OPENAI_TEMPERATURE: float = float(os.getenv("OPENAI_TEMPERATURE", "0.1"))
-    
-    # Agent Configuration
-    USE_AI_AGENTS: bool = os.getenv("USE_AI_AGENTS", "true").lower() == "true"
-    FALLBACK_TO_DIRECT: bool = os.getenv("FALLBACK_TO_DIRECT", "true").lower() == "true"
-    
-    # CORS Configuration
-    CORS_ORIGINS: str = os.getenv(
-        "CORS_ORIGINS", 
-        "http://localhost:3000,https://amazon-sales-agent.vercel.app,https://amazon-sales-agent.onrender.com"
-    )
-    
-    # API Configuration
-    API_TIMEOUT: int = int(os.getenv("API_TIMEOUT", "300"))  # 5 minutes default
-    MAX_RETRIES: int = int(os.getenv("MAX_RETRIES", "3"))
-    
-    # Logging Configuration
-    LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
-    DEBUG_MODE: bool = os.getenv("DEBUG_MODE", "false").lower() == "true"
-    
+    """Application settings sourced from environment variables (.env supported)."""
+
+    def __init__(self) -> None:
+        self._load_from_environment()
+
+    def _load_from_environment(self) -> None:
+        """(Re)load configuration from current environment variables."""
+        # OpenAI Configuration
+        self.OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
+        self.OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4")
+
+        # Agent Configuration
+        self.USE_AI_AGENTS: bool = os.getenv("USE_AI_AGENTS", "true").lower() == "true"
+        self.FALLBACK_TO_DIRECT: bool = os.getenv("FALLBACK_TO_DIRECT", "true").lower() == "true"
+
+        # CORS Configuration
+        self.CORS_ORIGINS: str = os.getenv(
+            "CORS_ORIGINS",
+            "http://localhost:3000,https://amazon-sales-agent.vercel.app,https://amazon-sales-agent.onrender.com",
+        )
+
+        # API Configuration
+        self.API_TIMEOUT: int = int(os.getenv("API_TIMEOUT", "300"))  # 5 minutes default
+        self.MAX_RETRIES: int = int(os.getenv("MAX_RETRIES", "3"))
+
+        # Logging Configuration
+        self.LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
+        self.DEBUG_MODE: bool = os.getenv("DEBUG_MODE", "false").lower() == "true"
+
+    def reload(self) -> None:
+        """Reload settings from environment (and .env if changed)."""
+        load_dotenv(find_dotenv(), override=True)
+        self._load_from_environment()
+
     @property
     def openai_configured(self) -> bool:
         """Check if OpenAI is properly configured"""

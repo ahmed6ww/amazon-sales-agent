@@ -34,28 +34,12 @@ class ResearchRunner:
             and product attributes analysis
         """
         
-        # Construct the research prompt
+        # Construct the research prompt (AI-only)
         prompt = f"""
-        Please conduct a comprehensive research analysis for this Amazon product:
-        
+        Analyze Amazon listing and CSVs via tools and return only tool JSON outputs.
         Product: {asin_or_url}
         Marketplace: {marketplace}
         Main Keyword: {main_keyword or "Not specified"}
-        
-        Tasks to complete:
-        1. Scrape the Amazon listing to get complete product information
-        2. Extract and categorize all product attributes (pricing, features, specifications)
-        3. Determine market positioning (budget/premium classification)
-        4. Parse Helium10 competitor data if provided:
-           - Revenue competitors CSV: {h10_revenue_csv or "Not provided"}
-           - Design competitors CSV: {h10_design_csv or "Not provided"}
-        
-        Please provide structured output that includes:
-        - Complete listing data
-        - Extracted product attributes
-        - Market positioning analysis  
-        - Competitor keyword data (if CSV files provided)
-        - Any insights about content sources for attribute extraction
         """
         
         try:
@@ -80,26 +64,8 @@ class ResearchRunner:
         Extracts only the 5 required sources: title, images, A+ content, reviews, Q&A section.
         """
         
-        # First try the direct method to avoid any asyncio conflicts
-        try:
-            from .helper_methods import scrape_amazon_listing_with_mvp_scraper
-            
-            # Use subprocess scraping directly
-            scrape_result = scrape_amazon_listing_with_mvp_scraper(asin_or_url)
-            
-            if scrape_result.get("success"):
-                return {
-                    "success": True,
-                    "final_output": f"Successfully extracted MVP data from {asin_or_url}. Found: {', '.join(scrape_result['data'].keys())}",
-                    "scraped_data": scrape_result["data"]
-                }
-            else:
-                # If direct method fails, try the agent approach
-                return self._try_agent_approach(asin_or_url, scrape_result.get("error"))
-                
-        except Exception as e:
-            # If direct method fails, try the agent approach
-            return self._try_agent_approach(asin_or_url, str(e))
+        # AI-only mode: do not attempt direct method
+        return self._try_agent_approach(asin_or_url, "direct_processing_disabled")
     
     def _try_agent_approach(self, asin_or_url: str, direct_error: str) -> Dict[str, Any]:
         """

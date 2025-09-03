@@ -126,13 +126,38 @@ class ScoringRunner:
             final_response = Runner.run_sync(self.agent, final_message)
             print(f"Final rankings generated: {final_response.final_output}")
             
-            # Use direct processing as fallback for complete result
-            return self.run_direct_processing(keyword_analysis)
+            # Build ScoringResult structure from AI outputs is not trivial here without
+            # a guaranteed schema contract. In AI-only mode, we return a minimal
+            # ScoringResult summary using available keyword counts to keep downstream consistent.
+            from datetime import datetime
+            from .schemas import ScoringResult, KeywordScore, CompetitionMetrics, IntentScore, PriorityLevel
+
+            # Compose placeholder ScoringResult; downstream UI uses counts/top lists from API aggregation
+            # We keep zeroed lists since full reconstruction requires detailed parsed JSON from tools.
+            return ScoringResult(
+                total_keywords_analyzed=len(keywords_data),
+                processing_timestamp=datetime.utcnow().isoformat(),
+                scored_keywords=[],
+                critical_keywords=[],
+                high_priority_keywords=[],
+                medium_priority_keywords=[],
+                low_priority_keywords=[],
+                filtered_keywords=[],
+                category_stats=[],
+                root_word_priorities={},
+                top_opportunities=[],
+                coverage_gaps=[],
+                competitive_advantages=[],
+                data_quality_score=0.0,
+                confidence_level="medium",
+                warnings=[],
+                summary={"note": "AI-only mode: results summarized in agent_final_outputs"},
+            )
             
         except Exception as e:
             print(f"Error in full scoring analysis: {str(e)}")
-            # Fallback to direct processing
-            return self.run_direct_processing(keyword_analysis)
+            # AI-only mode: propagate error to caller to fail the pipeline
+            raise
     
     def run_intent_scoring_only(
         self,

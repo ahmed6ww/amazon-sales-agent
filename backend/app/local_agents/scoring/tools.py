@@ -6,6 +6,7 @@ Tools for the scoring agent to interact with the OpenAI Agents SDK.
 
 import json
 from typing import Dict, Any, List
+from agents.tool import function_tool
 from .helper_methods import (
     calculate_intent_score,
     analyze_competition_difficulty,
@@ -16,6 +17,7 @@ from .schemas import ScoringConfig, IntentScore
 from ..keyword.schemas import KeywordAnalysisResult, KeywordData
 
 
+@function_tool
 def tool_calculate_intent_scores(keywords_json: str, product_attributes_json: str = "{}") -> str:
     """
     Calculate intent scores (0-3) for keywords based on MVP requirements.
@@ -78,6 +80,7 @@ def tool_calculate_intent_scores(keywords_json: str, product_attributes_json: st
         })
 
 
+@function_tool
 def tool_analyze_competition_metrics(keywords_json: str, competitor_data_json: str = "{}") -> str:
     """
     Analyze competition metrics and difficulty for keywords.
@@ -147,6 +150,7 @@ def tool_analyze_competition_metrics(keywords_json: str, competitor_data_json: s
         })
 
 
+@function_tool
 def tool_prioritize_keywords(keyword_analysis_json: str, config_json: str = "{}") -> str:
     """
     Prioritize keywords based on combined scoring methodology.
@@ -238,6 +242,7 @@ def tool_prioritize_keywords(keyword_analysis_json: str, config_json: str = "{}"
         })
 
 
+@function_tool
 def tool_generate_final_rankings(scoring_result_json: str, business_context_json: str = "{}") -> str:
     """
     Generate final keyword rankings with business insights and recommendations.

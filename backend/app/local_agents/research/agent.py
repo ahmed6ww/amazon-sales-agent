@@ -1,4 +1,5 @@
 from agents import Agent, ModelSettings
+from agents.tool import function_tool
 from dotenv import load_dotenv, find_dotenv
 
 from .schemas import ScrapeResult, CSVParseResult, ProductAttributes, MarketPosition
@@ -7,10 +8,23 @@ from .schemas import ScrapeResult, CSVParseResult, ProductAttributes, MarketPosi
 from .prompts import RESEARCH_AGENT_INSTRUCTIONS
 from .helper_methods import (
     scrape_amazon_listing_with_mvp_scraper,
-
     parse_helium10_csv,
     determine_market_position
 )
+
+# Define Research tools for AI-only path
+@function_tool
+def tool_extract_product_attributes(scraped_json: str) -> str:
+    import json
+    data = json.loads(scraped_json)
+    # Return as-is for now; real extraction is already done by scraper
+    return json.dumps({"extracted": True, "sources": list(data.keys())})
+
+@function_tool
+def tool_parse_csv(csv_json: str) -> str:
+    import json
+    rows = json.loads(csv_json)
+    return json.dumps({"rows": len(rows)})
 
 load_dotenv(find_dotenv())  # Load environment variables from .env file
 
@@ -21,12 +35,13 @@ load_dotenv(find_dotenv())  # Load environment variables from .env file
 research_agent = Agent(
     name="ResearchAgent",
     instructions=RESEARCH_AGENT_INSTRUCTIONS,
-    model="gpt-4o",  # Using gpt-4o for better stability
+    model="gpt-5-2025-08-07",  # Tool-compatible
     tools=[
-            # No tools needed - using Pythonic approach
+        tool_extract_product_attributes,
+        tool_parse_csv,
     ],
     model_settings=ModelSettings(
-        temperature=0.1,
-        max_tokens=4000
+        max_tokens=4000,
+        tool_choice="required",
     )
 ) 

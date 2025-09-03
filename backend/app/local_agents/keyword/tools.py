@@ -44,11 +44,15 @@ def tool_categorize_keywords(csv_data_json: str, product_attributes_json: str = 
             "processing_time": result.processing_time,
             "data_quality_score": result.data_quality_score,
             "warnings": result.warnings,
+            "zero_title_density_count": result.zero_title_density_count,
+            "derivative_keywords_count": result.derivative_keywords_count,
+            "unique_root_words_count": result.unique_root_words_count,
             "top_opportunities": result.top_opportunities,
             "coverage_gaps": result.coverage_gaps,
             "recommended_focus_areas": result.recommended_focus_areas,
             "category_stats": {
                 category.value: {
+                    "category": category.value,
                     "keyword_count": stats.keyword_count,
                     "total_search_volume": stats.total_search_volume,
                     "avg_relevancy_score": stats.avg_relevancy_score,

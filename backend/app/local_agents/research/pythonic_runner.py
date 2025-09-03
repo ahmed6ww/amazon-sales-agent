@@ -42,9 +42,8 @@ For each source, provide:
 Format your response with clear headings and bullet points for easy reading.
 Focus on data quality, completeness, and usefulness for keyword research purposes.
             """,
-            model="gpt-4o",
+            model="gpt-5-2025-08-07",
             model_settings=ModelSettings(
-                temperature=0.1,
                 max_tokens=4000
             )
         )

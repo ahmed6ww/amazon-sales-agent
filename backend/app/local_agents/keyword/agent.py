@@ -38,7 +38,7 @@ load_dotenv(find_dotenv())  # Load environment variables from .env file
 keyword_agent = Agent(
     name="KeywordAgent",
     instructions=KEYWORD_AGENT_INSTRUCTIONS,
-    model="gpt-4o",  # Using gpt-4o for better tool stability
+    model="gpt-5-2025-08-07",  # Using gpt-5-2025-08-07 for better tool stability
     tools=[
         tool_categorize_keywords,
         tool_calculate_relevancy_scores,
@@ -46,7 +46,6 @@ keyword_agent = Agent(
         tool_analyze_title_density
     ],
     model_settings=ModelSettings(
-        temperature=0.1,  # Low temperature for consistent categorization
         max_tokens=4000,
         tool_choice="required",
     ),

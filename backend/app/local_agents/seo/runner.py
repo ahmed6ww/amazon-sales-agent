@@ -8,6 +8,8 @@ import time
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
 
+from backend.app.core.config import settings
+
 from .agent import seo_agent
 from .helper_methods import (
     optimize_product_title,
@@ -83,7 +85,25 @@ class SEORunner:
             medium_priority_keywords = self._extract_keywords_by_priority(scoring_analysis, "medium")
             opportunity_keywords = self._extract_opportunity_keywords(scoring_analysis)
             
-            # Run SEO optimization workflow
+            # AI-only: require agent tool-driven outputs, no direct fallback
+            if getattr(settings, "USE_AI_AGENTS", False):
+                try:
+                    self._run_agent_context_messages(
+                        current_listing=current_listing,
+                        critical_keywords=critical_keywords,
+                        high_priority_keywords=high_priority_keywords,
+                        medium_priority_keywords=medium_priority_keywords,
+                        opportunity_keywords=opportunity_keywords,
+                        keyword_analysis=keyword_analysis,
+                        scoring_analysis=scoring_analysis,
+                        competitor_data=competitor_data or {}
+                    )
+                except Exception as agent_error:
+                    raise Exception(f"SEO agent context run failed (AI-only mode): {agent_error}")
+            else:
+                raise Exception("SEO AI agents disabled (AI-only mode)")
+
+            # Build SEOOptimization from helper methods using agent-guided outputs
             seo_optimization = self.run_direct_optimization(
                 current_listing=current_listing,
                 critical_keywords=critical_keywords,
