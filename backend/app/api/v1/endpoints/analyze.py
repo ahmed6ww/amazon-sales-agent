@@ -191,10 +191,10 @@ async def run_complete_analysis(
             logger.info(f"🚀 Using Production MVP Scraper → Research Agent Pipeline for {asin_or_url}")
             try:
                 # Step 1: Get clean MVP data using our production scraper
-                from app.local_agents.research.helper_methods import scrape_amazon_listing_with_mvp_scraper
+                from app.local_agents.research.helper_methods import scrape_amazon_listing
                 
                 logger.info(f"📊 Step 1: Scraping MVP data...")
-                scrape_result = scrape_amazon_listing_with_mvp_scraper(asin_or_url)
+                scrape_result = scrape_amazon_listing(asin_or_url)
                 
                 if not scrape_result.get("success"):
                     raise Exception(f"MVP scraping failed: {scrape_result.get('error')}")
@@ -203,19 +203,23 @@ async def run_complete_analysis(
                 logger.info(f"✅ MVP data extracted: {scraped_data.get('title', 'No title')[:50]}...")
                 
                 # Step 2: Pass clean data to Research Agent
-                from app.local_agents.research.pythonic_runner import PythonicResearchRunner
-                
                 logger.info(f"🤖 Step 2: Running Research Agent analysis...")
-                pythonic_runner = PythonicResearchRunner()
+                research_runner = ResearchRunner()
                 
                 # Handle asyncio properly for FastAPI context (use module-level asyncio import)
                 
                 def run_agent_analysis():
                     """Run agent analysis in a separate thread with its own event loop"""
-                    return pythonic_runner.analyze_prefetched_data_sync(
-                        raw_data=scraped_data,
-                        source_url=asin_or_url
-                    )
+                    loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop)
+                    try:
+                        return research_runner.run_research(
+                            asin_or_url=asin_or_url,
+                            marketplace=marketplace,
+                            main_keyword=main_keyword
+                        )
+                    finally:
+                        loop.close()
                 
                 # Run in thread pool to avoid event loop conflicts
                 loop = asyncio.get_event_loop()

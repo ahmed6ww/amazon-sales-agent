@@ -8,7 +8,7 @@ import time
 from typing import Dict, Any, List, Optional
 from datetime import datetime, timedelta
 
-from backend.app.core.config import settings
+from app.core.config import settings
 
 from .agent import seo_agent
 from .helper_methods import (

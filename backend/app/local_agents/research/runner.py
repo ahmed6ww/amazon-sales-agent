@@ -1,137 +1,73 @@
 from agents import Runner
 from typing import Dict, Any, Optional
 from .agent import research_agent
+from .helper_methods import scrape_amazon_listing
+
 
 class ResearchRunner:
     """
-    Runner class for the Research Agent that handles session management 
-    and provides a clean interface for running research tasks.
+    Minimal runner: scrape via helper, then analyze with the agent once.
     """
-    
-    def __init__(self):
-        pass
-    
+
     def run_research(
-        self, 
-        asin_or_url: str, 
+        self,
+        asin_or_url: str,
         marketplace: str = "US",
-        h10_revenue_csv: Optional[str] = None,
-        h10_design_csv: Optional[str] = None,
-        main_keyword: Optional[str] = None
+        main_keyword: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
-        Execute a complete research analysis for an Amazon product.
-        
+        Scrape the Amazon listing and analyze the 5 MVP sources using the agent.
+
         Args:
             asin_or_url: Amazon ASIN or full product URL
-            marketplace: Target marketplace (US, UK, DE, etc.)
-            h10_revenue_csv: Path to Helium10 revenue competitors CSV
-            h10_design_csv: Path to Helium10 design competitors CSV  
-            main_keyword: Optional main keyword for the product
-            
+            marketplace: Target marketplace code
+            main_keyword: Optional main keyword context
+
         Returns:
-            Comprehensive research results including listing data, competitor data,
-            and product attributes analysis
+            Dict with success flag, analysis text, and raw scraped data
         """
-        
-        # Construct the research prompt (AI-only)
-        prompt = f"""
-        Analyze Amazon listing and CSVs via tools and return only tool JSON outputs.
-        Product: {asin_or_url}
-        Marketplace: {marketplace}
-        Main Keyword: {main_keyword or "Not specified"}
-        """
-        
+
+        # 1) Fetch scraped data via helper
+        scraped_result = scrape_amazon_listing(asin_or_url)
+        if not scraped_result.get("success"):
+            return {
+                "success": False,
+                "error": f"Scraping failed: {scraped_result.get('error', 'Unknown error')}",
+                "scraped_data": scraped_result,
+            }
+
+        scraped_data = scraped_result.get("data", {})
+
+        # 2) Build a single analysis prompt using pre-fetched data
+        prompt = (
+            "Analyze this pre-fetched Amazon product data for the 5 MVP required sources:\n\n"
+            f"PRODUCT INFO:\n- URL/ASIN: {asin_or_url}\n- Marketplace: {marketplace}\n- Main Keyword: {main_keyword or 'Not specified'}\n\n"
+            f"SCRAPED DATA:\n{scraped_data}\n\n"
+            "Required sources to analyze:\n"
+            "1. TITLE - Product title text and quality assessment\n"
+            "2. IMAGES - Image URLs, count, and quality\n"
+            "3. A+ CONTENT - Enhanced brand content sections and marketing material\n"
+            "4. REVIEWS - Customer review samples and sentiment highlights\n"
+            "5. Q&A SECTION - Question and answer pairs\n\n"
+            "For each source, provide:\n"
+            "- Extracted: Yes/No\n"
+            "- Content: The actual data found\n"
+            "- Quality: Assessment (Excellent/Good/Fair/Poor/Missing)\n"
+            "- Notes: Any observations about completeness or issues\n"
+        )
+
+        # 3) Single agent call
         try:
-            # Run the agent
             result = Runner.run_sync(research_agent, prompt)
-            
             return {
                 "success": True,
-                "final_output": result.final_output
+                "final_output": result.final_output,
+                "scraped_data": scraped_data,
             }
-            
         except Exception as e:
             return {
                 "success": False,
                 "error": str(e),
-                "final_output": None
+                "final_output": None,
+                "scraped_data": scraped_data,
             }
-    
-    def run_listing_analysis_only(self, asin_or_url: str) -> Dict[str, Any]:
-        """
-        Run MVP product attribute extraction from Amazon listing.
-        Extracts only the 5 required sources: title, images, A+ content, reviews, Q&A section.
-        """
-        
-        # AI-only mode: do not attempt direct method
-        return self._try_agent_approach(asin_or_url, "direct_processing_disabled")
-    
-    def _try_agent_approach(self, asin_or_url: str, direct_error: str) -> Dict[str, Any]:
-        """
-        Fallback to agent approach if direct method fails.
-        """
-        prompt = f"""
-        Extract the 5 MVP required sources from this Amazon product listing: {asin_or_url}
-        
-        Required sources to extract:
-        1. TITLE - Product title text
-        2. IMAGES - Product image URLs and count
-        3. A+ CONTENT - Enhanced brand content sections
-        4. REVIEWS - Customer review samples and highlights
-        5. Q&A SECTION - Question and answer pairs
-        
-        Workflow:
-        1. Analyze pre-fetched product data from MVP scraper
-        2. Extract clean attributes with tool_extract_product_attributes
-        3. Report extraction quality for each of the 5 sources
-        
-        Provide a summary of what was successfully extracted and the quality of each source.
-        """
-        
-        try:
-            result = Runner.run_sync(research_agent, prompt)
-            
-            return {
-                "success": True,
-                "final_output": result.final_output
-            }
-            
-        except Exception as e:
-            return {
-                "success": False,
-                "error": f"Both direct method and agent failed. Direct error: {direct_error}, Agent error: {str(e)}",
-                "final_output": None
-            }
-    
-    def run_csv_analysis_only(self, csv_file_path: str, csv_type: str = "revenue") -> Dict[str, Any]:
-        """
-        Run just the CSV parsing without listing analysis.
-        Useful for processing Helium10 data independently.
-        """
-        
-        prompt = f"""
-        Please parse this Helium10 CSV file: {csv_file_path}
-        
-        CSV Type: {csv_type} competitors
-        
-        Task:
-        - Parse the CSV and extract all keyword data with metrics
-        - Provide summary statistics about the data
-        - Identify any data quality issues
-        """
-        
-        try:
-            result = Runner.run_sync(research_agent, prompt)
-            
-            return {
-                "success": True,
-                "final_output": result.final_output
-            }
-            
-        except Exception as e:
-            return {
-                "success": False,
-                "error": str(e),
-                "final_output": None
-            } 

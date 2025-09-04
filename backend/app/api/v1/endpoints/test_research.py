@@ -55,12 +55,17 @@ async def test_research_agent(
         
         logger.info(f"Testing research agent with URL: {url}")
         
-        # Import and use the Pythonic research runner
-        from app.local_agents.research.pythonic_runner import PythonicResearchRunner
+        # Import and use the Research runner
+        from app.local_agents.research.runner import ResearchRunner
         
-        runner = PythonicResearchRunner()
-        # Use the async method directly since FastAPI is async
-        result = await runner.run_research_analysis(url)
+        runner = ResearchRunner()
+        # Use the sync method in a thread since FastAPI is async
+        def run_analysis():
+            return runner.run_research(url)
+        
+        import asyncio
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(None, run_analysis)
         
         if not result.get("success"):
             raise HTTPException(
@@ -120,7 +125,7 @@ async def test_research_status() -> Dict[str, Any]:
         "use_ai_agents": settings.USE_AI_AGENTS,
         "openai_model": getattr(settings, 'OPENAI_MODEL', 'gpt-4'),
         "ready_for_research": settings.openai_configured and settings.USE_AI_AGENTS,
-        "pythonic_runner_available": True
+        "research_runner_available": True
     }
 
 

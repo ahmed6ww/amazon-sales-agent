@@ -4,10 +4,15 @@ Test MVP Scraper Data → Research Agent Integration
 Following OpenAI Agents SDK best practices for deterministic flows
 """
 
+import sys
+from pathlib import Path
+# Ensure backend package is on the path for imports
+sys.path.insert(0, str(Path(__file__).parent / 'backend'))
+
 import asyncio
 import json
-from app.local_agents.research.pythonic_runner import PythonicResearchRunner
-from app.local_agents.research.helper_methods import scrape_amazon_listing_with_mvp_scraper
+from app.local_agents.research.runner import ResearchRunner  # type: ignore
+from app.local_agents.research.helper_methods import scrape_amazon_listing  # type: ignore
 
 async def test_mvp_data_to_agent():
     """
@@ -23,7 +28,7 @@ async def test_mvp_data_to_agent():
     print("🔄 Step 1: Scraping product data with MVP scraper...")
     
     # Get clean MVP data using our working scraper
-    scrape_result = scrape_amazon_listing_with_mvp_scraper(test_url)
+    scrape_result = scrape_amazon_listing(test_url)
     
     if not scrape_result.get("success"):
         print(f"❌ Scraping failed: {scrape_result.get('error')}")
@@ -39,13 +44,12 @@ async def test_mvp_data_to_agent():
     
     print("\n🤖 Step 2: Passing data to Research Agent...")
     
-    # Initialize the Pythonic Research Runner
-    runner = PythonicResearchRunner()
+    # Initialize the Research Runner
+    runner = ResearchRunner()
     
     # Pass the pre-fetched data directly to the agent (no scraping inside agent)
-    analysis_result = await runner.analyze_prefetched_data(
-        raw_data=scraped_data,
-        source_url=test_url
+    analysis_result = runner.run_research(
+        asin_or_url=test_url
     )
     
     if analysis_result.get("success"):
@@ -71,4 +75,4 @@ if __name__ == "__main__":
     
     test_mvp_data_to_agent_sync()
     
-    print("\n✨ Test complete!") 
+    print("\n✨ Test complete!")

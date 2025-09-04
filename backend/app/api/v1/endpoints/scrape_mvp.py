@@ -49,7 +49,7 @@ async def scrape_mvp(
         current_file = Path(__file__)
         app_dir = current_file.parent.parent.parent.parent
         backend_dir = app_dir.parent
-        script_path = app_dir / "services" / "amazon" / "standalone_mvp_scraper.py"
+        script_path = app_dir / "services" / "amazon" / "standalone_scraper.py"
 
         proc = subprocess.run([sys.executable, str(script_path), full_url], capture_output=True, text=True, timeout=120, cwd=str(backend_dir))
         if proc.returncode != 0:
