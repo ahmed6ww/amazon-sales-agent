@@ -216,7 +216,9 @@ async def run_complete_analysis(
                         return research_runner.run_research(
                             asin_or_url=asin_or_url,
                             marketplace=marketplace,
-                            main_keyword=main_keyword
+                            main_keyword=main_keyword,
+                            revenue_csv=revenue_data,
+                            design_csv=design_data
                         )
                     finally:
                         loop.close()
@@ -229,16 +231,7 @@ async def run_complete_analysis(
                 
                 if research_ai_result.get("success"):
                     logger.info(f"✅ Research Agent analysis completed successfully")
-                    
-                    # Extract MVP data summary for response
-                    mvp_summary = {
-                        "title_extracted": bool(scraped_data.get("title", "").strip()),
-                        "images_count": scraped_data.get("images", {}).get("image_count", 0),
-                        "aplus_sections": len(scraped_data.get("aplus_content", {}).get("sections", [])),
-                        "reviews_count": len(scraped_data.get("reviews", {}).get("sample_reviews", [])),
-                        "qa_questions": len(scraped_data.get("qa_section", {}).get("questions", []))
-                    }
-                    
+                    structured = research_ai_result.get("structured_data") or {}
                     research_result = {
                         "success": True,
                         "asin": scraped_data.get("asin", asin_or_url),
@@ -247,17 +240,9 @@ async def run_complete_analysis(
                         "revenue_competitors": len(revenue_data),
                         "design_competitors": len(design_data),
                         "ai_analysis": research_ai_result.get("analysis", "Analysis completed"),
-                        "mvp_data_summary": mvp_summary,
-                        "product_title": scraped_data.get("title", "Title not found"),
+                        "structured_data": structured,
                         "agent_used": research_ai_result.get("agent_used", "ResearchAnalyst"),
                         "source": "production_mvp_pipeline",
-                        "data_quality_score": sum([
-                            1 if mvp_summary["title_extracted"] else 0,
-                            1 if mvp_summary["images_count"] > 0 else 0,
-                            1 if mvp_summary["aplus_sections"] > 0 else 0,
-                            1 if mvp_summary["reviews_count"] > 0 else 0,
-                            1 if mvp_summary["qa_questions"] > 0 else 0
-                        ])
                     }
                     
                 else:

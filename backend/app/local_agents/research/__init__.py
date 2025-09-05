@@ -10,7 +10,6 @@ This package contains the Amazon product research agent with tools for:
 from .agent import (
     research_agent
 )
-from .schemas import ScrapeResult, ProductAttributes
 # Function tools no longer used - using Pythonic approach
 # from .tools import tool_scrape_amazon_listing, tool_parse_helium10_csv, tool_determine_market_position
 from .prompts import RESEARCH_AGENT_INSTRUCTIONS
@@ -26,8 +25,6 @@ __all__ = [
     "research_agent",
     "ResearchRunner",
     "scrape_amazon_listing",
-    "ScrapeResult",
-    "ProductAttributes",
     # Function tools no longer used - using Pythonic approach
     "RESEARCH_AGENT_INSTRUCTIONS"
 ] 
