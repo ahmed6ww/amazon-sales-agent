@@ -57,6 +57,19 @@ class ResearchRunner:
         revenue_competitors = scrape_competitors(sorted(list(revenue_asins))[:10])
         design_competitors = scrape_competitors(sorted(list(design_asins))[:10])
 
+        # Slim competitor context for the agent (keep prompt compact)
+        def _slim_comps(comps: List[Dict[str, Any]], limit: Optional[int] = None) -> List[Dict[str, Any]]:
+            keep = ("asin", "price_amount", "price_currency", "rating_value", "ratings_count")
+            slim: List[Dict[str, Any]] = []
+            iterable = comps if limit is None else comps[:limit]
+            for c in iterable:
+                if isinstance(c, dict):
+                    slim.append({k: c.get(k) for k in keep if k in c})
+            return slim
+
+        rev_comp_slim = _slim_comps(revenue_competitors)
+        des_comp_slim = _slim_comps(design_competitors)
+        
         # 2) Slim and include top-10 rows from each CSV (if provided) to guide analysis
         def _slim_rows(rows: List[Dict[str, Any]], limit: int = 10) -> List[Dict[str, Any]]:
             if not rows:
@@ -92,6 +105,9 @@ class ResearchRunner:
             f"SCRAPED DATA (structured):\n{scraped_data}\n\n"
             f"CSV CONTEXT (Top 10 each) — Revenue keywords (slim):\n{json.dumps(rev_sample, separators=(',', ':'))}\n\n"
             f"CSV CONTEXT (Top 10 each) — Design keywords (slim):\n{json.dumps(des_sample, separators=(',', ':'))}\n\n"
+            "COMPETITOR CONTEXT (use for market_position tiering):\n"
+            f"- Revenue (all {len(rev_comp_slim)}):\n{json.dumps(rev_comp_slim, separators=(',', ':'))}\n"
+            f"- Design (all {len(des_comp_slim)}):\n{json.dumps(des_comp_slim, separators=(',', ':'))}\n\n"
             "Required sources to analyze (focus on extraction quality only):\n"
             "1. TITLE - Product title text and quality assessment\n"
             "2. IMAGES - Image URLs, count, and quality\n"
@@ -102,7 +118,8 @@ class ResearchRunner:
             "- Extracted: Yes/No\n"
             "- Content: The actual data found\n"
             "- Quality: Assessment (Excellent/Good/Fair/Poor/Missing)\n"
-            "- Notes: Any observations about completeness or issues\n"
+            "- Notes: Any observations about completeness or issues\n\n"
+            "For market_position: compare the product's price (or price_per_unit when unit_count/unit_name can be derived) against competitor medians to assign tier ('budget'|'average'|'premium'); provide a brief rationale.\n"
         )
 
         # 4) Single agent call
