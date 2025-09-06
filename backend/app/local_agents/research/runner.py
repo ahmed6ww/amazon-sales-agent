@@ -1,11 +1,7 @@
 from agents import Runner
-from typing import Dict, Any, Optional, List, Tuple
+from typing import Dict, Any, Optional, List
 from .agent import research_agent
 from .helper_methods import scrape_amazon_listing, select_top_rows, collect_asins, scrape_competitors
-from .schemas import (
-    MarketPosition,
-    MarketTier,
-)
 
 
 class ResearchRunner:
@@ -119,7 +115,7 @@ class ResearchRunner:
             "- Content: The actual data found\n"
             "- Quality: Assessment (Excellent/Good/Fair/Poor/Missing)\n"
             "- Notes: Any observations about completeness or issues\n\n"
-            "For market_position: compare the product's price (or price_per_unit when unit_count/unit_name can be derived) against competitor medians to assign tier ('budget'|'average'|'premium'); provide a brief rationale.\n"
+            "For market_position: compare the product's price (or price_per_unit when unit_count/unit_name can be derived) against competitor medians to assign tier ('budget'|'premium'); provide a brief rationale.\n"
         )
 
         # 4) Single agent call
@@ -214,162 +210,3 @@ class ResearchRunner:
             except Exception:
                 continue
         return {}
-
-    def _extract_value(self, data: Dict[str, Any], keys: List[str]) -> Optional[str]:
-        for k in keys:
-            v = data.get(k)
-            if isinstance(v, str) and v.strip():
-                return v.strip()
-        return None
-
-    def _extract_list(self, data: Dict[str, Any], keys: List[str]) -> List[str]:
-        for k in keys:
-            v = data.get(k)
-            if isinstance(v, list):
-                return [str(x) for x in v if isinstance(x, (str, int, float))]
-        return []
-
-    def _classify_market_position(self, scraped_data: Dict[str, Any]) -> MarketPosition:
-        # attempt to get price and unit
-        price_info = scraped_data.get("price", {}) or {}
-        amount = None
-        currency = None
-        if isinstance(price_info, dict):
-            amount = price_info.get("amount")
-            currency = price_info.get("currency")
-        elif isinstance(price_info, (int, float)):
-            amount = float(price_info)
-        elif isinstance(price_info, str):
-            # parse "$12.99" style strings
-            import re
-            m = re.search(r"([\$€£])?\s*(\d+(?:\.\d+)?)", price_info)
-            if m:
-                currency = {"$": "USD", "€": "EUR", "£": "GBP"}.get(m.group(1) or "", None)
-                try:
-                    amount = float(m.group(2))
-                except Exception:
-                    amount = None
-        # Other possible fields
-        if amount is None:
-            for k in ("price_str", "price_text", "price_display"):
-                val = scraped_data.get(k)
-                if isinstance(val, str):
-                    import re
-                    m = re.search(r"([\$€£])?\s*(\d+(?:\.\d+)?)", val)
-                    if m:
-                        currency = currency or {"$": "USD", "€": "EUR", "£": "GBP"}.get(m.group(1) or "", None)
-                        try:
-                            amount = float(m.group(2))
-                            break
-                        except Exception:
-                            continue
-
-        pack_size, unit_name = self._extract_pack_size(scraped_data)
-        ppu = None
-        if amount and pack_size and pack_size > 0:
-            ppu = round(float(amount) / float(pack_size), 2)
-
-        tier = MarketTier.UNKNOWN
-        rationale = "Insufficient data"
-        if ppu is not None:
-            # naive heuristic thresholds; can be tuned per category
-            if ppu < 0.75:
-                tier = MarketTier.BUDGET
-                rationale = f"Low price per {unit_name or 'unit'} ({ppu})"
-            elif ppu > 1.50:
-                tier = MarketTier.PREMIUM
-                rationale = f"High price per {unit_name or 'unit'} ({ppu})"
-            else:
-                tier = MarketTier.AVERAGE
-                rationale = f"Mid-range price per {unit_name or 'unit'} ({ppu})"
-
-        return MarketPosition(
-            tier=tier,
-            rationale=rationale,
-            price=amount,
-            currency=currency,
-            unit_count=pack_size,
-            unit_name=unit_name,
-            price_per_unit=ppu,
-        )
-
-    def _extract_pack_size(self, scraped_data: Dict[str, Any]) -> Tuple[Optional[float], Optional[str]]:
-        # Try pack/quantity/weight cues
-        details = scraped_data.get("details", {}) or {}
-        specs = scraped_data.get("specifications", {}) or {}
-        pack_size = None
-        unit = None
-        for d in (details, specs):
-            for k, v in d.items():
-                ks = str(k).lower()
-                vs = str(v)
-                if any(t in ks for t in ["pack", "count", "quantity", "ounces", "oz", "grams", "g", "pounds", "lb", "kg", "ml", "l"]):
-                    # very light parse: extract first number
-                    import re
-                    m = re.search(r"(\d+(?:\.\d+)?)", vs)
-                    if m:
-                        try:
-                            pack_size = float(m.group(1))
-                            # crude unit guess
-                            if any(u in ks for u in ["oz", "ounces"]):
-                                unit = "oz"
-                            elif any(u in ks for u in ["g", "grams"]):
-                                unit = "g"
-                            elif any(u in ks for u in ["lb", "pounds"]):
-                                unit = "lb"
-                            elif any(u in ks for u in ["ml"]):
-                                unit = "ml"
-                            elif any(u in ks for u in ["l "]):
-                                unit = "l"
-                            else:
-                                unit = unit or "unit"
-                            return pack_size, unit
-                        except Exception:
-                            continue
-        return None, None
-
-    def _derive_main_keyword_candidates(
-        self, title: str, revenue_csv: List[Dict[str, Any]], design_csv: List[Dict[str, Any]]
-    ) -> List[str]:
-        import re
-        candidates: List[str] = []
-        tl = (title or "").lower()
-        # from title: take noun-ish phrases by trimming brand and attributes crudely
-        base = re.sub(r"[^a-z0-9 ]+", " ", tl).strip()
-        tokens = [t for t in base.split() if len(t) > 2]
-        if tokens:
-            candidates.append(" ".join(tokens[:4]).strip())
-        # from CSVs: top keyword phrases by Search Volume
-        def top_phrases(rows: List[Dict[str, Any]]) -> List[str]:
-            def sv(row):
-                try:
-                    return int(float(row.get("Search Volume", 0) or 0))
-                except Exception:
-                    return 0
-            sorted_rows = sorted(rows[:10], key=sv, reverse=True)
-            seen = set()
-            phrases = []
-            for r in sorted_rows:
-                p = str(r.get("Keyword Phrase", "")).strip()
-                if p and p.lower() not in seen:
-                    seen.add(p.lower())
-                    phrases.append(p)
-            return phrases[:3]
-        candidates.extend(top_phrases(revenue_csv))
-        candidates.extend(top_phrases(design_csv))
-        # normalize and dedupe
-        dedup = []
-        seen = set()
-        for c in candidates:
-            cl = c.lower()
-            if cl and cl not in seen:
-                seen.add(cl)
-                dedup.append(c)
-        return dedup[:5]
-
-    def _quality_from_text(self, text: str) -> str:
-        if text and len(text) > 20:
-            return "good"
-        if text and len(text) > 0:
-            return "fair"
-        return "missing"

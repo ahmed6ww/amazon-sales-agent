@@ -50,7 +50,7 @@ Output JSON schema (required top-level keys):
 		}
 	},
 	"market_position": {
-		"tier": "budget"|"average"|"premium"|"unknown",
+		"tier": "budget"|"premium",
 		"rationale": string,
 		"price": number|null,
 		"currency": string|null,

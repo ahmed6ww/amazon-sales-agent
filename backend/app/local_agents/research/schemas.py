@@ -10,7 +10,7 @@ class MarketTier(str, Enum):
 
 class MarketPosition(BaseModel):
     model_config = ConfigDict(extra='forbid')
-    tier: MarketTier = Field(...,description="Market tier of the product, e.g., budget, average, premium, unknown")
+    tier: MarketTier = Field(...,description="Market tier of the product, e.g., budget, premium")
     rationale: str = Field(...,description="Rationale for the market position")
     price: Optional[float] = Field(...,description="Price of the product")
     currency: Optional[str] = Field(...,description="Currency of the price")
