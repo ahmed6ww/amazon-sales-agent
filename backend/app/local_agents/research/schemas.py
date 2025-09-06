@@ -47,4 +47,5 @@ class ResearchOutput(BaseModel):
     market_position: MarketPosition
     main_keyword: MainKeywordInfo
     current_listing: CurrentListing
+    relevancy_scores: Dict[str, float] = Field(default_factory=dict, description="Mapping of keyword phrase to relevancy score (0–10) based on competitor top-10 ranks proportion × 10")
     

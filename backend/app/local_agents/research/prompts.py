@@ -66,8 +66,8 @@ Output JSON schema (required top-level keys):
 		"title": string,
 		"bullets": [string],
 		"backend_keywords": [string]
-	}
-	
+	},
+		"relevancy_scores": {"<keyword>": number}  // 0–10 scale; fraction of tracked ASINs in top-10 × 10
 }
 
 Notes:

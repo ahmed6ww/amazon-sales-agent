@@ -92,6 +92,49 @@ class ResearchRunner:
         rev_sample = _slim_rows(revenue_csv or [], 10)
         des_sample = _slim_rows(design_csv or [], 10)
 
+        # Compute base relevancy scores from CSVs (fraction of tracked ASINs with rank <= 10)
+        def _compute_relevancy_scores(rows: List[Dict[str, Any]], competitor_asins: List[str]) -> Dict[str, float]:
+            scores: Dict[str, float] = {}
+            if not rows or not competitor_asins:
+                return scores
+            asin_set = [a for a in competitor_asins if isinstance(a, str) and len(a) == 10 and a.startswith('B0')]
+            if not asin_set:
+                return scores
+            for row in rows:
+                kw = str(row.get('Keyword Phrase', '')).strip()
+                if not kw:
+                    continue
+                ranks_in_top10 = 0
+                for asin in asin_set:
+                    try:
+                        rank_val = row.get(asin)
+                        if rank_val is None:
+                            continue
+                        rank_num = int(float(rank_val))
+                        if rank_num > 0 and rank_num <= 10:
+                            ranks_in_top10 += 1
+                    except Exception:
+                        continue
+                score10 = (ranks_in_top10 / max(1, len(asin_set))) * 10.0
+                # Keep max score across revenue/design rows for same keyword
+                scores[kw] = max(scores.get(kw, 0.0), score10)
+            return scores
+
+        # Build competitor asin lists from the CSV headers
+        def _extract_asins_from_rows(rows: List[Dict[str, Any]]) -> List[str]:
+            seen = set()
+            for row in rows:
+                for k in row.keys():
+                    if isinstance(k, str) and k.startswith('B0') and len(k) == 10:
+                        seen.add(k)
+            return list(seen)
+
+        rev_asins_list = _extract_asins_from_rows(revenue_csv or [])
+        des_asins_list = _extract_asins_from_rows(design_csv or [])
+        base_relevancy = _compute_relevancy_scores(revenue_csv or [], rev_asins_list)
+        for k, v in _compute_relevancy_scores(design_csv or [], des_asins_list).items():
+            base_relevancy[k] = max(base_relevancy.get(k, 0.0), v)
+
         # 3) Build a single analysis prompt using pre-fetched data + CSV context
         # Keep it compact; the agent should use CSV context only for high-level grounding
         import json
@@ -104,6 +147,7 @@ class ResearchRunner:
             "COMPETITOR CONTEXT (use for market_position tiering):\n"
             f"- Revenue (all {len(rev_comp_slim)}):\n{json.dumps(rev_comp_slim, separators=(',', ':'))}\n"
             f"- Design (all {len(des_comp_slim)}):\n{json.dumps(des_comp_slim, separators=(',', ':'))}\n\n"
+            f"BASE RELEVANCY SCORES (0–10 scale; proportion of competitor ASINs ranking top-10 per keyword × 10):\n{json.dumps(dict(sorted(base_relevancy.items(), key=lambda x: x[0]) ) , separators=(',', ':'))}\n\n"
             "Required sources to analyze (focus on extraction quality only):\n"
             "1. TITLE - Product title text and quality assessment\n"
             "2. IMAGES - Image URLs, count, and quality\n"
@@ -116,6 +160,7 @@ class ResearchRunner:
             "- Quality: Assessment (Excellent/Good/Fair/Poor/Missing)\n"
             "- Notes: Any observations about completeness or issues\n\n"
             "For market_position: compare the product's price (or price_per_unit when unit_count/unit_name can be derived) against competitor medians to assign tier ('budget'|'premium'); provide a brief rationale.\n"
+            "Also include 'relevancy_scores' mapping using the provided base scores; you may adjust slightly if Amazon search validation suggests stronger/weaker relevance.\n"
         )
 
         # 4) Single agent call
@@ -174,6 +219,7 @@ class ResearchRunner:
                     "revenue": revenue_competitors,
                     "design": design_competitors,
                 },
+                "base_relevancy_scores": base_relevancy,
             }
         except Exception as e:
             return {
