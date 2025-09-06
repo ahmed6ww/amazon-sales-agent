@@ -66,12 +66,8 @@ Output JSON schema (required top-level keys):
 		"title": string,
 		"bullets": [string],
 		"backend_keywords": [string]
-	},
-	"competitor_set": {
-		"total_asins": number,
-		"sources": [string],
-		"selection_rationale": string|null
 	}
+	
 }
 
 Notes:

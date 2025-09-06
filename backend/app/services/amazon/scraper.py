@@ -381,10 +381,6 @@ class AmazonScraperSpider(scrapy.Spider):
 def scrape_amazon_product(url: str, proxy_url: Optional[str] = None) -> Dict[str, Any]:
     """Synchronous scraper for specific IDs; returns raw HTML and text per element."""
     settings = {
-        "USER_AGENT": os.getenv(
-            "SCRAPER_USER_AGENT",
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
-        ),
         "ROBOTSTXT_OBEY": False,
         "LOG_LEVEL": "ERROR",
     }

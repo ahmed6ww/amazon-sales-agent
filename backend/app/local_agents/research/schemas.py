@@ -3,16 +3,9 @@ from typing import Dict, Any, Optional, List
 from enum import Enum
 
 
-
-
-
-
-
 class MarketTier(str, Enum):
     BUDGET = "budget"
-    AVERAGE = "average"
     PREMIUM = "premium"
-    UNKNOWN = "unknown"
 
 
 class MarketPosition(BaseModel):
@@ -48,17 +41,10 @@ class ContentSources(BaseModel):
     qa_section: Dict[str, Any] = Field(...,description="Content related to Q&A section")
 
 
-class CompetitorSet(BaseModel):
-    model_config = ConfigDict(extra='forbid')
-    total_asins: int = 0
-    sources: List[str] = Field(...,description="List of sources used for competitor analysis")  # e.g., ["revenue_csv","design_csv"]
-    selection_rationale: Optional[str] = Field(...,description="Rationale for the competitor selection")
-
-
 class ResearchOutput(BaseModel):
     model_config = ConfigDict(extra='forbid')
     content_sources: ContentSources
     market_position: MarketPosition
     main_keyword: MainKeywordInfo
     current_listing: CurrentListing
-    competitor_set: CompetitorSet
+    

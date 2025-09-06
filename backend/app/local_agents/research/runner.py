@@ -44,6 +44,19 @@ class ResearchRunner:
 
         scraped_data = scraped_result.get("data", {})
 
+        # 1.1) Select top competitors and scrape their price/ratings
+        revenue_comp_rows = self._select_top_rows(revenue_csv or [], mode="revenue", limit=10)
+        design_comp_rows = self._select_top_rows(design_csv or [], mode="design", limit=10)
+        revenue_asins = self._collect_asins(revenue_comp_rows)
+        design_asins = self._collect_asins(design_comp_rows)
+        # Fallback: if none found in the top rows, scan entire CSVs for ASINs
+        if not revenue_asins and (revenue_csv or []):
+            revenue_asins = self._collect_asins(revenue_csv or [])
+        if not design_asins and (design_csv or []):
+            design_asins = self._collect_asins(design_csv or [])
+        revenue_competitors = self._scrape_competitors(sorted(list(revenue_asins))[:10])
+        design_competitors = self._scrape_competitors(sorted(list(design_asins))[:10])
+
         # 2) Slim and include top-10 rows from each CSV (if provided) to guide analysis
         def _slim_rows(rows: List[Dict[str, Any]], limit: int = 10) -> List[Dict[str, Any]]:
             if not rows:
@@ -144,6 +157,10 @@ class ResearchRunner:
                     "revenue_sample": len(rev_sample),
                     "design_sample": len(des_sample),
                 },
+                "competitor_scrapes": {
+                    "revenue": revenue_competitors,
+                    "design": design_competitors,
+                },
             }
         except Exception as e:
             return {
@@ -154,6 +171,10 @@ class ResearchRunner:
                 "csv_context_counts": {
                     "revenue_sample": len(rev_sample),
                     "design_sample": len(des_sample),
+                },
+                "competitor_scrapes": {
+                    "revenue": revenue_competitors,
+                    "design": design_competitors,
                 },
             }
 
@@ -193,18 +214,18 @@ class ResearchRunner:
 
     def _collect_asins(self, rows: List[Dict[str, Any]]) -> set:
         asins = set()
+        import re
+        asin_regex = re.compile(r"B0[A-Z0-9]{8}")
         for row in rows[:10]:  # limit to top 10 contribution
             # Prefer explicit ASIN fields
-            for key in ("ASIN", "Asin", "asin", "Parent ASIN", "ParentAsin", "ParentASIN"):
-                val = row.get(key)
-                if isinstance(val, str) and len(val.strip()) == 10 and val.strip().upper().startswith("B0"):
-                    asins.add(val.strip().upper())
-            # Fallback: scan values for ASIN-like tokens
-            for v in row.values():
-                if isinstance(v, str):
-                    token = v.strip().upper()
-                    if len(token) == 10 and token.startswith("B0"):
-                        asins.add(token)
+            for key, val in row.items():
+                # Scan both header names and values for ASIN tokens
+                if isinstance(key, str):
+                    for m in asin_regex.finditer(key.upper()):
+                        asins.add(m.group(0))
+                if isinstance(val, str):
+                    for m in asin_regex.finditer(val.upper()):
+                        asins.add(m.group(0))
         return asins
 
     def _classify_market_position(self, scraped_data: Dict[str, Any]) -> MarketPosition:
@@ -351,3 +372,127 @@ class ResearchRunner:
         if text and len(text) > 0:
             return "fair"
         return "missing"
+
+    # --- new helpers: competitor selection and scraping ---
+
+    def _select_top_rows(self, rows: List[Dict[str, Any]], mode: str, limit: int = 10) -> List[Dict[str, Any]]:
+        if not rows:
+            return []
+
+        def to_float(v: Any) -> float:
+            try:
+                if isinstance(v, str):
+                    vs = v.replace(",", "").strip()
+                    return float(vs)
+                return float(v)
+            except Exception:
+                return 0.0
+
+        def key_revenue(row: Dict[str, Any]) -> float:
+            for k in (
+                "Revenue",
+                "Monthly Revenue",
+                "Gross Revenue",
+                "Estimated Revenue",
+                "Revenue ($)",
+                "Est. Revenue",
+            ):
+                if k in row and row.get(k) not in (None, ""):
+                    val = to_float(row.get(k))
+                    if val:
+                        return val
+            # Fallbacks that correlate with competitiveness
+            for k in ("Units Sold", "Sales", "Monthly Sales", "Orders", "Search Volume"):
+                if k in row and row.get(k) not in (None, ""):
+                    val = to_float(row.get(k))
+                    if val:
+                        return val
+            return 0.0
+
+        def key_design(row: Dict[str, Any]) -> float:
+            for k in ("Cerebro IQ Score", "Relevancy", "Title Density"):
+                if k in row and row.get(k) not in (None, ""):
+                    val = to_float(row.get(k))
+                    if val:
+                        return val
+            # Fallbacks: use engagement proxies
+            for k in ("Reviews", "Rating", "Search Volume"):
+                if k in row and row.get(k) not in (None, ""):
+                    val = to_float(row.get(k))
+                    if val:
+                        return val
+            return 0.0
+
+        key_fn = key_revenue if mode == "revenue" else key_design
+        sorted_rows = sorted(rows, key=key_fn, reverse=True)
+        return sorted_rows[:limit]
+
+    def _parse_rating_info(self, scraped: Dict[str, Any]) -> Tuple[Optional[float], Optional[int]]:
+        import re
+        rating_value: Optional[float] = None
+        ratings_count: Optional[int] = None
+
+        reviews = (scraped.get("reviews") or {}) if isinstance(scraped, dict) else {}
+        highlights = reviews.get("review_highlights") or []
+        if highlights:
+            m = re.search(r"([0-9.]+)\s+out of 5", str(highlights[0]))
+            if m:
+                try:
+                    rating_value = float(m.group(1))
+                except Exception:
+                    rating_value = None
+        if len(highlights) > 1 and ratings_count is None:
+            m = re.search(r"([0-9,]+)\s+ratings?", str(highlights[1]))
+            if m:
+                try:
+                    ratings_count = int(m.group(1).replace(",", ""))
+                except Exception:
+                    ratings_count = None
+
+        if rating_value is None or ratings_count is None:
+            kv = (((scraped.get("elements") or {}).get("detailBullets_feature_div") or {}).get("kv") or {})
+            for k, v in kv.items():
+                if "customer reviews" in str(k).lower():
+                    if rating_value is None:
+                        m2 = re.search(r"([0-9.]+)\s+out of 5", str(v))
+                        if m2:
+                            try:
+                                rating_value = float(m2.group(1))
+                            except Exception:
+                                pass
+                    if ratings_count is None:
+                        m3 = re.search(r"([0-9,]+)\s+ratings?", str(v))
+                        if m3:
+                            try:
+                                ratings_count = int(m3.group(1).replace(",", ""))
+                            except Exception:
+                                pass
+                    break
+
+        return rating_value, ratings_count
+
+    def _scrape_competitors(self, asins: List[str]) -> List[Dict[str, Any]]:
+        results: List[Dict[str, Any]] = []
+        for asin in asins[:10]:
+            res = scrape_amazon_listing(asin)
+            item: Dict[str, Any] = {"asin": asin, "success": bool(res.get("success"))}
+            if res.get("success"):
+                data = res.get("data", {}) or {}
+                url = data.get("url") or f"https://www.amazon.com/dp/{asin}"
+                price = (data.get("price") or {}) if isinstance(data.get("price"), dict) else {}
+                amount = price.get("amount")
+                currency = price.get("currency")
+                rating_value, ratings_count = self._parse_rating_info(data)
+                item.update({
+                    "url": url,
+                    "price_amount": amount,
+                    "price_currency": currency,
+                    "rating_value": rating_value,
+                    "ratings_count": ratings_count,
+                })
+            else:
+                item.update({
+                    "error": res.get("error"),
+                })
+            results.append(item)
+        return results
