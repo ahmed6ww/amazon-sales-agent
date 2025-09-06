@@ -37,6 +37,11 @@ class Settings:
         self.LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
         self.DEBUG_MODE: bool = os.getenv("DEBUG_MODE", "false").lower() == "true"
 
+        # Research/CSV Configuration
+        # Global top-N limit applied consistently across CSV sampling and code-based relevancy logic
+        # Used by research agent prompt context and internal computations
+        self.RESEARCH_CSV_TOP_N = int(os.getenv("RESEARCH_CSV_TOP_N", "20"))
+
     def reload(self) -> None:
         """Reload settings from environment (and .env if changed)."""
         load_dotenv(find_dotenv(), override=True)

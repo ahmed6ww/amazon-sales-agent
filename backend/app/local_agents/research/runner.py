@@ -2,6 +2,7 @@ from agents import Runner
 from typing import Dict, Any, Optional, List
 from .agent import research_agent
 from .helper_methods import scrape_amazon_listing, select_top_rows, collect_asins, scrape_competitors
+from app.core.config import settings
 
 
 class ResearchRunner:
@@ -41,17 +42,21 @@ class ResearchRunner:
         scraped_data = scraped_result.get("data", {})
 
         # 1.1) Select top competitors and scrape their price/ratings
-        revenue_comp_rows = select_top_rows(revenue_csv or [], mode="revenue", limit=10)
-        design_comp_rows = select_top_rows(design_csv or [], mode="design", limit=10)
-        revenue_asins = collect_asins(revenue_comp_rows)
-        design_asins = collect_asins(design_comp_rows)
+        top_n = getattr(settings, "RESEARCH_CSV_TOP_N", 10)
+        # Heuristic floors (configurable via settings if present)
+        literal_floor = int(getattr(settings, "RESEARCH_LITERAL_FLOOR", 8))  # when literal match is strong
+        competitor_floor = int(getattr(settings, "RESEARCH_COMPETITOR_FLOOR", 7))  # when many relevant designs
+        revenue_comp_rows = select_top_rows(revenue_csv or [], mode="revenue", limit=top_n)
+        design_comp_rows = select_top_rows(design_csv or [], mode="design", limit=top_n)
+        revenue_asins = collect_asins(revenue_comp_rows, limit=top_n)
+        design_asins = collect_asins(design_comp_rows, limit=top_n)
         # Fallback: if none found in the top rows, scan entire CSVs for ASINs
         if not revenue_asins and (revenue_csv or []):
-            revenue_asins = collect_asins(revenue_csv or [], limit=len(revenue_csv or []))
+            revenue_asins = collect_asins(revenue_csv or [], limit=top_n)
         if not design_asins and (design_csv or []):
-            design_asins = collect_asins(design_csv or [], limit=len(design_csv or []))
-        revenue_competitors = scrape_competitors(sorted(list(revenue_asins))[:10])
-        design_competitors = scrape_competitors(sorted(list(design_asins))[:10])
+            design_asins = collect_asins(design_csv or [], limit=top_n)
+        revenue_competitors = scrape_competitors(sorted(list(revenue_asins))[:top_n])
+        design_competitors = scrape_competitors(sorted(list(design_asins))[:top_n])
 
         # Slim competitor context for the agent (keep prompt compact)
         def _slim_comps(comps: List[Dict[str, Any]], limit: Optional[int] = None) -> List[Dict[str, Any]]:
@@ -89,18 +94,18 @@ class ResearchRunner:
                     slimmed.append(slim)
             return slimmed
 
-        rev_sample = _slim_rows(revenue_csv or [], 10)
-        des_sample = _slim_rows(design_csv or [], 10)
+        rev_sample = _slim_rows(revenue_csv or [], top_n)
+        des_sample = _slim_rows(design_csv or [], top_n)
 
         # Compute base relevancy scores from CSVs (fraction of tracked ASINs with rank <= 10)
-        def _compute_relevancy_scores(rows: List[Dict[str, Any]], competitor_asins: List[str]) -> Dict[str, float]:
-            scores: Dict[str, float] = {}
+        def _compute_relevancy_scores(rows: List[Dict[str, Any]], competitor_asins: List[str]) -> Dict[str, int]:
+            scores: Dict[str, int] = {}
             if not rows or not competitor_asins:
                 return scores
-            asin_set = [a for a in competitor_asins if isinstance(a, str) and len(a) == 10 and a.startswith('B0')]
+            asin_set = [a for a in competitor_asins if isinstance(a, str) and len(a) == 10 and a.startswith('B0')][:top_n]
             if not asin_set:
                 return scores
-            for row in rows:
+            for row in rows[:top_n]:
                 kw = str(row.get('Keyword Phrase', '')).strip()
                 if not kw:
                     continue
@@ -115,19 +120,64 @@ class ResearchRunner:
                             ranks_in_top10 += 1
                     except Exception:
                         continue
-                score10 = (ranks_in_top10 / max(1, len(asin_set))) * 10.0
+                score10 = int(round((ranks_in_top10 / max(1, len(asin_set))) * 10.0))
                 # Keep max score across revenue/design rows for same keyword
-                scores[kw] = max(scores.get(kw, 0.0), score10)
+                scores[kw] = max(scores.get(kw, 0), score10)
             return scores
+
+        # Simple literal-meaning relevance check using keyword tokens vs product title
+        def _literal_relevance(keyword: str, product_title: str) -> float:
+            kw = (keyword or "").lower().strip()
+            title = (product_title or "").lower()
+            if not kw or not title:
+                return 0.0
+            # token presence ratio (very simple heuristic, robust to ordering)
+            import re
+            kw_tokens = [t for t in re.split(r"[^a-z0-9]+", kw) if t]
+            # normalize extremely short tokens and handle simple plurals (ball -> balls)
+            norm_tokens = []
+            for t in kw_tokens:
+                if len(t) == 1:
+                    continue
+                norm_tokens.append(t)
+                if t.endswith('s') and len(t) > 2:
+                    norm_tokens.append(t[:-1])
+                elif not t.endswith('s') and len(t) > 2:
+                    norm_tokens.append(t + 's')
+            if norm_tokens:
+                kw_tokens = list(dict.fromkeys(norm_tokens))  # de-duplicate preserving order
+            if not kw_tokens:
+                return 0.0
+            hits = sum(1 for t in kw_tokens if t in title)
+            return hits / len(kw_tokens)
+
+        # Determine competitor "relevant design" by keyword presence in competitor title
+        def _count_relevant_designs(keyword: str, competitor_items: List[Dict[str, Any]]) -> int:
+            k = (keyword or "").lower().strip()
+            if not k:
+                return 0
+            import re
+            kw_tokens = [t for t in re.split(r"[^a-z0-9]+", k) if t]
+            count = 0
+            for it in competitor_items:
+                title = str(it.get("title") or "").lower()
+                if not title:
+                    continue
+                hits = sum(1 for t in kw_tokens if t and t in title)
+                if hits >= max(1, len(kw_tokens) - 1):  # loose match: allow one token miss
+                    count += 1
+            return count
 
         # Build competitor asin lists from the CSV headers
         def _extract_asins_from_rows(rows: List[Dict[str, Any]]) -> List[str]:
             seen = set()
-            for row in rows:
+            for row in rows[:top_n]:
                 for k in row.keys():
                     if isinstance(k, str) and k.startswith('B0') and len(k) == 10:
                         seen.add(k)
-            return list(seen)
+            # keep stable order limited to top_n
+            out = [a for a in list(seen)][:top_n]
+            return out
 
         rev_asins_list = _extract_asins_from_rows(revenue_csv or [])
         des_asins_list = _extract_asins_from_rows(design_csv or [])
@@ -135,11 +185,43 @@ class ResearchRunner:
         for k, v in _compute_relevancy_scores(design_csv or [], des_asins_list).items():
             base_relevancy[k] = max(base_relevancy.get(k, 0.0), v)
 
+        # Compute adjusted relevancy per rules:
+        # 1) Literal meaning first. If literal score is high (>=0.6), keep base score.
+        # 2) If literal is low (<0.6) but many relevant designs are ranked, incline to relevancy by boosting.
+        #    We approximate "relevant designs ranked" by competitor title matches count among scraped competitors.
+        #    Final confirmation via SERP is not implemented yet.
+        product_title = str(((scraped_data.get("elements") or {}).get("productTitle") or {}).get("text") or "")
+        if isinstance(product_title, list):
+            product_title = product_title[0] if product_title else ""
+        adjusted_relevancy: Dict[str, int] = {}
+        # Ensure we consider the provided main_keyword too, even if absent from CSV-derived base map
+        keywords_for_adjust = dict(base_relevancy)
+        if main_keyword and main_keyword not in keywords_for_adjust:
+            keywords_for_adjust[main_keyword] = 0
+
+        for kw, base_score in keywords_for_adjust.items():
+            lit = _literal_relevance(kw, product_title)
+            if lit >= 0.6:
+                # Literal meaning first: ensure a minimum score when literal is strong
+                adjusted = max(base_score, literal_floor)
+            else:
+                # competitor relevant designs across both sets we scraped
+                rel_rev = _count_relevant_designs(kw, revenue_competitors)
+                rel_des = _count_relevant_designs(kw, design_competitors)
+                rel_total = rel_rev + rel_des
+                # if we have strong competitor relevance (>=7 across both lists), incline upward
+                if rel_total >= 7:
+                    # Preserve prior +2 boost with cap 10, while also enforcing a minimum floor
+                    adjusted = max(base_score, min(10, max(base_score + 2, competitor_floor)))
+                else:
+                    adjusted = base_score
+            adjusted_relevancy[kw] = int(max(0, min(10, int(round(adjusted)))))
+
         # 3) Build a single analysis prompt using pre-fetched data + CSV context
         # Keep it compact; the agent should use CSV context only for high-level grounding
         import json
         prompt = (
-            "Analyze this pre-fetched Amazon product data for the 5 MVP required sources, and use the CSV keyword context only for grounding (do not perform full keyword scoring here).\n\n"
+            "Analyze this pre-fetched Amazon product data for the 5 MVP required sources, and use the CSV keyword context only for grounding. Do not compute or mention keyword relevancy here.\n\n"
             f"PRODUCT INFO:\n- URL/ASIN: {asin_or_url}\n- Marketplace: {marketplace}\n- Main Keyword: {main_keyword or 'Not specified'}\n\n"
             f"SCRAPED DATA (structured):\n{scraped_data}\n\n"
             f"CSV CONTEXT (Top 10 each) — Revenue keywords (slim):\n{json.dumps(rev_sample, separators=(',', ':'))}\n\n"
@@ -147,7 +229,6 @@ class ResearchRunner:
             "COMPETITOR CONTEXT (use for market_position tiering):\n"
             f"- Revenue (all {len(rev_comp_slim)}):\n{json.dumps(rev_comp_slim, separators=(',', ':'))}\n"
             f"- Design (all {len(des_comp_slim)}):\n{json.dumps(des_comp_slim, separators=(',', ':'))}\n\n"
-            f"BASE RELEVANCY SCORES (0–10 scale; proportion of competitor ASINs ranking top-10 per keyword × 10):\n{json.dumps(dict(sorted(base_relevancy.items(), key=lambda x: x[0]) ) , separators=(',', ':'))}\n\n"
             "Required sources to analyze (focus on extraction quality only):\n"
             "1. TITLE - Product title text and quality assessment\n"
             "2. IMAGES - Image URLs, count, and quality\n"
@@ -160,7 +241,7 @@ class ResearchRunner:
             "- Quality: Assessment (Excellent/Good/Fair/Poor/Missing)\n"
             "- Notes: Any observations about completeness or issues\n\n"
             "For market_position: compare the product's price (or price_per_unit when unit_count/unit_name can be derived) against competitor medians to assign tier ('budget'|'premium'); provide a brief rationale.\n"
-            "Also include 'relevancy_scores' mapping using the provided base scores; you may adjust slightly if Amazon search validation suggests stronger/weaker relevance.\n"
+            "Do not include any keyword relevancy scoring in your response; the system will attach it.\n"
         )
 
         # 4) Single agent call
@@ -203,12 +284,14 @@ class ResearchRunner:
                 except Exception:
                     pass
 
+
             return {
                 "success": True,
                 "final_output": final_output_text or (raw_output if isinstance(raw_output, str) else None),
                 # Back-compat aliases expected by endpoints/tests
                 "analysis": final_output_text or (raw_output if isinstance(raw_output, str) else ""),
                 "agent_used": "ResearchAnalyst",
+                "main_keyword": main_keyword,
                 "scraped_product": scraped_data,
                 "structured_data": structured or {},
                 "csv_context_counts": {
@@ -220,6 +303,7 @@ class ResearchRunner:
                     "design": design_competitors,
                 },
                 "base_relevancy_scores": base_relevancy,
+                "adjusted_relevancy_scores": adjusted_relevancy,
             }
         except Exception as e:
             return {
@@ -235,6 +319,8 @@ class ResearchRunner:
                     "revenue": revenue_competitors,
                     "design": design_competitors,
                 },
+                "base_relevancy_scores": base_relevancy,
+                "adjusted_relevancy_scores": adjusted_relevancy,
             }
 
     # --- internal: helpers ---

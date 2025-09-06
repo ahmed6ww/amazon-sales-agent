@@ -222,12 +222,16 @@ def scrape_competitors(asins: List[str], *, max_items: int = 10) -> List[Dict[st
         if res.get("success"):
             data = res.get("data", {}) or {}
             url = data.get("url") or f"https://www.amazon.com/dp/{asin}"
+            title = data.get("title") or ((data.get("elements") or {}).get("productTitle") or {}).get("text")
+            if isinstance(title, list):
+                title = title[0] if title else ""
             price = (data.get("price") or {}) if isinstance(data.get("price"), dict) else {}
             amount = price.get("amount")
             currency = price.get("currency")
             rating_value, ratings_count = _parse_rating_info(data)
             item.update({
                 "url": url,
+                "title": title,
                 "price_amount": amount,
                 "price_currency": currency,
                 "rating_value": rating_value,

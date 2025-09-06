@@ -3,9 +3,16 @@
 Manual runner to scrape a live Amazon product page and print the result.
 No pytest, no mocks. Provide the URL as an argument or paste when prompted.
 
-Usage:
-  python backend/tests/manual_mvp_scrape.py <amazon_product_url>
-  # or just run without args and paste the URL when prompted
+Usage (from repo root):
+    uv run -m backend.tests.services.amazon.manual_mvp_scrape <amazon_product_url>
+
+Usage (from backend folder):
+    uv run -m tests.services.amazon.manual_mvp_scrape <amazon_product_url>
+
+Or run the file directly:
+    uv run python backend/tests/services/amazon/manual_mvp_scrape.py <amazon_product_url>
+
+# You can also run without args and paste the URL when prompted
 """
 
 import sys
