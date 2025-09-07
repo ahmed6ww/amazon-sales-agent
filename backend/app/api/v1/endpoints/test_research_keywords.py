@@ -148,10 +148,6 @@ async def start_test_research_and_keywords(
             "success": True,
             "asin": scraped_data.get("asin", asin_or_url),
             "marketplace": marketplace,
-            "main_keyword": main_keyword,
-            "revenue_competitors": len(revenue_data),
-            "design_competitors": len(design_data),
-            "ai_analysis_research": research_ai_result,
             "ai_analysis_keywords": keyword_ai_result,
             "source": "test_research_keywords_endpoint",
         }

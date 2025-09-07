@@ -17,8 +17,8 @@ class KeywordRunner:
 		self,
 		scraped_product: Dict[str, Any],
 		base_relevancy_scores: Dict[str, int],
-		# marketplace: Optional[str] = None,
-		# asin_or_url: Optional[str] = None,
+		marketplace: Optional[str] = None,
+		asin_or_url: Optional[str] = None,
 	) -> Dict[str, Any]:
 		import json
 
