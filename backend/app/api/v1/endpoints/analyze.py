@@ -269,13 +269,32 @@ async def run_complete_analysis(
         # Force AI Keyword Agent processing only (no direct fallback)
         keyword_processing_method = "ai_keyword"
         logger.info(f"Using AI Keyword Agent for {len(combined_data)} keywords")
+        
+        # Build the minimal research context for the Keyword Agent prompt:
+        # Only include scraped_product and base_relevancy_scores as requested
+        try:
+            # Prefer values returned from ResearchRunner output payload
+            ra = locals().get("research_ai_result", {}) or {}
+            keyword_product_attributes = {
+                "scraped_product": ra.get("scraped_product", {}),
+                "base_relevancy_scores": ra.get("base_relevancy_scores", {}),
+            }
+        except Exception:
+            # Fallback for non-AI or error paths
+            keyword_product_attributes = {
+                "scraped_product": (research_result.get("scraped_product") or {}),
+                "base_relevancy_scores": (research_result.get("base_relevancy_scores") or {}),
+            }
         try:
             def run_keyword_analysis():
                 """Run keyword analysis in a separate thread with its own event loop"""
                 loop = asyncio.new_event_loop()
                 asyncio.set_event_loop(loop)
                 try:
-                    return keyword_runner.run_full_keyword_analysis(combined_data)
+                    return keyword_runner.run_full_keyword_analysis(
+                        combined_data,
+                        product_attributes=keyword_product_attributes
+                    )
                 finally:
                     loop.close()
 
