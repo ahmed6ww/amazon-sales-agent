@@ -144,6 +144,66 @@ async def start_test_research_and_keywords(
 
         keyword_ai_result = await loop.run_in_executor(None, run_keyword_agent)
 
+        # Enrich: append intent_score then merge CSV metrics into keyword items
+        try:
+            from app.local_agents.scoring.runner import ScoringRunner
+
+            items = []
+            if isinstance(keyword_ai_result, dict):
+                structured = keyword_ai_result.get("structured_data") or {}
+                items = structured.get("items") or []
+            if items:
+                # Run scoring/LLM enrichment in a background thread to avoid event loop conflicts
+                def run_scoring_enrichment():
+                    loop_inner = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop_inner)
+                    try:
+                        return ScoringRunner.score_and_enrich(
+                            items,
+                            scraped_product=scraped_product,
+                            revenue_csv=revenue_data,
+                            design_csv=design_data,
+                            base_relevancy_scores=base_relevancy_scores,
+                        )
+                    finally:
+                        loop_inner.close()
+
+                enriched = await loop.run_in_executor(None, run_scoring_enrichment)
+                # Replace items inside structured_data
+                if isinstance(keyword_ai_result, dict):
+                    keyword_ai_result.setdefault("structured_data", {})["items"] = enriched
+        except Exception as _enrich_err:
+            # Non-fatal: continue with original keyword result if enrichment fails
+            logger.warning(f"Keyword enrichment skipped: {_enrich_err!s}")
+            # Ensure items at least include a default intent_score
+            try:
+                if isinstance(keyword_ai_result, dict):
+                    structured = keyword_ai_result.get("structured_data") or {}
+                    items = structured.get("items") or []
+                    if isinstance(items, list):
+                        for it in items:
+                            if isinstance(it, dict) and "intent_score" not in it:
+                                it["intent_score"] = 0
+                        keyword_ai_result.setdefault("structured_data", {})["items"] = items
+            except Exception:
+                pass
+
+        # Always ensure intent_score field present (0 default) in case LLM returned nothing
+        try:
+            if isinstance(keyword_ai_result, dict):
+                structured = keyword_ai_result.get("structured_data") or {}
+                items = structured.get("items") or []
+                if isinstance(items, list):
+                    changed = False
+                    for it in items:
+                        if isinstance(it, dict) and "intent_score" not in it:
+                            it["intent_score"] = 0
+                            changed = True
+                    if changed:
+                        keyword_ai_result.setdefault("structured_data", {})["items"] = items
+        except Exception:
+            pass
+
         response = {
             "success": True,
             "asin": scraped_data.get("asin", asin_or_url),

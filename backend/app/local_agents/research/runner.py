@@ -3,6 +3,7 @@ from typing import Dict, Any, Optional, List
 from .agent import research_agent
 from .helper_methods import scrape_amazon_listing, select_top_rows, collect_asins, scrape_competitors
 from app.core.config import settings
+from app.local_agents.scoring.subagents.intent_agent import USER_PROMPT_TEMPLATE
 
 
 class ResearchRunner:
@@ -284,6 +285,13 @@ class ResearchRunner:
                 except Exception:
                     pass
 
+
+            # Build dynamic user prompt for IntentScoringSubagent (no execution here)
+            import json as _json
+            USER_PROMPT_TEMPLATE.format(
+                scraped_product=_json.dumps(scraped_data or {}, separators=(",", ":")),
+                base_relevancy_scores=_json.dumps(base_relevancy or {}, separators=(",", ":")),
+            )
 
             return {
                 "success": True,

@@ -53,7 +53,7 @@ def categorize_keywords_from_csv(
 				phrase=k,
 				category=cat,
 				reason=reason,
-				base_relevancy_score=int(score) if isinstance(score, (int, float)) else None,
+				relevancy_score=int(score) if isinstance(score, (int, float)) else 0,
 			)
 		)
 
