@@ -43,7 +43,7 @@ class CurrentSEO(BaseModel):
     backend_keywords: List[str] = Field(default_factory=list, description="Current backend keywords")
     keyword_coverage: KeywordCoverage = Field(..., description="Overall keyword coverage analysis")
     root_coverage: RootCoverage = Field(..., description="Root keyword coverage analysis")
-    total_character_usage: Dict[str, int] = Field(default_factory=dict, description="Character usage by content type")
+    total_character_usage: Dict[str, Any] = Field(default_factory=dict, description="Character usage by content type")
 
 
 class OptimizedContent(BaseModel):
@@ -65,10 +65,11 @@ class OptimizedSEO(BaseModel):
 
 class SEOComparison(BaseModel):
     """Comparison metrics between current and optimized SEO."""
-    coverage_improvement: Dict[str, float] = Field(default_factory=dict, description="Coverage improvement metrics")
-    intent_improvement: Dict[str, int] = Field(default_factory=dict, description="Intent score improvements")
-    volume_improvement: Dict[str, int] = Field(default_factory=dict, description="Search volume improvements")
-    character_efficiency: Dict[str, float] = Field(default_factory=dict, description="Character usage efficiency")
+    # Allow mixed value types because AI output may include lists/strings alongside numbers
+    coverage_improvement: Dict[str, Any] = Field(default_factory=dict, description="Coverage improvement metrics")
+    intent_improvement: Dict[str, Any] = Field(default_factory=dict, description="Intent score improvements")
+    volume_improvement: Dict[str, Any] = Field(default_factory=dict, description="Search volume improvements")
+    character_efficiency: Dict[str, Any] = Field(default_factory=dict, description="Character usage efficiency")
     summary_metrics: Dict[str, Any] = Field(default_factory=dict, description="High-level summary metrics")
 
 

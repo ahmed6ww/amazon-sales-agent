@@ -8,7 +8,6 @@ This package contains the scoring agent responsible for:
 - Final ranking calculations
 """
 
-from .agent import scoring_agent
 from .runner import ScoringRunner
 from .schemas import (
     IntentScore,
@@ -32,7 +31,6 @@ from .subagents import (
 )
 
 __all__ = [
-    "scoring_agent",
     "ScoringRunner",
     "IntentScore",
     "KeywordScore", 

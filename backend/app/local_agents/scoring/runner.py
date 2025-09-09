@@ -130,6 +130,7 @@ class ScoringRunner:
 			except Exception:
 				it["intent_score"] = 0
 		logger.info("[ScoringRunner] Intent scores applied to %d items", len(items))
+		logger.debug("[ScoringRunner] Sample scored item: %s", items)
 		return items
 
 	@staticmethod

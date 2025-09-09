@@ -17,7 +17,8 @@ from .helper_methods import (
     analyze_content_piece,
     prepare_keyword_data_for_analysis,
     format_keywords_for_prompt,
-    calculate_character_usage
+    calculate_character_usage,
+    extract_keywords_from_content
 )
 from .schemas import (
     SEOAnalysisResult, CurrentSEO, OptimizedSEO, SEOComparison,
@@ -68,18 +69,11 @@ class SEORunner:
             current_seo = self._analyze_current_seo(current_content, keyword_data, broad_search_volume_by_root)
             logger.info(f"✅ Current SEO analysis complete: {current_seo.keyword_coverage.coverage_percentage}% coverage")
             
-            # Step 4: Generate AI-powered optimization suggestions
-            if self._should_use_ai_optimization():
-                optimized_seo = self._generate_ai_optimizations(
-                    current_content, keyword_data, scraped_product
-                )
-                logger.info("🤖 AI optimization suggestions generated")
-            else:
-                # Fallback to rule-based optimization
-                optimized_seo = self._generate_rule_based_optimizations(
-                    current_content, keyword_data
-                )
-                logger.info("📋 Rule-based optimization suggestions generated")
+            # Step 4: Generate AI-powered optimization suggestions (no fallback)
+            optimized_seo = self._generate_ai_optimizations(
+                current_content, keyword_data, scraped_product
+            )
+            logger.info("🤖 AI optimization suggestions generated")
             
             # Step 5: Calculate comparison metrics
             comparison = self._calculate_comparison_metrics(current_seo, optimized_seo, keyword_data)
@@ -118,8 +112,7 @@ class SEORunner:
             logger.error(f"❌ SEO analysis failed: {str(e)}", exc_info=True)
             return {
                 "success": False,
-                "error": f"SEO analysis failed: {str(e)}",
-                "fallback_analysis": self._generate_minimal_analysis(scraped_product, keyword_items)
+                "error": f"SEO analysis failed: {str(e)}"
             }
     
     def _extract_current_content(self, scraped_product: Dict[str, Any]) -> Dict[str, Any]:
@@ -233,16 +226,14 @@ class SEORunner:
             # Run AI agent
             result = Runner.run_sync(seo_optimization_agent, prompt)
             ai_output = result.final_output
-            
-            # Extract optimized suggestions from AI output
-            # Note: This would need to be adapted based on actual AI output format
-            # For now, providing a structured fallback
-            
+
+            # Parse optimized suggestions from AI output
             return self._parse_ai_output_to_optimized_seo(ai_output, keyword_data)
-            
+
         except Exception as e:
-            logger.warning(f"AI optimization failed, using rule-based fallback: {e}")
-            return self._generate_rule_based_optimizations(current_content, keyword_data)
+            # No fallback: surface error to caller
+            logger.error(f"AI optimization failed: {e}")
+            raise
     
     def _generate_rule_based_optimizations(
         self,
@@ -403,9 +394,55 @@ class SEORunner:
     
     def _parse_ai_output_to_optimized_seo(self, ai_output: Any, keyword_data: Dict[str, Any]) -> OptimizedSEO:
         """Parse AI output into OptimizedSEO structure."""
-        # This would parse the actual AI output
-        # For now, falling back to rule-based
-        return self._generate_rule_based_optimizations({}, keyword_data)
+        from .schemas import OptimizedContent
+        data = ai_output
+
+        # If output is JSON string, parse it
+        if isinstance(data, str):
+            import json
+            data = json.loads(data)
+
+        # If output is a Pydantic model, convert to dict
+        try:
+            if hasattr(data, 'model_dump'):
+                data = data.model_dump()
+        except Exception:
+            pass
+
+        # If the agent returned a full SEOAnalysisResult, extract optimized_seo
+        if isinstance(data, dict) and 'optimized_seo' in data:
+            data = data['optimized_seo']
+
+        # At this point, data should be the optimized_seo dict
+        if not isinstance(data, dict):
+            raise ValueError("AI output is not in expected optimized_seo dict format")
+
+        # Build OptimizedSEO from dict tolerantly
+        optimized_title = data.get('optimized_title') or {}
+        optimized_bullets = data.get('optimized_bullets') or []
+        optimized_backend_keywords = data.get('optimized_backend_keywords') or []
+        keyword_strategy = data.get('keyword_strategy') or {}
+        rationale = data.get('rationale') or ""
+
+        # Normalize bullets and title into OptimizedContent
+        def to_opt_content(obj: dict) -> OptimizedContent:
+            return OptimizedContent(
+                content=obj.get('content', ''),
+                keywords_included=list(obj.get('keywords_included', [])),
+                improvements=list(obj.get('improvements', [])),
+                character_count=int(obj.get('character_count', len(obj.get('content', ''))))
+            )
+
+        title_content = to_opt_content(optimized_title)
+        bullets_content = [to_opt_content(b) for b in optimized_bullets if isinstance(b, dict)]
+
+        return OptimizedSEO(
+            optimized_title=title_content,
+            optimized_bullets=bullets_content,
+            optimized_backend_keywords=list(optimized_backend_keywords),
+            keyword_strategy=keyword_strategy,
+            rationale=rationale
+        )
     
     def _calculate_comparison_metrics(
         self, 
@@ -413,50 +450,88 @@ class SEORunner:
         optimized_seo: OptimizedSEO,
         keyword_data: Dict[str, Any]
     ) -> SEOComparison:
-        """Calculate before/after comparison metrics."""
-        
-        # Coverage improvements
-        current_coverage = current_seo.keyword_coverage.coverage_percentage
-        # Estimate optimized coverage (would be calculated from actual optimized content)
-        estimated_optimized_coverage = min(current_coverage + 30, 95.0)  # Conservative estimate
-        
+        """Calculate before/after comparison metrics from actual content."""
+
+        # Build phrase lists and maps
+        all_keywords = keyword_data.get("relevant_keywords", []) + keyword_data.get("design_keywords", [])
+        phrases = [kw.get("phrase", "") for kw in all_keywords if kw.get("phrase")]
+        phrase_to_volume = {kw.get("phrase", ""): kw.get("search_volume", 0) for kw in all_keywords}
+        high_intent_phrases = [kw.get("phrase", "") for kw in keyword_data.get("high_intent_keywords", []) if kw.get("phrase")]
+
+        # Current content strings
+        current_title = current_seo.title_analysis.content
+        current_bullets = [b.content for b in current_seo.bullets_analysis]
+        current_backend = current_seo.backend_keywords
+        current_text = " ".join([current_title] + current_bullets + [" ".join(current_backend)])
+
+        # Optimized content strings
+        opt_title = optimized_seo.optimized_title.content
+        opt_bullets = [b.content for b in optimized_seo.optimized_bullets]
+        opt_backend = optimized_seo.optimized_backend_keywords
+        opt_text = " ".join([opt_title] + opt_bullets + [" ".join(opt_backend)])
+
+        # Coverage details
+        current_found, _ = extract_keywords_from_content(current_text, phrases)
+        opt_found, _ = extract_keywords_from_content(opt_text, phrases)
+
+        total_kw = len(phrases)
+        before_cov = len(set(current_found))
+        after_cov = len(set(opt_found))
+        before_pct = round((before_cov / total_kw * 100), 2) if total_kw else 0.0
+        after_pct = round((after_cov / total_kw * 100), 2) if total_kw else 0.0
+        new_added = [p for p in set(opt_found) if p not in set(current_found)]
+
         coverage_improvement = {
-            "current_coverage": current_coverage,
-            "optimized_coverage": estimated_optimized_coverage,
-            "improvement": estimated_optimized_coverage - current_coverage
+            "total_keywords": total_kw,
+            "before_covered": before_cov,
+            "after_covered": after_cov,
+            "before_coverage_pct": before_pct,
+            "after_coverage_pct": after_pct,
+            "delta_pct_points": round(after_pct - before_pct, 2),
+            "new_keywords_added": sorted(new_added)[:20]
         }
-        
-        # Intent improvements
-        current_high_intent = len([kw for kw in keyword_data["relevant_keywords"] 
-                                 if kw.get("intent_score", 0) >= 2])
+
+        # Intent coverage
+        before_hi_intent = len([p for p in high_intent_phrases if p in set(current_found)])
+        after_hi_intent = len([p for p in high_intent_phrases if p in set(opt_found)])
         intent_improvement = {
-            "current_high_intent_covered": current_high_intent,
-            "optimized_high_intent_covered": min(current_high_intent + 5, len(keyword_data["high_intent_keywords"])),
-            "improvement": 5
+            "high_intent_total": len(high_intent_phrases),
+            "before_covered": before_hi_intent,
+            "after_covered": after_hi_intent,
+            "delta": max(0, after_hi_intent - before_hi_intent)
         }
-        
-        # Volume improvements  
-        current_volume = sum(kw.get("search_volume", 0) for kw in keyword_data["relevant_keywords"][:10])
+
+        # Volume capture (approximate)
+        before_vol = sum(phrase_to_volume.get(p, 0) for p in set(current_found))
+        after_vol = sum(phrase_to_volume.get(p, 0) for p in set(opt_found))
         volume_improvement = {
-            "current_volume_covered": current_volume,
-            "optimized_volume_covered": current_volume + 2000,
-            "improvement": 2000
+            "estimated_volume_before": before_vol,
+            "estimated_volume_after": after_vol,
+            "delta_volume": max(0, after_vol - before_vol)
         }
-        
+
         # Character efficiency
+        title_before = len(current_title or "")
+        title_after = len(opt_title or "")
+        backend_before = len(" ".join(current_backend) if current_backend else "")
+        backend_after = len(" ".join(opt_backend) if opt_backend else "")
         char_efficiency = {
-            "current_efficiency": 65.0,  # Placeholder
-            "optimized_efficiency": 85.0,  # Placeholder
-            "improvement": 20.0
+            "title_limit": 200,
+            "title_before": title_before,
+            "title_after": title_after,
+            "title_utilization_before_pct": round((title_before / 200) * 100, 1) if 200 else 0,
+            "title_utilization_after_pct": round((title_after / 200) * 100, 1) if 200 else 0,
+            "backend_limit": 249,
+            "backend_before": backend_before,
+            "backend_after": backend_after,
         }
-        
-        # Summary metrics
+
+        # Summary metrics (simple heuristic)
         summary_metrics = {
-            "overall_improvement_score": 7.5,  # Out of 10
-            "priority_recommendations": 3,
-            "estimated_ranking_improvement": "15-25%"
+            "overall_improvement_score": round(min(10.0, (after_pct - before_pct) / 10 + (after_hi_intent - before_hi_intent) / 2), 2),
+            "priority_recommendations": max(1, min(5, len(new_added) // 4)),
         }
-        
+
         return SEOComparison(
             coverage_improvement=coverage_improvement,
             intent_improvement=intent_improvement,
@@ -466,14 +541,5 @@ class SEORunner:
         )
     
     def _should_use_ai_optimization(self) -> bool:
-        """Determine if AI optimization should be used."""
-        # Could check settings, API availability, etc.
-        return True  # For now, always try AI first
-    
-    def _generate_minimal_analysis(self, scraped_product: Dict[str, Any], keyword_items: List[Dict[str, Any]]) -> Dict[str, Any]:
-        """Generate minimal analysis as fallback."""
-        return {
-            "current_title": scraped_product.get("title", ""),
-            "keywords_analyzed": len(keyword_items),
-            "status": "minimal_analysis"
-        } 
+        """Always use AI optimization (no rule-based fallback)."""
+        return True
