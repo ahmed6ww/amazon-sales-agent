@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.v1.endpoints import upload, analyze, test_research, scrape_mvp, test_research_keywords
+from app.api.v1.endpoints import upload, analyze, test_research, scrape_mvp, test_research_keywords, test_seo
 from app.core.config import settings
 
 app = FastAPI(
@@ -24,6 +24,7 @@ app.include_router(analyze.router, prefix="/api/v1", tags=["analyze"])
 app.include_router(test_research.router, prefix="/api/v1", tags=["test-research"])
 app.include_router(test_research_keywords.router, prefix="/api/v1", tags=["test-research-keywords"])
 app.include_router(scrape_mvp.router, prefix="/api/v1", tags=["scrape-mvp"])
+app.include_router(test_seo.router, prefix="/api/v1", tags=["test-seo"])
 
 @app.get("/")
 def read_root():

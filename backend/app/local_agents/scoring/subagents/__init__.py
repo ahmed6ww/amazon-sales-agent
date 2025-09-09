@@ -17,10 +17,12 @@ __all__ = [
     "opportunity_agent",
     "collect_metrics_from_csv",
     "merge_metrics_into_items",
+    "calculate_broad_volume",
+    "extract_root_word",
 ]
 
 
 from .intent_agent import intent_scoring_agent
-from .broad_volume_agent import broad_volume_agent
+from .broad_volume_agent import broad_volume_agent, calculate_broad_volume, extract_root_word
 from .metrics_agent import metrics_agent, collect_metrics_from_csv, merge_metrics_into_items
 from .opportunity_agent import opportunity_agent

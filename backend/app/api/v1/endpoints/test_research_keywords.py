@@ -1,7 +1,8 @@
 """
-Test Research + Keyword API Endpoint
+Test Research + Keyword + SEO API Endpoint
 Runs the Research agent, then feeds its scraped_product and base_relevancy_scores
-into the Keyword agent for categorization.
+into the Keyword agent for categorization, then runs Scoring enrichment, 
+and finally generates SEO optimization analysis.
 """
 
 from fastapi import APIRouter, HTTPException, Query, UploadFile, File, Form
@@ -24,12 +25,14 @@ async def start_test_research_and_keywords(
     design_csv: Optional[UploadFile] = File(None),
 ):
     """
-    Test endpoint mirroring the analyze flow through Research, then Keyword Agent.
+    Test endpoint for complete 4-agent pipeline: Research → Keyword → Scoring → SEO
 
     - Accepts optional Helium10 CSV uploads (revenue/design) for Research context
     - Scrapes listing and runs ResearchRunner with structured outputs
-    - Extracts only scraped_product and base_relevancy_scores
-    - Runs KeywordRunner using ONLY those two inputs
+    - Extracts scraped_product and base_relevancy_scores for Keyword Agent
+    - Runs KeywordRunner for categorization
+    - Runs ScoringRunner for enrichment with intent scores and metrics
+    - Runs SEORunner for optimization analysis and suggestions
     """
 
     try:
@@ -204,12 +207,82 @@ async def start_test_research_and_keywords(
         except Exception:
             pass
 
+        # Step 4: Run SEO Analysis
+        seo_analysis_result = None
+        try:
+            logger.info("🔍 Running SEO optimization analysis")
+            
+            # Get the enriched keyword items for SEO analysis
+            keyword_items = []
+            if isinstance(keyword_ai_result, dict):
+                structured = keyword_ai_result.get("structured_data", {})
+                items = structured.get("items", [])
+                if items:
+                    keyword_items = items
+            
+            if keyword_items and scraped_product:
+                from app.local_agents.seo import SEORunner
+                
+                def run_seo_analysis():
+                    loop_inner = asyncio.new_event_loop()
+                    asyncio.set_event_loop(loop_inner)
+                    try:
+                        seo_runner = SEORunner()
+                        return seo_runner.run_seo_analysis(
+                            scraped_product=scraped_product,
+                            keyword_items=keyword_items,
+                            broad_search_volume_by_root=None  # Could be enhanced with root volume data
+                        )
+                    finally:
+                        loop_inner.close()
+
+                seo_result = await loop.run_in_executor(None, run_seo_analysis)
+                
+                if seo_result and seo_result.get("success"):
+                    seo_analysis_result = seo_result
+                    logger.info("✅ SEO optimization analysis completed successfully")
+                else:
+                    logger.warning(f"SEO analysis had issues: {seo_result.get('error') if seo_result else 'No result'}")
+                    seo_analysis_result = {
+                        "success": False,
+                        "error": seo_result.get("error") if seo_result else "SEO analysis failed",
+                        "summary": {
+                            "current_coverage": "N/A",
+                            "optimization_opportunities": 0,
+                            "method": "failed"
+                        }
+                    }
+            else:
+                logger.warning("Skipping SEO analysis - insufficient data")
+                seo_analysis_result = {
+                    "success": False,
+                    "error": "Insufficient data for SEO analysis",
+                    "summary": {
+                        "current_coverage": "N/A", 
+                        "optimization_opportunities": 0,
+                        "method": "skipped"
+                    }
+                }
+                
+        except Exception as e:
+            logger.error(f"SEO analysis failed: {str(e)}", exc_info=True)
+            seo_analysis_result = {
+                "success": False,
+                "error": f"SEO analysis failed: {str(e)}",
+                "summary": {
+                    "current_coverage": "N/A",
+                    "optimization_opportunities": 0, 
+                    "method": "error"
+                }
+            }
+
         response = {
             "success": True,
             "asin": scraped_data.get("asin", asin_or_url),
             "marketplace": marketplace,
             "ai_analysis_keywords": keyword_ai_result,
-            "source": "test_research_keywords_endpoint",
+            "seo_analysis": seo_analysis_result,
+            "source": "test_research_keywords_seo_endpoint",
         }
 
         return response

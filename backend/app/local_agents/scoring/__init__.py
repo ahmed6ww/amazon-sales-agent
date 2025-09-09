@@ -26,6 +26,11 @@ from .helper_methods import (
     filter_by_thresholds
 )
 
+from .subagents import (
+    calculate_broad_volume,
+    extract_root_word
+)
+
 __all__ = [
     "scoring_agent",
     "ScoringRunner",
@@ -34,13 +39,11 @@ __all__ = [
     "CompetitionMetrics",
     "ScoringResult",
     "PriorityLevel",
-    "tool_calculate_intent_scores",
-    "tool_analyze_competition_metrics", 
-    "tool_prioritize_keywords",
-    "tool_generate_final_rankings",
     "calculate_intent_score",
     "analyze_competition_difficulty",
     "calculate_priority_score",
     "rank_keywords_by_priority",
-    "filter_by_thresholds"
+    "filter_by_thresholds",
+    "calculate_broad_volume",
+    "extract_root_word"
 ] 

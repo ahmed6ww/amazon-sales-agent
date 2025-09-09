@@ -1,61 +1,20 @@
 """
-SEO Agent Package
+SEO Optimization Agent Module
 
-This package contains the Amazon SEO optimization agent with tools for:
-- Listing optimization (title, bullets, backend keywords)
-- SEO gap analysis and competitive positioning
-- Content recommendations and keyword integration
-- Performance improvement scoring
+This module provides SEO analysis and optimization capabilities for Amazon listings.
+It analyzes current listing content and generates optimized suggestions based on
+keyword research data.
 """
 
-from .agent import seo_agent
-from .schemas import (
-    SEOOptimization,
-    TitleOptimization,
-    BulletPointOptimization,
-    BackendKeywordOptimization,
-    SEOAnalysisResult,
-    ContentGap,
-    CompetitiveAdvantage,
-    SEOScore
-)
-from .tools import (
-    tool_optimize_title,
-    tool_optimize_bullet_points,
-    tool_optimize_backend_keywords,
-    tool_analyze_seo_gaps
-)
-from .prompts import SEO_AGENT_INSTRUCTIONS
-from .helper_methods import (
-    optimize_product_title,
-    generate_bullet_points,
-    create_backend_keywords,
-    analyze_content_gaps,
-    calculate_seo_score,
-    identify_competitive_advantages
-)
+from .agent import seo_optimization_agent
 from .runner import SEORunner
+from .schemas import SEOAnalysisResult, CurrentSEO, OptimizedSEO, SEOComparison
 
 __all__ = [
-    "seo_agent",
+    "seo_optimization_agent", 
     "SEORunner",
-    "optimize_product_title",
-    "generate_bullet_points",
-    "create_backend_keywords",
-    "analyze_content_gaps",
-    "calculate_seo_score",
-    "identify_competitive_advantages",
-    "SEOOptimization",
-    "TitleOptimization",
-    "BulletPointOptimization",
-    "BackendKeywordOptimization",
     "SEOAnalysisResult",
-    "ContentGap",
-    "CompetitiveAdvantage",
-    "SEOScore",
-    "tool_optimize_title",
-    "tool_optimize_bullet_points",
-    "tool_optimize_backend_keywords",
-    "tool_analyze_seo_gaps",
-    "SEO_AGENT_INSTRUCTIONS"
+    "CurrentSEO", 
+    "OptimizedSEO",
+    "SEOComparison"
 ] 

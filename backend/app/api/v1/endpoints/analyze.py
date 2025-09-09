@@ -2,7 +2,7 @@
 Main Analysis Endpoint
 
 Production endpoint for the complete agentic workflow:
-Research Agent → Keyword Agent → Scoring Agent → SEO Agent
+Research Agent → Keyword Agent → Scoring Agent
 """
 
 from fastapi import APIRouter, HTTPException, BackgroundTasks, UploadFile, File, Form
@@ -62,8 +62,7 @@ async def start_analysis(
     This endpoint orchestrates all agents in sequence:
     1. Research Agent: Analyze product listing and CSVs
     2. Keyword Agent: Categorize and analyze keywords
-    3. Scoring Agent: Score and prioritize keywords (COMMENTED OUT)
-    4. SEO Agent: Generate optimization recommendations (COMMENTED OUT)
+    3. Scoring Agent: Score and prioritize keywords
     """
     
     # Generate unique analysis ID
@@ -150,7 +149,7 @@ async def run_complete_analysis(
     design_filename: str
 ):
     """
-    Run the complete analysis workflow with Research + Keyword agents only.
+    Run the complete analysis workflow with Research + Keyword + Scoring agents.
     """
     
     try:
@@ -360,78 +359,78 @@ async def run_complete_analysis(
         except Exception as e:
             raise Exception(f"Scoring analysis failed (AI-only mode): {e}")
         
-        # Update status
+        # Update status for SEO analysis
         analysis_results[analysis_id].current_step = "seo_optimization"
         analysis_results[analysis_id].progress = 80
-        analysis_results[analysis_id].message = f"Generating SEO optimization recommendations"
+        analysis_results[analysis_id].message = "Generating SEO optimization suggestions"
         
-        # Step 5: SEO Agent - Generate optimization recommendations
+        # Step 5: SEO Agent - Generate optimization suggestions
         seo_runner = SEORunner()
+        seo_result = None
         
-        # Use AI SEO Agent with proper asyncio handling
-        seo_processing_method = "direct_processing"
-        if settings.openai_configured and settings.USE_AI_AGENTS:
-            logger.info("Using AI SEO Agent for optimization recommendations")
-            try:
+        try:
+            logger.info("🔍 Starting SEO optimization analysis")
+            
+            # Get the scraped product data from research result
+            scraped_product_data = research_ai_result.get("scraped_product", {}) if 'research_ai_result' in locals() else {}
+            
+            # Get scored keyword items from scoring result
+            keyword_items = []
+            if hasattr(scoring_result, 'items') and scoring_result.items:
+                # Convert scoring result items to the format expected by SEO agent
+                for item in scoring_result.items:
+                    keyword_items.append({
+                        "phrase": getattr(item, 'phrase', ''),
+                        "category": getattr(item, 'category', ''),
+                        "intent_score": getattr(item, 'intent_score', 0),
+                        "search_volume": getattr(item, 'search_volume', 0),
+                        "title_density": getattr(item, 'title_density', 0),
+                        "cpr": getattr(item, 'cpr', 0),
+                        "root": getattr(item, 'root', ''),
+                        "competition": getattr(item, 'competition', {}),
+                        "relevancy_score": getattr(item, 'relevancy_score', 0)
+                    })
+            
+            # Get root volumes if available
+            broad_volume_data = getattr(scoring_result, 'broad_search_volume_by_root', None)
+            
+            if keyword_items and scraped_product_data:
                 def run_seo_analysis():
                     """Run SEO analysis in a separate thread with its own event loop"""
-                    # Create a new event loop for this thread
                     loop = asyncio.new_event_loop()
                     asyncio.set_event_loop(loop)
                     try:
-                        return seo_runner.run_full_seo_optimization(
-                            product_info={
-                                "title": research_result.get("product_title", ""),
-                                "asin": research_result.get("asin", ""),
-                                "marketplace": research_result.get("marketplace", marketplace),
-                                "ai_analysis": research_result.get("ai_analysis", ""),
-                                "main_keyword": main_keyword,
-                                **research_result
-                            },
-                            keyword_analysis=keyword_analysis.dict() if hasattr(keyword_analysis, 'dict') else {},
-                            scoring_analysis=scoring_result.dict() if hasattr(scoring_result, 'dict') else {},
-                            competitor_data={
-                                "revenue_competitors": research_result.get("revenue_competitors", 0),
-                                "design_competitors": research_result.get("design_competitors", 0),
-                                "total_keywords_analyzed": keyword_analysis.total_keywords
-                            }
+                        return seo_runner.run_seo_analysis(
+                            scraped_product=scraped_product_data,
+                            keyword_items=keyword_items,
+                            broad_search_volume_by_root=broad_volume_data
                         )
                     finally:
                         loop.close()
-                
+
                 # Run in thread pool to avoid event loop conflicts
                 loop = asyncio.get_event_loop()
                 seo_result = await loop.run_in_executor(None, run_seo_analysis)
                 
-                if not seo_result:
-                    raise Exception("AI SEO analysis returned empty result")
-                seo_processing_method = "ai_seo"
-            except Exception as e:
-                logger.warning(f"AI SEO Agent failed: {e}, falling back to direct processing")
-                seo_result = seo_runner.run_direct_optimization(
-                    current_listing=research_result,
-                    critical_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'critical_keywords', [])],
-                    high_priority_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'high_priority_keywords', [])],
-                    medium_priority_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'medium_priority_keywords', [])],
-                    opportunity_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'high_priority_keywords', [])],
-                    keyword_analysis={},
-                    scoring_analysis={},
-                    competitor_data={}
-                )
-                seo_processing_method = "direct_processing"
-        else:
-            logger.info("Using direct SEO processing")
-            seo_result = seo_runner.run_direct_optimization(
-                current_listing=research_result,
-                critical_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'critical_keywords', [])],
-                high_priority_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'high_priority_keywords', [])],
-                medium_priority_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'medium_priority_keywords', [])],
-                opportunity_keywords=[getattr(kw, 'keyword_phrase', str(kw)) for kw in getattr(scoring_result, 'high_priority_keywords', [])],
-                keyword_analysis={},
-                scoring_analysis={},
-                competitor_data={}
-            )
-            seo_processing_method = "direct_processing"
+                if seo_result and seo_result.get("success"):
+                    logger.info("✅ SEO optimization analysis completed successfully")
+                else:
+                    logger.warning(f"SEO analysis had issues: {seo_result.get('error') if seo_result else 'No result'}")
+            else:
+                logger.warning("Skipping SEO analysis - insufficient data")
+                seo_result = {
+                    "success": False,
+                    "error": "Insufficient data for SEO analysis",
+                    "keyword_items_count": len(keyword_items),
+                    "has_scraped_data": bool(scraped_product_data)
+                }
+                
+        except Exception as e:
+            logger.error(f"SEO analysis failed: {str(e)}", exc_info=True)
+            seo_result = {
+                "success": False,
+                "error": f"SEO analysis failed: {str(e)}"
+            }
         
         logger.info("✅ Complete pipeline analysis finished - Research + Keyword + Scoring + SEO")
         
@@ -472,31 +471,14 @@ async def run_complete_analysis(
                 ],
                 "processing_method": scoring_processing_method
             },
-            "seo_analysis": (
-                {
-                    # AI path returns SEOAnalysisResult with seo_optimization
-                    "optimizations_generated": len(getattr(seo_result.seo_optimization, 'quick_wins', [])) + len(getattr(seo_result.seo_optimization, 'long_term_strategy', [])),
-                    "title_optimization": getattr(seo_result.seo_optimization.title_optimization, 'recommended_title', 'No optimization available'),
-                    "bullet_optimizations": len(getattr(seo_result.seo_optimization, 'bullet_optimization', [])) if isinstance(getattr(seo_result.seo_optimization, 'bullet_optimization', None), list) else len(getattr(getattr(seo_result.seo_optimization, 'bullet_optimization', None), 'recommended_bullets', []) if hasattr(getattr(seo_result.seo_optimization, 'bullet_optimization', None), 'recommended_bullets') else []),
-                    "backend_keywords": getattr(getattr(seo_result.seo_optimization, 'backend_optimization', None), 'recommended_keywords', []),
-                    "content_gaps": len(getattr(seo_result.seo_optimization, 'content_gaps', [])),
-                    "competitive_advantages": len(getattr(seo_result.seo_optimization, 'competitive_advantages', [])),
-                    "seo_score": getattr(getattr(seo_result.seo_optimization, 'seo_score', None), 'overall_score', 0),
-                    "processing_method": seo_processing_method
-                }
-                if hasattr(seo_result, 'seo_optimization') else
-                {
-                    # Direct path returns SEOOptimization directly
-                    "optimizations_generated": len(getattr(seo_result, 'quick_wins', [])) + len(getattr(seo_result, 'long_term_strategy', [])),
-                    "title_optimization": getattr(getattr(seo_result, 'title_optimization', None), 'recommended_title', 'No optimization available'),
-                    "bullet_optimizations": len(getattr(getattr(seo_result, 'bullet_optimization', None), 'recommended_bullets', []) if hasattr(seo_result, 'bullet_optimization') else []),
-                    "backend_keywords": getattr(getattr(seo_result, 'backend_optimization', None), 'recommended_keywords', []) if hasattr(seo_result, 'backend_optimization') else [],
-                    "content_gaps": len(getattr(seo_result, 'content_gaps', [])),
-                    "competitive_advantages": len(getattr(seo_result, 'competitive_advantages', [])),
-                    "seo_score": getattr(getattr(seo_result, 'seo_score', None), 'overall_score', 0),
-                    "processing_method": seo_processing_method
-                }
-            ),
+            "seo_analysis": {
+                "success": seo_result.get("success", False) if seo_result else False,
+                "current_coverage": seo_result.get("summary", {}).get("current_coverage", "0%") if seo_result and seo_result.get("success") else "N/A",
+                "optimization_opportunities": seo_result.get("summary", {}).get("optimization_opportunities", 0) if seo_result and seo_result.get("success") else 0,
+                "method": seo_result.get("summary", {}).get("method", "unknown") if seo_result and seo_result.get("success") else "failed",
+                "error": seo_result.get("error") if seo_result and not seo_result.get("success") else None,
+                "full_analysis": seo_result.get("analysis") if seo_result and seo_result.get("success") else None
+            },
             "timestamp": datetime.utcnow().isoformat(),
             "pipeline_status": "complete"
         }
