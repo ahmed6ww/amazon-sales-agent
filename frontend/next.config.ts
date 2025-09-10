@@ -48,7 +48,14 @@ const nextConfig: NextConfig = {
 
   // Image optimization configuration
   images: {
-    domains: [],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'm.media-amazon.com',
+        port: '',
+        pathname: '/images/**',
+      },
+    ],
     unoptimized: false,
   },
 };
