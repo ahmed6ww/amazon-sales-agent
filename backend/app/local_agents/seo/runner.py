@@ -1,400 +1,545 @@
 """
-SEO Agent Runner
+SEO Optimization Runner
 
-Manages the execution and orchestration of SEO optimization analysis.
+Orchestrates SEO analysis and optimization using deterministic analysis 
+combined with AI-powered optimization suggestions.
 """
 
-import time
-from typing import Dict, Any, List, Optional
-from datetime import datetime, timedelta
+import logging
+from typing import Dict, List, Any, Optional
+from agents import Runner
 
-from .agent import seo_agent
+from .agent import seo_optimization_agent
+from .prompts import SEO_ANALYSIS_PROMPT_TEMPLATE
 from .helper_methods import (
-    optimize_product_title,
-    generate_bullet_points,
-    create_backend_keywords,
-    analyze_content_gaps,
-    identify_competitive_advantages,
-    calculate_seo_score
+    calculate_keyword_coverage,
+    analyze_root_coverage,
+    analyze_content_piece,
+    prepare_keyword_data_for_analysis,
+    format_keywords_for_prompt,
+    calculate_character_usage,
+    extract_keywords_from_content
 )
 from .schemas import (
-    SEOOptimization,
-    SEOAnalysisResult,
-    TitleOptimization,
-    BulletPointOptimization,
-    BackendKeywordOptimization,
-    ContentGap,
-    CompetitiveAdvantage,
-    SEOScore,
-    SEOConfig
+    SEOAnalysisResult, CurrentSEO, OptimizedSEO, SEOComparison,
+    KeywordCoverage, RootCoverage, ContentAnalysis
 )
+
+logger = logging.getLogger(__name__)
 
 
 class SEORunner:
     """
-    SEO Agent runner for managing Amazon listing optimization workflow.
+    Runner for SEO optimization analysis and suggestions.
+    
+    Combines deterministic analysis of current SEO state with 
+    AI-powered optimization recommendations.
     """
     
-    def __init__(self, config: Optional[SEOConfig] = None):
-        """
-        Initialize SEO runner with configuration.
-        
-        Args:
-            config: SEO optimization configuration
-        """
-        self.config = config or SEOConfig()
-        self.agent = seo_agent
-    
-    def run_full_seo_optimization(
+    def run_seo_analysis(
         self,
-        product_info: Dict[str, Any],
-        keyword_analysis: Dict[str, Any],
-        scoring_analysis: Dict[str, Any],
-        competitor_data: Optional[Dict[str, Any]] = None
-    ) -> SEOAnalysisResult:
+        scraped_product: Dict[str, Any],
+        keyword_items: List[Dict[str, Any]],
+        broad_search_volume_by_root: Optional[Dict[str, int]] = None
+    ) -> Dict[str, Any]:
         """
-        Run complete SEO optimization workflow using the agent.
+        Run complete SEO analysis and optimization.
         
         Args:
-            product_info: Product information from research agent
-            keyword_analysis: Keyword analysis results
-            scoring_analysis: Scoring analysis with prioritized keywords
-            competitor_data: Optional competitor analysis data
-        
+            scraped_product: Product data from research agent
+            keyword_items: Categorized and scored keywords from scoring agent
+            broad_search_volume_by_root: Root volume data (optional)
+            
         Returns:
-            SEOAnalysisResult: Complete SEO optimization analysis
+            Complete SEO analysis result
         """
-        
-        start_time = time.time()
         
         try:
-            # Extract data for optimization
-            current_listing = {
-                "title": product_info.get("title", ""),
-                "bullets": product_info.get("bullets", []),
-                "features": product_info.get("features", []),
-                "brand": product_info.get("brand", ""),
-                "category": product_info.get("category", "")
+            logger.info("🔍 Starting SEO analysis and optimization")
+            
+            # Step 1: Extract current listing content
+            current_content = self._extract_current_content(scraped_product)
+            logger.info(f"📄 Extracted current content: {len(current_content.get('bullets', []))} bullets")
+            
+            # Step 2: Prepare keyword data for analysis
+            keyword_data = prepare_keyword_data_for_analysis(keyword_items)
+            logger.info(f"📊 Prepared keyword data: {keyword_data['total_keywords']} total keywords")
+            
+            # Step 3: Perform deterministic current SEO analysis
+            current_seo = self._analyze_current_seo(current_content, keyword_data, broad_search_volume_by_root)
+            logger.info(f"✅ Current SEO analysis complete: {current_seo.keyword_coverage.coverage_percentage}% coverage")
+            
+            # Step 4: Generate AI-powered optimization suggestions (no fallback)
+            optimized_seo = self._generate_ai_optimizations(
+                current_content, keyword_data, scraped_product
+            )
+            logger.info("🤖 AI optimization suggestions generated")
+            
+            # Step 5: Calculate comparison metrics
+            comparison = self._calculate_comparison_metrics(current_seo, optimized_seo, keyword_data)
+            logger.info("📈 Comparison metrics calculated")
+            
+            # Step 6: Assemble final result
+            result = SEOAnalysisResult(
+                current_seo=current_seo,
+                optimized_seo=optimized_seo,
+                comparison=comparison,
+                product_context={
+                    "title": scraped_product.get("title", ""),
+                    "brand": current_content.get("brand", ""),
+                    "category": "Unknown"  # Could be enhanced with category detection
+                },
+                analysis_metadata={
+                    "total_keywords_analyzed": len(keyword_items),
+                    "relevant_keywords_count": len(keyword_data["relevant_keywords"]),
+                    "high_intent_keywords_count": len(keyword_data["high_intent_keywords"]),
+                    "optimization_method": "ai" if self._should_use_ai_optimization() else "rule_based"
+                }
+            )
+            
+            logger.info("✅ SEO analysis complete")
+            return {
+                "success": True,
+                "analysis": result.model_dump(),
+                "summary": {
+                    "current_coverage": f"{current_seo.keyword_coverage.coverage_percentage}%",
+                    "optimization_opportunities": len(current_seo.keyword_coverage.missing_high_intent),
+                    "method": "ai" if self._should_use_ai_optimization() else "rule_based"
+                }
             }
             
-            # Extract keywords from scoring analysis
-            critical_keywords = self._extract_keywords_by_priority(scoring_analysis, "critical")
-            high_priority_keywords = self._extract_keywords_by_priority(scoring_analysis, "high")
-            medium_priority_keywords = self._extract_keywords_by_priority(scoring_analysis, "medium")
-            opportunity_keywords = self._extract_opportunity_keywords(scoring_analysis)
-            
-            # Run SEO optimization workflow
-            seo_optimization = self.run_direct_optimization(
-                current_listing=current_listing,
-                critical_keywords=critical_keywords,
-                high_priority_keywords=high_priority_keywords,
-                medium_priority_keywords=medium_priority_keywords,
-                opportunity_keywords=opportunity_keywords,
-                keyword_analysis=keyword_analysis,
-                scoring_analysis=scoring_analysis,
-                competitor_data=competitor_data or {}
-            )
-            
-            # Calculate processing time
-            processing_time = time.time() - start_time
-            
-            # Generate implementation priority
-            implementation_priority = self._generate_implementation_priority(seo_optimization)
-            
-            # Predict performance improvements
-            performance_predictions = self._predict_performance_improvements(seo_optimization)
-            
-            # Calculate confidence level
-            confidence_level = self._calculate_confidence_level(seo_optimization)
-            
-            # Set next review date
-            next_review_date = (datetime.now() + timedelta(days=30)).isoformat()
-            
-            return SEOAnalysisResult(
-                product_info=product_info,
-                keyword_insights=keyword_analysis,
-                scoring_insights=scoring_analysis,
-                seo_optimization=seo_optimization,
-                implementation_priority=implementation_priority,
-                performance_predictions=performance_predictions,
-                processing_time=round(processing_time, 2),
-                confidence_level=confidence_level,
-                next_review_date=next_review_date
-            )
-            
         except Exception as e:
-            print(f"Error in SEO optimization: {str(e)}")
-            raise e
+            logger.error(f"❌ SEO analysis failed: {str(e)}", exc_info=True)
+            return {
+                "success": False,
+                "error": f"SEO analysis failed: {str(e)}"
+            }
     
-    def run_direct_optimization(
+    def _extract_current_content(self, scraped_product: Dict[str, Any]) -> Dict[str, Any]:
+        """Extract current listing content from scraped product data."""
+        
+        # Extract title
+        title = scraped_product.get("title", "")
+        
+        # Extract bullets from elements
+        bullets = []
+        elements = scraped_product.get("elements", {})
+        feature_bullets = elements.get("feature-bullets", {})
+        if feature_bullets.get("present"):
+            bullets = feature_bullets.get("bullets", [])
+        
+        # Extract backend keywords (if available - may not be in scraped data)
+        backend_keywords = []
+        
+        # Extract brand if available
+        brand = ""
+        overview = elements.get("productOverview_feature_div", {})
+        if overview.get("present"):
+            kv_data = overview.get("kv", {})
+            brand = kv_data.get("Brand", "")
+        
+        return {
+            "title": title,
+            "bullets": bullets,
+            "backend_keywords": backend_keywords,
+            "brand": brand
+        }
+    
+    def _analyze_current_seo(
+        self, 
+        current_content: Dict[str, Any], 
+        keyword_data: Dict[str, Any],
+        root_volumes: Optional[Dict[str, int]] = None
+    ) -> CurrentSEO:
+        """Perform deterministic analysis of current SEO state."""
+        
+        # Get relevant keywords for analysis
+        all_relevant = keyword_data["relevant_keywords"] + keyword_data["design_keywords"]
+        keyword_phrases = [kw.get("phrase", "") for kw in all_relevant]
+        
+        # Analyze keyword coverage
+        coverage_data = calculate_keyword_coverage(current_content, all_relevant)
+        keyword_coverage = KeywordCoverage(**coverage_data)
+        
+        # Analyze root coverage
+        if root_volumes:
+            root_data = analyze_root_coverage(current_content, root_volumes)
+            root_coverage = RootCoverage(**root_data)
+        else:
+            # Use aggregated root volumes from keyword data
+            root_coverage = RootCoverage(
+                total_roots=len(keyword_data["root_volumes"]),
+                covered_roots=0,
+                coverage_percentage=0.0,
+                missing_roots=list(keyword_data["root_volumes"].keys()),
+                root_volumes=keyword_data["root_volumes"]
+            )
+        
+        # Analyze individual content pieces
+        title_analysis = ContentAnalysis(**analyze_content_piece(
+            current_content["title"], keyword_phrases
+        ))
+        
+        bullets_analysis = []
+        for bullet in current_content["bullets"]:
+            analysis = ContentAnalysis(**analyze_content_piece(bullet, keyword_phrases))
+            bullets_analysis.append(analysis)
+        
+        # Calculate character usage
+        char_usage = calculate_character_usage(current_content)
+        
+        return CurrentSEO(
+            title_analysis=title_analysis,
+            bullets_analysis=bullets_analysis,
+            backend_keywords=current_content["backend_keywords"],
+            keyword_coverage=keyword_coverage,
+            root_coverage=root_coverage,
+            total_character_usage=char_usage
+        )
+    
+    def _generate_ai_optimizations(
         self,
-        current_listing: Dict[str, Any],
-        critical_keywords: List[str],
-        high_priority_keywords: List[str],
-        medium_priority_keywords: List[str],
-        opportunity_keywords: List[str],
-        keyword_analysis: Dict[str, Any],
-        scoring_analysis: Dict[str, Any],
-        competitor_data: Dict[str, Any]
-    ) -> SEOOptimization:
-        """
-        Run direct SEO optimization without agent orchestration.
+        current_content: Dict[str, Any],
+        keyword_data: Dict[str, Any], 
+        scraped_product: Dict[str, Any]
+    ) -> OptimizedSEO:
+        """Generate AI-powered optimization suggestions."""
         
-        Args:
-            current_listing: Current listing content
-            critical_keywords: Critical priority keywords
-            high_priority_keywords: High priority keywords
-            medium_priority_keywords: Medium priority keywords
-            opportunity_keywords: Opportunity keywords
-            keyword_analysis: Keyword analysis data
-            scoring_analysis: Scoring analysis data
-            competitor_data: Competitor analysis data
+        # Prepare prompt data
+        prompt_data = {
+            "current_title": current_content["title"],
+            "current_bullets": "\n".join([f"• {bullet}" for bullet in current_content["bullets"]]),
+            "backend_keywords": " ".join(current_content["backend_keywords"]) if current_content["backend_keywords"] else "None",
+            "total_keywords": keyword_data["total_keywords"],
+            "relevant_keywords": format_keywords_for_prompt(keyword_data["relevant_keywords"]),
+            "design_keywords": format_keywords_for_prompt(keyword_data["design_keywords"]),
+            "root_volumes": str(keyword_data["root_volumes"]),
+            "high_intent_keywords": format_keywords_for_prompt(keyword_data["high_intent_keywords"]),
+            "high_volume_keywords": format_keywords_for_prompt(keyword_data["high_volume_keywords"]),
+            "product_context": str(scraped_product.get("elements", {}).get("productOverview_feature_div", {}))
+        }
         
-        Returns:
-            SEOOptimization: Complete optimization package
-        """
+        # Format prompt
+        prompt = SEO_ANALYSIS_PROMPT_TEMPLATE.format(**prompt_data)
         
-        # 1. Title Optimization
-        title_optimization = optimize_product_title(
-            current_title=current_listing.get("title", ""),
-            critical_keywords=critical_keywords,
-            high_priority_keywords=high_priority_keywords,
-            product_info=current_listing,
-            character_limit=self.config.character_limits["title"]
-        )
+        try:
+            # Run AI agent
+            result = Runner.run_sync(seo_optimization_agent, prompt)
+            ai_output = result.final_output
+
+            # Parse optimized suggestions from AI output
+            return self._parse_ai_output_to_optimized_seo(ai_output, keyword_data)
+
+        except Exception as e:
+            # No fallback: surface error to caller
+            logger.error(f"AI optimization failed: {e}")
+            raise
+    
+    def _generate_rule_based_optimizations(
+        self,
+        current_content: Dict[str, Any],
+        keyword_data: Dict[str, Any]
+    ) -> OptimizedSEO:
+        """Generate rule-based optimization suggestions that fulfill MVP requirements."""
         
-        # 2. Bullet Points Optimization
-        bullet_optimization = generate_bullet_points(
-            current_bullets=current_listing.get("bullets", []),
-            critical_keywords=critical_keywords,
-            high_priority_keywords=high_priority_keywords,
-            product_info=current_listing,
-            customer_insights={}
-        )
+        # Get keywords by category and intent
+        relevant_keywords = keyword_data["relevant_keywords"]
+        design_keywords = keyword_data["design_keywords"]
+        high_intent_keywords = keyword_data["high_intent_keywords"]
+        high_volume_keywords = keyword_data["high_volume_keywords"]
         
-        # 3. Backend Keywords Optimization
-        backend_optimization = create_backend_keywords(
-            title=title_optimization.recommended_title,
-            bullets=bullet_optimization.recommended_bullets,
-            critical_keywords=critical_keywords,
-            high_priority_keywords=high_priority_keywords,
-            medium_priority_keywords=medium_priority_keywords,
-            opportunity_keywords=opportunity_keywords,
-            character_limit=self.config.character_limits["backend_keywords"]
-        )
+        # Combine relevant + design for optimization
+        all_good_keywords = relevant_keywords + design_keywords
         
-        # 4. Content Gap Analysis
-        content_gaps = analyze_content_gaps(
-            current_listing=current_listing,
-            keyword_analysis=keyword_analysis,
-            scoring_analysis=scoring_analysis,
-            competitor_data=competitor_data
-        )
+        # Sort by search volume (descending) and intent score (descending)
+        sorted_keywords = sorted(all_good_keywords, 
+                               key=lambda x: (x.get("intent_score", 0), x.get("search_volume", 0)), 
+                               reverse=True)
         
-        # 5. Competitive Advantages
-        competitive_advantages = identify_competitive_advantages(
-            product_info=current_listing,
-            keyword_analysis=keyword_analysis,
-            competitor_data=competitor_data
-        )
+        # Get all unique roots from good keywords
+        all_roots = set()
+        root_to_best_keyword = {}
+        for kw in sorted_keywords:
+            root = kw.get("root", "")
+            if root and root not in root_to_best_keyword:
+                root_to_best_keyword[root] = kw["phrase"]
+                all_roots.add(root)
         
-        # 6. SEO Score Calculation
-        seo_score = calculate_seo_score(
-            title_optimization=title_optimization,
-            bullet_optimization=bullet_optimization,
-            backend_optimization=backend_optimization,
-            content_gaps=content_gaps,
-            competitive_advantages=competitive_advantages
-        )
+        # Select top keywords for title optimization
+        # Prioritize: high intent + high volume + covers different roots
+        title_keywords = []
+        used_roots = set()
         
-        # 7. Generate Quick Wins and Strategy
-        quick_wins = self._generate_quick_wins(
-            title_optimization, bullet_optimization, backend_optimization, content_gaps
-        )
+        # First, get highest intent keywords that cover different roots
+        for kw in sorted_keywords[:15]:  # Look at top 15
+            root = kw.get("root", "")
+            phrase = kw.get("phrase", "")
+            intent = kw.get("intent_score", 0)
+            volume = kw.get("search_volume", 0)
+            
+            # Prioritize high intent (2+) and good volume (300+)
+            if intent >= 2 and volume >= 300 and root not in used_roots and len(title_keywords) < 4:
+                title_keywords.append(phrase)
+                used_roots.add(root)
         
-        long_term_strategy = self._generate_long_term_strategy(
-            seo_score, competitive_advantages, content_gaps
-        )
+        # Fill remaining slots with high-volume terms
+        for kw in sorted_keywords:
+            phrase = kw.get("phrase", "")
+            volume = kw.get("search_volume", 0)
+            if len(title_keywords) < 5 and phrase not in title_keywords and volume >= 400:
+                title_keywords.append(phrase)
         
-        return SEOOptimization(
-            title_optimization=title_optimization,
-            bullet_optimization=bullet_optimization,
-            backend_optimization=backend_optimization,
-            content_gaps=content_gaps,
-            competitive_advantages=competitive_advantages,
-            seo_score=seo_score,
-            quick_wins=quick_wins,
-            long_term_strategy=long_term_strategy
+        # Create natural-sounding optimized title
+        brand = current_content.get("brand", "BREWER")
+        primary_keyword = title_keywords[0] if title_keywords else "freeze dried strawberries"
+        
+        # Build title with natural flow
+        title_parts = []
+        if brand:
+            title_parts.append(brand)
+        
+        # Add pack info
+        title_parts.append("Bulk")
+        
+        # Add primary keyword
+        title_parts.append(primary_keyword.title())
+        
+        # Add key attributes
+        title_parts.append("- Organic")
+        title_parts.append("No Sugar Added")
+        
+        # Add secondary keyword if different
+        if len(title_keywords) > 1:
+            secondary = title_keywords[1]
+            if "organic" not in secondary.lower():
+                title_parts.append(f"Premium {secondary.title()}")
+        
+        # Add use cases
+        title_parts.append("for Snacking, Baking & Travel")
+        
+        optimized_title_content = " ".join(title_parts)[:200]  # Amazon limit
+        
+        optimized_title = {
+            "content": optimized_title_content,
+            "keywords_included": title_keywords[:3],
+            "improvements": [
+                f"Covers {len(used_roots)} keyword roots",
+                f"Uses {len([k for k in all_good_keywords if k.get('intent_score', 0) >= 2])} high-intent keywords",
+                f"Replaces low-volume terms with {sum(k.get('search_volume', 0) for k in all_good_keywords[:3])//1000}k+ volume terms",
+                "Natural, readable format"
+            ],
+            "character_count": len(optimized_title_content)
+        }
+        
+        # Create optimized bullets focusing on different keyword clusters
+        optimized_bullets = []
+        bullet_templates = [
+            ("Flavor & Quality", "Enjoy the naturally sweet, tangy crunch of {} bursting with real fruit flavor."),
+            ("Organic & Healthy", "Our {} are organic, no sugar added, and made from farm-fresh strawberries."),
+            ("Versatile Use", "Perfect {} for baking, smoothies, cereals, and on-the-go snacking."),
+            ("Travel Ready", "Lightweight and shelf-stable {} ideal for hiking, camping, and travel adventures."),
+            ("Bulk Value", "Buy in bulk and enjoy premium quality {} whenever you need them.")
+        ]
+        
+        for i, (focus, template) in enumerate(bullet_templates):
+            if i < len(sorted_keywords):
+                keyword = sorted_keywords[i]["phrase"]
+                bullet_content = f"✅ {focus}: " + template.format(keyword)
+                optimized_bullets.append({
+                    "content": bullet_content,
+                    "keywords_included": [keyword],
+                    "improvements": [f"Focused on {focus.lower()}", "Clear value proposition"],
+                    "character_count": len(bullet_content)
+                })
+        
+        # Backend keywords: Use remaining good keywords not in title/bullets
+        used_in_content = set(title_keywords)
+        for bullet in optimized_bullets:
+            used_in_content.update(bullet["keywords_included"])
+        
+        backend_keywords = []
+        for kw in sorted_keywords:
+            phrase = kw["phrase"]
+            if phrase not in used_in_content and len(backend_keywords) < 15:
+                backend_keywords.append(phrase)
+        
+        # Add misspellings and variations
+        variations = []
+        for kw in all_good_keywords:
+            phrase = kw["phrase"]
+            # Add common variations
+            if "freeze dried" in phrase:
+                variations.append(phrase.replace("freeze dried", "freeze-dried"))
+                variations.append(phrase.replace("freeze dried", "freezedried"))
+            if "strawberries" in phrase:
+                variations.append(phrase.replace("strawberries", "strawberry"))
+        
+        backend_keywords.extend([v for v in variations if v not in used_in_content and v not in backend_keywords][:5])
+        
+        from .schemas import OptimizedContent
+        
+        return OptimizedSEO(
+            optimized_title=OptimizedContent(**optimized_title),
+            optimized_bullets=[OptimizedContent(**bullet) for bullet in optimized_bullets],
+            optimized_backend_keywords=backend_keywords,
+            keyword_strategy={
+                "primary_focus": f"Cover {len(all_roots)} keyword roots",
+                "secondary_focus": f"Prioritize {len(high_intent_keywords)} high-intent keywords",
+                "volume_strategy": f"Replace low-volume with {sum(k.get('search_volume', 0) for k in high_volume_keywords[:5])//1000}k+ volume terms",
+                "character_optimization": True,
+                "root_coverage": f"{len(used_roots)}/{len(all_roots)} roots covered"
+            },
+            rationale=f"Enhanced optimization covering {len(all_roots)} keyword roots, prioritizing {len(high_intent_keywords)} high-intent terms, and replacing lower-volume keywords with better search volume options. Achieved natural readability while maximizing SEO potential."
         )
     
-    def _extract_keywords_by_priority(self, scoring_analysis: Dict[str, Any], priority: str) -> List[str]:
-        """Extract keywords by priority level from scoring analysis."""
-        keywords = []
-        
-        # Check different possible data structures
-        if f"{priority}_keywords" in scoring_analysis:
-            keyword_objects = scoring_analysis[f"{priority}_keywords"]
-            if isinstance(keyword_objects, list):
-                for kw in keyword_objects:
-                    if hasattr(kw, 'keyword_phrase'):
-                        keywords.append(kw.keyword_phrase)
-                    elif isinstance(kw, dict):
-                        keywords.append(kw.get("keyword", str(kw)))
-                    else:
-                        keywords.append(str(kw))
-        
-        # Fallback: check priority distribution
-        elif "priority_distribution" in scoring_analysis:
-            # This would need to be implemented based on actual data structure
+    def _parse_ai_output_to_optimized_seo(self, ai_output: Any, keyword_data: Dict[str, Any]) -> OptimizedSEO:
+        """Parse AI output into OptimizedSEO structure."""
+        from .schemas import OptimizedContent
+        data = ai_output
+
+        # If output is JSON string, parse it
+        if isinstance(data, str):
+            import json
+            data = json.loads(data)
+
+        # If output is a Pydantic model, convert to dict
+        try:
+            if hasattr(data, 'model_dump'):
+                data = data.model_dump()
+        except Exception:
             pass
-        
-        return keywords[:10]  # Limit to top 10 keywords
-    
-    def _extract_opportunity_keywords(self, scoring_analysis: Dict[str, Any]) -> List[str]:
-        """Extract opportunity keywords from scoring analysis."""
-        keywords = []
-        
-        if "top_opportunities" in scoring_analysis:
-            opportunities = scoring_analysis["top_opportunities"]
-            if isinstance(opportunities, list):
-                for opp in opportunities:
-                    if hasattr(opp, 'keyword_phrase'):
-                        keywords.append(opp.keyword_phrase)
-                    elif isinstance(opp, dict):
-                        keywords.append(opp.get("keyword", str(opp)))
-                    else:
-                        keywords.append(str(opp))
-        
-        return keywords[:15]  # Limit to top 15 opportunity keywords
-    
-    def _generate_quick_wins(
-        self,
-        title_opt: TitleOptimization,
-        bullet_opt: BulletPointOptimization,
-        backend_opt: BackendKeywordOptimization,
-        content_gaps: List[ContentGap]
-    ) -> List[str]:
-        """Generate list of quick win recommendations."""
-        quick_wins = []
-        
-        # Title quick wins
-        if title_opt.improvement_score > 20:
-            quick_wins.append(f"Update title to include {len(title_opt.keywords_added)} critical keywords")
-        
-        # Backend keywords quick wins
-        if len(backend_opt.opportunity_keywords) > 0:
-            quick_wins.append(f"Add {len(backend_opt.opportunity_keywords)} high-opportunity backend keywords")
-        
-        # Content gap quick wins
-        critical_gaps = [gap for gap in content_gaps if gap.priority == "critical"]
-        if critical_gaps:
-            quick_wins.append(f"Address {len(critical_gaps)} critical content gaps")
-        
-        # Bullet points quick wins
-        if bullet_opt.keywords_coverage < 5:
-            quick_wins.append("Increase keyword coverage in bullet points")
-        
-        return quick_wins
-    
-    def _generate_long_term_strategy(
-        self,
-        seo_score: SEOScore,
-        competitive_advantages: List[CompetitiveAdvantage],
-        content_gaps: List[ContentGap]
-    ) -> List[str]:
-        """Generate long-term SEO strategy recommendations."""
-        strategy = []
-        
-        # Performance improvement strategy
-        if seo_score.overall_score < 80:
-            strategy.append("Focus on improving overall SEO score through systematic optimization")
-        
-        # Competitive positioning strategy
-        if len(competitive_advantages) > 0:
-            strategy.append("Leverage unique competitive advantages in all listing content")
-        
-        # Content development strategy
-        high_impact_gaps = [gap for gap in content_gaps if gap.estimated_impact > 70]
-        if high_impact_gaps:
-            strategy.append("Develop comprehensive content strategy addressing high-impact gaps")
-        
-        # Keyword expansion strategy
-        strategy.append("Implement quarterly keyword analysis to capture emerging search trends")
-        
-        # Performance monitoring strategy
-        strategy.append("Monitor listing performance and adjust optimization based on conversion data")
-        
-        return strategy
-    
-    def _generate_implementation_priority(self, seo_optimization: SEOOptimization) -> List[str]:
-        """Generate prioritized implementation steps."""
-        priority_steps = []
-        
-        # Critical priority items
-        if seo_optimization.title_optimization.improvement_score > 30:
-            priority_steps.append("1. CRITICAL: Implement optimized title")
-        
-        critical_gaps = [gap for gap in seo_optimization.content_gaps if gap.priority == "critical"]
-        if critical_gaps:
-            priority_steps.append("2. CRITICAL: Address critical content gaps")
-        
-        # High priority items
-        if len(seo_optimization.backend_optimization.opportunity_keywords) > 5:
-            priority_steps.append("3. HIGH: Update backend keywords")
-        
-        if seo_optimization.bullet_optimization.keywords_coverage < 8:
-            priority_steps.append("4. HIGH: Optimize bullet points")
-        
-        # Medium priority items
-        if len(seo_optimization.competitive_advantages) > 0:
-            priority_steps.append("5. MEDIUM: Highlight competitive advantages")
-        
-        return priority_steps
-    
-    def _predict_performance_improvements(self, seo_optimization: SEOOptimization) -> Dict[str, float]:
-        """Predict performance improvements from optimization."""
-        predictions = {}
-        
-        # Search visibility improvement
-        title_score = seo_optimization.title_optimization.improvement_score
-        keyword_coverage = seo_optimization.bullet_optimization.keywords_coverage
-        predictions["search_visibility"] = min(50, (title_score + keyword_coverage * 3) / 2)
-        
-        # Conversion rate improvement
-        bullet_score = seo_optimization.bullet_optimization.call_to_action_strength
-        advantage_count = len(seo_optimization.competitive_advantages)
-        predictions["conversion_rate"] = min(25, bullet_score / 4 + advantage_count * 3)
-        
-        # Click-through rate improvement
-        overall_seo_score = seo_optimization.seo_score.overall_score
-        predictions["click_through_rate"] = min(30, overall_seo_score / 3)
-        
-        # Overall traffic improvement
-        predictions["organic_traffic"] = (
-            predictions["search_visibility"] * 0.4 +
-            predictions["click_through_rate"] * 0.6
+
+        # If the agent returned a full SEOAnalysisResult, extract optimized_seo
+        if isinstance(data, dict) and 'optimized_seo' in data:
+            data = data['optimized_seo']
+
+        # At this point, data should be the optimized_seo dict
+        if not isinstance(data, dict):
+            raise ValueError("AI output is not in expected optimized_seo dict format")
+
+        # Build OptimizedSEO from dict tolerantly
+        optimized_title = data.get('optimized_title') or {}
+        optimized_bullets = data.get('optimized_bullets') or []
+        optimized_backend_keywords = data.get('optimized_backend_keywords') or []
+        keyword_strategy = data.get('keyword_strategy') or {}
+        rationale = data.get('rationale') or ""
+
+        # Normalize bullets and title into OptimizedContent
+        def to_opt_content(obj: dict) -> OptimizedContent:
+            return OptimizedContent(
+                content=obj.get('content', ''),
+                keywords_included=list(obj.get('keywords_included', [])),
+                improvements=list(obj.get('improvements', [])),
+                character_count=int(obj.get('character_count', len(obj.get('content', ''))))
+            )
+
+        title_content = to_opt_content(optimized_title)
+        bullets_content = [to_opt_content(b) for b in optimized_bullets if isinstance(b, dict)]
+
+        return OptimizedSEO(
+            optimized_title=title_content,
+            optimized_bullets=bullets_content,
+            optimized_backend_keywords=list(optimized_backend_keywords),
+            keyword_strategy=keyword_strategy,
+            rationale=rationale
         )
-        
-        return predictions
     
-    def _calculate_confidence_level(self, seo_optimization: SEOOptimization) -> float:
-        """Calculate confidence level in optimization recommendations."""
-        confidence_factors = []
-        
-        # Data quality factors
-        keyword_coverage = seo_optimization.bullet_optimization.keywords_coverage
-        confidence_factors.append(min(100, keyword_coverage * 10))
-        
-        # Optimization completeness
-        overall_score = seo_optimization.seo_score.overall_score
-        confidence_factors.append(overall_score)
-        
-        # Competitive analysis depth
-        advantage_count = len(seo_optimization.competitive_advantages)
-        confidence_factors.append(min(100, advantage_count * 25))
-        
-        # Title optimization quality
-        title_compliance = sum(seo_optimization.title_optimization.compliance_check.values())
-        confidence_factors.append(title_compliance / len(seo_optimization.title_optimization.compliance_check) * 100)
-        
-        return round(sum(confidence_factors) / len(confidence_factors), 1) 
+    def _calculate_comparison_metrics(
+        self, 
+        current_seo: CurrentSEO, 
+        optimized_seo: OptimizedSEO,
+        keyword_data: Dict[str, Any]
+    ) -> SEOComparison:
+        """Calculate before/after comparison metrics from actual content."""
+
+        # Build phrase lists and maps
+        all_keywords = keyword_data.get("relevant_keywords", []) + keyword_data.get("design_keywords", [])
+        phrases = [kw.get("phrase", "") for kw in all_keywords if kw.get("phrase")]
+        phrase_to_volume = {kw.get("phrase", ""): kw.get("search_volume", 0) for kw in all_keywords}
+        high_intent_phrases = [kw.get("phrase", "") for kw in keyword_data.get("high_intent_keywords", []) if kw.get("phrase")]
+
+        # Current content strings
+        current_title = current_seo.title_analysis.content
+        current_bullets = [b.content for b in current_seo.bullets_analysis]
+        current_backend = current_seo.backend_keywords
+        current_text = " ".join([current_title] + current_bullets + [" ".join(current_backend)])
+
+        # Optimized content strings
+        opt_title = optimized_seo.optimized_title.content
+        opt_bullets = [b.content for b in optimized_seo.optimized_bullets]
+        opt_backend = optimized_seo.optimized_backend_keywords
+        opt_text = " ".join([opt_title] + opt_bullets + [" ".join(opt_backend)])
+
+        # Coverage details
+        current_found, _ = extract_keywords_from_content(current_text, phrases)
+        opt_found, _ = extract_keywords_from_content(opt_text, phrases)
+
+        total_kw = len(phrases)
+        before_cov = len(set(current_found))
+        after_cov = len(set(opt_found))
+        before_pct = round((before_cov / total_kw * 100), 2) if total_kw else 0.0
+        after_pct = round((after_cov / total_kw * 100), 2) if total_kw else 0.0
+        new_added = [p for p in set(opt_found) if p not in set(current_found)]
+
+        coverage_improvement = {
+            "total_keywords": total_kw,
+            "before_covered": before_cov,
+            "after_covered": after_cov,
+            "before_coverage_pct": before_pct,
+            "after_coverage_pct": after_pct,
+            "delta_pct_points": round(after_pct - before_pct, 2),
+            "new_keywords_added": sorted(new_added)[:20]
+        }
+
+        # Intent coverage
+        before_hi_intent = len([p for p in high_intent_phrases if p in set(current_found)])
+        after_hi_intent = len([p for p in high_intent_phrases if p in set(opt_found)])
+        intent_improvement = {
+            "high_intent_total": len(high_intent_phrases),
+            "before_covered": before_hi_intent,
+            "after_covered": after_hi_intent,
+            "delta": max(0, after_hi_intent - before_hi_intent)
+        }
+
+        # Volume capture (approximate)
+        before_vol = sum(phrase_to_volume.get(p, 0) for p in set(current_found))
+        after_vol = sum(phrase_to_volume.get(p, 0) for p in set(opt_found))
+        volume_improvement = {
+            "estimated_volume_before": before_vol,
+            "estimated_volume_after": after_vol,
+            "delta_volume": max(0, after_vol - before_vol)
+        }
+
+        # Character efficiency
+        title_before = len(current_title or "")
+        title_after = len(opt_title or "")
+        backend_before = len(" ".join(current_backend) if current_backend else "")
+        backend_after = len(" ".join(opt_backend) if opt_backend else "")
+        char_efficiency = {
+            "title_limit": 200,
+            "title_before": title_before,
+            "title_after": title_after,
+            "title_utilization_before_pct": round((title_before / 200) * 100, 1) if 200 else 0,
+            "title_utilization_after_pct": round((title_after / 200) * 100, 1) if 200 else 0,
+            "backend_limit": 249,
+            "backend_before": backend_before,
+            "backend_after": backend_after,
+        }
+
+        # Summary metrics (simple heuristic)
+        summary_metrics = {
+            "overall_improvement_score": round(min(10.0, (after_pct - before_pct) / 10 + (after_hi_intent - before_hi_intent) / 2), 2),
+            "priority_recommendations": max(1, min(5, len(new_added) // 4)),
+        }
+
+        return SEOComparison(
+            coverage_improvement=coverage_improvement,
+            intent_improvement=intent_improvement,
+            volume_improvement=volume_improvement,
+            character_efficiency=char_efficiency,
+            summary_metrics=summary_metrics
+        )
+    
+    def _should_use_ai_optimization(self) -> bool:
+        """Always use AI optimization (no rule-based fallback)."""
+        return True

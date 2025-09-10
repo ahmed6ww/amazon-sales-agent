@@ -8,7 +8,6 @@ This package contains the scoring agent responsible for:
 - Final ranking calculations
 """
 
-from .agent import scoring_agent
 from .runner import ScoringRunner
 from .schemas import (
     IntentScore,
@@ -17,35 +16,24 @@ from .schemas import (
     ScoringResult,
     PriorityLevel
 )
-from .tools import (
-    tool_calculate_intent_scores,
-    tool_analyze_competition_metrics,
-    tool_prioritize_keywords,
-    tool_generate_final_rankings
-)
+
 from .helper_methods import (
     calculate_intent_score,
-    analyze_competition_difficulty,
-    calculate_priority_score,
-    rank_keywords_by_priority,
-    filter_by_thresholds
+)
+
+from .subagents import (
+    calculate_broad_volume,
+    extract_root_word
 )
 
 __all__ = [
-    "scoring_agent",
     "ScoringRunner",
     "IntentScore",
     "KeywordScore", 
     "CompetitionMetrics",
     "ScoringResult",
     "PriorityLevel",
-    "tool_calculate_intent_scores",
-    "tool_analyze_competition_metrics", 
-    "tool_prioritize_keywords",
-    "tool_generate_final_rankings",
     "calculate_intent_score",
-    "analyze_competition_difficulty",
-    "calculate_priority_score",
-    "rank_keywords_by_priority",
-    "filter_by_thresholds"
+    "calculate_broad_volume",
+    "extract_root_word"
 ] 

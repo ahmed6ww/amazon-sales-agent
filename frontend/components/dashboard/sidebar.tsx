@@ -11,7 +11,8 @@ import {
   HelpCircle,
   Home,
   Upload,
-  Database
+  Database,
+  TestTube
 } from "lucide-react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
@@ -63,6 +64,12 @@ const navigationItems = [
     href: "/dashboard/data",
     icon: Database,
     description: "Manage datasets"
+  },
+  {
+    title: "Pipeline Test",
+    href: "/test-pipeline",
+    icon: TestTube,
+    description: "Test AI pipeline with visual results"
   }
 ]
 
