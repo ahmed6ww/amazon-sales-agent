@@ -22,27 +22,15 @@ class ScoringRunner:
 		self,
 		scraped_product: Dict[str, Any],
 		keyword_items: List[Dict[str, Any]],
-		use_llm: bool = False,
+		use_llm: bool = True,
 	) -> Dict[str, Any]:
-		# Deterministic local computation (scoring only, no sorting)
-		# Import utilities at runtime to avoid package path issues in various runners
-		import importlib
-		intent_mod = importlib.import_module('app.services.keyword_processing.intent')
-		classify_intent = getattr(intent_mod, 'classify_intent')
-		extract_brand_tokens = getattr(intent_mod, 'extract_brand_tokens')
-
-		brand_tokens = extract_brand_tokens(scraped_product)
-		items_with_scores: List[Dict[str, Any]] = []
-		for it in (keyword_items or []):
-			phrase = (it or {}).get("phrase") or ""
-			category = (it or {}).get("category")
-			res = classify_intent(
-				phrase=phrase,
-				scraped_product=scraped_product or {},
-				category=category,
-				brand_tokens=brand_tokens,
-			)
-			items_with_scores.append({**it, "intent_score": res.intent_score})
+		# AI-only analysis - no deterministic fallback allowed
+		if not use_llm:
+			raise ValueError("AI-only mode: deterministic intent classification not allowed")
+		
+		# Use LLM-based intent scoring through ScoringRunner
+		logger.info("[ScoringRunner] Using AI-based intent scoring for build_intent_view")
+		enriched_items = self.append_intent_scores(keyword_items, scraped_product)
 
 		return {
 			"product_context": {
@@ -51,7 +39,7 @@ class ScoringRunner:
 				).get("text")
 				)
 			},
-			"intent_scores": items_with_scores,
+			"intent_scores": enriched_items,
 		}
 
 	@staticmethod
@@ -196,7 +184,7 @@ class ScoringRunner:
 				broad_volume_result = calculate_broad_volume(
 					enriched_items, 
 					brand_tokens=brand_tokens, 
-					use_llm=False  # Use deterministic for this helper method
+					use_llm=True  # Use AI analysis only - no deterministic fallback
 				)
 				enriched_items = broad_volume_result.get("items", enriched_items)
 				
@@ -253,7 +241,7 @@ class ScoringRunner:
 			# Prepare scraped product context
 			scraped_product = product_attributes.get('scraped_product', {})
 			if not scraped_product and 'ai_analysis' in product_attributes:
-				# Fallback: create minimal product context from available data
+				# Data preparation: create minimal product context from available data
 				scraped_product = {
 					"elements": {
 						"productTitle": {

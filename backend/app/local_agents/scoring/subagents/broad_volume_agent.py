@@ -40,19 +40,19 @@ For each keyword:
 2. Normalize to lowercase
 3. Sum search volumes by root
 
-Return ONLY a JSON object with:
-{
+Return ONLY a JSON object with this exact structure:
+{{
   "items": [
-    {"phrase": "original phrase", "search_volume": number, "root": "identified_root", ...other_original_fields},
+    {{"phrase": "original phrase", "search_volume": number, "root": "identified_root", "category": "original_category", "relevancy_score": number, "intent_score": number, "title_density": number, "cpr": number, "competition": {{}}}},
     ...
   ],
-  "broad_search_volume_by_root": {
+  "broad_search_volume_by_root": {{
     "root1": total_volume,
-    "root2": total_volume,
-    ...
-  }
-}
-"""
+    "root2": total_volume
+  }}
+}}
+
+Ensure all original fields are preserved in each item. Only add the "root" field."""
 
 broad_volume_agent = Agent(
     name="BroadVolumeSubagent",
@@ -215,23 +215,54 @@ def calculate_broad_volume_llm(
         
         output = getattr(result, "final_output", None)
         
-        # Parse LLM response
+        # Parse LLM response with robust JSON extraction
         if isinstance(output, str):
+            logger.debug(f"[BroadVolumeAgent] Raw LLM output preview: {output[:500]}")
+            
+            # Try direct JSON parsing first
             try:
-                parsed = _json.loads(output)
+                parsed = _json.loads(output.strip())
                 if isinstance(parsed, dict) and "items" in parsed and "broad_search_volume_by_root" in parsed:
                     logger.info(f"[BroadVolumeAgent] LLM successfully processed {len(parsed['items'])} items")
                     return parsed
-            except Exception as e:
-                logger.warning(f"[BroadVolumeAgent] Failed to parse LLM output: {e}")
+            except _json.JSONDecodeError:
+                pass
+            
+            # Try to extract JSON from text if direct parsing fails
+            import re
+            json_pattern = r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}'
+            matches = re.findall(json_pattern, output, re.DOTALL)
+            
+            for match in reversed(matches):  # Try largest JSON blocks first
+                try:
+                    parsed = _json.loads(match)
+                    if isinstance(parsed, dict) and "items" in parsed and "broad_search_volume_by_root" in parsed:
+                        logger.info(f"[BroadVolumeAgent] LLM successfully processed {len(parsed['items'])} items via extraction")
+                        return parsed
+                except _json.JSONDecodeError:
+                    continue
+            
+            # Log the problematic output for debugging
+            logger.error(f"[BroadVolumeAgent] Could not parse LLM output. Full output: {output}")
+            raise Exception(f"LLM returned unparseable JSON: {output[:200]}...")
         
-        # Fallback to deterministic if LLM fails
-        logger.info("[BroadVolumeAgent] LLM failed, falling back to deterministic calculation")
-        return calculate_broad_volume_deterministic(items, brand_tokens)
+        elif hasattr(output, 'model_dump'):
+            # Handle structured output
+            try:
+                parsed = output.model_dump()
+                if isinstance(parsed, dict) and "items" in parsed and "broad_search_volume_by_root" in parsed:
+                    logger.info(f"[BroadVolumeAgent] LLM successfully processed {len(parsed['items'])} items via model_dump")
+                    return parsed
+            except Exception as e:
+                logger.error(f"[BroadVolumeAgent] Failed to extract from structured output: {e}")
+                raise Exception(f"Failed to extract structured LLM output: {e}")
+        
+        # No fallback - AI analysis only
+        raise Exception("LLM failed to produce valid broad volume analysis")
         
     except Exception as e:
         logger.error(f"[BroadVolumeAgent] LLM calculation failed: {e}")
-        return calculate_broad_volume_deterministic(items, brand_tokens)
+        raise Exception(f"AI-only broad volume calculation failed: {e}")
 
 def calculate_broad_volume(
     items: List[Dict[str, Any]], 
@@ -239,17 +270,17 @@ def calculate_broad_volume(
     use_llm: bool = True
 ) -> Dict[str, Any]:
     """
-    Main function to calculate broad search volume by root words.
+    Main function to calculate broad search volume by root words using AI analysis only.
     
     Args:
         items: List of keyword items with phrase and search_volume
         brand_tokens: Set of brand names to exclude from root extraction
-        use_llm: Whether to use LLM agent (True) or deterministic method (False)
+        use_llm: Whether to use LLM agent (True) or raise error (False not supported)
     
     Returns:
         Dict with enhanced items and broad_search_volume_by_root summary
     """
-    if use_llm:
-        return calculate_broad_volume_llm(items, brand_tokens)
-    else:
-        return calculate_broad_volume_deterministic(items, brand_tokens)
+    if not use_llm:
+        raise ValueError("AI-only analysis mode: deterministic calculation not allowed")
+    
+    return calculate_broad_volume_llm(items, brand_tokens)
