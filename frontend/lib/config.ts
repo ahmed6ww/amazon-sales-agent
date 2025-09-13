@@ -11,6 +11,7 @@ export interface ApiConfig {
     upload: string;
     scraper: string;
     test: string;
+  testResearchKeywords: string;
   };
 }
 
@@ -115,7 +116,8 @@ export const config: AppConfig = {
       analyze: '/api/v1/analyze',
       upload: '/api/v1/upload',
       scraper: '/api/v1/scraper',
-      test: '/api/v1/test',
+  test: '/api/v1/test',
+  testResearchKeywords: '/api/v1/test-research-keywords',
     },
   },
   environment: getEnvironment(),
