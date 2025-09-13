@@ -9,7 +9,7 @@ import { ChevronDown, ChevronRight, Star, TrendingUp, Package, Search, Target } 
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { config, getFullApiUrl } from '@/lib/config';
-import apiClient, { api } from '@/lib/api';
+import apiClient, { api as apiHelpers } from '@/lib/api';
 
 const Section = ({ title, children, isExpandable = false }: { 
   title: string; 
@@ -67,11 +67,25 @@ const getIntentBadge = (score: number) => {
   return <Badge>Intent: {score}</Badge>;
 };
 
+// Safe number formatter to avoid calling toLocaleString on undefined/null
+const fmtNumber = (value: unknown, fallback = '0'): string => {
+  const n =
+    typeof value === 'number'
+      ? value
+      : typeof value === 'string'
+      ? Number(value)
+      : NaN;
+  return Number.isFinite(n) ? n.toLocaleString() : fallback;
+};
+
+// Normalize potential value to an array for safe mapping/joining
+const toArr = (v: unknown): any[] => (Array.isArray(v) ? v : v == null ? [] : [v]);
+
 const TestResultsPage = () => {
   // Form state
-  const [asinOrUrl, setAsinOrUrl] = useState('https://www.amazon.com/dp/B0D5BL35MS');
+  const [asinOrUrl, setAsinOrUrl] = useState('');
   const [marketplace, setMarketplace] = useState('US');
-  const [mainKeyword, setMainKeyword] = useState<string>('freeze dried strawberries');
+  const [mainKeyword, setMainKeyword] = useState<string>('');
   const [revenueCsv, setRevenueCsv] = useState<File | null>(null);
   const [designCsv, setDesignCsv] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
@@ -85,49 +99,56 @@ const TestResultsPage = () => {
     setLoading(true);
     setError(null);
     try {
-      // Use only provided files; no dummy fallback
-      const revenue = revenueCsv;
-      const design = designCsv;
+      // Prefer library client; fallback to direct fetch if bundler cache causes export mismatch
+      const callViaClient = async () => {
+        if ((apiHelpers as any)?.testResearchKeywords) {
+          return (apiHelpers as any).testResearchKeywords({
+            asin_or_url: asinOrUrl,
+            marketplace,
+            main_keyword: mainKeyword || undefined,
+            revenue_csv: revenueCsv,
+            design_csv: designCsv,
+          });
+        }
+        if ((apiClient as any)?.testResearchKeywords) {
+          return (apiClient as any).testResearchKeywords({
+            asin_or_url: asinOrUrl,
+            marketplace,
+            main_keyword: mainKeyword || undefined,
+            revenue_csv: revenueCsv,
+            design_csv: designCsv,
+          });
+        }
+        return { success: false, error: 'Client method not available' } as any;
+      };
 
-      // Prefer api.testResearchKeywords; fallback to apiClient or direct fetch
-      const call = (api as any)?.testResearchKeywords ?? (apiClient as any)?.testResearchKeywords;
-
-      let res: any;
-      if (typeof call === 'function') {
-        res = await call({
-          asin_or_url: asinOrUrl,
-          marketplace,
-          main_keyword: mainKeyword,
-          revenue_csv: revenue ?? null,
-          design_csv: design ?? null,
-        });
-      } else {
-        // Final fallback: raw fetch
-        console.warn('api.testResearchKeywords not found; using raw fetch fallback');
+      let result = await callViaClient();
+      if (!result?.success) {
+        // Fallback direct fetch
         const formData = new FormData();
         formData.append('asin_or_url', asinOrUrl);
-        formData.append('marketplace', marketplace);
+        formData.append('marketplace', marketplace || 'US');
         if (mainKeyword) formData.append('main_keyword', mainKeyword);
-        if (revenue) formData.append('revenue_csv', revenue);
-        if (design) formData.append('design_csv', design);
+        if (revenueCsv) formData.append('revenue_csv', revenueCsv);
+        if (designCsv) formData.append('design_csv', designCsv);
 
         const resp = await fetch(getFullApiUrl(config.api.endpoints.testResearchKeywords), {
           method: 'POST',
           body: formData,
         });
         if (!resp.ok) {
-          const t = await resp.text();
-          throw new Error(`HTTP ${resp.status}: ${t}`);
+          const e = await resp.json().catch(() => ({}));
+          throw new Error(e?.message || `HTTP ${resp.status}`);
         }
         const data = await resp.json();
-        res = { success: true, data };
+        result = { success: true, data } as any;
       }
 
-      if (!res.success) {
-        throw new Error(res.error || 'Request failed');
+      if (!result.success) {
+        throw new Error(result.error || 'Request failed');
       }
 
-      setResponse(res.data);
+      setResponse(result.data as any);
     } catch (e: any) {
       setError(e?.message || 'Unknown error');
     } finally {
@@ -253,7 +274,7 @@ const TestResultsPage = () => {
             </div>
             <div className="bg-purple-50 p-4 rounded-lg">
               <div className="text-purple-600 font-semibold">Volume Increase</div>
-              <div className="text-2xl font-bold">+{comparison?.volume_improvement?.delta_volume?.toLocaleString() || 0}</div>
+              <div className="text-2xl font-bold">+{fmtNumber(comparison?.volume_improvement?.delta_volume)}</div>
               <div className="text-sm text-purple-600">Search Volume</div>
             </div>
             <div className="bg-orange-50 p-4 rounded-lg">
@@ -317,7 +338,7 @@ const TestResultsPage = () => {
                 <div>
                   <span className="font-medium text-gray-600 text-sm">Attributes:</span>
                   <div className="flex flex-wrap gap-2 mt-1">
-                    {(product_context?.attributes || []).map((attr: string, i: number) => (
+                    {toArr(product_context?.attributes).map((attr: string, i: number) => (
                       <Badge key={i} variant="outline">{attr}</Badge>
                     ))}
                   </div>
@@ -325,7 +346,7 @@ const TestResultsPage = () => {
                 <div>
                   <span className="font-medium text-gray-600 text-sm">Use Cases:</span>
                   <div className="flex flex-wrap gap-2 mt-1">
-                    {(product_context?.use_cases || []).map((use: string, i: number) => (
+                    {toArr(product_context?.use_cases).map((use: string, i: number) => (
                       <Badge key={i} variant="secondary">{use}</Badge>
                     ))}
                   </div>
@@ -350,7 +371,7 @@ const TestResultsPage = () => {
                 <div>
                   <h4 className="font-medium mb-2">All Images ({scraped_product.images.image_count} total)</h4>
                   <div className="grid grid-cols-3 gap-2">
-                    {(scraped_product.images.all_images || []).slice(0, 6).map((img: string, i: number) => (
+                    {toArr(scraped_product.images.all_images).slice(0, 6).map((img: string, i: number) => (
                       <Image 
                         key={i} 
                         src={img} 
@@ -412,8 +433,8 @@ const TestResultsPage = () => {
                   }, i: number) => (
                     <tr key={i} className="border-b hover:bg-gray-50">
                       <td className="py-3 px-4 font-medium text-sm">{kw.phrase}</td>
-                      <td className="text-right py-3 px-4 text-sm">{kw.search_volume.toLocaleString()}</td>
-                      <td className="text-center py-3 px-4">{getIntentBadge(kw.intent_score)}</td>
+                      <td className="text-right py-3 px-4 text-sm">{fmtNumber(kw.search_volume)}</td>
+                      <td className="text-center py-3 px-4">{getIntentBadge(kw.intent_score ?? 0)}</td>
                       <td className="text-center py-3 px-4">
                         <Badge variant="outline">{kw.relevancy_score}/10</Badge>
                       </td>
@@ -435,250 +456,258 @@ const TestResultsPage = () => {
 
       {/* SEO Tab */}
       {activeTab === 'seo' && (
-        <div className="space-y-6">
-          <Section title="Title Optimization">
-            <div className="space-y-4">
-              <div>
-                <h4 className="font-medium text-gray-700 mb-2">Current Title ({current_seo.title_analysis.character_count} chars)</h4>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {/* Row 1: Titles (Left = Current, Right = Optimized) */}
+          <div className="space-y-6">
+            <Section title={`Current Title (${current_seo?.title_analysis?.character_count ?? 0} chars)`}>
+              <div className="space-y-2">
                 <div className="bg-red-50 p-3 rounded border text-sm border-red-200">
-                  {current_seo.title_analysis.content}
+                  {current_seo?.title_analysis?.content || '—'}
                 </div>
-                <div className="mt-2 text-sm text-gray-600">
-                  Keywords found: {current_seo.title_analysis.keywords_found.join(', ')}
+                <div className="text-sm text-gray-600">
+                  Keywords found: {toArr(current_seo?.title_analysis?.keywords_found).join(', ')}
                 </div>
               </div>
-              <div>
-                <h4 className="font-medium text-gray-700 mb-2">Optimized Title ({optimized_seo.optimized_title.character_count} chars)</h4>
+            </Section>
+          </div>
+
+          {/* Right title */}
+          <div className="space-y-6">
+            <Section title={`Optimized Title (${optimized_seo?.optimized_title?.character_count ?? 0} chars)`}>
+              <div className="space-y-2">
                 <div className="bg-green-50 p-3 rounded border text-sm border-green-200">
-                  {optimized_seo.optimized_title.content}
+                  {optimized_seo?.optimized_title?.content || '—'}
                 </div>
-                <div className="mt-2 text-sm text-gray-600">
-                  Keywords included: {optimized_seo.optimized_title.keywords_included.join(', ')}
-                </div>
-              </div>
-            </div>
-          </Section>
-
-          <Section title="Bullet Point Analysis">
-            <div className="space-y-6">
-              {current_seo.bullets_analysis.map((bullet: {
-                content: string;
-                keywords_found: string[];
-                opportunities: string[];
-                keyword_count: number;
-                character_count: number;
-                keyword_density: number;
-              }, i: number) => (
-                <div key={i} className="border rounded-lg p-4">
-                  <h5 className="font-medium text-gray-700 mb-2">Bullet Point {i + 1}</h5>
-                  <div className="bg-gray-50 p-3 rounded text-sm mb-3">
-                    {bullet.content}
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <strong>Keywords Found:</strong>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {bullet.keywords_found.map((kw: string, j: number) => (
-                          <Badge key={j} variant="outline" className="text-xs">{kw}</Badge>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <strong>Opportunities:</strong>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {bullet.opportunities.map((op: string, j: number) => (
-                          <Badge key={j} variant="secondary" className="text-xs">{op}</Badge>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <div className="flex gap-4 mt-3 text-xs text-gray-600">
-                    <span>Keywords: {bullet.keyword_count}</span>
-                    <span>Characters: {bullet.character_count}</span>
-                    <span>Density: {bullet.keyword_density}%</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Section>
-
-          <Section title="Optimized Bullet Points">
-            <div className="space-y-6">
-              {optimized_seo.optimized_bullets.map((bullet: {
-                content: string;
-                keywords_included: string[];
-                improvements: string[];
-                character_count: number;
-              }, i: number) => (
-                <div key={i} className="border rounded-lg p-4 bg-green-50 border-green-200">
-                  <h5 className="font-medium text-green-700 mb-2">Optimized Bullet Point {i + 1}</h5>
-                  <div className="bg-white p-3 rounded text-sm mb-3 border">
-                    {bullet.content}
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div>
-                      <strong>Keywords Included:</strong>
-                      <div className="flex flex-wrap gap-1 mt-1">
-                        {bullet.keywords_included.map((kw: string, j: number) => (
-                          <Badge key={j} className="bg-green-600 text-white text-xs">{kw}</Badge>
-                        ))}
-                      </div>
-                    </div>
-                    <div>
-                      <strong>Improvements:</strong>
-                      <ul className="list-disc list-inside mt-1 text-xs text-gray-600">
-                        {bullet.improvements.map((imp: string, j: number) => (
-                          <li key={j}>{imp}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                  <div className="flex gap-4 mt-3 text-xs text-gray-600">
-                    <span>Characters: {bullet.character_count}</span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Section>
-
-          <Section title="SEO Metrics Comparison">
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-red-50 p-4 rounded-lg">
-                <h4 className="font-medium text-red-600 mb-3">Current SEO</h4>
-                <div className="space-y-2">
-                  <KeyValue label="Coverage" value={`${comparison.coverage_improvement.before_coverage_pct}%`} />
-                  <KeyValue label="Keywords Covered" value={comparison.coverage_improvement.before_covered} />
-                  <KeyValue label="Total Keywords" value={comparison.coverage_improvement.total_keywords} />
+                <div className="text-sm text-gray-600">
+                  Keywords included: {toArr(optimized_seo?.optimized_title?.keywords_included).join(', ')}
                 </div>
               </div>
-              <div className="bg-green-50 p-4 rounded-lg">
-                <h4 className="font-medium text-green-600 mb-3">Optimized SEO</h4>
-                <div className="space-y-2">
-                  <KeyValue label="Coverage" value={`${comparison.coverage_improvement.after_coverage_pct}%`} />
-                  <KeyValue label="Keywords Covered" value={comparison.coverage_improvement.after_covered} />
-                  <KeyValue label="Volume Increase" value={`+${comparison.volume_improvement.delta_volume.toLocaleString()}`} />
-                </div>
-              </div>
-              <div className="bg-blue-50 p-4 rounded-lg">
-                <h4 className="font-medium text-blue-600 mb-3">Improvement</h4>
-                <div className="space-y-2">
-                  <KeyValue label="Coverage Gain" value={`+${comparison.coverage_improvement.delta_pct_points}%`} />
-                  <KeyValue label="Intent Improvement" value={`+${comparison.intent_improvement.delta}`} />
-                  <KeyValue label="Overall Score" value={`${comparison.summary_metrics.overall_improvement_score}/10`} />
-                </div>
-              </div>
-            </div>
-          </Section>
+            </Section>
+          </div>
 
-          <Section title="Backend Keywords Strategy">
-            <div className="space-y-4">
-              <p className="text-sm text-gray-600">
-                Recommended backend search terms to capture misspellings, synonyms, and alternate word orders:
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                {optimized_seo.optimized_backend_keywords.map((term: string, i: number) => (
-                  <Badge key={i} variant="outline" className="text-xs">{term}</Badge>
-                ))}
-              </div>
-            </div>
-          </Section>
+          {/* Paired bullet points aligned by index across both columns */}
+          <div className="md:col-span-2">
+            <Section title="Bullet Points (Current vs Optimized)">
+              {(() => {
+                const curr = toArr(current_seo?.bullets_analysis);
+                const opt = toArr(optimized_seo?.optimized_bullets);
+                const maxLen = Math.max(curr.length, opt.length);
+                return (
+                  <div className="space-y-6">
+                    {Array.from({ length: maxLen }).map((_, i) => {
+                      const c = curr[i];
+                      const o = opt[i];
+                      return (
+                        <div key={i} className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                          {/* Current bullet */}
+                          <div className="border rounded-lg p-4 h-full">
+                            <h5 className="font-medium text-gray-700 mb-2">Bullet Point {i + 1}</h5>
+                            <div className="bg-gray-50 p-3 rounded text-sm mb-3 min-h-[56px]">
+                              {c?.content || '—'}
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                              <div>
+                                <strong>Keywords Found:</strong>
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                  {toArr(c?.keywords_found).map((kw: string, j: number) => (
+                                    <Badge key={j} variant="outline" className="text-xs">{kw}</Badge>
+                                  ))}
+                                </div>
+                              </div>
+                              <div>
+                                <strong>Opportunities:</strong>
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                  {toArr(c?.opportunities).map((op: string, j: number) => (
+                                    <Badge key={j} variant="secondary" className="text-xs">{op}</Badge>
+                                  ))}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex gap-4 mt-3 text-xs text-gray-600">
+                              <span>Keywords: {c?.keyword_count ?? 0}</span>
+                              <span>Characters: {c?.character_count ?? 0}</span>
+                              <span>Density: {c?.keyword_density ?? 0}%</span>
+                            </div>
+                          </div>
 
-          <Section title="Root Coverage Analysis" isExpandable>
-            <div className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          {/* Optimized bullet */}
+                          <div className="border rounded-lg p-4 bg-green-50 border-green-200 h-full">
+                            <h5 className="font-medium text-green-700 mb-2">Optimized Bullet Point {i + 1}</h5>
+                            <div className="bg-white p-3 rounded text-sm mb-3 border min-h-[56px]">
+                              {o?.content || '—'}
+                            </div>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                              <div>
+                                <strong>Keywords Included:</strong>
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                  {toArr(o?.keywords_included).map((kw: string, j: number) => (
+                                    <Badge key={j} className="bg-green-600 text-white text-xs">{kw}</Badge>
+                                  ))}
+                                </div>
+                              </div>
+                              <div>
+                                <strong>Improvements:</strong>
+                                <ul className="list-disc list-inside mt-1 text-xs text-gray-600">
+                                  {toArr(o?.improvements).map((imp: string, j: number) => (
+                                    <li key={j}>{imp}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                            <div className="flex gap-4 mt-3 text-xs text-gray-600">
+                              <span>Characters: {o?.character_count ?? 0}</span>
+                            </div>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                );
+              })()}
+            </Section>
+          </div>
+
+          {/* Row 3: Remaining sections (Left current details, Right optimized details) */}
+          <div className="space-y-6">
+            <Section title="Current Root Coverage" isExpandable>
+              <div className="space-y-4">
                 <div className="p-4 bg-red-50 rounded-lg">
-                  <h4 className="font-medium text-red-600 mb-2">Current Coverage</h4>
-                  <div className="text-2xl font-bold text-red-600">{current_seo.root_coverage.coverage_percentage}%</div>
-                  <div className="text-sm text-red-600">{current_seo.root_coverage.covered_roots} of {current_seo.root_coverage.total_roots} roots covered</div>
+                  <h4 className="font-medium text-red-600 mb-2">Coverage</h4>
+                  <div className="text-2xl font-bold text-red-600">{current_seo?.root_coverage?.coverage_percentage ?? 0}%</div>
+                  <div className="text-sm text-red-600">{current_seo?.root_coverage?.covered_roots ?? 0} of {current_seo?.root_coverage?.total_roots ?? 0} roots covered</div>
                 </div>
                 <div className="p-4 bg-blue-50 rounded-lg">
                   <h4 className="font-medium text-blue-600 mb-2">Root Volumes</h4>
                   <div className="space-y-1 text-sm">
-                    {Object.entries(current_seo.root_coverage.root_volumes as Record<string, number>).map(([root, volume]) => (
+                    {Object.entries((current_seo?.root_coverage?.root_volumes || {}) as Record<string, number>).map(([root, volume]) => (
                       <div key={root} className="flex justify-between">
                         <span>{root}:</span>
-                        <span className="font-medium">{volume.toLocaleString()}</span>
+                        <span className="font-medium">{fmtNumber(volume)}</span>
                       </div>
                     ))}
                   </div>
                 </div>
               </div>
-            </div>
-          </Section>
+            </Section>
 
-          <Section title="Character Usage Analysis" isExpandable>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-medium text-gray-700 mb-2">Title Usage</h4>
-                <div className="text-2xl font-bold">{current_seo.total_character_usage.title_chars}</div>
-                <div className="text-sm text-gray-600">characters used</div>
-              </div>
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-medium text-gray-700 mb-2">Bullets Total</h4>
-                <div className="text-2xl font-bold">{current_seo.total_character_usage.bullets_total_chars}</div>
-                <div className="text-sm text-gray-600">avg: {current_seo.total_character_usage.bullets_avg_chars} chars</div>
-              </div>
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-medium text-gray-700 mb-2">Backend Usage</h4>
-                <div className="text-2xl font-bold">{current_seo.total_character_usage.backend_chars}</div>
-                <div className="text-sm text-gray-600">characters used</div>
-              </div>
-            </div>
-          </Section>
-
-          <Section title="Keyword Strategy Details" isExpandable>
-            <div className="space-y-6">
-              <div>
-                <h4 className="font-medium text-gray-700 mb-2">Primary Roots</h4>
-                <div className="flex flex-wrap gap-2">
-                  {optimized_seo.keyword_strategy.primary_roots.map((root: string, i: number) => (
-                    <Badge key={i} className="bg-blue-600 text-white">{root}</Badge>
-                  ))}
+            <Section title="Character Usage" isExpandable>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <h4 className="font-medium text-gray-700 mb-2">Title</h4>
+                  <div className="text-2xl font-bold">{current_seo?.total_character_usage?.title_chars ?? 0}</div>
+                  <div className="text-sm text-gray-600">characters used</div>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <h4 className="font-medium text-gray-700 mb-2">Bullets</h4>
+                  <div className="text-2xl font-bold">{current_seo?.total_character_usage?.bullets_total_chars ?? 0}</div>
+                  <div className="text-sm text-gray-600">avg: {current_seo?.total_character_usage?.bullets_avg_chars ?? 0} chars</div>
+                </div>
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <h4 className="font-medium text-gray-700 mb-2">Backend</h4>
+                  <div className="text-2xl font-bold">{current_seo?.total_character_usage?.backend_chars ?? 0}</div>
+                  <div className="text-sm text-gray-600">characters used</div>
                 </div>
               </div>
-              
-              <div>
-                <h4 className="font-medium text-gray-700 mb-2">Priority Clusters</h4>
-                <div className="space-y-2">
-                  {optimized_seo.keyword_strategy.priority_clusters.map((cluster: string, i: number) => (
-                    <div key={i} className="p-2 bg-blue-50 rounded text-sm">{cluster}</div>
-                  ))}
-                </div>
-              </div>
+            </Section>
 
-              <div>
-                <h4 className="font-medium text-gray-700 mb-2">Frontend Phrase Variants</h4>
+            <Section title="Current SEO Metrics">
+              <div className="space-y-2">
+                <KeyValue label="Coverage" value={`${comparison?.coverage_improvement?.before_coverage_pct ?? 0}%`} />
+                <KeyValue label="Keywords Covered" value={comparison?.coverage_improvement?.before_covered ?? 0} />
+                <KeyValue label="Total Keywords" value={comparison?.coverage_improvement?.total_keywords ?? 0} />
+              </div>
+            </Section>
+          </div>
+
+          <div className="space-y-6">
+            <Section title="Backend Keywords Strategy">
+              <div className="space-y-4">
+                <p className="text-sm text-gray-600">
+                  Recommended backend search terms to capture misspellings, synonyms, and alternate word orders:
+                </p>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                  {optimized_seo.keyword_strategy.phrase_variants_in_frontend.map((phrase: string, i: number) => (
-                    <Badge key={i} variant="outline" className="text-xs">{phrase}</Badge>
+                  {toArr(optimized_seo?.optimized_backend_keywords).map((term: string, i: number) => (
+                    <Badge key={i} variant="outline" className="text-xs">{term}</Badge>
                   ))}
                 </div>
               </div>
+            </Section>
 
-              <div>
-                <h4 className="font-medium text-gray-700 mb-2">Backend Misspellings & Synonyms</h4>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                  {optimized_seo.keyword_strategy.misspellings_and_synonyms_in_backend.map((term: string, i: number) => (
-                    <Badge key={i} variant="secondary" className="text-xs">{term}</Badge>
-                  ))}
+            <Section title="Keyword Strategy Details" isExpandable>
+              <div className="space-y-6">
+                <div>
+                  <h4 className="font-medium text-gray-700 mb-2">Primary Roots</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {toArr(optimized_seo?.keyword_strategy?.primary_roots).map((root: string, i: number) => (
+                      <Badge key={i} className="bg-blue-600 text-white">{root}</Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-medium text-gray-700 mb-2">Priority Clusters</h4>
+                  <div className="space-y-2">
+                    {toArr(optimized_seo?.keyword_strategy?.priority_clusters).map((cluster: string, i: number) => (
+                      <div key={i} className="p-2 bg-blue-50 rounded text-sm">{cluster}</div>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-medium text-gray-700 mb-2">Frontend Phrase Variants</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {toArr(optimized_seo?.keyword_strategy?.phrase_variants_in_frontend).map((phrase: string, i: number) => (
+                      <Badge key={i} variant="outline" className="text-xs">{phrase}</Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-medium text-gray-700 mb-2">Backend Misspellings & Synonyms</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {toArr(optimized_seo?.keyword_strategy?.misspellings_and_synonyms_in_backend).map((term: string, i: number) => (
+                      <Badge key={i} variant="secondary" className="text-xs">{term}</Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <h4 className="font-medium text-gray-700 mb-2">Exclusions</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {toArr(optimized_seo?.keyword_strategy?.exclusions).map((exclusion: string, i: number) => (
+                      <Badge key={i} variant="destructive" className="text-xs">{exclusion}</Badge>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="p-4 bg-gray-50 rounded-lg">
+                  <h4 className="font-medium text-gray-700 mb-2">Rationale</h4>
+                  <p className="text-sm text-gray-600">{optimized_seo?.rationale || '—'}</p>
                 </div>
               </div>
+            </Section>
 
-              <div>
-                <h4 className="font-medium text-gray-700 mb-2">Exclusions</h4>
-                <div className="flex flex-wrap gap-2">
-                  {optimized_seo.keyword_strategy.exclusions.map((exclusion: string, i: number) => (
-                    <Badge key={i} variant="destructive" className="text-xs">{exclusion}</Badge>
-                  ))}
+            <Section title="Optimized SEO Metrics">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="bg-green-50 p-4 rounded-lg">
+                  <h4 className="font-medium text-green-600 mb-3">Optimized</h4>
+                  <div className="space-y-2">
+                    <KeyValue label="Coverage" value={`${comparison?.coverage_improvement?.after_coverage_pct ?? 0}%`} />
+                    <KeyValue label="Keywords Covered" value={comparison?.coverage_improvement?.after_covered ?? 0} />
+                    <KeyValue label="Volume Increase" value={`+${fmtNumber(comparison?.volume_improvement?.delta_volume)}`} />
+                  </div>
+                </div>
+                <div className="bg-blue-50 p-4 rounded-lg">
+                  <h4 className="font-medium text-blue-600 mb-3">Improvement</h4>
+                  <div className="space-y-2">
+                    <KeyValue label="Coverage Gain" value={`+${comparison?.coverage_improvement?.delta_pct_points ?? 0}%`} />
+                    <KeyValue label="Intent Improvement" value={`+${comparison?.intent_improvement?.delta ?? 0}`} />
+                    <KeyValue label="Overall Score" value={`${comparison?.summary_metrics?.overall_improvement_score ?? 0}/10`} />
+                  </div>
                 </div>
               </div>
-
-              <div className="p-4 bg-gray-50 rounded-lg">
-                <h4 className="font-medium text-gray-700 mb-2">Rationale</h4>
-                <p className="text-sm text-gray-600">{optimized_seo.rationale}</p>
-              </div>
-            </div>
-          </Section>
+            </Section>
+          </div>
         </div>
       )}
 
@@ -687,7 +716,7 @@ const TestResultsPage = () => {
         <div className="space-y-6">
           <Section title="Product Details" isExpandable>
             <div className="space-y-4">
-              {Object.entries(scraped_product.elements.detailBullets_feature_div.kv as Record<string, unknown>).map(([key, value]) => (
+              {Object.entries((scraped_product?.elements?.detailBullets_feature_div?.kv || {}) as Record<string, unknown>).map(([key, value]) => (
                 <KeyValue key={key} label={key} value={typeof value === 'number' ? value : String(value)} />
               ))}
             </div>
@@ -695,7 +724,7 @@ const TestResultsPage = () => {
 
           <Section title="Feature Bullets" isExpandable>
             <div className="space-y-3">
-              {scraped_product.elements["feature-bullets"].bullets.map((bullet: string, i: number) => (
+              {toArr(scraped_product?.elements?.["feature-bullets"]?.bullets).map((bullet: string, i: number) => (
                 <div key={i} className="p-3 bg-gray-50 rounded border-l-4 border-blue-500">
                   <div className="text-sm">{bullet}</div>
                 </div>
@@ -714,7 +743,7 @@ const TestResultsPage = () => {
               </div>
               
               <div className="space-y-3">
-                {scraped_product.reviews.sample_reviews.map((review: string, i: number) => (
+                {toArr(scraped_product?.reviews?.sample_reviews).map((review: string, i: number) => (
                   <div key={i} className="p-4 bg-gray-50 rounded-lg border">
                     <p className="text-sm text-gray-700 italic">&quot;{review}&quot;</p>
                   </div>

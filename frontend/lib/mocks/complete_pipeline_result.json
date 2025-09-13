@@ -722,10 +722,10 @@
         "detailBullets_feature_div": {
           "present": true,
           "kv": {
-            "Package Dimensions ‏ : ‎": "8.7 x 7.72 x 4.57 inches; 4.8 ounces",
-            "Manufacturer ‏ : ‎": "Brewer Outdoor Solutions",
-            "ASIN ‏ : ‎": "B0D5BL35MS",
-            "Units ‏ : ‎": "4.8 Ounce",
+            "Package Dimensions \u200f : \u200e": "8.7 x 7.72 x 4.57 inches; 4.8 ounces",
+            "Manufacturer \u200f : \u200e": "Brewer Outdoor Solutions",
+            "ASIN \u200f : \u200e": "B0D5BL35MS",
+            "Units \u200f : \u200e": "4.8 Ounce",
             "Best Sellers Rank": "#54,395 in Grocery & Gourmet Food ( See Top 100 in Grocery & Gourmet Food ) #149 in Dried Berries",
             "Customer Reviews": "4.4 out of 5 stars 93 ratings"
           }
@@ -758,7 +758,7 @@
       "reviews": {
         "present": true,
         "sample_reviews": [
-          "I purchased the 1.2oz bag for my family of 3 to try- I admit, I was tempted to buy the size “small” bag, to ensure Mama got an adequate sample, but then second guessed myself with the fear of them being too tart and no one enjoying them, as I’ve bought dried strawberries from a big box store before and they were pretty sour to eat and ended up wasting. Well, these proved me wrong!! It has the perfect amount of tart without being too sour to enjoy, and tastes just like a fresh strawberry in a crunchy enjoyable texture. Will definitely be getting the bigger bag! All of the family have tried the strawberries and agree they are a great snack and we need more! Buy some- In the BIG bag- you WON’T regret it!",
+          "I purchased the 1.2oz bag for my family of 3 to try- I admit, I was tempted to buy the size \u201csmall\u201d bag, to ensure Mama got an adequate sample, but then second guessed myself with the fear of them being too tart and no one enjoying them, as I\u2019ve bought dried strawberries from a big box store before and they were pretty sour to eat and ended up wasting. Well, these proved me wrong!! It has the perfect amount of tart without being too sour to enjoy, and tastes just like a fresh strawberry in a crunchy enjoyable texture. Will definitely be getting the bigger bag! All of the family have tried the strawberries and agree they are a great snack and we need more! Buy some- In the BIG bag- you WON\u2019T regret it!",
           "she was very happy. she said the flavor was excellent and finished the bag in 2 days (she also said they were kind of addictive due to their flavor). would recommend and will probably get her some more in a few weeks.",
           "Excellent quality. Large pieces of dehydrated strawberries. Very happy with purchase!",
           "These packages are not particularly large but on a cost-per ounce they are a good value.",
@@ -936,7 +936,7 @@
       },
       "optimized_seo": {
         "optimized_title": {
-          "content": "Brewer Bulk Freeze Dried Strawberries, Organic Freeze Dried Strawberry Slices 4 Pack (1.2 oz Each) – No Sugar Added, Gluten Free Snack, Dried Strawberries for Baking, Smoothies, Cereal, Travel",
+          "content": "Brewer Bulk Freeze Dried Strawberries, Organic Freeze Dried Strawberry Slices 4 Pack (1.2 oz Each) \u2013 No Sugar Added, Gluten Free Snack, Dried Strawberries for Baking, Smoothies, Cereal, Travel",
           "keywords_included": [
             "bulk freeze dried strawberries",
             "freeze dried strawberry slices",
@@ -952,7 +952,7 @@
         },
         "optimized_bullets": [
           {
-            "content": "Crisp, sweet-tart freeze dried strawberry slices — real fruit strawberry chips made from ripe berries; enjoy as snacks or toppings for yogurt, oatmeal, cereal, and desserts. These freeze-dried strawberries deliver intense flavor.",
+            "content": "Crisp, sweet-tart freeze dried strawberry slices \u2014 real fruit strawberry chips made from ripe berries; enjoy as snacks or toppings for yogurt, oatmeal, cereal, and desserts. These freeze-dried strawberries deliver intense flavor.",
             "keywords_included": [
               "freeze dried strawberry slices",
               "strawberry chips",
@@ -980,7 +980,7 @@
             "character_count": 221
           },
           {
-            "content": "Clean ingredients you can trust: freeze dried strawberries organic, non-GMO, no sugar added, gluten free — simply 100% real fruit. USDA Organic freeze dried organic strawberries.",
+            "content": "Clean ingredients you can trust: freeze dried strawberries organic, non-GMO, no sugar added, gluten free \u2014 simply 100% real fruit. USDA Organic freeze dried organic strawberries.",
             "keywords_included": [
               "freeze dried strawberries organic",
               "freeze dried organic strawberries"
@@ -1049,7 +1049,7 @@
           "exclusions": "Apple-related terms excluded as irrelevant to product; avoid keyword stuffing with unrelated roots.",
           "notes": "Hyphen/no-hyphen variants are covered across title/bullets; singular/plural and order variants distributed across bullets and backend."
         },
-        "rationale": "The optimized listing leads with the highest-intent, high-volume strawberry roots, adds exact-match variants (singular/plural, hyphenation, bulk, slices, organic), and reserves misspellings/order variants for backend. Bullets are benefit-led for conversion while naturally embedding 2–4 keyword phrases each."
+        "rationale": "The optimized listing leads with the highest-intent, high-volume strawberry roots, adds exact-match variants (singular/plural, hyphenation, bulk, slices, organic), and reserves misspellings/order variants for backend. Bullets are benefit-led for conversion while naturally embedding 2\u20134 keyword phrases each."
       },
       "comparison": {
         "coverage_improvement": {
