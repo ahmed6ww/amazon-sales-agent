@@ -5,9 +5,10 @@ import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ChevronRight, Star, TrendingUp, Package, Search, Target } from 'lucide-react';
+import { ChevronDown, ChevronRight, Star, TrendingUp, Package, Search, Target, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import mockResult from '@/lib/mocks/complete_pipeline_result.json';
 
 const Section = ({ title, children, isExpandable = false }: { 
@@ -113,6 +114,80 @@ const TestResultsPage = () => {
   // Data state
   const [response, setResponse] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
+  // Keyword list UI state
+  const [categoryFilter, setCategoryFilter] = useState<string>('All');
+  const [sortConfig, setSortConfig] = useState<{ key: 'category' | 'root'; direction: 'asc' | 'desc' } | null>(null);
+  const [rootFilter, setRootFilter] = useState<string>('');
+
+  // Keep hooks stable: compute keyword items from response safely (works even when response is null)
+  const keywordItems = useMemo(() => {
+    return toArr((response?.ai_analysis_keywords?.structured_data as any)?.items) as Array<{
+      phrase: string;
+      search_volume: number;
+      intent_score: number;
+      relevancy_score: number;
+      title_density: number;
+      category: string;
+      root: string;
+    }>;
+  }, [response]);
+
+  // Unique categories for filter dropdown
+  const uniqueCategories = useMemo(() => {
+    const set = new Set<string>();
+    keywordItems.forEach((it) => {
+      if (it?.category) set.add(String(it.category));
+    });
+    return Array.from(set).sort((a, b) => a.localeCompare(b));
+  }, [keywordItems]);
+
+  // Filter + sort items for display in table
+  const displayItems = useMemo(() => {
+    let list = keywordItems;
+
+    // Filter by category
+    if (categoryFilter && categoryFilter !== 'All') {
+      list = list.filter((it) => String(it.category) === categoryFilter);
+    }
+
+    // Filter by root text search (case-insensitive substring)
+    const q = rootFilter.trim().toLowerCase();
+    if (q) {
+      list = list.filter((it) => (it?.root || '').toString().toLowerCase().includes(q));
+    }
+
+    // Sort by category when requested
+    if (sortConfig?.key === 'category') {
+      const dir = sortConfig.direction === 'asc' ? 1 : -1;
+      list = [...list].sort((a, b) => {
+        const ca = (a?.category || '').toString();
+        const cb = (b?.category || '').toString();
+        return ca.localeCompare(cb) * dir;
+      });
+    } else if (sortConfig?.key === 'root') {
+      const dir = sortConfig.direction === 'asc' ? 1 : -1;
+      list = [...list].sort((a, b) => {
+        const ra = (a?.root || '').toString();
+        const rb = (b?.root || '').toString();
+        return ra.localeCompare(rb) * dir;
+      });
+    }
+    return list;
+  }, [keywordItems, categoryFilter, rootFilter, sortConfig]);
+
+  const toggleCategorySort = () => {
+    setSortConfig((prev) => {
+      if (!prev || prev.key !== 'category') return { key: 'category', direction: 'asc' };
+      return { key: 'category', direction: prev.direction === 'asc' ? 'desc' : 'asc' };
+    });
+  };
+
+  const toggleRootSort = () => {
+    setSortConfig((prev) => {
+      if (!prev || prev.key !== 'root') return { key: 'root', direction: 'asc' };
+      return { key: 'root', direction: prev.direction === 'asc' ? 'desc' : 'asc' };
+    });
+  };
 
   // Image gallery hooks must be unconditional (before any early return)
   const scrapedProductForImages = response?.ai_analysis_keywords?.scraped_product as any | undefined;
@@ -214,6 +289,7 @@ const TestResultsPage = () => {
   const { product_context, items, stats } = structured_data || {};
   const { analysis } = seo_analysis || {};
   const { current_seo, optimized_seo, comparison, analysis_metadata } = analysis || {};
+
 
   
 
@@ -437,7 +513,40 @@ const TestResultsPage = () => {
       {activeTab === 'keywords' && (
         <div className="space-y-6">
           <Section title="Keyword Analysis">
-            <div className="overflow-x-auto">
+            <div className="flex flex-col gap-3">
+              {/* Filters */}
+              <div className="flex flex-wrap items-center gap-3">
+                <div className="flex items-center gap-2">
+                  <Label className="text-sm text-gray-600">Category</Label>
+                  <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                    <SelectTrigger className="w-[200px]">
+                      <SelectValue placeholder="All" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="All">All</SelectItem>
+                      {uniqueCategories.map((cat) => (
+                        <SelectItem key={cat} value={cat}>{cat}</SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+                {categoryFilter !== 'All' && (
+                  <Button variant="ghost" size="sm" onClick={() => setCategoryFilter('All')}>Clear</Button>
+                )}
+                <div className="flex items-center gap-2">
+                  <Label className="text-sm text-gray-600">Root</Label>
+                  <Input
+                    value={rootFilter}
+                    onChange={(e) => setRootFilter(e.target.value)}
+                    placeholder="Search root (e.g., slices)"
+                    className="w-[220px]"
+                  />
+                </div>
+                {!!rootFilter && (
+                  <Button variant="ghost" size="sm" onClick={() => setRootFilter('')}>Clear</Button>
+                )}
+              </div>
+              <div className="overflow-x-auto">
               <table className="w-full table-auto">
                 <thead>
                   <tr className="border-b bg-gray-50">
@@ -446,12 +555,30 @@ const TestResultsPage = () => {
                     <th className="text-center py-3 px-4 font-medium">Intent</th>
                     <th className="text-center py-3 px-4 font-medium">Relevancy</th>
                     <th className="text-right py-3 px-4 font-medium">Title Density</th>
-                    <th className="text-center py-3 px-4 font-medium">Category</th>
-                    <th className="text-center py-3 px-4 font-medium">Root</th>
+                      <th className="text-center py-3 px-4 font-medium">
+                        <button type="button" className="inline-flex items-center gap-1 hover:underline" onClick={toggleCategorySort} title="Sort by category">
+                          Category
+                          {sortConfig?.key === 'category' ? (
+                            sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                          ) : (
+                            <ArrowUpDown className="w-3 h-3" />
+                          )}
+                        </button>
+                      </th>
+                      <th className="text-center py-3 px-4 font-medium">
+                        <button type="button" className="inline-flex items-center gap-1 hover:underline" onClick={toggleRootSort} title="Sort by root">
+                          Root
+                          {sortConfig?.key === 'root' ? (
+                            sortConfig.direction === 'asc' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />
+                          ) : (
+                            <ArrowUpDown className="w-3 h-3" />
+                          )}
+                        </button>
+                      </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {(items || []).map((kw: { 
+                  {displayItems.map((kw: { 
                     phrase: string; 
                     search_volume: number; 
                     intent_score: number; 
@@ -486,8 +613,14 @@ const TestResultsPage = () => {
                       </td>
                     </tr>
                   ))}
+                  {displayItems.length === 0 && (
+                    <tr>
+                      <td colSpan={7} className="text-center py-6 text-sm text-gray-500">No keywords match the selected filters.</td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
+              </div>
             </div>
           </Section>
         </div>
