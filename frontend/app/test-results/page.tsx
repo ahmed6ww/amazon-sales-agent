@@ -551,7 +551,7 @@ const TestResultsPage = () => {
                 <thead>
                   <tr className="border-b bg-gray-50">
                     <th className="text-left py-3 px-4 font-medium">Keyword</th>
-                    <th className="text-right py-3 px-4 font-medium">Volume</th>
+                    <th className="text-right py-3 px-4 font-medium">Search Volume</th>
                     <th className="text-center py-3 px-4 font-medium">Intent</th>
                     <th className="text-center py-3 px-4 font-medium">Relevancy</th>
                     <th className="text-right py-3 px-4 font-medium">Title Density</th>
@@ -696,9 +696,8 @@ const TestResultsPage = () => {
                               </div>
                             </div>
                             <div className="flex gap-4 mt-3 text-xs text-gray-600">
-                              <span>Keywords: {c?.keyword_count ?? 0}</span>
-                              <span>Characters: {c?.character_count ?? 0}</span>
-                              <span>Density: {c?.keyword_density ?? 0}%</span>
+                              <span title="Count of distinct keywords detected in this bullet">Keywords: {c?.keyword_count ?? 0}</span>
+                              <span title="Total number of characters in the bullet text (not just keywords)">Characters: {c?.character_count ?? 0}</span>
                             </div>
                           </div>
 
@@ -727,7 +726,7 @@ const TestResultsPage = () => {
                               </div>
                             </div>
                             <div className="flex gap-4 mt-3 text-xs text-gray-600">
-                              <span>Characters: {o?.character_count ?? 0}</span>
+                              <span title="Total number of characters in the bullet text (not just keywords)">Characters: {o?.character_count ?? 0}</span>
                             </div>
                           </div>
                         </div>
