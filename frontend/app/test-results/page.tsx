@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -94,6 +94,42 @@ const TestResultsPage = () => {
   // Data state
   const [response, setResponse] = useState<any | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
+
+  // Image gallery hooks must be unconditional (before any early return)
+  const scrapedProductForImages = response?.ai_analysis_keywords?.scraped_product as any | undefined;
+  const galleryImages: string[] = useMemo(() => {
+    const raw = toArr(scrapedProductForImages?.images?.all_images).filter(Boolean) as string[];
+    const normalize = (u: string): string => {
+      try {
+        // Strip query/fragment
+        const base = u.split('?')[0].split('#')[0].trim();
+        // Only upgrade Amazon media hosts
+        if (!/\b(m\.media-amazon\.com|images-na\.ssl-images-amazon\.com)\b/i.test(base)) return base;
+        // Turn thumbnails like .../I/51GKBz7WVYL._AC_US40_.jpg -> .../I/51GKBz7WVYL.jpg
+        const m = base.match(/^(https?:\/\/[^\s]+\/images\/[^/]+\/[^.]+)(\._[^.]+_)?\.(jpg|jpeg|png|webp)$/i);
+        if (m) return `${m[1]}.${m[3]}`;
+        return base.replace(/\._[^./]+_(\.[a-zA-Z0-9]+)$/i, '$1');
+      } catch {
+        return u;
+      }
+    };
+    const isProduct = (u: string): boolean => {
+      const lower = u.toLowerCase();
+      if (!/(\.jpg|\.jpeg|\.png|\.webp)$/i.test(lower)) return false;
+      const noisy = ['\/images\/g\/', '/g/', 'play-icon', 'overlay', 'sprite', 'icon_', '360_icon', 'placeholder'];
+      if (noisy.some((n) => lower.includes(n.replace(/\\/g, '')))) return false;
+      return true;
+    };
+    const upgraded = raw.map(normalize).filter(isProduct);
+    // Dedupe
+    const seen = new Set<string>();
+    return upgraded.filter((u) => (seen.has(u) ? false : (seen.add(u), true)));
+  }, [scrapedProductForImages]);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  useEffect(() => {
+    const initial = (scrapedProductForImages?.images?.main_image as string) || galleryImages[0] || null;
+    setSelectedImage(initial);
+  }, [scrapedProductForImages, galleryImages]);
 
   const handleRun = async () => {
     setLoading(true);
@@ -206,6 +242,8 @@ const TestResultsPage = () => {
   const { product_context, items, stats } = structured_data || {};
   const { analysis } = seo_analysis || {};
   const { current_seo, optimized_seo, comparison, analysis_metadata } = analysis || {};
+
+  
 
   return (
         <div className="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
@@ -356,31 +394,50 @@ const TestResultsPage = () => {
           </Section>
 
           <Section title="Product Images">
-            {scraped_product?.images ? (
+            {galleryImages.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h4 className="font-medium mb-2">Main Image</h4>
-                  <Image 
-                    src={scraped_product.images.main_image} 
-                    alt="Main Product Image" 
-                    width={300} 
-                    height={300} 
-                    className="rounded-lg object-cover border" 
-                  />
+                  <h4 className="font-medium mb-2">Preview</h4>
+                  {selectedImage ? (
+                    <Image
+                      src={selectedImage}
+                      alt="Selected Product Image"
+                      width={500}
+                      height={500}
+                      className="rounded-lg object-cover border max-h-[500px] w-auto"
+                      priority
+                    />
+                  ) : (
+                    <div className="w-full h-[300px] bg-gray-100 border rounded-lg grid place-items-center text-gray-500">
+                      No preview available
+                    </div>
+                  )}
                 </div>
                 <div>
-                  <h4 className="font-medium mb-2">All Images ({scraped_product.images.image_count} total)</h4>
-                  <div className="grid grid-cols-3 gap-2">
-                    {toArr(scraped_product.images.all_images).slice(0, 6).map((img: string, i: number) => (
-                      <Image 
-                        key={i} 
-                        src={img} 
-                        alt={`Product image ${i + 1}`} 
-                        width={96} 
-                        height={96} 
-                        className="w-24 h-24 object-cover rounded border" 
-                      />
-                    ))}
+                  <h4 className="font-medium mb-2">Gallery ({scraped_product?.images?.image_count ?? galleryImages.length} total)</h4>
+                  <div className="grid grid-cols-4 sm:grid-cols-5 gap-2 max-h-[520px] overflow-auto pr-1">
+                    {galleryImages.map((img: string, i: number) => {
+                      const isActive = img === selectedImage;
+                      return (
+                        <button
+                          key={i}
+                          type="button"
+                          onClick={() => setSelectedImage(img)}
+                          className={`relative aspect-square rounded overflow-hidden border focus:outline-none ${
+                            isActive ? 'ring-2 ring-blue-500 border-blue-500' : 'hover:ring-2 hover:ring-gray-300'
+                          }`}
+                          title={`Image ${i + 1}`}
+                        >
+                          <Image
+                            src={img}
+                            alt={`Product image ${i + 1}`}
+                            width={120}
+                            height={120}
+                            className="w-full h-full object-cover"
+                          />
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
               </div>
