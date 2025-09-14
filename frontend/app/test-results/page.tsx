@@ -269,6 +269,22 @@ const TestResultsPage = () => {
     }
   };
 
+  const { asin, marketplace: resMarketplace, ai_analysis_keywords, seo_analysis, source } = response || {};
+  const { structured_data, final_output, scraped_product } = ai_analysis_keywords || {};
+  const { product_context, items, stats } = structured_data || {};
+  const { analysis } = seo_analysis || {};
+  const { current_seo, optimized_seo, comparison, analysis_metadata } = analysis || {};
+
+  const optimizedTitleKeywords = useMemo(() => {
+    const keywords = toArr(optimized_seo?.optimized_title?.keywords_included);
+    return new Set(keywords.map(kw => String(kw).toLowerCase()));
+  }, [optimized_seo]);
+
+  const currentTitleKeywords = useMemo(() => {
+    const keywords = toArr(current_seo?.title_analysis?.keywords_found);
+    return new Set(keywords.map(kw => String(kw).toLowerCase()));
+  }, [current_seo]);
+
   // Only work with real API data - no mock fallback
   if (!response) {
     return (
@@ -313,12 +329,6 @@ const TestResultsPage = () => {
       </div>
     );
   }
-
-  const { asin, marketplace: resMarketplace, ai_analysis_keywords, seo_analysis, source } = response;
-  const { structured_data, final_output, scraped_product } = ai_analysis_keywords || {};
-  const { product_context, items, stats } = structured_data || {};
-  const { analysis } = seo_analysis || {};
-  const { current_seo, optimized_seo, comparison, analysis_metadata } = analysis || {};
 
 
   
@@ -672,7 +682,17 @@ const TestResultsPage = () => {
                     const total = sumVolumes(list);
                     return (
                       <>
-                        Keywords found: {list.map(labelWithVolume).join(', ')}
+                        Keywords found: 
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {list.map((kw: string, j: number) => (
+                            <Badge 
+                              key={j} 
+                              className="text-xs bg-gray-200 text-gray-800 border border-gray-300"
+                            >
+                              {labelWithVolume(kw)}
+                            </Badge>
+                          ))}
+                        </div>
                         <span className="ml-2 text-gray-500">• Total: {fmtNumber(total)}</span>
                       </>
                     );
@@ -695,7 +715,17 @@ const TestResultsPage = () => {
                     const total = sumVolumes(list);
                     return (
                       <>
-                        Keywords included: {list.map(labelWithVolume).join(', ')}
+                        Keywords included: 
+                        <div className="flex flex-wrap gap-1 mt-1">
+                          {list.map((kw: string, j: number) => (
+                            <Badge 
+                              key={j} 
+                              className="text-xs bg-green-600 text-white border border-green-700"
+                            >
+                              {labelWithVolume(kw)}
+                            </Badge>
+                          ))}
+                        </div>
                         <span className="ml-2 text-gray-500">• Total: {fmtNumber(total)}</span>
                       </>
                     );
@@ -716,6 +746,8 @@ const TestResultsPage = () => {
                 const optimizedAllKeywords = opt.flatMap((b: any) => toArr(b?.keywords_included));
                 const currentBulletsTotal = sumVolumes(currentAllKeywords);
                 const optimizedBulletsTotal = sumVolumes(optimizedAllKeywords);
+                // Track suggestions we have already shown across current bullets to avoid repeats
+                const seenCurrentSuggestions = new Set<string>();
                 return (
                   <div className="space-y-6">
                     {Array.from({ length: maxLen }).map((_, i) => {
@@ -733,19 +765,47 @@ const TestResultsPage = () => {
                               <div>
                                 <strong>Keywords Found:</strong>
                                 <div className="flex flex-wrap gap-1 mt-1">
-                                  {toArr(c?.keywords_found).map((kw: string, j: number) => (
-                                    <Badge key={j} variant="outline" className="text-xs">{labelWithVolume(kw)}</Badge>
-                                  ))}
+                                  {toArr(c?.keywords_found).map((kw: string, j: number) => {
+                                    const isDuplicate = currentTitleKeywords.has(String(kw).toLowerCase());
+                                    return (
+                                      <Badge 
+                                        key={j} 
+                                        className={`text-xs ${isDuplicate ? 'bg-yellow-400 text-yellow-900' : 'bg-gray-200 text-gray-800'}`}
+                                        title={isDuplicate ? 'This keyword is also in the current title' : ''}
+                                      >
+                                        {labelWithVolume(kw)}
+                                      </Badge>
+                                    );
+                                  })}
                                 </div>
                               </div>
-                              <div>
-                                <strong>Opportunities:</strong>
-                                <div className="flex flex-wrap gap-1 mt-1">
-                                  {toArr(c?.opportunities).map((op: string, j: number) => (
-                                    <Badge key={j} variant="secondary" className="text-xs">{op}</Badge>
-                                  ))}
-                                </div>
-                              </div>
+                              {(() => {
+                                const normalize = (s: string) => String(s || '').trim().toLowerCase();
+                                const bulletKeywordSet = new Set(toArr(c?.keywords_found).map((k: string) => normalize(k)));
+                                const localSeen = new Set<string>();
+                                const filtered: string[] = [];
+                                for (const raw of toArr(c?.opportunities)) {
+                                  const norm = normalize(raw as string);
+                                  if (!norm) continue;
+                                  // Skip duplicates within this bullet, across earlier bullets, or already present in title/bullet keywords
+                                  if (localSeen.has(norm) || seenCurrentSuggestions.has(norm)) continue;
+                                  if (bulletKeywordSet.has(norm) || currentTitleKeywords.has(norm)) continue;
+                                  localSeen.add(norm);
+                                  seenCurrentSuggestions.add(norm);
+                                  filtered.push(String(raw));
+                                }
+                                if (filtered.length === 0) return null;
+                                return (
+                                  <div>
+                                    <strong>Opportunities:</strong>
+                                    <div className="flex flex-wrap gap-1 mt-1">
+                                      {filtered.map((op: string, j: number) => (
+                                        <Badge key={j} variant="secondary" className="text-xs">{op}</Badge>
+                                      ))}
+                                    </div>
+                                  </div>
+                                );
+                              })()}
                             </div>
                             <div className="flex gap-4 mt-3 text-xs text-gray-600">
                               <span title="Count of distinct keywords detected in this bullet">Keywords: {c?.keyword_count ?? 0}</span>
@@ -763,9 +823,18 @@ const TestResultsPage = () => {
                               <div>
                                 <strong>Keywords Included:</strong>
                                 <div className="flex flex-wrap gap-1 mt-1">
-                                  {toArr(o?.keywords_included).map((kw: string, j: number) => (
-                                    <Badge key={j} className="bg-green-600 text-white text-xs">{labelWithVolume(kw)}</Badge>
-                                  ))}
+                                  {toArr(o?.keywords_included).map((kw: string, j: number) => {
+                                    const isDuplicate = optimizedTitleKeywords.has(String(kw).toLowerCase());
+                                    return (
+                                      <Badge 
+                                        key={j} 
+                                        className={`text-xs ${isDuplicate ? 'bg-yellow-400 text-yellow-900' : 'bg-green-600 text-white'}`}
+                                        title={isDuplicate ? 'This keyword is also in the optimized title' : ''}
+                                      >
+                                        {labelWithVolume(kw)}
+                                      </Badge>
+                                    );
+                                  })}
                                 </div>
                               </div>
                               <div>
