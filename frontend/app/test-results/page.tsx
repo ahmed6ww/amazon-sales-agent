@@ -132,6 +132,36 @@ const TestResultsPage = () => {
     }>;
   }, [response]);
 
+  // Map keyword phrase -> search volume (case-insensitive)
+  const volumeByPhrase = useMemo(() => {
+    const map = new Map<string, number>();
+    keywordItems.forEach((it) => {
+      const key = (it?.phrase || '').toString().trim().toLowerCase();
+      if (key) map.set(key, Number(it?.search_volume) || 0);
+    });
+    return map;
+  }, [keywordItems]);
+
+  // Display helper to append volume in parentheses
+  const labelWithVolume = (kw: unknown): string => {
+    const phrase = (kw ?? '').toString();
+    const vol = volumeByPhrase.get(phrase.trim().toLowerCase());
+    return `${phrase} (${fmtNumber(vol)})`;
+  };
+
+  // Helper to sum volumes for a list of keywords (deduped, case-insensitive)
+  const sumVolumes = (keywords: unknown[]): number => {
+    const seen = new Set<string>();
+    let total = 0;
+    for (const kw of keywords) {
+      const key = (kw ?? '').toString().trim().toLowerCase();
+      if (!key || seen.has(key)) continue;
+      seen.add(key);
+      total += volumeByPhrase.get(key) || 0;
+    }
+    return total;
+  };
+
   // Unique categories for filter dropdown
   const uniqueCategories = useMemo(() => {
     const set = new Set<string>();
@@ -637,7 +667,16 @@ const TestResultsPage = () => {
                   {current_seo?.title_analysis?.content || '—'}
                 </div>
                 <div className="text-sm text-gray-600">
-                  Keywords found: {toArr(current_seo?.title_analysis?.keywords_found).join(', ')}
+                  {(() => {
+                    const list = toArr(current_seo?.title_analysis?.keywords_found);
+                    const total = sumVolumes(list);
+                    return (
+                      <>
+                        Keywords found: {list.map(labelWithVolume).join(', ')}
+                        <span className="ml-2 text-gray-500">• Total: {fmtNumber(total)}</span>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
             </Section>
@@ -651,7 +690,16 @@ const TestResultsPage = () => {
                   {optimized_seo?.optimized_title?.content || '—'}
                 </div>
                 <div className="text-sm text-gray-600">
-                  Keywords included: {toArr(optimized_seo?.optimized_title?.keywords_included).join(', ')}
+                  {(() => {
+                    const list = toArr(optimized_seo?.optimized_title?.keywords_included);
+                    const total = sumVolumes(list);
+                    return (
+                      <>
+                        Keywords included: {list.map(labelWithVolume).join(', ')}
+                        <span className="ml-2 text-gray-500">• Total: {fmtNumber(total)}</span>
+                      </>
+                    );
+                  })()}
                 </div>
               </div>
             </Section>
@@ -664,6 +712,10 @@ const TestResultsPage = () => {
                 const curr = toArr(current_seo?.bullets_analysis);
                 const opt = toArr(optimized_seo?.optimized_bullets);
                 const maxLen = Math.max(curr.length, opt.length);
+                const currentAllKeywords = curr.flatMap((b: any) => toArr(b?.keywords_found));
+                const optimizedAllKeywords = opt.flatMap((b: any) => toArr(b?.keywords_included));
+                const currentBulletsTotal = sumVolumes(currentAllKeywords);
+                const optimizedBulletsTotal = sumVolumes(optimizedAllKeywords);
                 return (
                   <div className="space-y-6">
                     {Array.from({ length: maxLen }).map((_, i) => {
@@ -682,7 +734,7 @@ const TestResultsPage = () => {
                                 <strong>Keywords Found:</strong>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {toArr(c?.keywords_found).map((kw: string, j: number) => (
-                                    <Badge key={j} variant="outline" className="text-xs">{kw}</Badge>
+                                    <Badge key={j} variant="outline" className="text-xs">{labelWithVolume(kw)}</Badge>
                                   ))}
                                 </div>
                               </div>
@@ -712,7 +764,7 @@ const TestResultsPage = () => {
                                 <strong>Keywords Included:</strong>
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {toArr(o?.keywords_included).map((kw: string, j: number) => (
-                                    <Badge key={j} className="bg-green-600 text-white text-xs">{kw}</Badge>
+                                    <Badge key={j} className="bg-green-600 text-white text-xs">{labelWithVolume(kw)}</Badge>
                                   ))}
                                 </div>
                               </div>
@@ -732,6 +784,14 @@ const TestResultsPage = () => {
                         </div>
                       );
                     })}
+                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3 pt-2 text-sm text-gray-700">
+                      <span className="px-2 py-1 bg-gray-100 rounded">
+                        Current bullets total search volume: <strong>{fmtNumber(currentBulletsTotal)}</strong>
+                      </span>
+                      <span className="px-2 py-1 bg-green-100 text-green-800 rounded">
+                        Optimized bullets total search volume: <strong>{fmtNumber(optimizedBulletsTotal)}</strong>
+                      </span>
+                    </div>
                   </div>
                 );
               })()}
