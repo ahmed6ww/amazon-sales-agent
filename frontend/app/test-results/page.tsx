@@ -8,8 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronDown, ChevronRight, Star, TrendingUp, Package, Search, Target } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { config, getFullApiUrl } from '@/lib/config';
-import apiClient, { api as apiHelpers } from '@/lib/api';
+import mockResult from '@/lib/mocks/complete_pipeline_result.json';
 
 const Section = ({ title, children, isExpandable = false }: { 
   title: string; 
@@ -81,6 +80,26 @@ const fmtNumber = (value: unknown, fallback = '0'): string => {
 // Normalize potential value to an array for safe mapping/joining
 const toArr = (v: unknown): any[] => (Array.isArray(v) ? v : v == null ? [] : [v]);
 
+// Build marketplace-specific Amazon search URL (spaces as '+')
+const getAmazonDomainForMarketplace = (mkt?: string): string => {
+  const m = (mkt || '').toString().trim().toLowerCase();
+  if (!m) return 'amazon.com';
+  if (['us', 'usa', 'united states', 'united states of america'].includes(m)) return 'amazon.com';
+  if (['uk', 'gb', 'great britain', 'united kingdom', 'england'].includes(m)) return 'amazon.co.uk';
+  if (['ca', 'canada'].includes(m)) return 'amazon.ca';
+  if (['de', 'germany', 'deutschland'].includes(m)) return 'amazon.de';
+  if (['ae', 'uae', 'united arab emirates', 'dubai'].includes(m)) return 'amazon.ae';
+  // If user already supplied a domain like amazon.fr
+  if (/^amazon\.[a-z.]+$/.test(m)) return m;
+  return 'amazon.com';
+};
+
+const buildAmazonSearchUrl = (phrase: string, mkt?: string): string => {
+  const domain = getAmazonDomainForMarketplace(mkt);
+  const q = encodeURIComponent(phrase).replace(/%20/g, '+');
+  return `https://${domain}/s?k=${q}`;
+};
+
 const TestResultsPage = () => {
   // Form state
   const [asinOrUrl, setAsinOrUrl] = useState('');
@@ -135,56 +154,9 @@ const TestResultsPage = () => {
     setLoading(true);
     setError(null);
     try {
-      // Prefer library client; fallback to direct fetch if bundler cache causes export mismatch
-      const callViaClient = async () => {
-        if ((apiHelpers as any)?.testResearchKeywords) {
-          return (apiHelpers as any).testResearchKeywords({
-            asin_or_url: asinOrUrl,
-            marketplace,
-            main_keyword: mainKeyword || undefined,
-            revenue_csv: revenueCsv,
-            design_csv: designCsv,
-          });
-        }
-        if ((apiClient as any)?.testResearchKeywords) {
-          return (apiClient as any).testResearchKeywords({
-            asin_or_url: asinOrUrl,
-            marketplace,
-            main_keyword: mainKeyword || undefined,
-            revenue_csv: revenueCsv,
-            design_csv: designCsv,
-          });
-        }
-        return { success: false, error: 'Client method not available' } as any;
-      };
-
-      let result = await callViaClient();
-      if (!result?.success) {
-        // Fallback direct fetch
-        const formData = new FormData();
-        formData.append('asin_or_url', asinOrUrl);
-        formData.append('marketplace', marketplace || 'US');
-        if (mainKeyword) formData.append('main_keyword', mainKeyword);
-        if (revenueCsv) formData.append('revenue_csv', revenueCsv);
-        if (designCsv) formData.append('design_csv', designCsv);
-
-        const resp = await fetch(getFullApiUrl(config.api.endpoints.testResearchKeywords), {
-          method: 'POST',
-          body: formData,
-        });
-        if (!resp.ok) {
-          const e = await resp.json().catch(() => ({}));
-          throw new Error(e?.message || `HTTP ${resp.status}`);
-        }
-        const data = await resp.json();
-        result = { success: true, data } as any;
-      }
-
-      if (!result.success) {
-        throw new Error(result.error || 'Request failed');
-      }
-
-      setResponse(result.data as any);
+      // Simulate network latency for testing and return local mock JSON
+      await new Promise((r) => setTimeout(r, 5000));
+      setResponse(mockResult as any);
     } catch (e: any) {
       setError(e?.message || 'Unknown error');
     } finally {
@@ -223,7 +195,7 @@ const TestResultsPage = () => {
               <Button onClick={handleRun} disabled={loading}>
                 {loading ? 'Running…' : 'Run test-research-keywords'}
               </Button>
-              <span className="text-xs text-gray-500">Endpoint: {getFullApiUrl(config.api.endpoints.testResearchKeywords)}</span>
+              <span className="text-xs text-gray-500">Mock: lib/mocks/complete_pipeline_result.json (5s delay)</span>
             </div>
             {error && (
               <div className="text-sm text-red-600">{error}</div>
@@ -292,7 +264,7 @@ const TestResultsPage = () => {
             <Button onClick={handleRun} disabled={loading}>
               {loading ? 'Running…' : 'Run test-research-keywords'}
             </Button>
-            <span className="text-xs text-gray-500">Endpoint: {getFullApiUrl(config.api.endpoints.testResearchKeywords)}</span>
+            <span className="text-xs text-gray-500">Mock: lib/mocks/complete_pipeline_result.json (5s delay)</span>
           </div>
           {error && (
             <div className="text-sm text-red-600">{error}</div>
@@ -489,7 +461,17 @@ const TestResultsPage = () => {
                     root: string; 
                   }, i: number) => (
                     <tr key={i} className="border-b hover:bg-gray-50">
-                      <td className="py-3 px-4 font-medium text-sm">{kw.phrase}</td>
+                      <td className="py-3 px-4 font-medium text-sm">
+                        <a
+                          href={buildAmazonSearchUrl(kw.phrase, (resMarketplace || marketplace))}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-blue-600 hover:underline"
+                          title={`Search on Amazon for ${kw.phrase}`}
+                        >
+                          {kw.phrase}
+                        </a>
+                      </td>
                       <td className="text-right py-3 px-4 text-sm">{fmtNumber(kw.search_volume)}</td>
                       <td className="text-center py-3 px-4">{getIntentBadge(kw.intent_score ?? 0)}</td>
                       <td className="text-center py-3 px-4">
@@ -838,7 +820,7 @@ const TestResultsPage = () => {
           {response && (
             <div className="mt-4">
               <details>
-                <summary className="cursor-pointer text-xs text-gray-500">Show raw API response</summary>
+                <summary className="cursor-pointer text-xs text-gray-500">Show raw mock response</summary>
                 <pre className="text-[11px] bg-gray-50 p-2 rounded border overflow-auto max-h-64">{JSON.stringify(response, null, 2)}</pre>
               </details>
             </div>
