@@ -30,8 +30,11 @@ class Settings:
         )
 
         # API Configuration
-        self.API_TIMEOUT: int = int(os.getenv("API_TIMEOUT", "300"))  # 5 minutes default
+        self.API_TIMEOUT: int = int(os.getenv("API_TIMEOUT", "600"))  # 10 minutes for large keyword processing
         self.MAX_RETRIES: int = int(os.getenv("MAX_RETRIES", "3"))
+        
+        # Keyword Processing Optimization
+        self.KEYWORD_BATCH_SIZE: int = int(os.getenv("KEYWORD_BATCH_SIZE", "50"))  # Process in smaller batches
 
         # Logging Configuration
         self.LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
@@ -40,7 +43,8 @@ class Settings:
         # Research/CSV Configuration
         # Global top-N limit applied consistently across CSV sampling and code-based relevancy logic
         # Used by research agent prompt context and internal computations
-        self.RESEARCH_CSV_TOP_N = int(os.getenv("RESEARCH_CSV_TOP_N", "20"))
+        # Increased default to handle larger keyword lists with root-based optimization
+        self.RESEARCH_CSV_TOP_N = int(os.getenv("RESEARCH_CSV_TOP_N", "200"))
 
     def reload(self) -> None:
         """Reload settings from environment (and .env if changed)."""

@@ -4,6 +4,11 @@ from .agent import research_agent
 from .helper_methods import scrape_amazon_listing, select_top_rows, collect_asins, scrape_competitors
 from app.core.config import settings
 from app.local_agents.scoring.subagents.intent_agent import USER_PROMPT_TEMPLATE
+from app.services.keyword_processing.root_extraction import group_keywords_by_roots, get_priority_roots_for_search
+from app.services.keyword_processing.batch_processor import (
+    optimize_keyword_processing_for_agents,
+    create_agent_optimized_base_relevancy_scores
+)
 
 
 class ResearchRunner:
@@ -43,7 +48,7 @@ class ResearchRunner:
         scraped_data = scraped_result.get("data", {})
 
         # 1.1) Select top competitors and scrape their price/ratings
-        top_n = getattr(settings, "RESEARCH_CSV_TOP_N", 10)
+        top_n = getattr(settings, "RESEARCH_CSV_TOP_N", 200)  # Increased to analyze more keywords
         # Heuristic floors (configurable via settings if present)
         literal_floor = int(getattr(settings, "RESEARCH_LITERAL_FLOOR", 8))  # when literal match is strong
         competitor_floor = int(getattr(settings, "RESEARCH_COMPETITOR_FLOOR", 7))  # when many relevant designs
@@ -182,9 +187,50 @@ class ResearchRunner:
 
         rev_asins_list = _extract_asins_from_rows(revenue_csv or [])
         des_asins_list = _extract_asins_from_rows(design_csv or [])
+        
+        # Extract all keywords from both CSV files for optimized processing
+        revenue_keywords = []
+        for row in (revenue_csv or []):
+            kw = row.get('Keyword Phrase', '')
+            if kw and isinstance(kw, str):
+                revenue_keywords.append(kw.strip())
+        
+        design_keywords = []
+        for row in (design_csv or []):
+            kw = row.get('Keyword Phrase', '')
+            if kw and isinstance(kw, str):
+                design_keywords.append(kw.strip())
+        
+        # Use optimized batch processing to handle large datasets efficiently
+        batch_size = getattr(settings, "KEYWORD_BATCH_SIZE", 50)
+        keyword_root_analysis = optimize_keyword_processing_for_agents(
+            revenue_keywords=revenue_keywords,
+            design_keywords=design_keywords,
+            batch_size=batch_size
+        )
+        
+        # Extract results for compatibility
+        priority_roots = keyword_root_analysis.get('priority_roots', [])
+        unique_keywords = revenue_keywords + design_keywords
+        unique_keywords = list(dict.fromkeys([kw for kw in unique_keywords if kw.strip()]))
+        
+        # Create optimized base relevancy scores (limited set to prevent timeouts)
+        optimized_base_relevancy = create_agent_optimized_base_relevancy_scores(
+            unique_keywords, 
+            max_keywords_for_agent=100  # Limit to prevent AI timeouts
+        )
+        
+        # Combine traditional relevancy scores with optimized scores
         base_relevancy = _compute_relevancy_scores(revenue_csv or [], rev_asins_list)
         for k, v in _compute_relevancy_scores(design_csv or [], des_asins_list).items():
             base_relevancy[k] = max(base_relevancy.get(k, 0.0), v)
+        
+        # Use optimized scores for agent processing (prevents timeouts)
+        agent_base_relevancy = optimized_base_relevancy
+        
+        # Keep full analysis for reporting, but use optimized set for agents
+        full_base_relevancy = base_relevancy.copy()
+        base_relevancy = agent_base_relevancy  # This goes to the agents
 
         # Compute adjusted relevancy per rules:
         # 1) Literal meaning first. If literal score is high (>=0.6), keep base score.
@@ -310,8 +356,18 @@ class ResearchRunner:
                     "revenue": revenue_competitors,
                     "design": design_competitors,
                 },
-                "base_relevancy_scores": base_relevancy,
+                "base_relevancy_scores": base_relevancy,  # Optimized set for agents
+                "full_base_relevancy_scores": full_base_relevancy,  # Complete analysis
                 "adjusted_relevancy_scores": adjusted_relevancy,
+                "keyword_root_analysis": keyword_root_analysis,
+                "priority_roots": priority_roots,
+                "total_unique_keywords": len(unique_keywords),
+                "agent_optimization": {
+                    "timeout_prevention": True,
+                    "agent_keywords_count": len(base_relevancy),
+                    "full_keywords_count": len(unique_keywords),
+                    "optimization_ratio": f"{len(base_relevancy)}/{len(unique_keywords)}"
+                },
             }
         except Exception as e:
             return {
@@ -327,8 +383,18 @@ class ResearchRunner:
                     "revenue": revenue_competitors,
                     "design": design_competitors,
                 },
-                "base_relevancy_scores": base_relevancy,
+                "base_relevancy_scores": base_relevancy,  # Optimized set for agents
+                "full_base_relevancy_scores": full_base_relevancy,  # Complete analysis  
                 "adjusted_relevancy_scores": adjusted_relevancy,
+                "keyword_root_analysis": keyword_root_analysis,
+                "priority_roots": priority_roots,
+                "total_unique_keywords": len(unique_keywords),
+                "agent_optimization": {
+                    "timeout_prevention": True,
+                    "agent_keywords_count": len(base_relevancy),
+                    "full_keywords_count": len(unique_keywords),
+                    "optimization_ratio": f"{len(base_relevancy)}/{len(unique_keywords)}"
+                },
             }
 
     # --- internal: helpers ---

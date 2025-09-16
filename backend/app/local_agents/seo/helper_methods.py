@@ -201,16 +201,33 @@ def prepare_keyword_data_for_analysis(keyword_items: List[Dict[str, Any]]) -> Di
         if search_volume > 500:
             high_volume_keywords.append(item)
             
-        # Aggregate root volumes
+        # Task 13: Use AI agent for root relevance filtering (with programmatic fallback)
         if root:
-            root_volumes[root] += search_volume
+            root_volumes[root] += search_volume  # Collect all volumes first
+    
+    # Apply AI-powered Task 13 filtering after collecting all data
+    try:
+        from app.local_agents.scoring.subagents.root_relevance_agent import apply_root_filtering_ai
+        # Use AI to filter root volumes based on keyword relevance
+        filtered_root_volumes = apply_root_filtering_ai(keyword_items)
+        logger.info(f"[Task13-AI] Applied AI root filtering: {len(root_volumes)} -> {len(filtered_root_volumes)} roots")
+    except Exception as e:
+        logger.warning(f"[Task13-AI] AI filtering failed, using programmatic fallback: {e}")
+        # Fallback to programmatic filtering
+        filtered_root_volumes = {}
+        for item in keyword_items:
+            root = item.get("root", "")
+            category = item.get("category", "")
+            search_volume = item.get("search_volume", 0)
+            if root and category in ["Relevant", "Design-Specific"]:
+                filtered_root_volumes[root] = filtered_root_volumes.get(root, 0) + search_volume
     
     return {
         "relevant_keywords": relevant_keywords,
         "design_keywords": design_keywords,
         "high_intent_keywords": high_intent_keywords,
         "high_volume_keywords": high_volume_keywords,
-        "root_volumes": dict(root_volumes),
+        "root_volumes": filtered_root_volumes,  # Use AI-filtered volumes
         "total_keywords": len(keyword_items)
     }
 

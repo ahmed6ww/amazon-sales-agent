@@ -8,11 +8,11 @@ logger = logging.getLogger(__name__)
 BROAD_VOLUME_INSTRUCTIONS = """
 Role: Compute broad search volume per root word.
 - Identify a simple root token for each keyword (e.g., main noun excluding stopwords/brands).
-- Sum search_volume across all keywords sharing that root.
+- Sum search_volume across all keywords sharing that root, but ONLY for relevant or design-specific keywords.
 Return: the original list with `root` field per item and a separate map `broad_search_volume_by_root`.
 No sorting; no external data.
 
-Input: List of keyword items with phrase, search_volume, etc.
+Input: List of keyword items with phrase, search_volume, category, etc.
 Output: Same list with added `root` field + separate `broad_search_volume_by_root` summary.
 
 Instructions:
@@ -20,13 +20,14 @@ Instructions:
 2. Exclude common stopwords, brand names, and modifiers 
 3. Normalize to lowercase
 4. Group keywords by their root and sum search volumes
-5. Return original items with `root` field added and summary map
+5. IMPORTANT: Only include search volumes for keywords with category "Relevant" or "Design-Specific" in the broad_search_volume_by_root calculation
+6. Return original items with `root` field added and summary map
 
 Example:
-Input: [{"phrase": "wireless mouse", "search_volume": 1000}, {"phrase": "gaming mouse", "search_volume": 800}]
+Input: [{"phrase": "wireless mouse", "search_volume": 1000, "category": "Relevant"}, {"phrase": "gaming mouse", "search_volume": 800, "category": "Irrelevant"}]
 Output: 
-- Items: [{"phrase": "wireless mouse", "search_volume": 1000, "root": "mouse"}, {"phrase": "gaming mouse", "search_volume": 800, "root": "mouse"}]
-- Summary: {"mouse": 1800}
+- Items: [{"phrase": "wireless mouse", "search_volume": 1000, "root": "mouse", "category": "Relevant"}, {"phrase": "gaming mouse", "search_volume": 800, "root": "mouse", "category": "Irrelevant"}]
+- Summary: {"mouse": 1000}  // Only the relevant keyword's volume is included
 """
 
 USER_PROMPT_TEMPLATE = """
@@ -39,6 +40,7 @@ For each keyword:
 1. Identify the main root word (primary noun, excluding modifiers/brands)
 2. Normalize to lowercase
 3. Sum search volumes by root
+4. CRITICAL: For the broad_search_volume_by_root summary, only include search volumes from keywords with category "Relevant" or "Design-Specific". Exclude "Irrelevant" keywords from the volume totals.
 
 Return ONLY a JSON object with this exact structure:
 {{
@@ -47,12 +49,15 @@ Return ONLY a JSON object with this exact structure:
     ...
   ],
   "broad_search_volume_by_root": {{
-    "root1": total_volume,
-    "root2": total_volume
+    "root1": total_volume_from_relevant_keywords_only,
+    "root2": total_volume_from_relevant_keywords_only
   }}
 }}
 
-Ensure all original fields are preserved in each item. Only add the "root" field."""
+Ensure all original fields are preserved in each item. Only add the "root" field.
+IMPORTANT: The broad_search_volume_by_root should only sum volumes from "Relevant" and "Design-Specific" categories.
+
+NOTE: This instruction is now enhanced with AI-powered Task 13 filtering for better relevance assessment."""
 
 broad_volume_agent = Agent(
     name="BroadVolumeSubagent",
@@ -123,12 +128,9 @@ def extract_root_word(phrase: str, brand_tokens: Optional[Set[str]] = None) -> s
     # For now, take the longest meaningful token as a simple heuristic
     root = max(filtered_tokens, key=len)
     
-    # Handle plural forms (basic stemming)
-    if root.endswith('s') and len(root) > 3:
-        potential_singular = root[:-1]
-        # Simple check: if removing 's' gives a reasonable word
-        if len(potential_singular) >= 3:
-            root = potential_singular
+    # Handle plural forms (Task 11: Use enhanced normalization)
+    from app.services.keyword_processing.root_extraction import normalize_word
+    root = normalize_word(root)
     
     return root
 
