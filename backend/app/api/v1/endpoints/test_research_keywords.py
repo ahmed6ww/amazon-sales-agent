@@ -10,10 +10,8 @@ from typing import Dict, Any, Optional
 import logging
 
 from app.core.config import settings
-from app.services.keyword_processing.root_extraction import (
-    group_keywords_by_roots, 
-    get_priority_roots_for_search
-)
+from app.services.keyword_processing.root_extraction import get_priority_roots_for_search
+from app.local_agents.keyword.subagents.root_extraction_agent import apply_root_extraction_ai
 
 
 logger = logging.getLogger(__name__)

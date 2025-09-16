@@ -34,7 +34,7 @@ class Settings:
         self.MAX_RETRIES: int = int(os.getenv("MAX_RETRIES", "3"))
         
         # Keyword Processing Optimization
-        self.KEYWORD_BATCH_SIZE: int = int(os.getenv("KEYWORD_BATCH_SIZE", "50"))  # Process in smaller batches
+        self.KEYWORD_BATCH_SIZE: int = int(os.getenv("KEYWORD_BATCH_SIZE", "3"))  # Process in smaller batches for testing
 
         # Logging Configuration
         self.LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")

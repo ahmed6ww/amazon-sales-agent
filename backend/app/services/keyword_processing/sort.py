@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, List, Tuple
 
-from .intent import classify_intent, extract_brand_tokens
+from .intent import extract_brand_tokens
+from app.local_agents.keyword.subagents.intent_classification_agent import classify_intent_ai
 
 
 INTENT_ORDER: List[int] = [3, 2, 1, 0]
@@ -27,7 +28,18 @@ def sort_keywords_by_intent(
         phrase = (it or {}).get("phrase")
         category = (it or {}).get("category")
         score = (it or {}).get("base_relevancy_score")
-        res = classify_intent(phrase=phrase or "", scraped_product=scraped_product or {}, category=category, brand_tokens=brand_tokens)
+        # Use AI-powered intent classification (replacing programmatic version)
+        intent_analysis = classify_intent_ai(
+            phrase=phrase or "", 
+            scraped_product=scraped_product or {}, 
+            category=category, 
+            brand_tokens=list(brand_tokens) if brand_tokens else []
+        )
+        res = type('IntentResult', (), {
+            'intent_score': intent_analysis.get('intent_score', 0),
+            'matched_aspects': intent_analysis.get('matched_aspects', []),
+            'debug': intent_analysis.get('reasoning', {})
+        })()
         enriched.append({
             **it,
             "intent_score": res.intent_score,

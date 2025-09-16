@@ -7,9 +7,50 @@ to avoid timeout issues while maintaining the benefits of root-based optimizatio
 
 from typing import Dict, List, Any, Optional
 import logging
-from .root_extraction import group_keywords_by_roots, get_priority_roots_for_search
+from .root_extraction import get_priority_roots_for_search
+from app.local_agents.keyword.subagents.root_extraction_agent import extract_roots_ai
 
 logger = logging.getLogger(__name__)
+
+
+def _convert_ai_analysis_to_legacy_format(ai_analysis: Dict[str, Any], original_keywords: List[str]) -> Dict[str, Any]:
+    """
+    Convert AI root analysis to the legacy format expected by the research runner.
+    This maintains compatibility while using AI intelligence.
+    """
+    keyword_roots_data = ai_analysis.get("keyword_roots", {})
+    analysis_summary = ai_analysis.get("analysis_summary", {})
+    category_breakdown = ai_analysis.get("category_breakdown", {})
+    
+    # Extract meaningful roots (AI determines meaningfulness)
+    meaningful_roots = [
+        root_name for root_name, root_data in keyword_roots_data.items()
+        if root_data.get("is_meaningful", False)
+    ]
+    
+    # Get priority roots from the most meaningful ones (limited for efficiency)
+    priority_roots = meaningful_roots[:30]  # Top 30 most meaningful roots
+    
+    # Create legacy-compatible structure
+    return {
+        'total_keywords': len(original_keywords),
+        'total_roots': len(keyword_roots_data),
+        'meaningful_roots': len(meaningful_roots),
+        'priority_roots': priority_roots,
+        'roots': keyword_roots_data,  # Full AI analysis
+        'summary': {
+            'top_product_ingredients': category_breakdown.get('product_ingredient', []),
+            'top_processing_methods': category_breakdown.get('attribute_processing', []),
+            'top_brands': category_breakdown.get('brand', [])
+        },
+        'ai_enhanced': True,
+        'efficiency_metrics': {
+            'original_keywords': len(original_keywords),
+            'meaningful_roots': len(meaningful_roots),
+            'reduction_percentage': analysis_summary.get('efficiency_gain', '0% reduction'),
+            'ai_powered': True
+        }
+    }
 
 
 def process_keywords_in_batches(
@@ -44,19 +85,71 @@ def process_keywords_in_batches(
     
     logger.info(f"Processing {total_unique} unique keywords in batches of {batch_size}")
     
-    # If dataset is small enough, process directly
+    # If dataset is small enough, process directly with AI
     if total_unique <= batch_size:
-        logger.info("Dataset small enough for direct processing")
-        return group_keywords_by_roots(unique_keywords)
+        logger.info("Dataset small enough for direct AI processing")
+        ai_analysis = extract_roots_ai(unique_keywords)
+        return _convert_ai_analysis_to_legacy_format(ai_analysis, unique_keywords)
     
-    # For large datasets, use root-based optimization approach
-    logger.info("Large dataset detected - using optimized root-based processing")
+    # For large datasets, use AI-powered batch processing approach
+    logger.info("Large dataset detected - using AI-powered batch processing")
     
-    # Step 1: Use the full root analysis to get comprehensive results
-    root_analysis = group_keywords_by_roots(unique_keywords)
+    # Step 1: Process in batches with AI analysis
+    all_roots = {}
+    batch_results = []
     
-    # Step 2: Get priority roots for efficient processing
-    priority_roots = get_priority_roots_for_search(root_analysis, max_roots=max_priority_roots)
+    for i in range(0, total_unique, batch_size):
+        batch = unique_keywords[i:i + batch_size]
+        logger.info(f"Processing batch {i//batch_size + 1}/{(total_unique + batch_size - 1)//batch_size}")
+        
+        try:
+            batch_analysis = extract_roots_ai(batch)
+            batch_roots = batch_analysis.get("keyword_roots", {})
+            
+            # Merge roots from this batch
+            for root_name, root_data in batch_roots.items():
+                if root_name in all_roots:
+                    # Combine variants and update frequency
+                    all_roots[root_name]["variants"].extend(root_data.get("variants", []))
+                    all_roots[root_name]["frequency"] += root_data.get("frequency", 0)
+                    all_roots[root_name]["variants"] = list(set(all_roots[root_name]["variants"]))  # Remove duplicates
+                else:
+                    all_roots[root_name] = root_data.copy()
+            
+            batch_results.append(batch_analysis)
+            
+        except Exception as e:
+            logger.warning(f"Batch processing failed for batch {i//batch_size + 1}: {e}")
+            continue
+    
+    # Consolidate results
+    root_analysis = {
+        'total_keywords': total_unique,
+        'total_roots': len(all_roots),
+        'meaningful_roots': len([r for r in all_roots.values() if r.get("is_meaningful", False)]),
+        'roots': all_roots,
+        'ai_enhanced': True,
+        'batch_processed': True
+    }
+    
+    # Step 2: Get priority roots for efficient processing (AI-enhanced)
+    meaningful_roots = [
+        root_name for root_name, root_data in all_roots.items()
+        if root_data.get("is_meaningful", False)
+    ]
+    
+    # Sort by consolidation potential and semantic strength
+    sorted_roots = sorted(
+        meaningful_roots,
+        key=lambda r: (
+            all_roots[r].get("consolidation_potential", 0),
+            all_roots[r].get("semantic_strength", 0),
+            all_roots[r].get("frequency", 0)
+        ),
+        reverse=True
+    )
+    
+    priority_roots = sorted_roots[:max_priority_roots]
     
     # Step 3: Calculate efficiency metrics
     original_count = total_unique
