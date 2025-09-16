@@ -4,7 +4,7 @@ from .agent import research_agent
 from .helper_methods import scrape_amazon_listing, select_top_rows, collect_asins, scrape_competitors
 from app.core.config import settings
 from app.local_agents.scoring.subagents.intent_agent import USER_PROMPT_TEMPLATE
-from app.services.keyword_processing.root_extraction import group_keywords_by_roots, get_priority_roots_for_search
+from app.services.keyword_processing.root_extraction import get_priority_roots_for_search
 from app.services.keyword_processing.batch_processor import (
     optimize_keyword_processing_for_agents,
     create_agent_optimized_base_relevancy_scores

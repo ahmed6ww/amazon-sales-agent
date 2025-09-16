@@ -250,7 +250,7 @@ def optimize_keyword_processing_for_agents(
 
 def create_agent_optimized_base_relevancy_scores(
     keywords: List[str],
-    max_keywords_for_agent: int = 100
+    max_keywords_for_agent: int = 20
 ) -> Dict[str, int]:
     """
     Create optimized base relevancy scores for agent processing.
@@ -271,17 +271,31 @@ def create_agent_optimized_base_relevancy_scores(
     if len(keywords) > max_keywords_for_agent:
         logger.info(f"Optimizing {len(keywords)} keywords for agent processing (limit: {max_keywords_for_agent})")
         
-        # Get root analysis to identify most important keywords
-        root_analysis = group_keywords_by_roots(keywords)
-        priority_roots = get_priority_roots_for_search(root_analysis, max_roots=20)
+        # Get AI-powered root analysis to identify most important keywords
+        ai_root_analysis = extract_roots_ai(keywords)
+        keyword_roots_data = ai_root_analysis.get("keyword_roots", {})
+        
+        # Get priority roots from AI analysis (sorted by consolidation potential)
+        meaningful_roots = [
+            root_name for root_name, root_data in keyword_roots_data.items()
+            if root_data.get("is_meaningful", False)
+        ]
+        
+        priority_roots = sorted(
+            meaningful_roots,
+            key=lambda r: (
+                keyword_roots_data[r].get("consolidation_potential", 0),
+                keyword_roots_data[r].get("semantic_strength", 0)
+            ),
+            reverse=True
+        )[:20]  # Top 20 priority roots
         
         # Select keywords that contain priority roots
         selected_keywords = []
-        roots_data = root_analysis.get('roots', {})
         
         for root in priority_roots:
-            if root in roots_data:
-                variants = roots_data[root].get('variants', [])
+            if root in keyword_roots_data:
+                variants = keyword_roots_data[root].get('variants', [])
                 selected_keywords.extend(variants[:5])  # Max 5 variants per root
         
         # Remove duplicates and limit to max
