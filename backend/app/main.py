@@ -4,9 +4,9 @@ from app.api.v1.endpoints import upload, test_research_keywords
 from app.core.config import settings
 
 app = FastAPI(
-    title="Amazon Sales Agent API",
-    description="API for managing and interacting with sales agents.",
-    version="1"
+    title="Amazon Sales Intelligence API",
+    description="AI-powered Amazon product analysis and optimization platform. Complete pipeline for research, keyword analysis, scoring, and SEO optimization.",
+    version="1.0"
 )
 
 # Add CORS middleware for frontend testing
@@ -20,7 +20,7 @@ app.add_middleware(
 
 # Include the production endpoints only
 app.include_router(upload.router, prefix="/api/v1", tags=["upload"])
-app.include_router(test_research_keywords.router, prefix="/api/v1", tags=["production"])
+app.include_router(test_research_keywords.router, prefix="/api/v1", tags=["amazon-sales-intelligence"])
 
 @app.get("/")
 def read_root():

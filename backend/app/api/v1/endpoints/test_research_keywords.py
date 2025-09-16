@@ -20,8 +20,8 @@ logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
-@router.post("/test-research-keywords")
-async def start_test_research_and_keywords(
+@router.post("/amazon-sales-intelligence")
+async def amazon_sales_intelligence_pipeline(
     asin_or_url: str = Form(...),
     marketplace: str = Form("US"),
     main_keyword: Optional[str] = Form(None),
@@ -29,24 +29,29 @@ async def start_test_research_and_keywords(
     design_csv: Optional[UploadFile] = File(None),
 ):
     """
-    Test endpoint for complete 4-agent pipeline with keyword root optimization: 
-    Research → Keyword → Scoring → SEO + Root Analysis
-
-    - Accepts optional Helium10 CSV uploads (revenue/design) for Research context
-    - Scrapes listing and runs ResearchRunner with structured outputs
-    - Performs keyword root extraction and analysis for optimization
-    - Extracts scraped_product and base_relevancy_scores for Keyword Agent
-    - Runs KeywordRunner for categorization
-    - Runs ScoringRunner for enrichment with intent scores and metrics
-    - Runs SEORunner for optimization analysis and suggestions
-    - Provides keyword root optimization metrics and recommendations
+    Amazon Sales Intelligence Pipeline - Complete AI-powered product analysis and optimization.
     
-    New Features:
-    - Processes ALL keywords from CSV files (no 37-keyword limitation)
-    - Groups keywords by meaningful roots (e.g., "strawberry", "dried", "frozen")
-    - Reduces keyword complexity by 70-95% while maintaining coverage
+    🚀 **PRODUCTION ENDPOINT** - Runs complete 4-agent pipeline with advanced AI optimization:
+    Research → Keyword Analysis → Scoring → SEO Optimization + Root Analysis
+
+    ✨ **Features:**
+    - 🔍 **Product Research**: Scrapes and analyzes Amazon listings with structured data extraction
+    - 🎯 **Keyword Intelligence**: AI-powered categorization with intent scoring and relevancy analysis  
+    - 📊 **Performance Scoring**: Advanced metrics with competition analysis and opportunity identification
+    - 🏆 **SEO Optimization**: Amazon Guidelines compliant titles and bullets with 80-character mobile optimization
+    - 🧠 **AI Enhancements**: Tasks 7, 11, 13 - Singular/plural handling, root filtering, compliance checking
+    
+    📈 **Efficiency Gains:**
+    - Processes unlimited keywords from CSV files (no limitations)
+    - Reduces keyword complexity by 70-95% through intelligent root grouping
     - Optimizes Amazon search strategies with priority root terms
-    - Provides efficiency metrics and memory optimization insights
+    - Provides comprehensive analytics and actionable recommendations
+    
+    🎯 **Perfect for:**
+    - Amazon sellers optimizing product listings
+    - Market research and competitive analysis  
+    - SEO optimization with compliance assurance
+    - Data-driven decision making for product strategy
     """
 
     try:
@@ -338,7 +343,7 @@ async def start_test_research_and_keywords(
                     ] if efficiency_metrics else []
                 }
             },
-            "source": "test_research_keywords_seo_endpoint_with_root_optimization",
+            "source": "amazon_sales_intelligence_pipeline",
         }
 
         return response
