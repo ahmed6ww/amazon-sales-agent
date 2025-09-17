@@ -250,10 +250,35 @@ async def amazon_sales_intelligence_pipeline(
                     asyncio.set_event_loop(loop_inner)
                     try:
                         seo_runner = SEORunner()
+                        
+                        # Extract competitor data for Task 6 analysis
+                        competitor_data = []
+                        if research_ai_result and research_ai_result.get("success"):
+                            competitor_scrapes = research_ai_result.get("competitor_scrapes", {})
+                            revenue_competitors = competitor_scrapes.get("revenue", [])
+                            design_competitors = competitor_scrapes.get("design", [])
+                            
+                            # Combine both revenue and design competitors for comprehensive analysis
+                            all_competitors = revenue_competitors + design_competitors
+                            
+                            # Deduplicate by ASIN and keep only successful scrapes with titles
+                            seen_asins = set()
+                            for comp in all_competitors:
+                                asin = comp.get("asin", "")
+                                if (asin not in seen_asins and 
+                                    comp.get("success") and 
+                                    comp.get("title") and 
+                                    len(competitor_data) < 20):  # Limit to top 20 for analysis
+                                    competitor_data.append(comp)
+                                    seen_asins.add(asin)
+                            
+                            logger.info(f"🏆 Task 6: Prepared {len(competitor_data)} competitors for title analysis")
+                        
                         return seo_runner.run_seo_analysis(
                             scraped_product=scraped_product,
                             keyword_items=keyword_items,
-                            broad_search_volume_by_root=None  # Could be enhanced with root volume data
+                            broad_search_volume_by_root=None,  # Could be enhanced with root volume data
+                            competitor_data=competitor_data  # Task 6: Pass competitor data for benefit analysis
                         )
                     finally:
                         loop_inner.close()

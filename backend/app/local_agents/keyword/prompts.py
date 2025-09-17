@@ -13,7 +13,7 @@ KEYWORD_AGENT_INSTRUCTIONS = ("""
 
 ## Category Guide (use names exactly as written)
 - **Relevant**: Core keywords directly describing the product.
-- **Design-Specific**: Specific feature, use-case, or style variants.
+- **Design-Specific**: Keywords that separate one product variation from another (e.g., "slices" vs "pieces" vs "whole"). NOT general descriptive terms like "bulk" or "organic" that don't create distinct product variations.
 - **Irrelevant**: Different product or not applicable.
 - **Branded**: Contains a brand name (competitor or own).
 - **Spanish**: Non-English (e.g., Spanish).

@@ -40,7 +40,8 @@ class SEORunner:
         self,
         scraped_product: Dict[str, Any],
         keyword_items: List[Dict[str, Any]],
-        broad_search_volume_by_root: Optional[Dict[str, int]] = None
+        broad_search_volume_by_root: Optional[Dict[str, int]] = None,
+        competitor_data: Optional[List[Dict[str, Any]]] = None
     ) -> Dict[str, Any]:
         """
         Run complete SEO analysis and optimization.
@@ -49,6 +50,7 @@ class SEORunner:
             scraped_product: Product data from research agent
             keyword_items: Categorized and scored keywords from scoring agent
             broad_search_volume_by_root: Root volume data (optional)
+            competitor_data: Competitor ASIN data for Task 6 analysis (optional)
             
         Returns:
             Complete SEO analysis result
@@ -69,9 +71,27 @@ class SEORunner:
             current_seo = self._analyze_current_seo(current_content, keyword_data, broad_search_volume_by_root)
             logger.info(f"✅ Current SEO analysis complete: {current_seo.keyword_coverage.coverage_percentage}% coverage")
             
-            # Step 4: Generate AI-powered optimization suggestions (no fallback)
+            # Step 4: Task 6 - Analyze competitor titles for benefit-focused optimization
+            competitor_analysis = None
+            if competitor_data and len(competitor_data) > 0:
+                try:
+                    from .subagents.competitor_title_analysis_agent import apply_competitor_title_optimization_ai
+                    competitor_analysis = apply_competitor_title_optimization_ai(
+                        current_content=current_content,
+                        competitor_data=competitor_data,
+                        keyword_data=keyword_data,
+                        product_context=scraped_product
+                    )
+                    logger.info(f"🏆 Task 6: Analyzed {len(competitor_data)} competitors for benefit optimization")
+                except Exception as e:
+                    logger.warning(f"🟡 Task 6: Competitor analysis failed: {e}")
+                    competitor_analysis = None
+            else:
+                logger.info("📝 Task 6: No competitor data provided, skipping competitor analysis")
+            
+            # Step 5: Generate AI-powered optimization suggestions (enhanced with competitor insights)
             optimized_seo = self._generate_ai_optimizations(
-                current_content, keyword_data, scraped_product
+                current_content, keyword_data, scraped_product, competitor_analysis
             )
             logger.info("🤖 AI optimization suggestions generated")
             
@@ -201,7 +221,8 @@ class SEORunner:
         self,
         current_content: Dict[str, Any],
         keyword_data: Dict[str, Any], 
-        scraped_product: Dict[str, Any]
+        scraped_product: Dict[str, Any],
+        competitor_analysis: Optional[Dict[str, Any]] = None
     ) -> OptimizedSEO:
         """Generate AI-powered optimization suggestions with Task 7 Amazon compliance."""
         
@@ -216,11 +237,12 @@ class SEORunner:
                 "title": current_content.get("title", "")
             }
             
-            # Apply AI-powered Amazon compliance optimization (Task 7)
+            # Apply AI-powered Amazon compliance optimization (Task 7) with Task 6 competitor insights
             compliance_result = apply_amazon_compliance_ai(
                 current_content=current_content,
                 keyword_data=keyword_data,
-                product_context=product_context
+                product_context=product_context,
+                competitor_analysis=competitor_analysis
             )
             
             logger.info("[Task7-AI] Applied Amazon Guidelines Compliance with 80-character optimization")
@@ -249,7 +271,7 @@ class SEORunner:
             enhanced_prompt = SEO_ANALYSIS_PROMPT_TEMPLATE.format(**prompt_data)
             enhanced_prompt += """
 
-## CRITICAL TASK 7 REQUIREMENTS:
+## REQUIREMENTS:
 - Follow Amazon Title Guidelines (https://sellercentral.amazon.com/help/hub/reference/external/GYTR6SYGFA5E3EQC?locale=en-US)
 - Follow Amazon Bullet Point Guidelines (https://sellercentral.amazon.com/help/hub/reference/external/GX5L8BF8GLMML6CX?locale=en-US)
 - OPTIMIZE FIRST 80 CHARACTERS: Must include main keyword root + design-specific keyword root + key benefit
@@ -263,7 +285,7 @@ class SEORunner:
                 return self._parse_ai_output_to_optimized_seo(ai_output, keyword_data)
 
             except Exception as e:
-                logger.error(f"Both Task 7 and fallback AI optimization failed: {e}")
+                logger.error(f"Both Task and fallback AI optimization failed: {e}")
                 raise
     
     def _convert_compliance_result_to_optimized_seo(
@@ -271,7 +293,7 @@ class SEORunner:
         compliance_result: Dict[str, Any], 
         keyword_data: Dict[str, Any]
     ) -> OptimizedSEO:
-        """Convert Task 7 compliance result to OptimizedSEO format."""
+        """Convert compliance result to OptimizedSEO format."""
         from .schemas import OptimizedContent
         
         # Extract optimized title

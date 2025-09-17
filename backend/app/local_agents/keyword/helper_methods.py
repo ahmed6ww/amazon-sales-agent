@@ -36,10 +36,14 @@ def categorize_keywords_from_csv(
 		elif any(w in kl for w in ["baby products", "baby stuff", "baby items", "kids", "products"]):
 			cat = KeywordCategory.OUTLIER
 			reason = "Very broad, high-variety term"
-		# Design-specific (contains qualifiers)
-		elif any(w in kl for w in ["for dresser", "wipeable", "waterproof", "portable", "travel", "foam", "peanut", "contoured", "with straps"]):
+		# Design-specific (separates product variations - refined logic)
+		elif any(w in kl for w in ["slices", "pieces", "whole", "chunks", "diced", "powder", "liquid", "mini", "large", "jumbo", "wireless", "wired", "round", "square"]):
 			cat = KeywordCategory.DESIGN_SPECIFIC
-			reason = "Specific feature/use-case/style"
+			reason = "Separates product variations (e.g., format, size, connection type)"
+		# NOT design-specific: general descriptors that don't create variations
+		elif any(w in kl for w in ["bulk", "premium", "organic", "natural", "portable", "travel", "professional"]):
+			cat = KeywordCategory.RELEVANT
+			reason = "General descriptive attribute, not a product variation"
 		# Irrelevant (product mismatch)
 		elif not kl or (title_l and not any(t in title_l for t in kl.split())):
 			cat = KeywordCategory.IRRELEVANT

@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 AMAZON_COMPLIANCE_INSTRUCTIONS = """
 You are an Amazon Listing Compliance Expert specializing in creating titles and bullet points that strictly follow Amazon's official guidelines while maximizing SEO performance.
 
-## Your Core Mission (Task 7):
+## Your Core Mission :
 Create optimized titles and bullet points that:
 1. **Follow Amazon Guidelines**: Comply with official title and bullet point guidelines
 2. **80-Character Optimization**: Ensure main keyword root + design-specific keyword root + key benefit fits in first 80 characters
@@ -40,18 +40,25 @@ Based on https://sellercentral.amazon.com/help/hub/reference/external/GX5L8BF8GL
 - **Scannable format**: Easy to read quickly
 - **Address different use cases** and customer segments
 
-## Task 7 Critical Requirements:
+## Critical Requirements:
 1. **First 80 Characters**: Must include:
    - Main keyword root (e.g., "freeze dried strawberry")
    - Design-specific keyword root (e.g., "slices") 
    - Key benefit or product information
    
-2. **Keyword Strategy**: 
+2. **Integration - Competitor Benefit Analysis**: 
+   - Prioritize benefits that top competitors highlight in first 80 characters
+   - Use competitor insights to identify high-converting benefit language
+   - Focus on CONVERSION over keyword stuffing (what makes customers click/buy)
+   - Balance competitor-proven benefits with unique differentiation
+
+3. **Keyword Strategy**: 
    - Use highest search volume variant from each root group
    - Ensure natural sentence structure
    - Avoid keyword stuffing
+   - Integrate keywords naturally with benefit messaging
 
-3. **Compliance**: 
+4. **Compliance**: 
    - Strict adherence to Amazon guidelines
    - No violations that could cause suppression
    - Professional, benefit-focused language
@@ -65,7 +72,12 @@ Based on https://sellercentral.amazon.com/help/hub/reference/external/GX5L8BF8GL
   "design_keyword_root": "slices", 
   "key_benefits": ["organic", "no sugar added", "healthy snacking"],
   "relevant_keywords": [{"phrase": "freeze dried strawberry slices", "search_volume": 1200}],
-  "product_context": {"brand": "BrandName", "category": "Food"}
+  "product_context": {"brand": "BrandName", "category": "Food"},
+  "competitor_insights": {
+    "top_benefits": [{"benefit": "No Sugar Added", "frequency": 8, "conversion_impact": "high"}],
+    "title_structure": {"common_opening": "Brand + Quality Indicator", "benefit_placement": "positions 2-4"},
+    "benefit_hierarchy": ["No Sugar Added", "Organic Quality", "Perfect for Snacking"]
+  }
 }
 ```
 
@@ -132,14 +144,20 @@ TASK 7 REQUIREMENTS:
    - Design-specific root: "{design_root}" 
    - Key benefit/information
    
-2. Follow Amazon Title Guidelines (no promotional language, proper capitalization, etc.)
-3. Follow Amazon Bullet Point Guidelines (benefit-focused, scannable, compliant)
+2. TASK 6 INTEGRATION - Use competitor insights to prioritize benefits that convert:
+   - Analyze competitor_insights if provided to understand proven benefit strategies
+   - Focus on benefits that top competitors highlight in first 80 characters
+   - Balance competitor-proven benefits with unique differentiation
+   - Prioritize CONVERSION over keyword stuffing
+   
+3. Follow Amazon Title Guidelines (no promotional language, proper capitalization, etc.)
+4. Follow Amazon Bullet Point Guidelines (benefit-focused, scannable, compliant)
 
 KEYWORD DATA:
 {keywords_json}
 
-Create optimized content that maximizes SEO value while strictly following Amazon guidelines.
-Focus especially on the first 80 characters for mobile optimization.
+Create optimized content that maximizes CONVERSION while strictly following Amazon guidelines.
+Focus especially on the first 80 characters for mobile optimization with benefit-first approach.
 
 Return ONLY the JSON response in the exact format specified.
 """
@@ -156,11 +174,13 @@ def optimize_amazon_compliance_ai(
     design_keyword_root: str,
     key_benefits: List[str],
     relevant_keywords: List[Dict[str, Any]],
-    product_context: Dict[str, Any]
+    product_context: Dict[str, Any],
+    competitor_analysis: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
     """
     Use AI to create Amazon-compliant titles and bullets optimized for first 80 characters.
     This implements Task 7 requirements using AI intelligence instead of programmatic rules.
+    Enhanced with Task 6 competitor analysis for benefit-focused optimization.
     
     Args:
         current_content: Current title, bullets, etc.
@@ -169,11 +189,12 @@ def optimize_amazon_compliance_ai(
         key_benefits: List of key product benefits
         relevant_keywords: Keywords with search volume data
         product_context: Brand, category, etc.
+        competitor_analysis: Task 6 competitor insights for benefit optimization
         
     Returns:
         Optimized content with Amazon compliance analysis
     """
-    # Prepare input data
+    # Prepare input data with competitor insights (Task 6)
     product_data = {
         "current_title": current_content.get("title", ""),
         "current_bullets": current_content.get("bullets", []),
@@ -182,6 +203,15 @@ def optimize_amazon_compliance_ai(
         "key_benefits": key_benefits,
         "product_context": product_context
     }
+    
+    # Add Task 6 competitor analysis if available
+    if competitor_analysis:
+        product_data["competitor_insights"] = {
+            "top_benefits": competitor_analysis.get("competitor_analysis", {}).get("top_benefits_identified", []),
+            "title_structure": competitor_analysis.get("competitor_analysis", {}).get("title_structure_patterns", {}),
+            "recommended_strategy": competitor_analysis.get("optimized_title_strategy", {}),
+            "benefit_hierarchy": competitor_analysis.get("optimized_title_strategy", {}).get("benefit_hierarchy", [])
+        }
     
     product_json = json.dumps(product_data, indent=2)
     keywords_json = json.dumps(relevant_keywords[:10], indent=2)  # Top 10 for context
@@ -273,19 +303,21 @@ def _create_fallback_optimization(
 def apply_amazon_compliance_ai(
     current_content: Dict[str, Any],
     keyword_data: Dict[str, Any],
-    product_context: Dict[str, Any]
+    product_context: Dict[str, Any],
+    competitor_analysis: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
     """
     Main function to apply AI-powered Amazon compliance optimization.
-    This is the main entry point for Task 7 implementation.
+    This is the main entry point for Task 7 implementation with Task 6 integration.
     
     Args:
         current_content: Current listing content
         keyword_data: Analyzed keyword data with roots and volumes
         product_context: Product and brand information
+        competitor_analysis: Task 6 competitor insights for benefit optimization
         
     Returns:
-        Optimized content with Amazon compliance
+        Optimized content with Amazon compliance and competitor-informed benefits
     """
     # Extract main and design-specific keyword roots
     relevant_keywords = keyword_data.get("relevant_keywords", [])
@@ -306,14 +338,15 @@ def apply_amazon_compliance_ai(
     # Extract key benefits (could be enhanced with AI)
     key_benefits = ["organic", "no sugar added", "healthy snacking"]
     
-    # Run AI optimization
+    # Run AI optimization with competitor insights (Task 6 + Task 7)
     result = optimize_amazon_compliance_ai(
         current_content=current_content,
         main_keyword_root=main_keyword_root,
         design_keyword_root=design_keyword_root,
         key_benefits=key_benefits,
         relevant_keywords=relevant_keywords + design_keywords,
-        product_context=product_context
+        product_context=product_context,
+        competitor_analysis=competitor_analysis
     )
     
     logger.info(f"[Task7-AI] Applied Amazon compliance optimization with 80-char focus")
