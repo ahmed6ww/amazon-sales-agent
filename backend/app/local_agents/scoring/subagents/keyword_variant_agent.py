@@ -126,17 +126,12 @@ def analyze_keyword_variants_ai(keywords: List[Dict[str, Any]]) -> Dict[str, Any
             from agents.runner import Runner as _Runner
         except ImportError:
             # Fallback for different SDK versions
-            from agents import run_sync as _Runner
+            from agents import Runner
         
         # Run AI agent
-        result = _Runner.run_sync(
+        result = Runner.run_sync(
             keyword_variant_agent,
-            prompt,
-            metadata={
-                "component": "KeywordVariantAgent",
-                "task": "Task_11_Variant_Analysis",
-                "keywords_count": len(keywords),
-            }
+            prompt
         )
         
         output = getattr(result, "final_output", None)

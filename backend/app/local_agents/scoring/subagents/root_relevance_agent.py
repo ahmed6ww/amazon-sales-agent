@@ -149,17 +149,12 @@ def analyze_root_relevance_ai(keywords: List[Dict[str, Any]]) -> Dict[str, Any]:
             from agents.runner import Runner as _Runner
         except ImportError:
             # Fallback for different SDK versions
-            from agents import run_sync as _Runner
+            from agents import Runner
         
         # Run AI agent
-        result = _Runner.run_sync(
+        result = Runner.run_sync(
             root_relevance_agent,
-            prompt,
-            metadata={
-                "component": "RootRelevanceAgent",
-                "task": "Task_13_Root_Filtering",
-                "keywords_count": len(keywords),
-            }
+            prompt
         )
         
         output = getattr(result, "final_output", None)

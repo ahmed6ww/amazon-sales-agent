@@ -5,8 +5,11 @@ Utility functions for SEO analysis and optimization.
 """
 
 import re
+import logging
 from typing import Dict, List, Any, Tuple, Set
 from collections import defaultdict
+
+logger = logging.getLogger(__name__)
 
 
 def extract_keywords_from_content(content: str, keywords_list: List[str]) -> Tuple[List[str], int]:

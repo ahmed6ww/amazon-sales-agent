@@ -1,0 +1,433 @@
+{
+  "success": true,
+  "asin": "http://amazon.com/dp/B0D5BL35MS",
+  "marketplace": "US",
+  "ai_analysis_keywords": {
+    "success": true,
+    "structured_data": {
+      "product_context": {
+        "title": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) Organic Freeze Dried Strawberries No Sugar Added, Dry Strawberry Gluten Free Fruit Snack for Baking, Smoothies, Cereals & Travel",
+        "brand": "Brewer Outdoor Solutions",
+        "form": "Freeze-dried strawberry slices; organic; no sugar added; gluten free",
+        "pack_size": "4 pack (1.2 oz each)",
+        "use_cases": [
+          "baking",
+          "smoothies",
+          "cereals",
+          "travel"
+        ]
+      },
+      "items": [
+        {
+          "phrase": "freeze dried strawberries",
+          "category": "Relevant",
+          "reason": "Exact core term for the product.",
+          "relevancy_score": 4,
+          "intent_score": 2,
+          "title_density": 4,
+          "search_volume": 470,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 548,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 15.9,
+            "competitor_performance_score": 10
+          },
+          "root": "strawberrie"
+        },
+        {
+          "phrase": "freeze dried strawberries bulk",
+          "category": "Design-Specific",
+          "reason": "Includes 'bulk', a specific pack/size feature of this product.",
+          "relevancy_score": 3,
+          "intent_score": 3,
+          "title_density": 0,
+          "search_volume": 909,
+          "cpr": 12,
+          "competition": {
+            "competing_products": 640,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 15.9,
+            "competitor_performance_score": 10
+          },
+          "root": "strawberrie"
+        },
+        {
+          "phrase": "organic freeze dried strawberries",
+          "category": "Design-Specific",
+          "reason": "Adds 'organic', a specific attribute of this item.",
+          "relevancy_score": 3,
+          "intent_score": 3,
+          "title_density": 1,
+          "search_volume": 422,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 404,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 16.9,
+            "competitor_performance_score": 8
+          },
+          "root": "strawberrie"
+        },
+        {
+          "phrase": "dried strawberries",
+          "category": "Relevant",
+          "reason": "Generic dried strawberries directly match the item.",
+          "relevancy_score": 5,
+          "intent_score": 2,
+          "title_density": 21,
+          "search_volume": 8603,
+          "cpr": 41,
+          "competition": {
+            "competing_products": 819,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 44.4,
+            "competitor_performance_score": 6
+          },
+          "root": "strawberrie"
+        },
+        {
+          "phrase": "strawberry chips",
+          "category": "Design-Specific",
+          "reason": "Describes a style variant (chips) of strawberry slices.",
+          "relevancy_score": 4,
+          "intent_score": 2,
+          "title_density": 1,
+          "search_volume": 371,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 205,
+            "ranking_competitors": 8,
+            "competitor_rank_avg": 18.1,
+            "competitor_performance_score": 8
+          },
+          "root": "strawberry"
+        }
+      ],
+      "stats": {
+        "Relevant": {
+          "count": 2,
+          "examples": []
+        },
+        "Design-Specific": {
+          "count": 3,
+          "examples": []
+        },
+        "Irrelevant": {
+          "count": 0,
+          "examples": []
+        },
+        "Branded": {
+          "count": 0,
+          "examples": []
+        },
+        "Spanish": {
+          "count": 0,
+          "examples": []
+        },
+        "Outlier": {
+          "count": 0,
+          "examples": []
+        }
+      }
+    },
+    "scraped_product": {
+      "title": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) Organic Freeze Dried Strawberries No Sugar Added, Dry Strawberry Gluten Free Fruit Snack for Baking, Smoothies, Cereals & Travel",
+      "elements": {
+        "feature-bullets": {
+          "present": true,
+          "bullets": [
+            "Delicious Flavor in Every Bite: Savor the naturally sweet, tangy crunch of freeze dried strawberry slices bursting with real fruit flavor.",
+            "Ideal Travel Companion: Lightweight, mess-free, and shelf-stable, our freeze dried strawberries bulk are perfect for hiking or camping.",
+            "From Farm to Your Table: Our organic dried strawberries, delivered sun-ripened, farm-fresh, are made from real strawberries.",
+            "Shelf Life: Our freeze-dried strawberries are at peak flavor for up to 24 months.",
+            "Bulk Packed for Convenience: Buy in bulk and enjoy premium quality freeze dried strawberries whenever you need them."
+          ]
+        },
+        "productOverview_feature_div": {
+          "present": true,
+          "kv": {
+            "Brand": "Brewer Outdoor Solutions",
+            "Item Weight": "4.8 Ounces",
+            "Size": "4 Pack"
+          }
+        }
+      }
+    }
+  },
+  "seo_analysis": {
+    "success": true,
+    "analysis": {
+      "current_seo": {
+        "title_analysis": {
+          "content": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) Organic Freeze Dried Strawberries No Sugar Added, Dry Strawberry Gluten Free Fruit Snack for Baking, Smoothies, Cereals & Travel",
+          "keywords_found": [
+            "freeze dried strawberries",
+            "dried strawberries",
+            "organic freeze dried strawberries"
+          ],
+          "keyword_count": 3,
+          "character_count": 199,
+          "keyword_density": 1.51,
+          "opportunities": [
+            "freeze dried strawberries bulk",
+            "strawberry chips"
+          ]
+        },
+        "bullets_analysis": [
+          {
+            "content": "Delicious Flavor in Every Bite: Savor the naturally sweet, tangy crunch of freeze dried strawberry slices bursting with real fruit flavor.",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 138,
+            "keyword_density": 0.0,
+            "opportunities": [
+              "freeze dried strawberries",
+              "dried strawberries",
+              "freeze dried strawberries bulk",
+              "organic freeze dried strawberries",
+              "strawberry chips"
+            ]
+          },
+          {
+            "content": "Ideal Travel Companion: Lightweight, mess-free, and shelf-stable, our freeze dried strawberries bulk are perfect for hiking or camping.",
+            "keywords_found": [
+              "freeze dried strawberries",
+              "dried strawberries",
+              "freeze dried strawberries bulk"
+            ],
+            "keyword_count": 3,
+            "character_count": 135,
+            "keyword_density": 2.22,
+            "opportunities": [
+              "organic freeze dried strawberries",
+              "strawberry chips"
+            ]
+          },
+          {
+            "content": "From Farm to Your Table: Our organic dried strawberries, delivered sun-ripened, farm-fresh, are made from real strawberries.",
+            "keywords_found": [
+              "dried strawberries"
+            ],
+            "keyword_count": 1,
+            "character_count": 124,
+            "keyword_density": 0.81,
+            "opportunities": [
+              "freeze dried strawberries",
+              "freeze dried strawberries bulk",
+              "organic freeze dried strawberries",
+              "strawberry chips"
+            ]
+          },
+          {
+            "content": "Shelf Life: Our freeze-dried strawberries are at peak flavor for up to 24 months.",
+            "keywords_found": [
+              "dried strawberries"
+            ],
+            "keyword_count": 1,
+            "character_count": 81,
+            "keyword_density": 1.23,
+            "opportunities": [
+              "freeze dried strawberries",
+              "freeze dried strawberries bulk",
+              "organic freeze dried strawberries",
+              "strawberry chips"
+            ]
+          },
+          {
+            "content": "Bulk Packed for Convenience: Buy in bulk and enjoy premium quality freeze dried strawberries whenever you need them.",
+            "keywords_found": [
+              "freeze dried strawberries",
+              "dried strawberries"
+            ],
+            "keyword_count": 2,
+            "character_count": 116,
+            "keyword_density": 1.72,
+            "opportunities": [
+              "freeze dried strawberries bulk",
+              "organic freeze dried strawberries",
+              "strawberry chips"
+            ]
+          }
+        ],
+        "backend_keywords": [],
+        "keyword_coverage": {
+          "total_keywords": 5,
+          "covered_keywords": 4,
+          "coverage_percentage": 80.0,
+          "missing_high_intent": [
+            "strawberry chips"
+          ],
+          "missing_high_volume": []
+        },
+        "root_coverage": {
+          "total_roots": 2,
+          "covered_roots": 2,
+          "coverage_percentage": 100.0,
+          "missing_roots": [],
+          "root_volumes": {
+            "strawberrie": 12000,
+            "strawberry": 8500
+          }
+        },
+        "total_character_usage": {
+          "title_chars": 199,
+          "bullets_total_chars": 594,
+          "bullets_avg_chars": 118,
+          "backend_chars": 0,
+          "total_chars": 793
+        }
+      },
+      "optimized_seo": {
+        "optimized_title": {
+          "content": "Freeze Dried Strawberries Bulk - Organic, No Sugar Added, Strawberry Slices, Pack of 4 (1.2 oz Each), Gluten Free Fruit Snack for Smoothies, Baking, Cereal",
+          "keywords_included": [],
+          "improvements": [
+            "Amazon Guidelines Compliant",
+            "80-char optimized: Freeze Dried Strawberries Bulk - Organic, No Sugar...",
+            "Main root included: True",
+            "Design root included: True"
+          ],
+          "character_count": 155
+        },
+        "optimized_bullets": [
+          {
+            "content": "Clean, Simple Ingredients: Made with organic freeze dried strawberry slices and no sugar added for a naturally sweet, healthy snacking option the whole family can enjoy.",
+            "keywords_included": [
+              "organic",
+              "freeze dried strawberry slices",
+              "no sugar added",
+              "healthy snacking"
+            ],
+            "improvements": [
+              "Benefit-focused: Clean, no-sugar-added ingredients",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 169
+          },
+          {
+            "content": "Crunchy Or Rehydrate: Enjoy crisp slices straight from the bag, or rehydrate for smoothies, baking, oatmeal, yogurt, and cereal for real strawberry flavor without added moisture or mess.",
+            "keywords_included": [
+              "freeze dried strawberries",
+              "smoothies",
+              "baking",
+              "cereal"
+            ],
+            "improvements": [
+              "Benefit-focused: Versatile use and texture",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 186
+          },
+          {
+            "content": "Bulk Value, Portable Packs: Four 1.2 oz pouches provide convenient, portion-ready dried strawberries for lunchboxes, travel, hiking, and office snacking - lightweight and shelf-stable.",
+            "keywords_included": [
+              "bulk",
+              "1.2 oz",
+              "dried strawberries",
+              "travel"
+            ],
+            "improvements": [
+              "Benefit-focused: Portable, portion-ready bulk value",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 184
+          },
+          {
+            "content": "Gluten Free Fruit Snack: Naturally gluten free with no sugar added, ideal for clean ingredient lists and special-diet pantries; a simple way to satisfy cravings with real fruit flavor.",
+            "keywords_included": [
+              "gluten free",
+              "no sugar added",
+              "fruit snack"
+            ],
+            "improvements": [
+              "Benefit-focused: Diet-friendly snack option",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 184
+          },
+          {
+            "content": "Long Shelf Life: Freeze-dried for freshness you can count on - stays at peak flavor up to 24 months. Store in a cool, dry place; after opening, keep sealed or transfer to an airtight container.",
+            "keywords_included": [
+              "freeze-dried",
+              "24 months",
+              "shelf life",
+              "airtight container"
+            ],
+            "improvements": [
+              "Benefit-focused: Extended storage and freshness",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 193
+          }
+        ],
+        "optimized_backend_keywords": [
+          "organic freeze dried strawberries",
+          "strawberry chips"
+        ],
+        "keyword_strategy": {
+          "amazon_compliance": "ENFORCED",
+          "first_80_optimization": "Included main root 'dried strawberries' (within 'freeze dried strawberries bulk'), design root 'freeze dried strawberries bulk', and key benefit 'organic, no sugar added' in the first 80 characters.",
+          "keyword_integration": "Used highest-volume variant 'dried strawberries' and design phrase 'freeze dried strawberries bulk' early; supported with related terms like 'strawberry slices', 'gluten free', and use-case keywords across bullets.",
+          "guideline_compliance": "STRICT"
+        },
+        "rationale": "Task 7 Amazon Guidelines Compliance Applied: Title in Title Case under 200 characters, no promotional or subjective claims, no restricted special characters; bullets are benefit-led, scannable, and within 256 characters.. First 80 characters optimized for mobile viewing with main and design-specific keyword roots. All content verified for Amazon policy compliance."
+      },
+      "comparison": {
+        "coverage_improvement": {
+          "total_keywords": 5,
+          "before_covered": 4,
+          "after_covered": 5,
+          "before_coverage_pct": 80.0,
+          "after_coverage_pct": 100.0,
+          "delta_pct_points": 20.0,
+          "new_keywords_added": [
+            "strawberry chips"
+          ]
+        },
+        "intent_improvement": {
+          "high_intent_total": 5,
+          "before_covered": 4,
+          "after_covered": 5,
+          "delta": 1
+        },
+        "volume_improvement": {
+          "estimated_volume_before": 10404,
+          "estimated_volume_after": 10775,
+          "delta_volume": 371
+        },
+        "character_efficiency": {
+          "title_limit": 200,
+          "title_before": 199,
+          "title_after": 155,
+          "title_utilization_before_pct": 99.5,
+          "title_utilization_after_pct": 77.5,
+          "backend_limit": 249,
+          "backend_before": 0,
+          "backend_after": 50
+        },
+        "summary_metrics": {
+          "overall_improvement_score": 2.5,
+          "priority_recommendations": 1
+        }
+      },
+      "product_context": {
+        "title": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) Organic Freeze Dried Strawberries No Sugar Added, Dry Strawberry Gluten Free Fruit Snack for Baking, Smoothies, Cereals & Travel",
+        "brand": "Brewer Outdoor Solutions",
+        "category": "Unknown"
+      },
+      "analysis_metadata": {
+        "total_keywords_analyzed": 5,
+        "relevant_keywords_count": 2,
+        "high_intent_keywords_count": 5,
+        "optimization_method": "ai"
+      }
+    },
+    "summary": {
+      "current_coverage": "80.0%",
+      "optimization_opportunities": 1,
+      "method": "ai"
+    }
+  },
+  "source": "complete_4_agent_pipeline"
+}
