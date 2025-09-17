@@ -237,6 +237,78 @@ class ApiClient {
   async scrapeProduct(asin: string, marketplace: string = 'US'): Promise<ApiResponse<unknown>> {
     return this.post('/api/v1/scraper', { asin, marketplace });
   }
+
+  /**
+   * Test Research Keywords endpoint - Complete pipeline analysis
+   */
+  async testResearchKeywords(request: {
+    asin_or_url: string;
+    marketplace?: string;
+    main_keyword?: string;
+    revenue_csv?: File;
+    design_csv?: File;
+  }): Promise<ApiResponse<unknown>> {
+    const formData = new FormData();
+    formData.append('asin_or_url', request.asin_or_url);
+    formData.append('marketplace', request.marketplace || 'US');
+    if (request.main_keyword) {
+      formData.append('main_keyword', request.main_keyword);
+    }
+    if (request.revenue_csv) {
+      formData.append('revenue_csv', request.revenue_csv);
+    }
+    if (request.design_csv) {
+      formData.append('design_csv', request.design_csv);
+    }
+
+    return this.longRunningUploadRequest('/api/v1/amazon-sales-intelligence', formData);
+  }
+
+  // Special method for long-running requests with extended timeout
+  private async longRunningUploadRequest<T>(
+    endpoint: string,
+    formData: FormData
+  ): Promise<ApiResponse<T>> {
+    const url = getFullApiUrl(endpoint);
+    
+    debugLog('Long-running Upload Request', { url });
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 4000000); // 5 minutes timeout
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        body: formData,
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.message || `HTTP ${response.status}: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      debugLog('Long-running Upload Response', { url, status: response.status, data });
+
+      return {
+        success: true,
+        data,
+      };
+    } catch (error) {
+      clearTimeout(timeoutId);
+      
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      debugLog('Long-running Upload Error', { url, error: errorMessage });
+
+      return {
+        success: false,
+        error: errorMessage,
+      };
+    }
+  }
 }
 
 // Export singleton instance
@@ -252,6 +324,13 @@ export const api = {
   testConnection: () => apiClient.testConnection(),
   uploadCSV: (file: File) => apiClient.uploadCSV(file),
   scrapeProduct: (asin: string, marketplace?: string) => apiClient.scrapeProduct(asin, marketplace),
+  testResearchKeywords: (request: {
+    asin_or_url: string;
+    marketplace?: string;
+    main_keyword?: string;
+    revenue_csv?: File;
+    design_csv?: File;
+  }) => apiClient.testResearchKeywords(request),
 };
 
 export default apiClient; 

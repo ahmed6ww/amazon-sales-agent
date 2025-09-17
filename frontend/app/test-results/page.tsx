@@ -10,6 +10,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import mockResult from '@/lib/mocks/complete_pipeline_result.json';
+import { api } from '@/lib/api';
 
 const Section = ({ title, children, isExpandable = false }: { 
   title: string; 
@@ -259,9 +260,24 @@ const TestResultsPage = () => {
     setLoading(true);
     setError(null);
     try {
-      // Simulate network latency for testing and return local mock JSON
-      await new Promise((r) => setTimeout(r, 5000));
-      setResponse(mockResult as any);
+      if (!asinOrUrl.trim()) {
+        throw new Error('ASIN or URL is required');
+      }
+
+      // Call the real API
+      const response = await api.testResearchKeywords({
+        asin_or_url: asinOrUrl,
+        marketplace: marketplace || 'US',
+        main_keyword: mainKeyword || undefined,
+        revenue_csv: revenueCsv || undefined,
+        design_csv: designCsv || undefined,
+      });
+
+      if (!response.success) {
+        throw new Error(response.error || 'API request failed');
+      }
+
+      setResponse(response.data as any);
     } catch (e: any) {
       setError(e?.message || 'Unknown error');
     } finally {
@@ -312,17 +328,22 @@ const TestResultsPage = () => {
                 <Input id="designCsv" type="file" accept=".csv" onChange={(e) => setDesignCsv(e.target.files?.[0] || null)} />
               </div>
             </div>
-            <div className="flex items-center gap-3 mb-2">
-              <Button onClick={handleRun} disabled={loading}>
-                {loading ? 'Running…' : 'Run test-research-keywords'}
-              </Button>
-              <span className="text-xs text-gray-500">Mock: lib/mocks/complete_pipeline_result.json (5s delay)</span>
+                      <div className="flex items-center gap-3 mb-2">
+            <Button onClick={handleRun} disabled={loading || !asinOrUrl.trim()}>
+              {loading ? 'Running Analysis…' : 'Run Amazon Sales Intelligence'}
+            </Button>
+            <span className="text-xs text-gray-500">Real API: /api/v1/amazon-sales-intelligence</span>
             </div>
             {error && (
               <div className="text-sm text-red-600">{error}</div>
             )}
             {loading && (
-              <div className="text-sm text-blue-600">Analysis in progress...</div>
+              <div className="text-sm text-blue-600">
+                <div className="flex items-center gap-2">
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                  Analysis in progress... (this may take 2-5 minutes)
+                </div>
+              </div>
             )}
           </CardContent>
         </Card>
@@ -377,10 +398,10 @@ const TestResultsPage = () => {
             </div>
           </div>
           <div className="flex items-center gap-3 mb-2">
-            <Button onClick={handleRun} disabled={loading}>
-              {loading ? 'Running…' : 'Run test-research-keywords'}
+            <Button onClick={handleRun} disabled={loading || !asinOrUrl.trim()}>
+              {loading ? 'Running Analysis…' : 'Run Amazon Sales Intelligence'}
             </Button>
-            <span className="text-xs text-gray-500">Mock: lib/mocks/complete_pipeline_result.json (5s delay)</span>
+            <span className="text-xs text-gray-500">Real API: /api/v1/amazon-sales-intelligence</span>
           </div>
           {error && (
             <div className="text-sm text-red-600">{error}</div>
