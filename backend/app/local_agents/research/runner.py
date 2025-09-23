@@ -232,6 +232,21 @@ class ResearchRunner:
         full_base_relevancy = base_relevancy.copy()
         base_relevancy = agent_base_relevancy  # This goes to the agents
 
+        # Perform AI-powered root extraction for richer analysis context (non-blocking if fails)
+        ai_keyword_root_analysis: Dict[str, Any] = {}
+        try:
+            from app.local_agents.keyword.subagents.root_extraction_agent import extract_roots_ai
+            # Build minimal product context for the AI subagent
+            _title_text = str(((scraped_data.get("elements") or {}).get("productTitle") or {}).get("text") or "")
+            if isinstance(_title_text, list):
+                _title_text = _title_text[0] if _title_text else ""
+            _brand = (((scraped_data.get("elements") or {}).get("productOverview_feature_div") or {}).get("kv") or {}).get("Brand", "")
+            product_context = {"title": _title_text, "category": scraped_data.get("category", ""), "brand": _brand}
+            ai_keyword_root_analysis = extract_roots_ai(unique_keywords, product_context)
+        except Exception:
+            # Non-fatal: continue without AI root analysis
+            ai_keyword_root_analysis = {}
+
         # Compute adjusted relevancy per rules:
         # 1) Literal meaning first. If literal score is high (>=0.6), keep base score.
         # 2) If literal is low (<0.6) but many relevant designs are ranked, incline to relevancy by boosting.
@@ -362,6 +377,7 @@ class ResearchRunner:
                 "keyword_root_analysis": keyword_root_analysis,
                 "priority_roots": priority_roots,
                 "total_unique_keywords": len(unique_keywords),
+                "ai_keyword_root_analysis": ai_keyword_root_analysis,
                 "agent_optimization": {
                     "timeout_prevention": True,
                     "agent_keywords_count": len(base_relevancy),
@@ -389,6 +405,7 @@ class ResearchRunner:
                 "keyword_root_analysis": keyword_root_analysis,
                 "priority_roots": priority_roots,
                 "total_unique_keywords": len(unique_keywords),
+                "ai_keyword_root_analysis": ai_keyword_root_analysis,
                 "agent_optimization": {
                     "timeout_prevention": True,
                     "agent_keywords_count": len(base_relevancy),

@@ -20,7 +20,7 @@ DESIGN_SPECIFIC_CLASSIFICATION_INSTRUCTIONS = """
 You are a Design-Specific Keyword Classification Expert specializing in distinguishing between product variations and general descriptive attributes for Amazon products.
 
 ## Your Core Mission:
-Determine which keywords are truly "Design-Specific" based on whether they separate one product design/variation from another, versus keywords that are generally descriptive but don't create distinct product variations.
+Determine which keywords are truly "Design-Specific" based on whether they separate one product design/variation from another, versus keywords that are generally descriptive but don't separate distinct product variations.
 
 ## Critical Classification Logic:
 
@@ -34,36 +34,18 @@ These keywords indicate different product variations or designs that a customer 
 
 **Physical Variations**:
 - "mini" vs "regular" vs "large" vs "jumbo" (when these are distinct product variations)
-- "thick" vs "thin" vs "medium" (when these are distinct product options)
-- "single" vs "double" vs "triple" (layers, cores, etc.)
-
-**Style/Design Variations**:
-- "classic" vs "modern" vs "vintage" (distinct design styles)
-- "smooth" vs "textured" vs "ribbed" (surface variations)
-- "open" vs "closed" vs "semi-open" (structural design differences)
 
 **Functional Variations**:
-- "wireless" vs "wired" vs "bluetooth" (connection types)
+- "wireless" vs "wired" (connection types)
 - "manual" vs "automatic" vs "semi-automatic" (operation types)
 - "waterproof" vs "water-resistant" vs "splash-proof" (protection levels)
 
 ### **NOT Design-Specific Keywords** (General Descriptive):
 These keywords describe the product but don't create distinct variations a customer chooses between:
 
-**Quality Descriptors**:
-- "bulk", "premium", "professional", "commercial"
-- "organic", "natural", "fresh", "pure"
-- "high-quality", "durable", "heavy-duty"
-
 **General Attributes**:
 - "portable", "lightweight", "compact" (unless these are distinct product lines)
-- "eco-friendly", "sustainable", "biodegradable"
-- "fast", "slow", "efficient"
-
-**Broad Categories**:
-- "food", "snack", "supplement", "tool"
-- "kitchen", "bathroom", "outdoor"
-- "baby", "adult", "kids"
+- "eco-friendly", "sustainable", "biodegradable" 
 
 ## Analysis Framework:
 
@@ -71,10 +53,12 @@ These keywords describe the product but don't create distinct variations a custo
 1. **Choice Decision**: "Would a customer need to choose between this keyword and alternatives when buying?"
    - "slices" vs "pieces" → YES (design-specific)
    - "bulk" vs "retail" → NO (quantity/packaging, not design)
+   - "Diaper changing pad" vs "portable diaper changing pad" → Yes (The word "portable" means that the product can be used during traveling so it shows product more like a mat while the simple simple diaper changing pad is hard, non-foldable and you can resemble it to samll portion of bed mattress)
+   - "Squishy stress balls" vs "smile face stress balls" → Yes (The word smile face shows smiley on the stress ball vs squishy means stress ball is soft and squishy)
 
 2. **Product Differentiation**: "Does this keyword indicate a fundamentally different product variation?"
    - "wireless" vs "wired" → YES (different products)
-   - "premium" vs "standard" → NO (quality level, same product)
+   - "Wooden" vs "Stainless Steel" → YES (different materials)
 
 3. **Mutual Exclusivity**: "Can this keyword exist with its alternatives in the same product?"
    - "mini" vs "large" → NO (mutually exclusive) → Design-specific

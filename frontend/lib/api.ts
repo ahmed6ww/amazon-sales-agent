@@ -274,7 +274,7 @@ class ApiClient {
     debugLog('Long-running Upload Request', { url });
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 4000000); // 5 minutes timeout
+    const timeoutId = setTimeout(() => controller.abort(), 8000000); // 5 minutes timeout
 
     try {
       const response = await fetch(url, {

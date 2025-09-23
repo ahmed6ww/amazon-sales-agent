@@ -111,6 +111,21 @@ class ScoringRunner:
 							break
 					except Exception:
 						continue
+		# Fallback: if we didn't get a valid scored list aligned with items, use the keyword intent classification subagent per item
+		if not isinstance(scored, list) or len(scored) != len(items):
+			try:
+				from app.local_agents.keyword.subagents.intent_classification_agent import apply_intent_classification_ai
+				logger.warning("[ScoringRunner] Intent subagent output unusable; falling back to Keyword Intent Classification subagent")
+				fallback = apply_intent_classification_ai(items, scraped_product)
+				for idx, it in enumerate(items):
+					try:
+						it["intent_score"] = int((fallback[idx] or {}).get("intent_score", it.get("intent_score", 0)))
+					except Exception:
+						it["intent_score"] = it.get("intent_score", 0)
+				logger.info("[ScoringRunner] Applied fallback intent scores to %d items", len(items))
+				return items
+			except Exception as e:
+				logger.warning(f"[ScoringRunner] Fallback keyword intent classification failed: {e}")
 		# Map back by index to preserve order; write intent_score only
 		for idx, it in enumerate(items):
 			try:
@@ -168,6 +183,14 @@ class ScoringRunner:
 		include_broad_volume: bool = True,
 	) -> List[Dict[str, Any]]:
 		"""End-to-end convenience: append LLM intent scores, merge CSV metrics, and calculate broad volume."""
+		# Optional pre-pass: deduplicate singular/plural variants to reduce token usage
+		try:
+			from app.local_agents.scoring.subagents.keyword_variant_agent import apply_variant_optimization_ai
+			_before = len(items)
+			items = apply_variant_optimization_ai(items)
+			logger.info(f"[ScoringRunner] Variant optimization reduced keywords {_before} -> {len(items)}")
+		except Exception as e:
+			logger.debug(f"[ScoringRunner] Variant optimization skipped: {e}")
 		# Step 1: Add intent scores
 		ScoringRunner.append_intent_scores(items, scraped_product, base_relevancy_scores)
 		
@@ -187,9 +210,44 @@ class ScoringRunner:
 					use_llm=True  # Use AI analysis only - no deterministic fallback
 				)
 				enriched_items = broad_volume_result.get("items", enriched_items)
-				
+				# Note: filtered root volumes will be computed where they are consumed (API/SEO stage)
 			except Exception as e:
 				logger.warning(f"[ScoringRunner] Broad volume calculation failed in score_and_enrich: {e}")
+		
+		# Step 4: Opportunity detection (AI rules) after metrics and (optionally) root assignment
+		try:
+			from agents import Runner as _Runner
+			from app.local_agents.scoring.subagents.opportunity_agent import opportunity_agent
+			import json as _json
+			opp_prompt = _json.dumps({"items": enriched_items}, separators=(",", ":"))
+			opp_res = _Runner.run_sync(opportunity_agent, opp_prompt)
+			opp_out = getattr(opp_res, "final_output", None)
+			updates = None
+			if isinstance(opp_out, str):
+				try:
+					parsed = _json.loads(opp_out.strip())
+					updates = parsed.get("items", parsed if isinstance(parsed, list) else None)
+				except Exception:
+					updates = None
+			elif hasattr(opp_out, "model_dump"):
+				try:
+					parsed = opp_out.model_dump()
+					updates = parsed.get("items", parsed if isinstance(parsed, list) else None)
+				except Exception:
+					updates = None
+			# Apply updates by phrase match if available
+			if isinstance(updates, list):
+				by_phrase = {str((u or {}).get("phrase", "")).strip().lower(): u for u in updates}
+				for it in enriched_items:
+					p = str(it.get("phrase", "")).strip().lower()
+					upd = by_phrase.get(p)
+					if isinstance(upd, dict):
+						for k in ("opportunity_decision", "opportunity_reason"):
+							if k in upd:
+								it[k] = upd[k]
+				logger.info("[ScoringRunner] Opportunity annotations applied to items")
+		except Exception as e:
+			logger.debug(f"[ScoringRunner] Opportunity subagent skipped: {e}")
 		
 		return enriched_items
 

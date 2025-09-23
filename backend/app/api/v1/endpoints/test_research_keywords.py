@@ -242,6 +242,16 @@ async def amazon_sales_intelligence_pipeline(
                 if items:
                     keyword_items = items
             
+            # Compute filtered root volumes (Task 13) if we have items with roots
+            filtered_root_volumes = None
+            try:
+                if keyword_items:
+                    from app.local_agents.scoring.subagents.root_relevance_agent import apply_root_filtering_ai
+                    filtered_root_volumes = apply_root_filtering_ai(keyword_items)
+            except Exception as _rr_err:
+                logger.debug(f"Root relevance filtering skipped: {_rr_err!s}")
+                filtered_root_volumes = None
+            
             if keyword_items and scraped_product:
                 from app.local_agents.seo import SEORunner
                 
@@ -277,7 +287,7 @@ async def amazon_sales_intelligence_pipeline(
                         return seo_runner.run_seo_analysis(
                             scraped_product=scraped_product,
                             keyword_items=keyword_items,
-                            broad_search_volume_by_root=None,  # Could be enhanced with root volume data
+                            broad_search_volume_by_root=filtered_root_volumes,  # Task 13: filtered root volumes
                             competitor_data=competitor_data  # Task 6: Pass competitor data for benefit analysis
                         )
                     finally:

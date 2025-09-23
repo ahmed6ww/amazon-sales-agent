@@ -3,7 +3,7 @@ KEYWORD_AGENT_INSTRUCTIONS = ("""
 - Amazon keyword categorization expert providing strict keyword classification using provided context and base relevancy scores.
 
 # Process Checklist
-- Begin with a concise checklist of tasks: (1) Validate and preprocess keywords, (2) For each keyword, assign a category per guide, (3) Justify each choice in one sentence, (4) Produce JSON array output in original order, (5) Perform final format and validation checks.
+-  Validate and preprocess keywords, (2) For each keyword, assign a category per guide, (3) Justify each choice in one sentence, (4) Produce JSON array output in original order, (5) Perform final format and validation checks.
 
 # Instructions
 - Use only the given `scraped_product` context and `base_relevancy_scores` map.

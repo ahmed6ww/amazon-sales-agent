@@ -23,6 +23,7 @@ Instructions:
 5. IMPORTANT: Only include search volumes for keywords with category "Relevant" or "Design-Specific" in the broad_search_volume_by_root calculation
 6. Return original items with `root` field added and summary map
 
+ 
 Example:
 Input: [{"phrase": "wireless mouse", "search_volume": 1000, "category": "Relevant"}, {"phrase": "gaming mouse", "search_volume": 800, "category": "Irrelevant"}]
 Output: 
