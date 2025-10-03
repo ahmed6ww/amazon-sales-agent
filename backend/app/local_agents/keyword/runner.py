@@ -4,7 +4,6 @@ import logging
 from agents import Runner
 
 from .agent import keyword_agent
-from .subagents.design_specific_classification_agent import enhance_keyword_categorization_with_design_logic
 
 logger = logging.getLogger(__name__)
 
@@ -144,26 +143,10 @@ class KeywordRunner:
 			if "stats" not in structured:
 				structured["stats"] = {}
 
-		# Apply refined design-specific classification logic
-		enhanced_structured = structured
-		if structured and structured.get("items"):
-			try:
-				logger.info("🔍 Applying refined design-specific classification logic")
-				enhanced_items = enhance_keyword_categorization_with_design_logic(
-					keyword_items=structured["items"],
-					product_context=scraped_product or {}
-				)
-				enhanced_structured = structured.copy()
-				enhanced_structured["items"] = enhanced_items
-				logger.info("✅ Design-specific refinement completed")
-			except Exception as e:
-				logger.warning(f"⚠️ Design-specific refinement failed: {e}")
-				enhanced_structured = structured
-
 		return {
-			"success": bool(enhanced_structured),
-			"structured_data": enhanced_structured or {},
-			"final_output": "Keyword categorization completed with design-specific refinement" if enhanced_structured else raw_output,
+			"success": bool(structured),
+			"structured_data": structured or {},
+			"final_output": "Keyword categorization completed" if structured else raw_output,
 			"scraped_product": scraped_product or {},
 			"keywords_count": len(base_relevancy_scores or {}),
 		}
