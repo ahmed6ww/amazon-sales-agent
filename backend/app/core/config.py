@@ -15,6 +15,9 @@ class Settings:
 
     def _load_from_environment(self) -> None:
         """(Re)load configuration from current environment variables."""
+        # Load .env file first
+        load_dotenv(find_dotenv(), override=True)
+        
         # OpenAI Configuration
         self.OPENAI_API_KEY: Optional[str] = os.getenv("OPENAI_API_KEY")
         self.OPENAI_MODEL: str = os.getenv("OPENAI_MODEL", "gpt-4")
@@ -37,7 +40,7 @@ class Settings:
         self.KEYWORD_BATCH_SIZE: int = int(os.getenv("KEYWORD_BATCH_SIZE", "2000"))  # Process all keywords in one batch for quick testing
 
         # Logging Configuration
-        self.LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
+        self.LOG_LEVEL: str = os.getenv("LOG_LEVEL", "WARNING")  # Changed from INFO to WARNING
         self.DEBUG_MODE: bool = os.getenv("DEBUG_MODE", "false").lower() == "true"
 
         # Research/CSV Configuration

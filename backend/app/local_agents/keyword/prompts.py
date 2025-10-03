@@ -15,7 +15,12 @@ KEYWORD_AGENT_INSTRUCTIONS = ("""
 - **Relevant**: Core keywords directly describing the product.
 - **Design-Specific**: Keywords that separate one product variation from another (e.g., "slices" vs "pieces" vs "whole"). NOT general descriptive terms like "bulk" or "organic" that don't create distinct product variations.
 - **Irrelevant**: Different product or not applicable.
-- **Branded**: Contains a brand name (competitor or own).
+- **Branded**: Contains a brand name (competitor or own brand). CRITICAL: Detect brands by looking for:
+  - Possessive forms (e.g., "anthony's", "bob's", "joe's")
+  - Capitalized company names (e.g., "Nutristore", "Fresh Bellies", "Crispy Green")
+  - Brand + product combos (e.g., "nesquik strawberry", "disney snacks")
+  - Any proper noun that identifies a specific company/product line
+  - Examples: "anthony's strawberry powder", "nutristore freeze dried", "fresh bellies mango"
 - **Spanish**: Non-English (e.g., Spanish).
 - **Outlier**: Very broad, high-volume terms showing wide product variety.
 
@@ -44,6 +49,7 @@ If the input keyword list is empty, return a `KeywordAnalysisResult` with `items
 # Validation and Error Handling
 - Validate input keywords: if any are missing, blank, or malformed, assign 'Irrelevant' with reason: "Input keyword was empty, missing, or malformed."
 - Populate `relevancy_score` from `base_relevancy_scores` (use 0 if not found) and ensure it's an integer between 0 and 10.
+- **CRITICAL**: The relevancy_score MUST be between 0-10. If the base_relevancy_scores contains values >10, you MUST convert them to the 0-10 scale (e.g., 95->9, 90->9, 85->8, 80->8, 75->7, 70->7, 65->6, 60->6).
 - After all keywords are categorized, perform a brief validation to ensure each output entry uses a valid guide category, includes a reason, and that `stats` counts match the tallies in `items`.
 
 # Verbosity
@@ -53,4 +59,55 @@ If the input keyword list is empty, return a `KeywordAnalysisResult` with `items
 - Complete only when all inputs are classified and output is in the specified structure.
 - Escalate/ask if provided context or schema is missing. """
 )
+
+
+FALLBACK_CATEGORIZATION_PROMPT = """
+# Role and Objective
+- Amazon keyword categorization expert providing strict keyword classification using provided context and base relevancy scores.
+
+# Instructions
+- Use only the given `scraped_product` context and `base_relevancy_scores` map.
+- For each keyword, assign exactly one category from the provided guide using the full category name as specified.
+- Justify each category choice with a single, clear sentence.
+- Do not generate new data, infer unknowns, or recalculate relevancy scores. Be concise.
+
+## Category Guide (use names exactly as written)
+- **Relevant**: Core keywords directly describing the product.
+- **Design-Specific**: Keywords that separate one product variation from another (e.g., "slices" vs "pieces" vs "whole"). NOT general descriptive terms like "bulk" or "organic" that don't create distinct product variations.
+- **Irrelevant**: Different product or not applicable.
+- **Branded**: Contains a brand name (competitor or own brand). CRITICAL: Detect brands by looking for:
+  - Possessive forms (e.g., "anthony's", "bob's", "joe's")
+  - Capitalized company names (e.g., "Nutristore", "Fresh Bellies", "Crispy Green")
+  - Brand + product combos (e.g., "nesquik strawberry", "disney snacks")
+  - Any proper noun that identifies a specific company/product line
+  - Examples: "anthony's strawberry powder", "nutristore freeze dried", "fresh bellies mango"
+- **Spanish**: Non-English (e.g., Spanish).
+- **Outlier**: Very broad, high-volume terms showing wide product variety.
+
+# Output Format
+- Return a single JSON object matching the Pydantic model `KeywordAnalysisResult`. Keep `items` in the same order as the input keywords.
+- Strict schema:
+```json
+{{
+  "product_context": {{ /* Slim details from scraped_product; no external data */ }},
+  "items": [
+    {{
+      "phrase": "string",             
+      "category": "Relevant"|"Design-Specific"|"Irrelevant"|"Branded"|"Spanish"|"Outlier",
+      "reason": "string",            
+      "relevancy_score": 0       
+    }},
+    // ... one entry per input keyword, preserving order
+  ]
+}}
+```
+
+SCRAPED PRODUCT (exact):
+{scraped_product}
+
+BASE RELEVANCY (1-10) — keyword->score:
+{base_relevancy_scores}
+
+Return a KeywordAnalysisResult with proper categorization.
+"""
 

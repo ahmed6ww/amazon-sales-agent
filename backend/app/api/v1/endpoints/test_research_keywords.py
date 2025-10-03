@@ -53,7 +53,17 @@ async def amazon_sales_intelligence_pipeline(
     """
 
     try:
+        logger.info("="*80)
+        logger.info("🚀 [REQUEST RECEIVED] Amazon Sales Intelligence Pipeline")
+        logger.info(f"   ASIN/URL: {asin_or_url}")
+        logger.info(f"   Marketplace: {marketplace}")
+        logger.info(f"   Main Keyword: {main_keyword or 'Auto-detect'}")
+        logger.info(f"   Revenue CSV: {'Provided' if revenue_csv else 'Not provided'}")
+        logger.info(f"   Design CSV: {'Provided' if design_csv else 'Not provided'}")
+        logger.info("="*80)
+        
         # Validate OpenAI setup
+        logger.info("🔧 [VALIDATION] Checking configuration...")
         if not settings.openai_configured:
             raise HTTPException(status_code=503, detail="OpenAI not configured")
         if not settings.USE_AI_AGENTS:
@@ -67,8 +77,11 @@ async def amazon_sales_intelligence_pipeline(
             raise HTTPException(status_code=400, detail="Revenue file must be a CSV")
         if design_csv and not design_csv.filename.endswith(".csv"):
             raise HTTPException(status_code=400, detail="Design file must be a CSV")
+        
+        logger.info("✅ [VALIDATION] Configuration valid")
 
         # Parse CSV files if provided
+        logger.info("📄 [CSV PROCESSING] Parsing uploaded files...")
         revenue_data: list = []
         design_data: list = []
         if revenue_csv:
@@ -82,6 +95,7 @@ async def amazon_sales_intelligence_pipeline(
                     detail=f"Failed to parse revenue CSV: {revenue_res.get('error')}",
                 )
             revenue_data = revenue_res["data"]
+            logger.info(f"   ✅ Revenue CSV parsed: {len(revenue_data)} keywords")
         if design_csv:
             from app.services.file_processing.csv_processor import parse_csv_bytes
 
@@ -93,6 +107,9 @@ async def amazon_sales_intelligence_pipeline(
                     detail=f"Failed to parse design CSV: {design_res.get('error')}",
                 )
             design_data = design_res["data"]
+            logger.info(f"   ✅ Design CSV parsed: {len(design_data)} keywords")
+        
+        logger.info(f"✅ [CSV PROCESSING] Complete - Total: {len(revenue_data) + len(design_data)} keywords")
 
         # Auto-pick main keyword if not provided
         if not main_keyword and revenue_data:
@@ -102,9 +119,13 @@ async def amazon_sales_intelligence_pipeline(
                 if row.get("Keyword Phrase")
             ]
             main_keyword = phrases[0] if phrases else None
+            if main_keyword:
+                logger.info(f"🎯 [AUTO-DETECT] Main keyword: {main_keyword}")
 
-        # Scrape and run Research Agent similar to analyze flow
-        logger.info(f"🔬 Test Research+Keywords: scraping and analyzing {asin_or_url}")
+        # Scrape and run Research Agent
+        logger.info("")
+        logger.info("📊 [STEP 1/4] RESEARCH AGENT - Product Analysis")
+        logger.info(f"   Scraping Amazon listing: {asin_or_url}")
 
         from app.local_agents.research.helper_methods import scrape_amazon_listing
 
@@ -114,6 +135,7 @@ async def amazon_sales_intelligence_pipeline(
                 status_code=500, detail=f"Scraping failed: {scrape_result.get('error')}"
             )
         scraped_data = scrape_result.get("data", {})
+        logger.info("   ✅ Product scraped successfully")
 
         from app.local_agents.research.runner import ResearchRunner
 
@@ -149,7 +171,15 @@ async def amazon_sales_intelligence_pipeline(
             "base_relevancy_scores", {}
         )
 
-        # Run Keyword Agent - only with the two required inputs
+        logger.info(f"✅ [STEP 1/4] RESEARCH COMPLETE")
+        logger.info(f"   Total unique keywords: {total_unique_keywords}")
+        logger.info(f"   Priority roots: {len(priority_roots)}")
+
+        # Run Keyword Agent
+        logger.info("")
+        logger.info("🎯 [STEP 2/4] KEYWORD AGENT - Categorization")
+        logger.info(f"   Analyzing {len(base_relevancy_scores)} keywords...")
+        
         from app.local_agents.keyword.runner import KeywordRunner
 
         kw_runner = KeywordRunner()
@@ -168,8 +198,23 @@ async def amazon_sales_intelligence_pipeline(
                 loop.close()
 
         keyword_ai_result = await loop.run_in_executor(None, run_keyword_agent)
+        
+        # Extract stats
+        if isinstance(keyword_ai_result, dict):
+            structured = keyword_ai_result.get("structured_data") or {}
+            items = structured.get("items") or []
+            stats = structured.get("stats") or {}
+            logger.info(f"✅ [STEP 2/4] KEYWORD CATEGORIZATION COMPLETE")
+            logger.info(f"   Total keywords: {len(items)}")
+            logger.info(f"   Relevant: {stats.get('Relevant', {}).get('count', 0)}")
+            logger.info(f"   Design-Specific: {stats.get('Design-Specific', {}).get('count', 0)}")
+            logger.info(f"   Irrelevant: {stats.get('Irrelevant', {}).get('count', 0)}")
 
         # Enrich: append intent_score then merge CSV metrics into keyword items
+        logger.info("")
+        logger.info("📈 [STEP 3/4] SCORING AGENT - Intent & Metrics")
+        logger.info("   Enriching keywords with intent scores...")
+        
         try:
             from app.local_agents.scoring.runner import ScoringRunner
 
@@ -197,9 +242,11 @@ async def amazon_sales_intelligence_pipeline(
                 # Replace items inside structured_data
                 if isinstance(keyword_ai_result, dict):
                     keyword_ai_result.setdefault("structured_data", {})["items"] = enriched
+                    logger.info(f"✅ [STEP 3/4] SCORING COMPLETE")
+                    logger.info(f"   Enriched {len(enriched)} keywords with intent scores and metrics")
         except Exception as _enrich_err:
             # Non-fatal: continue with original keyword result if enrichment fails
-            logger.warning(f"Keyword enrichment skipped: {_enrich_err!s}")
+            logger.warning(f"⚠️  [STEP 3/4] Keyword enrichment skipped: {_enrich_err!s}")
             # Ensure items at least include a default intent_score
             try:
                 if isinstance(keyword_ai_result, dict):
@@ -230,10 +277,12 @@ async def amazon_sales_intelligence_pipeline(
             pass
 
         # Step 4: Run SEO Analysis
+        logger.info("")
+        logger.info("🏆 [STEP 4/4] SEO AGENT - Optimization")
+        logger.info("   Analyzing current SEO state...")
+        
         seo_analysis_result = None
         try:
-            logger.info("🔍 Running SEO optimization analysis")
-            
             # Get the enriched keyword items for SEO analysis
             keyword_items = []
             if isinstance(keyword_ai_result, dict):
@@ -241,6 +290,7 @@ async def amazon_sales_intelligence_pipeline(
                 items = structured.get("items", [])
                 if items:
                     keyword_items = items
+                    logger.info(f"   Analyzing {len(keyword_items)} keywords for SEO optimization")
             
             # Compute filtered root volumes (Task 13) if we have items with roots
             filtered_root_volumes = None
@@ -297,9 +347,21 @@ async def amazon_sales_intelligence_pipeline(
                 
                 if seo_result and seo_result.get("success"):
                     seo_analysis_result = seo_result
-                    logger.info("✅ SEO optimization analysis completed successfully")
+                    
+                    # Extract and log SEO results
+                    analysis = seo_result.get("analysis", {})
+                    optimized_seo = analysis.get("optimized_seo", {})
+                    optimized_title = optimized_seo.get("optimized_title", {})
+                    optimized_bullets = optimized_seo.get("optimized_bullets", [])
+                    
+                    logger.info(f"✅ [STEP 4/4] SEO OPTIMIZATION COMPLETE")
+                    logger.info(f"   Optimized title: {optimized_title.get('character_count', 0)} chars, {len(optimized_title.get('keywords_included', []))} keywords")
+                    logger.info(f"   Optimized bullets: {len(optimized_bullets)} bullets created")
+                    for i, bullet in enumerate(optimized_bullets[:3], 1):  # Show first 3
+                        kw_count = len(bullet.get('keywords_included', []))
+                        logger.info(f"      Bullet #{i}: {bullet.get('character_count', 0)} chars, {kw_count} keywords")
                 else:
-                    logger.warning(f"SEO analysis had issues: {seo_result.get('error') if seo_result else 'No result'}")
+                    logger.warning(f"⚠️  [STEP 4/4] SEO analysis had issues: {seo_result.get('error') if seo_result else 'No result'}")
                     seo_analysis_result = {
                         "success": False,
                         "error": seo_result.get("error") if seo_result else "SEO analysis failed",
@@ -378,11 +440,27 @@ async def amazon_sales_intelligence_pipeline(
             },
             "source": "amazon_sales_intelligence_pipeline",
         }
+        
+        # Final success log
+        logger.info("")
+        logger.info("="*80)
+        logger.info("✅ [PIPELINE COMPLETE] Response ready")
+        logger.info(f"   Total keywords analyzed: {original_keyword_count}")
+        logger.info(f"   Keyword categories: {len(items)} items categorized")
+        logger.info(f"   SEO optimization: {'Success' if seo_analysis_result.get('success') else 'Failed'}")
+        logger.info(f"   Root optimization: {priority_roots_count} priority roots identified")
+        logger.info(f"   Efficiency gain: {efficiency_metrics.get('reduction_percentage', 0)}%")
+        logger.info("="*80)
 
         return response
 
     except HTTPException:
         raise
     except Exception as e:
-        logger.error(f"Test research+keywords (POST) error: {e}")
+        logger.error("="*80)
+        logger.error("❌ [PIPELINE ERROR] Request failed")
+        logger.error(f"   Error type: {type(e).__name__}")
+        logger.error(f"   Error message: {str(e)}")
+        logger.error("="*80)
+        logger.error(f"Full error details: {e}", exc_info=True)
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")

@@ -16,20 +16,22 @@ from dotenv import load_dotenv, find_dotenv
 load_dotenv(find_dotenv())  # Load environment variables from .env file
 
 
-def scrape_amazon_listing(asin_or_url: str) -> Dict[str, Any]:
+def scrape_amazon_listing(asin_or_url: str, marketplace: str = "US") -> Dict[str, Any]:
     """
     Scrape an Amazon product listing using the standalone scraper
     via a separate subprocess to avoid reactor/event loop conflicts.
 
     Args:
         asin_or_url: Either an ASIN (e.g., B08KT2Z93D) or full Amazon URL
+        marketplace: Target marketplace code (e.g., "US", "UK", "DE")
 
     Returns:
         Dict containing scraped data (title, images, A+ content excerpts, reviews, Q&A, price)
     """
-    # Convert ASIN to full URL if needed
+    # Convert ASIN to full URL if needed with country-specific domain
     if not asin_or_url.startswith("http"):
-        url = f"https://www.amazon.com/dp/{asin_or_url}"
+        from app.services.amazon.country_handler import construct_amazon_url
+        url = construct_amazon_url(asin_or_url, marketplace)
     else:
         url = asin_or_url
 
@@ -214,14 +216,15 @@ def _parse_rating_info(scraped: Dict[str, Any]) -> Tuple[Optional[float], Option
     return rating_value, ratings_count
 
 
-def scrape_competitors(asins: List[str], *, max_items: int = 10) -> List[Dict[str, Any]]:
+def scrape_competitors(asins: List[str], *, max_items: int = 10, marketplace: str = "US") -> List[Dict[str, Any]]:
     results: List[Dict[str, Any]] = []
     for asin in asins[:max_items]:
-        res = scrape_amazon_listing(asin)
+        res = scrape_amazon_listing(asin, marketplace)
         item: Dict[str, Any] = {"asin": asin, "success": bool(res.get("success"))}
         if res.get("success"):
             data = res.get("data", {}) or {}
-            url = data.get("url") or f"https://www.amazon.com/dp/{asin}"
+            from app.services.amazon.country_handler import construct_amazon_url
+            url = data.get("url") or construct_amazon_url(asin, marketplace)
             title = data.get("title") or ((data.get("elements") or {}).get("productTitle") or {}).get("text")
             if isinstance(title, list):
                 title = title[0] if title else ""

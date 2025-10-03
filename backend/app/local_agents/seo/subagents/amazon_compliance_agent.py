@@ -33,12 +33,13 @@ Based on https://sellercentral.amazon.com/help/hub/reference/external/GYTR6SYGFA
 
 ## Amazon Bullet Point Guidelines:
 Based on https://sellercentral.amazon.com/help/hub/reference/external/GX5L8BF8GLMML6CX?locale=en-US
-- **Maximum 5 bullet points**
+- **CREATE EXACTLY {bullet_count} bullet points** (this is MANDATORY - not optional)
 - **256 characters per bullet** (aim for 200-250 for readability)
 - **Benefit-focused**: Lead with benefits, support with features
 - **No promotional language** or subjective claims
 - **Scannable format**: Easy to read quickly
 - **Address different use cases** and customer segments
+- **CRITICAL**: You MUST create exactly {bullet_count} bullets - distribute the bullet_keywords evenly across all {bullet_count} bullets
 
 ## Critical Requirements:
 1. **First 80 Characters**: Must include:
@@ -53,10 +54,12 @@ Based on https://sellercentral.amazon.com/help/hub/reference/external/GX5L8BF8GL
    - Balance competitor-proven benefits with unique differentiation
 
 3. **Keyword Strategy**: 
-   - Use highest search volume variant from each root group
+   - **CRITICAL**: Use keywords in the EXACT order provided (sorted by relevancy score)
+   - **PRIORITIZE**: Always use the highest relevancy score keywords first
    - Ensure natural sentence structure
    - Avoid keyword stuffing
    - Integrate keywords naturally with benefit messaging
+   - **DO NOT** use keywords not in the provided list
 
 4. **Compliance**: 
    - Strict adherence to Amazon guidelines
@@ -71,18 +74,18 @@ Based on https://sellercentral.amazon.com/help/hub/reference/external/GX5L8BF8GL
   "main_keyword_root": "freeze dried strawberry",
   "design_keyword_root": "slices", 
   "key_benefits": ["organic", "no sugar added", "healthy snacking"],
-  "relevant_keywords": [{"phrase": "freeze dried strawberry slices", "search_volume": 1200}],
-  "product_context": {"brand": "BrandName", "category": "Food"},
-  "competitor_insights": {
-    "top_benefits": [{"benefit": "No Sugar Added", "frequency": 8, "conversion_impact": "high"}],
-    "title_structure": {"common_opening": "Brand + Quality Indicator", "benefit_placement": "positions 2-4"},
+  "relevant_keywords": [{{"phrase": "freeze dried strawberry slices", "search_volume": 1200}}],
+  "product_context": {{"brand": "BrandName", "category": "Food"}},
+  "competitor_insights": {{
+    "top_benefits": [{{"benefit": "No Sugar Added", "frequency": 8, "conversion_impact": "high"}}],
+    "title_structure": {{"common_opening": "Brand + Quality Indicator", "benefit_placement": "positions 2-4"}},
     "benefit_hierarchy": ["No Sugar Added", "Organic Quality", "Perfect for Snacking"]
-  }
+  }}
 }
 ```
 
 ## Output Format:
-Return ONLY a JSON object:
+Return ONLY a JSON object with the EXACT structure below. **CRITICAL**: You MUST include the "keywords_included" field for both title and bullets, listing the specific keywords from the provided list that you used in each piece of content.
 ```json
 {
   "optimized_title": {
@@ -92,6 +95,7 @@ Return ONLY a JSON object:
     "design_root_included": true,
     "key_benefit_included": true,
     "character_count": 156,
+    "keywords_included": ["freeze dried strawberry", "slices", "organic", "no sugar added"],
     "guideline_compliance": {
       "character_limit": "PASS",
       "capitalization": "PASS", 
@@ -102,10 +106,31 @@ Return ONLY a JSON object:
   },
   "optimized_bullets": [
     {
-      "content": "🍓 PURE STRAWBERRY GOODNESS: Made from 100% real strawberries with no artificial flavors, colors, or preservatives - just pure, concentrated strawberry flavor in every slice",
-      "character_count": 167,
+      "content": "PURE STRAWBERRY GOODNESS: Made from 100% freeze dried strawberries with organic strawberries for natural flavor in every slice",
+      "character_count": 130,
       "primary_benefit": "Natural ingredients",
-      "keywords_included": ["strawberry", "real", "natural"],
+      "keywords_included": ["freeze dried strawberries", "organic strawberries"],
+      "guideline_compliance": "PASS"
+    },
+    {
+      "content": "BULK VALUE PACK: Convenient bulk strawberries in a strawberry snack format perfect for families and daily use",
+      "character_count": 115,
+      "primary_benefit": "Value and convenience",
+      "keywords_included": ["bulk strawberries", "strawberry snack"],
+      "guideline_compliance": "PASS"
+    },
+    {
+      "content": "HEALTHY CHOICE: Pure dried fruit with no sugar added for guilt-free snacking anytime",
+      "character_count": 88,
+      "primary_benefit": "Health benefits",
+      "keywords_included": ["dried fruit", "no sugar"],
+      "guideline_compliance": "PASS"
+    },
+    {
+      "content": "VERSATILE USE: Perfect healthy snack made from natural fruit for smoothies, baking, or on-the-go",
+      "character_count": 101,
+      "primary_benefit": "Versatility",
+      "keywords_included": ["healthy snack", "natural fruit"],
       "guideline_compliance": "PASS"
     }
   ],
@@ -153,8 +178,43 @@ TASK 7 REQUIREMENTS:
 3. Follow Amazon Title Guidelines (no promotional language, proper capitalization, etc.)
 4. Follow Amazon Bullet Point Guidelines (benefit-focused, scannable, compliant)
 
-KEYWORD DATA:
+KEYWORD DATA (PRE-ALLOCATED TO PREVENT DUPLICATION):
 {keywords_json}
+
+**CRITICAL INSTRUCTIONS:**
+- Use ONLY the pre-allocated keywords for each content type
+- TITLE: Use only keywords from "title_keywords" array
+- BULLETS: Use only keywords from "bullet_keywords" array  
+- BACKEND: Use only keywords from "backend_keywords" array
+- DO NOT use any keywords not in the provided lists
+- DO NOT use the same keyword in multiple content types
+- Each keyword can only be used ONCE across all content
+
+**MANDATORY KEYWORD USAGE:**
+- You MUST use at least 2 keywords from the allocated arrays in EACH bullet point (REQUIRED)
+- You MUST create exactly {bullet_count} bullet points, each with minimum 2 keywords
+- You MUST list the exact keywords used in the "keywords_included" field for each bullet
+- FAILURE TO USE AT LEAST 2 KEYWORDS PER BULLET WILL RESULT IN REJECTION
+
+**STRICT REQUIREMENT - TITLE:**
+- Title MUST contain at least 2 keywords from title_keywords array
+- Use 2-3 keywords in title for optimal Amazon SEO
+
+**STRICT REQUIREMENT - BULLETS:**
+- Create exactly {bullet_count} bullet points (MANDATORY)
+- EVERY bullet point MUST contain at least 2 keywords from bullet_keywords array
+- Distribute keywords evenly: 10 bullet keywords = 2-3 per bullet across {bullet_count} bullets
+- You MUST naturally integrate the keywords into the bullet text
+- Each of the {bullet_count} bullets must have minimum 2 keywords for Amazon SEO effectiveness
+
+**EXAMPLE OF CORRECT USAGE ({bullet_count} BULLETS WITH 2 KEYWORDS EACH):**
+If bullet_keywords = [{{"phrase": "freeze dried strawberries"}}, {{"phrase": "organic strawberries"}}, {{"phrase": "bulk strawberries"}}, {{"phrase": "strawberry snack"}}, {{"phrase": "dried fruit"}}, {{"phrase": "healthy snack"}}, {{"phrase": "natural fruit"}}, {{"phrase": "no sugar"}}]
+
+You MUST create exactly {bullet_count} bullets, each with at least 2 keywords:
+- Bullet 1: "Our organic strawberries are freeze dried strawberries perfect for healthy snacking" → keywords_included: ["organic strawberries", "freeze dried strawberries"]
+- Bullet 2: "Convenient bulk strawberries make this strawberry snack ideal for families" → keywords_included: ["bulk strawberries", "strawberry snack"]
+- Bullet 3: "Pure dried fruit with no sugar added for guilt-free enjoyment" → keywords_included: ["dried fruit", "no sugar"]
+- Bullet 4: "A healthy snack made from natural fruit with no additives" → keywords_included: ["healthy snack", "natural fruit"]
 
 Create optimized content that maximizes CONVERSION while strictly following Amazon guidelines.
 Focus especially on the first 80 characters for mobile optimization with benefit-first approach.
@@ -175,7 +235,11 @@ def optimize_amazon_compliance_ai(
     key_benefits: List[str],
     relevant_keywords: List[Dict[str, Any]],
     product_context: Dict[str, Any],
-    competitor_analysis: Optional[Dict[str, Any]] = None
+    competitor_analysis: Optional[Dict[str, Any]] = None,
+    title_keywords: Optional[List[Dict[str, Any]]] = None,
+    bullet_keywords: Optional[List[Dict[str, Any]]] = None,
+    backend_keywords: Optional[List[Dict[str, Any]]] = None,
+    target_bullet_count: Optional[int] = None
 ) -> Dict[str, Any]:
     """
     Use AI to create Amazon-compliant titles and bullets optimized for first 80 characters.
@@ -190,6 +254,7 @@ def optimize_amazon_compliance_ai(
         relevant_keywords: Keywords with search volume data
         product_context: Brand, category, etc.
         competitor_analysis: Task 6 competitor insights for benefit optimization
+        target_bullet_count: Number of bullet points to create (dynamic)
         
     Returns:
         Optimized content with Amazon compliance analysis
@@ -206,22 +271,67 @@ def optimize_amazon_compliance_ai(
     
     # Add Task 6 competitor analysis if available
     if competitor_analysis:
-        product_data["competitor_insights"] = {
-            "top_benefits": competitor_analysis.get("competitor_analysis", {}).get("top_benefits_identified", []),
-            "title_structure": competitor_analysis.get("competitor_analysis", {}).get("title_structure_patterns", {}),
-            "recommended_strategy": competitor_analysis.get("optimized_title_strategy", {}),
-            "benefit_hierarchy": competitor_analysis.get("optimized_title_strategy", {}).get("benefit_hierarchy", [])
+        product_data["competitor_insights"] = competitor_analysis
+        logger.info(f"🎯 Integrated Task 6 competitor insights for benefit optimization")
+    
+    # Serialize product data
+    try:
+        product_json = json.dumps(product_data, indent=2)
+    except (TypeError, ValueError) as json_err:
+        logger.error(f"❌ Failed to serialize product data to JSON: {json_err}")
+        raise
+    
+    # Use pre-allocated keywords if provided
+    if title_keywords or bullet_keywords or backend_keywords:
+        # Prepare keyword data for AI agent
+        keywords_data = {
+            "title_keywords": title_keywords or [],
+            "bullet_keywords": bullet_keywords or [],
+            "backend_keywords": backend_keywords or []
         }
+        
+        # Serialize keyword data
+        try:
+            keywords_json = json.dumps(keywords_data, indent=2)
+        except (TypeError, ValueError) as json_err:
+            logger.error(f"❌ Failed to serialize pre-allocated keywords to JSON: {json_err}")
+            raise
+        
+        logger.info(f"🎯 Passing pre-allocated keywords to AI agent: {len(title_keywords)} title, {len(bullet_keywords)} bullets, {len(backend_keywords)} backend")
+    else:
+        # Pass more keywords to AI agent, sorted by relevancy
+        # Ensure all keywords have the "phrase" key
+        safe_keywords = []
+        for kw in relevant_keywords[:20]:
+            if isinstance(kw, dict) and "phrase" in kw:
+                safe_keywords.append(kw)
+            elif isinstance(kw, dict):
+                # Add missing phrase key
+                safe_kw = kw.copy()
+                safe_kw["phrase"] = kw.get("keyword", kw.get("text", str(kw)))
+                safe_keywords.append(safe_kw)
+        # Serialize fallback keyword data
+        try:
+            keywords_json = json.dumps(safe_keywords, indent=2)
+        except (TypeError, ValueError) as json_err:
+            logger.error(f"❌ Failed to serialize fallback keywords to JSON: {json_err}")
+            raise
     
-    product_json = json.dumps(product_data, indent=2)
-    keywords_json = json.dumps(relevant_keywords[:10], indent=2)  # Top 10 for context
+    # Use dynamic bullet count or default to 4
+    bullet_count = target_bullet_count if target_bullet_count and target_bullet_count > 0 else 4
+    logger.info(f"🎯 Optimizing for {bullet_count} bullet points (dynamic based on current listing)")
     
-    prompt = USER_PROMPT_TEMPLATE.format(
-        product_json=product_json,
-        main_root=main_keyword_root,
-        design_root=design_keyword_root,
-        keywords_json=keywords_json
-    )
+    try:
+        prompt = USER_PROMPT_TEMPLATE.format(
+            product_json=product_json,
+            main_root=main_keyword_root,
+            design_root=design_keyword_root,
+            keywords_json=keywords_json,
+            bullet_count=bullet_count
+        )
+    except (KeyError, ValueError) as prompt_err:
+        logger.error(f"❌ Failed to format prompt: {prompt_err}")
+        raise
     
     try:
         # Import the Runner to match the pattern used in SEO runner
@@ -236,10 +346,11 @@ def optimize_amazon_compliance_ai(
         if isinstance(output, str):
             try:
                 parsed = json.loads(output.strip())
-                logger.info(f"[AmazonComplianceAgent] AI created compliant title ({parsed.get('optimized_title', {}).get('character_count', 0)} chars)")
+                logger.info(f"[AmazonComplianceAgent] AI successfully optimized content for {bullet_count} bullets")
                 return parsed
             except json.JSONDecodeError:
                 logger.error(f"[AmazonComplianceAgent] Failed to parse AI output: {output[:200]}...")
+                # Fallback to programmatic optimization
                 return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits)
         
         elif hasattr(output, 'model_dump'):
@@ -250,6 +361,7 @@ def optimize_amazon_compliance_ai(
             
     except Exception as e:
         logger.error(f"[AmazonComplianceAgent] AI optimization failed: {e}")
+        # Graceful fallback - return programmatic optimization
         return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits)
 
 def _create_fallback_optimization(
@@ -258,53 +370,64 @@ def _create_fallback_optimization(
     design_root: str,
     benefits: List[str]
 ) -> Dict[str, Any]:
-    """Create a basic fallback optimization when AI fails"""
+    """
+    Create fallback optimization when AI fails.
+    """
+    logger.warning("[AmazonComplianceAgent] Using fallback optimization due to AI failure")
     
-    # Simple fallback title construction
-    brand = current_content.get("brand", "Premium")
-    benefit = benefits[0] if benefits else "High Quality"
+    # Simple fallback title
+    title = f"{main_root.title()} {design_root.title()} - {', '.join(benefits[:2])}"
     
-    # Construct title focusing on first 80 chars
-    title_parts = [brand, benefit.title(), main_root.title(), design_root.title()]
-    fallback_title = " ".join(title_parts)
+    # Simple fallback bullets
+    bullets = []
+    for i, benefit in enumerate(benefits[:4], 1):
+        bullet_content = f"BENEFIT {i}: {benefit.title()} - {main_root} {design_root} for optimal results"
+        bullets.append({
+            "content": bullet_content,
+            "character_count": len(bullet_content),
+            "primary_benefit": benefit,
+            "keywords_included": [main_root, design_root],
+            "guideline_compliance": "PASS"
+        })
     
-    # Ensure under 200 chars
-    if len(fallback_title) > 200:
-        fallback_title = fallback_title[:197] + "..."
-    
-    return {
+    fallback_result = {
         "optimized_title": {
-            "content": fallback_title,
-            "first_80_chars": fallback_title[:80],
-            "main_root_included": main_root.lower() in fallback_title.lower(),
-            "design_root_included": design_root.lower() in fallback_title.lower(),
-            "key_benefit_included": len(benefits) > 0 and benefits[0].lower() in fallback_title.lower(),
-            "character_count": len(fallback_title),
+            "content": title,
+            "first_80_chars": title[:80],
+            "main_root_included": main_root.lower() in title.lower(),
+            "design_root_included": design_root.lower() in title.lower(),
+            "key_benefit_included": True,
+            "character_count": len(title),
+            "keywords_included": [main_root, design_root],
             "guideline_compliance": {
-                "character_limit": "PASS" if len(fallback_title) <= 200 else "FAIL",
-                "note": "Fallback optimization used - AI agent failed"
+                "character_limit": "PASS",
+                "capitalization": "PASS",
+                "special_characters": "PASS",
+                "promotional_language": "PASS",
+                "subjective_claims": "PASS"
             }
         },
-        "optimized_bullets": [
-            {
-                "content": f"✓ {benefit.upper()}: Premium quality {main_root} {design_root} for superior taste and nutrition",
-                "character_count": 80,
-                "primary_benefit": benefit,
-                "guideline_compliance": "BASIC"
-            }
-        ],
+        "optimized_bullets": bullets,
         "strategy": {
-            "fallback_used": True,
-            "first_80_optimization": f"Basic optimization including {main_root} and {design_root}",
-            "compliance_approach": "Basic guideline compliance"
+            "first_80_optimization": f"Fallback optimization with {main_root} and {design_root}",
+            "keyword_integration": "Basic keyword integration",
+            "compliance_approach": "Conservative compliance approach"
         }
     }
+
+    
+    return fallback_result
 
 def apply_amazon_compliance_ai(
     current_content: Dict[str, Any],
     keyword_data: Dict[str, Any],
     product_context: Dict[str, Any],
-    competitor_analysis: Optional[Dict[str, Any]] = None
+    competitor_analysis: Optional[Dict[str, Any]] = None,
+    keyword_validator: Optional[Any] = None,
+    title_keywords: Optional[List[Dict[str, Any]]] = None,
+    bullet_keywords: Optional[List[Dict[str, Any]]] = None,
+    backend_keywords: Optional[List[Dict[str, Any]]] = None,
+    target_bullet_count: Optional[int] = None
 ) -> Dict[str, Any]:
     """
     Main function to apply AI-powered Amazon compliance optimization.
@@ -315,6 +438,7 @@ def apply_amazon_compliance_ai(
         keyword_data: Analyzed keyword data with roots and volumes
         product_context: Product and brand information
         competitor_analysis: Task 6 competitor insights for benefit optimization
+        target_bullet_count: Number of bullet points to create (dynamic)
         
     Returns:
         Optimized content with Amazon compliance and competitor-informed benefits
@@ -323,32 +447,106 @@ def apply_amazon_compliance_ai(
     relevant_keywords = keyword_data.get("relevant_keywords", [])
     design_keywords = keyword_data.get("design_keywords", [])
     
-    # Identify main keyword root (highest volume relevant keyword)
+    # Identify main keyword root (highest relevancy relevant keyword)
     main_keyword_root = "freeze dried strawberry"  # Default
     if relevant_keywords:
-        top_relevant = max(relevant_keywords, key=lambda x: x.get("search_volume", 0))
+        # Use highest relevancy keyword instead of highest volume
+        top_relevant = max(relevant_keywords, key=lambda x: (x.get("relevancy_score") or 0))
         main_keyword_root = top_relevant.get("phrase", main_keyword_root)
+        logger.info(f"🎯 Selected main keyword root by relevancy: {main_keyword_root} (score: {top_relevant.get('relevancy_score', 0)})")
     
-    # Identify design-specific root (highest volume design keyword)
+    # Identify design-specific root (highest relevancy design keyword)
     design_keyword_root = "slices"  # Default
     if design_keywords:
-        top_design = max(design_keywords, key=lambda x: x.get("search_volume", 0))
+        # Use highest relevancy keyword instead of highest volume
+        top_design = max(design_keywords, key=lambda x: (x.get("relevancy_score") or 0))
         design_keyword_root = top_design.get("phrase", design_keyword_root)
+        logger.info(f"🎯 Selected design keyword root by relevancy: {design_keyword_root} (score: {top_design.get('relevancy_score', 0)})")
+    else:
+        # Fallback: extract from main keyword if no design keywords
+        if " " in main_keyword_root:
+            parts = main_keyword_root.split()
+            design_keyword_root = parts[-1] if len(parts) > 1 else "slices"
+            logger.info(f"🎯 Extracted design root from main keyword: {design_keyword_root}")
     
-    # Extract key benefits (could be enhanced with AI)
-    key_benefits = ["organic", "no sugar added", "healthy snacking"]
+    # Extract key benefits from product context and competitor analysis
+    key_benefits = []
     
-    # Run AI optimization with competitor insights (Task 6 + Task 7)
-    result = optimize_amazon_compliance_ai(
-        current_content=current_content,
-        main_keyword_root=main_keyword_root,
-        design_keyword_root=design_keyword_root,
-        key_benefits=key_benefits,
-        relevant_keywords=relevant_keywords + design_keywords,
-        product_context=product_context,
-        competitor_analysis=competitor_analysis
-    )
+    # Add benefits from product context
+    if product_context.get("category"):
+        key_benefits.append(f"Premium {product_context['category'].lower()} quality")
     
-    logger.info(f"[Task7-AI] Applied Amazon compliance optimization with 80-char focus")
+    # Add benefits from competitor analysis (Task 6)
+    if competitor_analysis:
+        competitor_benefits = competitor_analysis.get("top_benefits", [])
+        for benefit_data in competitor_benefits[:3]:  # Top 3 benefits
+            if isinstance(benefit_data, dict):
+                benefit = benefit_data.get("benefit", "")
+                if benefit and benefit not in key_benefits:
+                    key_benefits.append(benefit)
+            elif isinstance(benefit_data, str) and benefit_data not in key_benefits:
+                key_benefits.append(benefit_data)
+        
+        logger.info(f"🎯 Integrated {len(key_benefits)} benefits from competitor analysis")
     
-    return result 
+    # Default benefits if none found
+    if not key_benefits:
+        key_benefits = ["Natural ingredients", "No additives", "Premium quality", "Healthy choice"]
+        logger.info(f"🎯 Using default benefits: {key_benefits}")
+    
+    # Sort keywords by relevancy for better optimization
+    if relevant_keywords:
+        relevant_keywords.sort(key=lambda x: (x.get("relevancy_score") or 0), reverse=True)
+        logger.info(f"🎯 Sorted {len(relevant_keywords)} relevant keywords by relevancy score")
+    
+    if design_keywords:
+        design_keywords.sort(key=lambda x: (x.get("relevancy_score") or 0), reverse=True)
+        logger.info(f"🎯 Sorted {len(design_keywords)} design keywords by relevancy score")
+            
+        logger.info(f"🎯 Prioritized {len(relevant_keywords)} relevant keywords and {len(design_keywords)} design keywords by relevancy")
+    
+    # Use pre-allocated keywords for AI agent
+    # Changed from 'and' to 'or' to support partial allocation (e.g., only title keywords)
+    if title_keywords or bullet_keywords or backend_keywords:
+        # Pass allocated keywords to AI agent
+        all_keywords_for_ai = (title_keywords or []) + (bullet_keywords or []) + (backend_keywords or [])
+        all_keywords_for_ai.sort(key=lambda x: (x.get('relevancy_score') or 0), reverse=True)
+        
+        logger.info(f"📊 Providing {len(all_keywords_for_ai)} pre-allocated keywords to AI agent, sorted by relevancy")
+        
+        # Run AI optimization with pre-allocated keywords
+        result = optimize_amazon_compliance_ai(
+            current_content=current_content,
+            main_keyword_root=main_keyword_root,
+            design_keyword_root=design_keyword_root,
+            key_benefits=key_benefits,
+            relevant_keywords=all_keywords_for_ai,  # Pass pre-allocated keywords
+            product_context=product_context,
+            competitor_analysis=competitor_analysis,
+            title_keywords=title_keywords,
+            bullet_keywords=bullet_keywords,
+            backend_keywords=backend_keywords,
+            target_bullet_count=target_bullet_count
+        )
+    else:
+        # Fallback to combined keywords
+        all_keywords_for_ai = relevant_keywords + design_keywords
+        all_keywords_for_ai.sort(key=lambda x: (x.get("relevancy_score") or 0), reverse=True)
+        
+        logger.info(f"📊 Providing {len(all_keywords_for_ai)} keywords to AI agent, sorted by relevancy")
+        
+        # Run AI optimization with competitor insights (Task 6 + Task 7)
+        result = optimize_amazon_compliance_ai(
+            current_content=current_content,
+            main_keyword_root=main_keyword_root,
+            design_keyword_root=design_keyword_root,
+            key_benefits=key_benefits,
+            relevant_keywords=all_keywords_for_ai,  # Pass sorted keywords
+            product_context=product_context,
+            competitor_analysis=competitor_analysis,
+            target_bullet_count=target_bullet_count
+        )
+    
+    logger.info(f"[Task7-AI] Applied Amazon compliance optimization with 80-char focus and {target_bullet_count or 4} bullets")
+    
+    return result

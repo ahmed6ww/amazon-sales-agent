@@ -1,0 +1,48 @@
+{
+  "total_keywords": 506,
+  "filtered_keywords": 8,
+  "filtering_ratio": 0.015810276679841896,
+  "threshold": 4,
+  "output_file": "D:\\Aptivmind\\Work\\Amazon_Agent\\test-filtering\\filtered_keywords_relevancy_4.csv",
+  "score_distribution": {
+    "3": 14,
+    "2": 33,
+    "4": 8,
+    "1": 314,
+    "0": 137
+  },
+  "top_keywords": [
+    [
+      "freez dried apples",
+      4
+    ],
+    [
+      "freeze dried apple slices",
+      4
+    ],
+    [
+      "freeze dried apples bulk",
+      4
+    ],
+    [
+      "freeze dried apple",
+      4
+    ],
+    [
+      "freeze dried strawberries slices",
+      4
+    ],
+    [
+      "freeze dried strawberry slices",
+      4
+    ],
+    [
+      "dried strawberry slices",
+      4
+    ],
+    [
+      "dehydrated strawberries sliced",
+      4
+    ]
+  ]
+}

@@ -2,6 +2,19 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.api.v1.endpoints import upload, test_research_keywords
 from app.core.config import settings
+import logging
+
+# Configure logging to show INFO level logs with timestamps
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(levelname)s - %(name)s - %(message)s',
+    handlers=[
+        logging.StreamHandler()  # Output to console
+    ]
+)
+
+# Set httpx to WARNING to reduce noise from API calls
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 app = FastAPI(
     title="Amazon Sales Intelligence API",

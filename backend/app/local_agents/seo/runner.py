@@ -20,6 +20,7 @@ from .helper_methods import (
     calculate_character_usage,
     extract_keywords_from_content
 )
+from .keyword_validator import SEOKeywordValidator, validate_seo_output_keywords
 from .schemas import (
     SEOAnalysisResult, CurrentSEO, OptimizedSEO, SEOComparison,
     KeywordCoverage, RootCoverage, ContentAnalysis
@@ -63,7 +64,11 @@ class SEORunner:
             current_content = self._extract_current_content(scraped_product)
             logger.info(f"📄 Extracted current content: {len(current_content.get('bullets', []))} bullets")
             
-            # Step 2: Prepare keyword data for analysis
+            # Step 2: Initialize keyword validator to prevent hallucination
+            keyword_validator = SEOKeywordValidator(keyword_items)
+            logger.info(f"🔒 Keyword validator initialized with {len(keyword_items)} research keywords")
+            
+            # Step 3: Prepare keyword data for analysis
             keyword_data = prepare_keyword_data_for_analysis(keyword_items)
             logger.info(f"📊 Prepared keyword data: {keyword_data['total_keywords']} total keywords")
             
@@ -80,7 +85,8 @@ class SEORunner:
                         current_content=current_content,
                         competitor_data=competitor_data,
                         keyword_data=keyword_data,
-                        product_context=scraped_product
+                        product_context=scraped_product,
+                        keyword_validator=keyword_validator
                     )
                     logger.info(f"🏆 Task 6: Analyzed {len(competitor_data)} competitors for benefit optimization")
                 except Exception as e:
@@ -89,11 +95,34 @@ class SEORunner:
             else:
                 logger.info("📝 Task 6: No competitor data provided, skipping competitor analysis")
             
-            # Step 5: Generate AI-powered optimization suggestions (enhanced with competitor insights)
+            # Step 5: Pre-allocate keywords to prevent duplication
+            # Allocate keywords for AI optimization
+            # Get actual bullet count from scraped data for dynamic optimization
+            actual_bullet_count = len(current_content.get("bullets", []))
+            logger.info(f"📊 Detected {actual_bullet_count} bullet points in current listing")
+            
+            logger.info(f"📊 Allocating keywords for optimization...")
+            title_keywords = keyword_validator.get_allocated_keywords_for_ai("title")
+            bullet_keywords = keyword_validator.get_allocated_keywords_for_ai("bullets", actual_bullet_count)
+            backend_keywords = keyword_validator.get_allocated_keywords_for_ai("backend")
+            
+            logger.info(f"   ✅ Allocated {len(title_keywords)} title, {len(bullet_keywords)} bullet, {len(backend_keywords)} backend keywords")
+            
+            # Step 6: Generate AI-powered optimization suggestions
+            logger.info(f"🤖 Generating AI optimization suggestions...")
             optimized_seo = self._generate_ai_optimizations(
-                current_content, keyword_data, scraped_product, competitor_analysis
+                current_content, keyword_data, scraped_product, competitor_analysis, keyword_validator,
+                title_keywords, bullet_keywords, backend_keywords, actual_bullet_count
             )
             logger.info("🤖 AI optimization suggestions generated")
+            
+            # Step 5.5: Validate SEO output to prevent keyword hallucination
+            validation_report = validate_seo_output_keywords(optimized_seo.model_dump(), keyword_validator)
+            if not validation_report['overall_valid']:
+                logger.error("❌ Keyword hallucination detected in SEO output - applying corrections")
+                optimized_seo = self._correct_keyword_hallucination(optimized_seo, keyword_validator)
+            else:
+                logger.info("✅ SEO output validation passed - no keyword hallucination")
             
             # Step 5: Calculate comparison metrics
             comparison = self._calculate_comparison_metrics(current_seo, optimized_seo, keyword_data)
@@ -118,6 +147,53 @@ class SEORunner:
             )
             
             logger.info("✅ SEO analysis complete")
+            
+            # Debug: Print stats and keywords to console
+            # Debug output disabled
+            # print("\n" + "="*80)
+            # print("SEO ANALYSIS DEBUG INFO")
+            # print("="*80)
+            # 
+            # # Print comparison stats
+            # print(f"\nCOMPARISON STATS:")
+            # print(f"  Coverage Improvement: {comparison.coverage_improvement.get('delta_pct_points', 0)}%")
+            # print(f"  Before Coverage: {comparison.coverage_improvement.get('before_coverage_pct', 0)}%")
+            # print(f"  After Coverage: {comparison.coverage_improvement.get('after_coverage_pct', 0)}%")
+            # print(f"  Volume Increase: {comparison.volume_improvement.get('delta_volume', 0)}")
+            # print(f"  Optimization Score: {comparison.summary_metrics.get('overall_improvement_score', 0)}/10")
+            # 
+            # # Print current title keywords
+            # print(f"\nCURRENT TITLE KEYWORDS:")
+            # current_title_keywords = getattr(current_seo.title_analysis, 'keywords_found', [])
+            # print(f"  Found: {len(current_title_keywords)} keywords")
+            # for i, kw in enumerate(current_title_keywords[:10], 1):
+            #     print(f"    {i}. {kw}")
+            # if len(current_title_keywords) > 10:
+            #     print(f"    ... and {len(current_title_keywords) - 10} more")
+            # 
+            # # Print optimized title keywords
+            # print(f"\nOPTIMIZED TITLE KEYWORDS:")
+            # optimized_title_keywords = getattr(optimized_seo.optimized_title, 'keywords_included', [])
+            # print(f"  Included: {len(optimized_title_keywords)} keywords")
+            # for i, kw in enumerate(optimized_title_keywords[:10], 1):
+            #     print(f"    {i}. {kw}")
+            # if len(optimized_title_keywords) > 10:
+            #     print(f"    ... and {len(optimized_title_keywords) - 10} more")
+            # 
+            # # Print bullet keywords
+            # print(f"\nBULLET POINT KEYWORDS:")
+            # for i, bullet in enumerate(optimized_seo.optimized_bullets, 1):
+            #     bullet_keywords = getattr(bullet, 'keywords_included', [])
+            #     print(f"  Bullet {i}: {len(bullet_keywords)} keywords")
+            #     for j, kw in enumerate(bullet_keywords[:5], 1):
+            #         print(f"    {j}. {kw}")
+            #     if len(bullet_keywords) > 5:
+            #         print(f"    ... and {len(bullet_keywords) - 5} more")
+            # 
+            # print("="*80)
+            # print("END SEO ANALYSIS DEBUG INFO")
+            # print("="*80 + "\n")
+            
             return {
                 "success": True,
                 "analysis": result.model_dump(),
@@ -222,7 +298,12 @@ class SEORunner:
         current_content: Dict[str, Any],
         keyword_data: Dict[str, Any], 
         scraped_product: Dict[str, Any],
-        competitor_analysis: Optional[Dict[str, Any]] = None
+        competitor_analysis: Optional[Dict[str, Any]] = None,
+        keyword_validator: Optional[SEOKeywordValidator] = None,
+        title_keywords: Optional[List[Dict[str, Any]]] = None,
+        bullet_keywords: Optional[List[Dict[str, Any]]] = None,
+        backend_keywords: Optional[List[Dict[str, Any]]] = None,
+        target_bullet_count: Optional[int] = None
     ) -> OptimizedSEO:
         """Generate AI-powered optimization suggestions with Task 7 Amazon compliance."""
         
@@ -242,7 +323,12 @@ class SEORunner:
                 current_content=current_content,
                 keyword_data=keyword_data,
                 product_context=product_context,
-                competitor_analysis=competitor_analysis
+                competitor_analysis=competitor_analysis,
+                keyword_validator=keyword_validator,
+                title_keywords=title_keywords,
+                bullet_keywords=bullet_keywords,
+                backend_keywords=backend_keywords,
+                target_bullet_count=target_bullet_count
             )
             
             logger.info("[Task7-AI] Applied Amazon Guidelines Compliance with 80-character optimization")
@@ -376,9 +462,9 @@ class SEORunner:
         # Combine relevant + design for optimization
         all_good_keywords = relevant_keywords + design_keywords
         
-        # Sort by search volume (descending) and intent score (descending)
+        # Sort by relevancy score (descending), then by search volume, then by intent score
         sorted_keywords = sorted(all_good_keywords, 
-                               key=lambda x: (x.get("intent_score", 0), x.get("search_volume", 0)), 
+                               key=lambda x: (x.get("relevancy_score", 0), x.get("search_volume", 0), x.get("intent_score", 0)), 
                                reverse=True)
         
         # Get all unique roots from good keywords
@@ -387,7 +473,7 @@ class SEORunner:
         for kw in sorted_keywords:
             root = kw.get("root", "")
             if root and root not in root_to_best_keyword:
-                root_to_best_keyword[root] = kw["phrase"]
+                root_to_best_keyword[root] = kw.get("phrase", "")
                 all_roots.add(root)
         
         # Select top keywords for title optimization
@@ -395,23 +481,34 @@ class SEORunner:
         title_keywords = []
         used_roots = set()
         
-        # First, get highest intent keywords that cover different roots
+        # First, get highest relevancy keywords that cover different roots
         for kw in sorted_keywords[:15]:  # Look at top 15
             root = kw.get("root", "")
             phrase = kw.get("phrase", "")
-            intent = kw.get("intent_score", 0)
+            relevancy = kw.get("relevancy_score", 0)
             volume = kw.get("search_volume", 0)
             
-            # Prioritize high intent (2+) and good volume (300+)
-            if intent >= 2 and volume >= 300 and root not in used_roots and len(title_keywords) < 4:
+            # Handle None values safely
+            if relevancy is None:
+                relevancy = 0
+            if volume is None:
+                volume = 0
+            
+            # Prioritize high relevancy (80+) and good volume (300+)
+            if relevancy >= 80 and volume >= 300 and root not in used_roots and len(title_keywords) < 4:
                 title_keywords.append(phrase)
                 used_roots.add(root)
         
-        # Fill remaining slots with high-volume terms
+        # Fill remaining slots with high-relevancy terms
         for kw in sorted_keywords:
             phrase = kw.get("phrase", "")
-            volume = kw.get("search_volume", 0)
-            if len(title_keywords) < 5 and phrase not in title_keywords and volume >= 400:
+            relevancy = kw.get("relevancy_score", 0)
+            
+            # Handle None values safely
+            if relevancy is None:
+                relevancy = 0
+                
+            if len(title_keywords) < 5 and phrase not in title_keywords and relevancy >= 70:
                 title_keywords.append(phrase)
         
         # Create natural-sounding optimized title
@@ -449,8 +546,8 @@ class SEORunner:
             "keywords_included": title_keywords[:3],
             "improvements": [
                 f"Covers {len(used_roots)} keyword roots",
-                f"Uses {len([k for k in all_good_keywords if k.get('intent_score', 0) >= 2])} high-intent keywords",
-                f"Replaces low-volume terms with {sum(k.get('search_volume', 0) for k in all_good_keywords[:3])//1000}k+ volume terms",
+                f"Uses {len([k for k in all_good_keywords if (k.get('relevancy_score') or 0) >= 80])} high-relevancy keywords",
+                f"Prioritizes {sum((k.get('relevancy_score') or 0) for k in all_good_keywords[:3])//3} avg relevancy score",
                 "Natural, readable format"
             ],
             "character_count": len(optimized_title_content)
@@ -468,7 +565,7 @@ class SEORunner:
         
         for i, (focus, template) in enumerate(bullet_templates):
             if i < len(sorted_keywords):
-                keyword = sorted_keywords[i]["phrase"]
+                keyword = sorted_keywords[i].get("phrase", "")
                 bullet_content = f"✅ {focus}: " + template.format(keyword)
                 optimized_bullets.append({
                     "content": bullet_content,
@@ -484,7 +581,7 @@ class SEORunner:
         
         backend_keywords = []
         for kw in sorted_keywords:
-            phrase = kw["phrase"]
+            phrase = kw.get("phrase", "")
             if phrase not in used_in_content and len(backend_keywords) < 15:
                 backend_keywords.append(phrase)
         
@@ -501,7 +598,7 @@ class SEORunner:
         # Add misspellings and variations (using optimized keyword list)
         variations = []
         for kw in optimized_keywords:
-            phrase = kw["phrase"]
+            phrase = kw.get("phrase", "")
             # Add common variations (punctuation, spacing only - no singular/plural thanks to AI)
             if "freeze dried" in phrase:
                 variations.append(phrase.replace("freeze dried", "freeze-dried"))
@@ -523,12 +620,12 @@ class SEORunner:
             optimized_backend_keywords=backend_keywords,
             keyword_strategy={
                 "primary_focus": f"Cover {len(all_roots)} keyword roots",
-                "secondary_focus": f"Prioritize {len(high_intent_keywords)} high-intent keywords",
-                "volume_strategy": f"Replace low-volume with {sum(k.get('search_volume', 0) for k in high_volume_keywords[:5])//1000}k+ volume terms",
+                "secondary_focus": f"Prioritize {len([k for k in all_good_keywords if (k.get('relevancy_score') or 0) >= 80])} high-relevancy keywords",
+                "relevancy_strategy": f"Use {sum((k.get('relevancy_score') or 0) for k in all_good_keywords[:5])//5} avg relevancy score",
                 "character_optimization": True,
                 "root_coverage": f"{len(used_roots)}/{len(all_roots)} roots covered"
             },
-            rationale=f"Enhanced optimization covering {len(all_roots)} keyword roots, prioritizing {len(high_intent_keywords)} high-intent terms, and replacing lower-volume keywords with better search volume options. Achieved natural readability while maximizing SEO potential."
+            rationale=f"Enhanced optimization covering {len(all_roots)} keyword roots, prioritizing high-relevancy terms (80+ score), and using keywords sorted by relevancy score. Achieved natural readability while maximizing SEO potential."
         )
     
     def _parse_ai_output_to_optimized_seo(self, ai_output: Any, keyword_data: Dict[str, Any]) -> OptimizedSEO:
@@ -594,8 +691,13 @@ class SEORunner:
         # Build phrase lists and maps
         all_keywords = keyword_data.get("relevant_keywords", []) + keyword_data.get("design_keywords", [])
         phrases = [kw.get("phrase", "") for kw in all_keywords if kw.get("phrase")]
-        phrase_to_volume = {kw.get("phrase", ""): kw.get("search_volume", 0) for kw in all_keywords}
+        phrase_to_volume = {kw.get("phrase", ""): (kw.get("search_volume") or 0) for kw in all_keywords}
         high_intent_phrases = [kw.get("phrase", "") for kw in keyword_data.get("high_intent_keywords", []) if kw.get("phrase")]
+
+        # Debug logging
+        logger.info(f"📊 [METRICS] Comparison data:")
+        logger.info(f"   Total keywords for comparison: {len(phrases)}")
+        logger.info(f"   High-intent keywords: {len(high_intent_phrases)}")
 
         # Current content strings
         current_title = current_seo.title_analysis.content
@@ -612,6 +714,9 @@ class SEORunner:
         # Coverage details
         current_found, _ = extract_keywords_from_content(current_text, phrases)
         opt_found, _ = extract_keywords_from_content(opt_text, phrases)
+        
+        logger.info(f"   Current content keywords found: {len(current_found)}/{len(phrases)}")
+        logger.info(f"   Optimized content keywords found: {len(opt_found)}/{len(phrases)}")
 
         total_kw = len(phrases)
         before_cov = len(set(current_found))
@@ -682,3 +787,686 @@ class SEORunner:
     def _should_use_ai_optimization(self) -> bool:
         """Always use AI optimization (no rule-based fallback)."""
         return True
+    
+    def _correct_keyword_hallucination(self, optimized_seo: OptimizedSEO, keyword_validator: SEOKeywordValidator) -> OptimizedSEO:
+        """
+        Correct keyword hallucination by replacing invalid keywords with valid research keywords.
+        
+        Args:
+            optimized_seo: SEO output with potential hallucinated keywords
+            keyword_validator: Validator instance with research keywords
+            
+        Returns:
+            Corrected SEO output with only valid keywords
+        """
+        from .schemas import OptimizedContent
+        
+        logger.info("🔧 Correcting keyword hallucination in SEO output")
+        
+        # Get available valid keywords
+        available_keywords = keyword_validator.get_available_keywords()
+        
+        # Correct title keywords
+        title_keywords = optimized_seo.optimized_title.keywords_included
+        valid_title_keywords, _ = keyword_validator.validate_keywords_against_research(title_keywords)
+        
+        # If title has invalid keywords, replace with top valid keywords
+        if len(valid_title_keywords) < len(title_keywords):
+            top_keywords = keyword_validator.get_top_keywords_by_relevancy(available_keywords, 5)
+            corrected_title_keywords = keyword_validator.allocate_keywords_for_content_type(top_keywords, 'title')
+            
+            # Update title content to use corrected keywords
+            corrected_title_content = self._rebuild_content_with_keywords(
+                optimized_seo.optimized_title.content, 
+                corrected_title_keywords
+            )
+            
+            optimized_seo.optimized_title = OptimizedContent(
+                content=corrected_title_content,
+                keywords_included=corrected_title_keywords,
+                improvements=optimized_seo.optimized_title.improvements + ["Keyword hallucination corrected"],
+                character_count=len(corrected_title_content)
+            )
+        
+        # Correct bullet keywords
+        corrected_bullets = []
+        for bullet in optimized_seo.optimized_bullets:
+            bullet_keywords = bullet.keywords_included
+            valid_bullet_keywords, _ = keyword_validator.validate_keywords_against_research(bullet_keywords)
+            
+            # If bullet has invalid keywords, replace with valid ones
+            if len(valid_bullet_keywords) < len(bullet_keywords):
+                top_keywords = keyword_validator.get_top_keywords_by_relevancy(available_keywords, 2)
+                corrected_bullet_keywords = keyword_validator.allocate_keywords_for_content_type(top_keywords, 'bullets')
+                
+                # Update bullet content
+                corrected_bullet_content = self._rebuild_content_with_keywords(
+                    bullet.content, 
+                    corrected_bullet_keywords
+                )
+                
+                corrected_bullets.append(OptimizedContent(
+                    content=corrected_bullet_content,
+                    keywords_included=corrected_bullet_keywords,
+                    improvements=bullet.improvements + ["Keyword hallucination corrected"],
+                    character_count=len(corrected_bullet_content)
+                ))
+            else:
+                corrected_bullets.append(bullet)
+        
+        optimized_seo.optimized_bullets = corrected_bullets
+        
+        # Correct backend keywords
+        backend_keywords = optimized_seo.optimized_backend_keywords
+        valid_backend_keywords, _ = keyword_validator.validate_keywords_against_research(backend_keywords)
+        
+        # If backend has invalid keywords, replace with valid ones
+        if len(valid_backend_keywords) < len(backend_keywords):
+            top_keywords = keyword_validator.get_top_keywords_by_relevancy(available_keywords, 15)
+            corrected_backend_keywords = keyword_validator.allocate_keywords_for_content_type(top_keywords, 'backend')
+            optimized_seo.optimized_backend_keywords = corrected_backend_keywords
+        
+        logger.info("✅ Keyword hallucination correction completed")
+        
+        return optimized_seo
+    
+    def _rebuild_content_with_keywords(self, content: str, keywords: List[str]) -> str:
+        """
+        Rebuild content using only valid keywords.
+        This is a simple implementation - in practice, you might want more sophisticated content rebuilding.
+        """
+        if not keywords:
+            return content
+        
+        # Simple approach: append keywords to content if they're not already present
+        content_lower = content.lower()
+        missing_keywords = [kw for kw in keywords if kw.lower() not in content_lower]
+        
+        if missing_keywords:
+            # Add missing keywords to the end
+            return content + " " + " ".join(missing_keywords)
+        
+        return content
+    
+    def _generate_rule_based_optimizations(
+        self,
+        current_content: Dict[str, Any],
+        keyword_data: Dict[str, Any]
+    ) -> OptimizedSEO:
+        """Generate rule-based optimization suggestions that fulfill MVP requirements."""
+        
+        # Get keywords by category and intent
+        relevant_keywords = keyword_data["relevant_keywords"]
+        design_keywords = keyword_data["design_keywords"]
+        high_intent_keywords = keyword_data["high_intent_keywords"]
+        high_volume_keywords = keyword_data["high_volume_keywords"]
+        
+        # Combine relevant + design for optimization
+        all_good_keywords = relevant_keywords + design_keywords
+        
+        # Sort by relevancy score (descending), then by search volume, then by intent score
+        sorted_keywords = sorted(all_good_keywords, 
+                               key=lambda x: (x.get("relevancy_score", 0), x.get("search_volume", 0), x.get("intent_score", 0)), 
+                               reverse=True)
+        
+        # Get all unique roots from good keywords
+        all_roots = set()
+        root_to_best_keyword = {}
+        for kw in sorted_keywords:
+            root = kw.get("root", "")
+            if root and root not in root_to_best_keyword:
+                root_to_best_keyword[root] = kw.get("phrase", "")
+                all_roots.add(root)
+        
+        # Select top keywords for title optimization
+        # Prioritize: high intent + high volume + covers different roots
+        title_keywords = []
+        used_roots = set()
+        
+        # First, get highest relevancy keywords that cover different roots
+        for kw in sorted_keywords[:15]:  # Look at top 15
+            root = kw.get("root", "")
+            phrase = kw.get("phrase", "")
+            relevancy = kw.get("relevancy_score", 0)
+            volume = kw.get("search_volume", 0)
+            
+            # Handle None values safely
+            if relevancy is None:
+                relevancy = 0
+            if volume is None:
+                volume = 0
+            
+            # Prioritize high relevancy (80+) and good volume (300+)
+            if relevancy >= 80 and volume >= 300 and root not in used_roots and len(title_keywords) < 4:
+                title_keywords.append(phrase)
+                used_roots.add(root)
+        
+        # Fill remaining slots with high-relevancy terms
+        for kw in sorted_keywords:
+            phrase = kw.get("phrase", "")
+            relevancy = kw.get("relevancy_score", 0)
+            
+            # Handle None values safely
+            if relevancy is None:
+                relevancy = 0
+                
+            if len(title_keywords) < 5 and phrase not in title_keywords and relevancy >= 70:
+                title_keywords.append(phrase)
+        
+        # Create natural-sounding optimized title
+        brand = current_content.get("brand", "BREWER")
+        primary_keyword = title_keywords[0] if title_keywords else "freeze dried strawberries"
+        
+        # Build title with natural flow
+        title_parts = []
+        if brand:
+            title_parts.append(brand)
+        
+        # Add pack info
+        title_parts.append("Bulk")
+        
+        # Add primary keyword
+        title_parts.append(primary_keyword.title())
+        
+        # Add key attributes
+        title_parts.append("- Organic")
+        title_parts.append("No Sugar Added")
+        
+        # Add secondary keyword if different
+        if len(title_keywords) > 1:
+            secondary = title_keywords[1]
+            if "organic" not in secondary.lower():
+                title_parts.append(f"Premium {secondary.title()}")
+        
+        # Add use cases
+        title_parts.append("for Snacking, Baking & Travel")
+        
+        optimized_title_content = " ".join(title_parts)[:200]  # Amazon limit
+        
+        optimized_title = {
+            "content": optimized_title_content,
+            "keywords_included": title_keywords[:3],
+            "improvements": [
+                f"Covers {len(used_roots)} keyword roots",
+                f"Uses {len([k for k in all_good_keywords if (k.get('relevancy_score') or 0) >= 80])} high-relevancy keywords",
+                f"Prioritizes {sum((k.get('relevancy_score') or 0) for k in all_good_keywords[:3])//3} avg relevancy score",
+                "Natural, readable format"
+            ],
+            "character_count": len(optimized_title_content)
+        }
+        
+        # Create optimized bullets focusing on different keyword clusters
+        optimized_bullets = []
+        bullet_templates = [
+            ("Flavor & Quality", "Enjoy the naturally sweet, tangy crunch of {} bursting with real fruit flavor."),
+            ("Organic & Healthy", "Our {} are organic, no sugar added, and made from farm-fresh strawberries."),
+            ("Versatile Use", "Perfect {} for baking, smoothies, cereals, and on-the-go snacking."),
+            ("Travel Ready", "Lightweight and shelf-stable {} ideal for hiking, camping, and travel adventures."),
+            ("Bulk Value", "Buy in bulk and enjoy premium quality {} whenever you need them.")
+        ]
+        
+        for i, (focus, template) in enumerate(bullet_templates):
+            if i < len(sorted_keywords):
+                keyword = sorted_keywords[i].get("phrase", "")
+                bullet_content = f"✅ {focus}: " + template.format(keyword)
+                optimized_bullets.append({
+                    "content": bullet_content,
+                    "keywords_included": [keyword],
+                    "improvements": [f"Focused on {focus.lower()}", "Clear value proposition"],
+                    "character_count": len(bullet_content)
+                })
+        
+        # Backend keywords: Use remaining good keywords not in title/bullets
+        used_in_content = set(title_keywords)
+        for bullet in optimized_bullets:
+            used_in_content.update(bullet["keywords_included"])
+        
+        backend_keywords = []
+        for kw in sorted_keywords:
+            phrase = kw.get("phrase", "")
+            if phrase not in used_in_content and len(backend_keywords) < 15:
+                backend_keywords.append(phrase)
+        
+        # Task 11: Apply AI-powered variant optimization before generating variations
+        try:
+            from app.local_agents.scoring.subagents.keyword_variant_agent import apply_variant_optimization_ai
+            # Use AI to remove redundant singular/plural variants from good keywords
+            optimized_keywords = apply_variant_optimization_ai(all_good_keywords)
+            logger.info(f"[Task11-AI] Applied AI variant optimization: {len(all_good_keywords)} -> {len(optimized_keywords)} keywords")
+        except Exception as e:
+            logger.warning(f"[Task11-AI] AI variant optimization failed, using original keywords: {e}")
+            optimized_keywords = all_good_keywords
+        
+        # Add misspellings and variations (using optimized keyword list)
+        variations = []
+        for kw in optimized_keywords:
+            phrase = kw.get("phrase", "")
+            # Add common variations (punctuation, spacing only - no singular/plural thanks to AI)
+            if "freeze dried" in phrase:
+                variations.append(phrase.replace("freeze dried", "freeze-dried"))
+                variations.append(phrase.replace("freeze dried", "freezedried"))
+        
+        # Remove duplicates and already used variations
+        filtered_variations = []
+        for variation in variations:
+            if variation not in used_in_content and variation not in backend_keywords:
+                filtered_variations.append(variation)
+        
+        backend_keywords.extend(filtered_variations[:5])
+        
+        from .schemas import OptimizedContent
+        
+        return OptimizedSEO(
+            optimized_title=OptimizedContent(**optimized_title),
+            optimized_bullets=[OptimizedContent(**bullet) for bullet in optimized_bullets],
+            optimized_backend_keywords=backend_keywords,
+            keyword_strategy={
+                "primary_focus": f"Cover {len(all_roots)} keyword roots",
+                "secondary_focus": f"Prioritize {len([k for k in all_good_keywords if (k.get('relevancy_score') or 0) >= 80])} high-relevancy keywords",
+                "relevancy_strategy": f"Use {sum((k.get('relevancy_score') or 0) for k in all_good_keywords[:5])//5} avg relevancy score",
+                "character_optimization": True,
+                "root_coverage": f"{len(used_roots)}/{len(all_roots)} roots covered"
+            },
+            rationale=f"Enhanced optimization covering {len(all_roots)} keyword roots, prioritizing high-relevancy terms (80+ score), and using keywords sorted by relevancy score. Achieved natural readability while maximizing SEO potential."
+        )
+    
+    def _parse_ai_output_to_optimized_seo(self, ai_output: Any, keyword_data: Dict[str, Any]) -> OptimizedSEO:
+
+        """Parse AI output into OptimizedSEO structure."""
+
+        from .schemas import OptimizedContent
+
+        data = ai_output
+
+
+
+        # If output is JSON string, parse it
+
+        if isinstance(data, str):
+
+            import json
+
+            data = json.loads(data)
+
+
+
+        # If output is a Pydantic model, convert to dict
+
+        try:
+
+            if hasattr(data, 'model_dump'):
+
+                data = data.model_dump()
+
+        except Exception:
+
+            pass
+
+
+
+        # If the agent returned a full SEOAnalysisResult, extract optimized_seo
+
+        if isinstance(data, dict) and 'optimized_seo' in data:
+
+            data = data['optimized_seo']
+
+
+
+        # At this point, data should be the optimized_seo dict
+
+        if not isinstance(data, dict):
+
+            raise ValueError("AI output is not in expected optimized_seo dict format")
+
+
+
+        # Build OptimizedSEO from dict tolerantly
+
+        optimized_title = data.get('optimized_title') or {}
+
+        optimized_bullets = data.get('optimized_bullets') or []
+
+        optimized_backend_keywords = data.get('optimized_backend_keywords') or []
+
+        keyword_strategy = data.get('keyword_strategy') or {}
+
+        rationale = data.get('rationale') or ""
+
+
+
+        # Normalize bullets and title into OptimizedContent
+
+        def to_opt_content(obj: dict) -> OptimizedContent:
+
+            return OptimizedContent(
+
+                content=obj.get('content', ''),
+
+                keywords_included=list(obj.get('keywords_included', [])),
+
+                improvements=list(obj.get('improvements', [])),
+
+                character_count=int(obj.get('character_count', len(obj.get('content', ''))))
+
+            )
+
+
+
+        title_content = to_opt_content(optimized_title)
+
+        bullets_content = [to_opt_content(b) for b in optimized_bullets if isinstance(b, dict)]
+
+
+
+        return OptimizedSEO(
+
+            optimized_title=title_content,
+
+            optimized_bullets=bullets_content,
+
+            optimized_backend_keywords=list(optimized_backend_keywords),
+
+            keyword_strategy=keyword_strategy,
+
+            rationale=rationale
+
+        )
+    
+    
+    
+    def _calculate_comparison_metrics(
+
+        self, 
+
+        current_seo: CurrentSEO, 
+
+        optimized_seo: OptimizedSEO,
+
+        keyword_data: Dict[str, Any]
+
+    ) -> SEOComparison:
+
+        """Calculate before/after comparison metrics from actual content."""
+
+
+
+        # Build phrase lists and maps
+
+        all_keywords = keyword_data.get("relevant_keywords", []) + keyword_data.get("design_keywords", [])
+
+        phrases = [kw.get("phrase", "") for kw in all_keywords if kw.get("phrase")]
+
+        phrase_to_volume = {kw.get("phrase", ""): (kw.get("search_volume") or 0) for kw in all_keywords}
+        high_intent_phrases = [kw.get("phrase", "") for kw in keyword_data.get("high_intent_keywords", []) if kw.get("phrase")]
+
+
+
+        # Current content strings
+
+        current_title = current_seo.title_analysis.content
+
+        current_bullets = [b.content for b in current_seo.bullets_analysis]
+
+        current_backend = current_seo.backend_keywords
+
+        current_text = " ".join([current_title] + current_bullets + [" ".join(current_backend)])
+
+
+
+        # Optimized content strings
+
+        opt_title = optimized_seo.optimized_title.content
+
+        opt_bullets = [b.content for b in optimized_seo.optimized_bullets]
+
+        opt_backend = optimized_seo.optimized_backend_keywords
+
+        opt_text = " ".join([opt_title] + opt_bullets + [" ".join(opt_backend)])
+
+
+
+        # Coverage details
+
+        current_found, _ = extract_keywords_from_content(current_text, phrases)
+
+        opt_found, _ = extract_keywords_from_content(opt_text, phrases)
+
+
+
+        total_kw = len(phrases)
+
+        before_cov = len(set(current_found))
+
+        after_cov = len(set(opt_found))
+
+        before_pct = round((before_cov / total_kw * 100), 2) if total_kw else 0.0
+
+        after_pct = round((after_cov / total_kw * 100), 2) if total_kw else 0.0
+
+        new_added = [p for p in set(opt_found) if p not in set(current_found)]
+
+
+
+        coverage_improvement = {
+
+            "total_keywords": total_kw,
+
+            "before_covered": before_cov,
+
+            "after_covered": after_cov,
+
+            "before_coverage_pct": before_pct,
+
+            "after_coverage_pct": after_pct,
+
+            "delta_pct_points": round(after_pct - before_pct, 2),
+
+            "new_keywords_added": sorted(new_added)[:20]
+
+        }
+
+
+
+        # Intent coverage
+
+        before_hi_intent = len([p for p in high_intent_phrases if p in set(current_found)])
+
+        after_hi_intent = len([p for p in high_intent_phrases if p in set(opt_found)])
+
+        intent_improvement = {
+
+            "high_intent_total": len(high_intent_phrases),
+
+            "before_covered": before_hi_intent,
+
+            "after_covered": after_hi_intent,
+
+            "delta": max(0, after_hi_intent - before_hi_intent)
+
+        }
+
+
+
+        # Volume capture (approximate)
+
+        before_vol = sum(phrase_to_volume.get(p, 0) for p in set(current_found))
+
+        after_vol = sum(phrase_to_volume.get(p, 0) for p in set(opt_found))
+
+        volume_improvement = {
+
+            "estimated_volume_before": before_vol,
+
+            "estimated_volume_after": after_vol,
+
+            "delta_volume": max(0, after_vol - before_vol)
+
+        }
+
+
+
+        # Character efficiency
+
+        title_before = len(current_title or "")
+
+        title_after = len(opt_title or "")
+
+        backend_before = len(" ".join(current_backend) if current_backend else "")
+
+        backend_after = len(" ".join(opt_backend) if opt_backend else "")
+
+        char_efficiency = {
+
+            "title_limit": 200,
+
+            "title_before": title_before,
+
+            "title_after": title_after,
+
+            "title_utilization_before_pct": round((title_before / 200) * 100, 1) if 200 else 0,
+
+            "title_utilization_after_pct": round((title_after / 200) * 100, 1) if 200 else 0,
+
+            "backend_limit": 249,
+
+            "backend_before": backend_before,
+
+            "backend_after": backend_after,
+
+        }
+
+
+
+        # Summary metrics (simple heuristic)
+
+        summary_metrics = {
+
+            "overall_improvement_score": round(min(10.0, (after_pct - before_pct) / 10 + (after_hi_intent - before_hi_intent) / 2), 2),
+
+            "priority_recommendations": max(1, min(5, len(new_added) // 4)),
+
+        }
+
+
+
+        return SEOComparison(
+
+            coverage_improvement=coverage_improvement,
+
+            intent_improvement=intent_improvement,
+
+            volume_improvement=volume_improvement,
+
+            character_efficiency=char_efficiency,
+
+            summary_metrics=summary_metrics
+
+        )
+    
+    
+    
+    def _should_use_ai_optimization(self) -> bool:
+
+        """Always use AI optimization (no rule-based fallback)."""
+
+        return True
+    
+    def _correct_keyword_hallucination(self, optimized_seo: OptimizedSEO, keyword_validator: SEOKeywordValidator) -> OptimizedSEO:
+        """
+        Correct keyword hallucination by replacing invalid keywords with valid research keywords.
+        
+        Args:
+            optimized_seo: SEO output with potential hallucinated keywords
+            keyword_validator: Validator instance with research keywords
+            
+        Returns:
+            Corrected SEO output with only valid keywords
+        """
+        from .schemas import OptimizedContent
+        
+        logger.info("🔧 Correcting keyword hallucination in SEO output")
+        
+        # Get available valid keywords
+        available_keywords = keyword_validator.get_available_keywords()
+        
+        # Correct title keywords
+        title_keywords = optimized_seo.optimized_title.keywords_included
+        valid_title_keywords, _ = keyword_validator.validate_keywords_against_research(title_keywords)
+        
+        # If title has invalid keywords, replace with top valid keywords
+        if len(valid_title_keywords) < len(title_keywords):
+            top_keywords = keyword_validator.get_top_keywords_by_relevancy(available_keywords, 5)
+            corrected_title_keywords = keyword_validator.allocate_keywords_for_content_type(top_keywords, 'title')
+            
+            # Update title content to use corrected keywords
+            corrected_title_content = self._rebuild_content_with_keywords(
+                optimized_seo.optimized_title.content, 
+                corrected_title_keywords
+            )
+            
+            optimized_seo.optimized_title = OptimizedContent(
+                content=corrected_title_content,
+                keywords_included=corrected_title_keywords,
+                improvements=optimized_seo.optimized_title.improvements + ["Keyword hallucination corrected"],
+                character_count=len(corrected_title_content)
+            )
+        
+        # Correct bullet keywords
+        corrected_bullets = []
+        for bullet in optimized_seo.optimized_bullets:
+            bullet_keywords = bullet.keywords_included
+            valid_bullet_keywords, _ = keyword_validator.validate_keywords_against_research(bullet_keywords)
+            
+            # If bullet has invalid keywords, replace with valid ones
+            if len(valid_bullet_keywords) < len(bullet_keywords):
+                top_keywords = keyword_validator.get_top_keywords_by_relevancy(available_keywords, 2)
+                corrected_bullet_keywords = keyword_validator.allocate_keywords_for_content_type(top_keywords, 'bullets')
+                
+                # Update bullet content
+                corrected_bullet_content = self._rebuild_content_with_keywords(
+                    bullet.content, 
+                    corrected_bullet_keywords
+                )
+                
+                corrected_bullets.append(OptimizedContent(
+                    content=corrected_bullet_content,
+                    keywords_included=corrected_bullet_keywords,
+                    improvements=bullet.improvements + ["Keyword hallucination corrected"],
+                    character_count=len(corrected_bullet_content)
+                ))
+            else:
+                corrected_bullets.append(bullet)
+        
+        optimized_seo.optimized_bullets = corrected_bullets
+        
+        # Correct backend keywords
+        backend_keywords = optimized_seo.optimized_backend_keywords
+        valid_backend_keywords, _ = keyword_validator.validate_keywords_against_research(backend_keywords)
+        
+        # If backend has invalid keywords, replace with valid ones
+        if len(valid_backend_keywords) < len(backend_keywords):
+            top_keywords = keyword_validator.get_top_keywords_by_relevancy(available_keywords, 15)
+            corrected_backend_keywords = keyword_validator.allocate_keywords_for_content_type(top_keywords, 'backend')
+            optimized_seo.optimized_backend_keywords = corrected_backend_keywords
+        
+        logger.info("✅ Keyword hallucination correction completed")
+        
+        return optimized_seo
+    
+    def _rebuild_content_with_keywords(self, content: str, keywords: List[str]) -> str:
+        """
+        Rebuild content using only valid keywords.
+        This is a simple implementation - in practice, you might want more sophisticated content rebuilding.
+        """
+        if not keywords:
+            return content
+        
+        # Simple approach: append keywords to content if they're not already present
+        content_lower = content.lower()
+        missing_keywords = [kw for kw in keywords if kw.lower() not in content_lower]
+        
+        if missing_keywords:
+            # Add missing keywords to the end
+            return content + " " + " ".join(missing_keywords)
+        
+        return content

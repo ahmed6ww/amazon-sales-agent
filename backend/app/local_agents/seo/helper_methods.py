@@ -30,8 +30,49 @@ def extract_keywords_from_content(content: str, keywords_list: List[str]) -> Tup
     found_keywords = []
     
     for keyword in keywords_list:
-        if keyword.lower() in content_lower:
+        if not keyword:
+            continue
+            
+        keyword_lower = keyword.lower().strip()
+        
+        # Direct substring match
+        if keyword_lower in content_lower:
             found_keywords.append(keyword)
+            continue
+            
+        # Handle variations and partial matches
+        keyword_words = keyword_lower.split()
+        if len(keyword_words) > 1:
+            # Check if all words in the keyword are present in content
+            if all(word in content_lower for word in keyword_words):
+                found_keywords.append(keyword)
+                continue
+                
+        # Handle hyphenated vs non-hyphenated variations
+        if '-' in keyword_lower:
+            # Try without hyphens
+            keyword_no_hyphen = keyword_lower.replace('-', ' ')
+            if keyword_no_hyphen in content_lower:
+                found_keywords.append(keyword)
+                continue
+        else:
+            # Try with hyphens
+            keyword_with_hyphen = keyword_lower.replace(' ', '-')
+            if keyword_with_hyphen in content_lower:
+                found_keywords.append(keyword)
+                continue
+                
+        # Handle plural/singular variations (basic)
+        if keyword_lower.endswith('s') and len(keyword_lower) > 3:
+            singular = keyword_lower[:-1]
+            if singular in content_lower:
+                found_keywords.append(keyword)
+                continue
+        elif not keyword_lower.endswith('s'):
+            plural = keyword_lower + 's'
+            if plural in content_lower:
+                found_keywords.append(keyword)
+                continue
             
     return found_keywords, len(found_keywords)
 
@@ -155,6 +196,18 @@ def analyze_content_piece(content: str, keywords_list: List[str]) -> Dict[str, A
     # Find opportunities (keywords not included)
     opportunities = [kw for kw in keywords_list if kw not in found_keywords][:5]
     
+    # Debug: Print keyword extraction results
+    # Debug output disabled
+    # print(f"\nKEYWORD EXTRACTION DEBUG:")
+    # print(f"  Content: {content[:100]}{'...' if len(content) > 100 else ''}")
+    # print(f"  Keywords to search: {len(keywords_list)}")
+    # print(f"  Keywords found: {count}")
+    # if found_keywords:
+    #     print(f"  Found keywords: {found_keywords[:5]}{'...' if len(found_keywords) > 5 else ''}")
+    # else:
+    #     print(f"  No keywords found in content")
+    # print(f"  Keyword density: {round(density, 2)}%")
+    
     return {
         "content": content,
         "keywords_found": found_keywords,
@@ -190,6 +243,12 @@ def prepare_keyword_data_for_analysis(keyword_items: List[Dict[str, Any]]) -> Di
         root = item.get("root", "")
         phrase = item.get("phrase", "")
         
+        # Handle None values safely
+        if search_volume is None:
+            search_volume = 0
+        if intent_score is None:
+            intent_score = 0
+        
         # Categorize keywords
         if category == "Relevant":
             relevant_keywords.append(item)
@@ -222,6 +281,9 @@ def prepare_keyword_data_for_analysis(keyword_items: List[Dict[str, Any]]) -> Di
             root = item.get("root", "")
             category = item.get("category", "")
             search_volume = item.get("search_volume", 0)
+            # Handle None values safely
+            if search_volume is None:
+                search_volume = 0
             if root and category in ["Relevant", "Design-Specific"]:
                 filtered_root_volumes[root] = filtered_root_volumes.get(root, 0) + search_volume
     
@@ -254,6 +316,13 @@ def format_keywords_for_prompt(keywords: List[Dict[str, Any]], limit: int = 20) 
         phrase = kw.get("phrase", "")
         intent = kw.get("intent_score", 0)
         volume = kw.get("search_volume", 0)
+        
+        # Handle None values safely
+        if intent is None:
+            intent = 0
+        if volume is None:
+            volume = 0
+            
         lines.append(f"- {phrase} (Intent: {intent}, Volume: {volume})")
         
     if len(keywords) > limit:

@@ -9,6 +9,13 @@ This script uses the successful data structure you already have and adds SEO ana
 import json
 import sys
 import os
+import logging
+
+# Configure logging to see debug messages
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(levelname)s - %(name)s - %(message)s'
+)
 
 # Add the backend path so we can import our modules
 sys.path.append(os.path.join(os.path.dirname(__file__), 'backend'))
@@ -157,11 +164,11 @@ def test_complete_pipeline():
     try:
         from app.local_agents.seo import SEORunner
         
-        print("🧪 Testing complete 4-agent pipeline...")
-        print("✅ Research Agent: Product scraped and analyzed")
-        print("✅ Keyword Agent: 5 keywords categorized")
-        print("✅ Scoring Agent: Intent scores and metrics added")
-        print("🔍 Running SEO Agent...")
+        print("[TEST] Testing complete 4-agent pipeline...")
+        print("[OK] Research Agent: Product scraped and analyzed")
+        print("[OK] Keyword Agent: 5 keywords categorized")
+        print("[OK] Scoring Agent: Intent scores and metrics added")
+        print("[RUN] Running SEO Agent...")
         
         # Extract data for SEO analysis
         scraped_product = existing_successful_data["ai_analysis_keywords"]["scraped_product"]
@@ -176,7 +183,7 @@ def test_complete_pipeline():
         )
         
         if seo_result.get("success"):
-            print("✅ SEO Agent: Analysis completed successfully")
+            print("[OK] SEO Agent: Analysis completed successfully")
             
             # Display the complete pipeline results
             complete_result = existing_successful_data.copy()
@@ -190,13 +197,13 @@ def test_complete_pipeline():
             comparison = analysis.get("comparison", {})
             
             print("\n" + "="*60)
-            print("📊 COMPLETE 4-AGENT PIPELINE RESULTS")
+            print("[RESULTS] COMPLETE 4-AGENT PIPELINE RESULTS")
             print("="*60)
             
             # Current SEO State
             if current_seo:
                 keyword_coverage = current_seo.get("keyword_coverage", {})
-                print(f"\n📈 CURRENT SEO ANALYSIS:")
+                print(f"\n[CURRENT] CURRENT SEO ANALYSIS:")
                 print(f"   Keyword Coverage: {keyword_coverage.get('coverage_percentage', 0)}%")
                 print(f"   Keywords Covered: {keyword_coverage.get('covered_keywords', 0)}/{keyword_coverage.get('total_keywords', 0)}")
                 print(f"   Missing High-Intent: {len(keyword_coverage.get('missing_high_intent', []))}")
@@ -209,7 +216,7 @@ def test_complete_pipeline():
             if optimized_seo:
                 optimized_title = optimized_seo.get("optimized_title", {})
                 optimized_bullets = optimized_seo.get("optimized_bullets", [])
-                print(f"\n🚀 OPTIMIZED SEO SUGGESTIONS:")
+                print(f"\n[OPTIMIZED] OPTIMIZED SEO SUGGESTIONS:")
                 print(f"   Improved Title: {optimized_title.get('character_count', 0)} chars")
                 print(f"   Keywords Added: {len(optimized_title.get('keywords_included', []))}")
                 print(f"   Optimized Bullets: {len(optimized_bullets)}")
@@ -218,33 +225,39 @@ def test_complete_pipeline():
             if comparison:
                 coverage_improvement = comparison.get("coverage_improvement", {})
                 intent_improvement = comparison.get("intent_improvement", {})
-                print(f"\n📊 IMPROVEMENT METRICS:")
-                print(f"   Coverage: {coverage_improvement.get('current_coverage', 0)}% → {coverage_improvement.get('optimized_coverage', 0)}% (+{coverage_improvement.get('improvement', 0)}%)")
-                print(f"   High-Intent: {intent_improvement.get('current_high_intent_covered', 0)} → {intent_improvement.get('optimized_high_intent_covered', 0)} (+{intent_improvement.get('improvement', 0)})")
+                volume_improvement = comparison.get("volume_improvement", {})
+                print(f"\n[METRICS] IMPROVEMENT METRICS:")
+                print(f"   Coverage: {coverage_improvement.get('before_coverage_pct', 0)}% -> {coverage_improvement.get('after_coverage_pct', 0)}% (+{coverage_improvement.get('delta_pct_points', 0)}%)")
+                print(f"   Keywords: {coverage_improvement.get('before_covered', 0)}/{coverage_improvement.get('total_keywords', 0)} -> {coverage_improvement.get('after_covered', 0)}/{coverage_improvement.get('total_keywords', 0)}")
+                print(f"   High-Intent: {intent_improvement.get('before_covered', 0)} -> {intent_improvement.get('after_covered', 0)} (+{intent_improvement.get('delta', 0)})")
+                print(f"   Search Volume: {volume_improvement.get('estimated_volume_before', 0):,} -> {volume_improvement.get('estimated_volume_after', 0):,} (+{volume_improvement.get('delta_volume', 0):,})")
+                
+                new_keywords = coverage_improvement.get('new_keywords_added', [])
+                if new_keywords:
+                    print(f"   New Keywords Added: {', '.join(new_keywords[:5])}")
                 
                 summary_metrics = comparison.get("summary_metrics", {})
                 print(f"   Overall Score: {summary_metrics.get('overall_improvement_score', 0)}/10")
-                print(f"   Ranking Improvement: {summary_metrics.get('estimated_ranking_improvement', 'N/A')}")
             
             print("\n" + "="*60)
-            print("🎉 COMPLETE PIPELINE SUCCESS!")
+            print("[SUCCESS] COMPLETE PIPELINE SUCCESS!")
             print("All 4 agents working together:")
-            print("Research → Keyword → Scoring → SEO ✅")
+            print("Research -> Keyword -> Scoring -> SEO [OK]")
             print("="*60)
             
             # Save complete result
             with open("complete_pipeline_result.json", "w") as f:
                 json.dump(complete_result, f, indent=2)
-            print(f"\n📄 Complete result saved to: complete_pipeline_result.json")
+            print(f"\n[SAVED] Complete result saved to: complete_pipeline_result.json")
             
             return True
             
         else:
-            print(f"❌ SEO Agent failed: {seo_result.get('error', 'Unknown error')}")
+            print(f"[ERROR] SEO Agent failed: {seo_result.get('error', 'Unknown error')}")
             return False
             
     except Exception as e:
-        print(f"❌ Pipeline test failed: {str(e)}")
+        print(f"[ERROR] Pipeline test failed: {str(e)}")
         import traceback
         traceback.print_exc()
         return False

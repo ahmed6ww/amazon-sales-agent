@@ -298,7 +298,8 @@ def apply_competitor_title_optimization_ai(
     current_content: Dict[str, Any],
     competitor_data: List[Dict[str, Any]],
     keyword_data: Dict[str, Any],
-    product_context: Dict[str, Any]
+    product_context: Dict[str, Any],
+    keyword_validator: Optional[Any] = None
 ) -> Dict[str, Any]:
     """
     Main function to apply AI-powered competitor title analysis for Task 6.
@@ -317,17 +318,47 @@ def apply_competitor_title_optimization_ai(
     relevant_keywords = keyword_data.get("relevant_keywords", [])
     design_keywords = keyword_data.get("design_keywords", [])
     
-    # Identify main keyword root (highest volume relevant keyword)
+    # Validate and prioritize keywords by relevancy if validator is provided
+    if keyword_validator:
+        # Get only valid keywords from research data
+        all_keywords = [kw.get("phrase", "") for kw in relevant_keywords + design_keywords]
+        valid_keywords, invalid_keywords = keyword_validator.validate_keywords_against_research(all_keywords)
+        
+        if invalid_keywords:
+            logger.warning(f"🚫 Found {len(invalid_keywords)} invalid keywords in competitor analysis input: {invalid_keywords[:3]}")
+        
+        # Get top keywords sorted by relevancy score
+        top_keywords_by_relevancy = keyword_validator.get_top_keywords_by_relevancy(valid_keywords, 20)
+        logger.info(f"📈 Using top {len(top_keywords_by_relevancy)} keywords by relevancy for competitor analysis: {top_keywords_by_relevancy[:5]}")
+        
+        # Filter keyword data to only include top relevancy keywords
+        valid_relevant_keywords = [kw for kw in relevant_keywords if kw.get("phrase", "") in top_keywords_by_relevancy]
+        valid_design_keywords = [kw for kw in design_keywords if kw.get("phrase", "") in top_keywords_by_relevancy]
+        
+        # Sort by relevancy score within each category
+        valid_relevant_keywords.sort(key=lambda x: (x.get('relevancy_score') or 0), reverse=True)
+        valid_design_keywords.sort(key=lambda x: (x.get('relevancy_score') or 0), reverse=True)
+        
+        relevant_keywords = valid_relevant_keywords
+        design_keywords = valid_design_keywords
+        
+        logger.info(f"🎯 Prioritized {len(relevant_keywords)} relevant keywords and {len(design_keywords)} design keywords by relevancy for competitor analysis")
+    
+    # Identify main keyword root (highest relevancy relevant keyword)
     main_keyword_root = "freeze dried strawberry"  # Default
     if relevant_keywords:
-        top_relevant = max(relevant_keywords, key=lambda x: x.get("search_volume", 0))
+        # Use highest relevancy keyword instead of highest volume
+        top_relevant = max(relevant_keywords, key=lambda x: (x.get("relevancy_score") or 0))
         main_keyword_root = top_relevant.get("phrase", main_keyword_root)
+        logger.info(f"🎯 Selected main keyword root by relevancy for competitor analysis: {main_keyword_root} (score: {top_relevant.get('relevancy_score', 0)})")
     
-    # Identify design-specific root (highest volume design keyword)  
+    # Identify design-specific root (highest relevancy design keyword)  
     design_keyword_root = "slices"  # Default
     if design_keywords:
-        top_design = max(design_keywords, key=lambda x: x.get("search_volume", 0))
+        # Use highest relevancy keyword instead of highest volume
+        top_design = max(design_keywords, key=lambda x: (x.get("relevancy_score") or 0))
         design_keyword_root = top_design.get("phrase", design_keyword_root)
+        logger.info(f"🎯 Selected design keyword root by relevancy for competitor analysis: {design_keyword_root} (score: {top_design.get('relevancy_score', 0)})")
     
     # Run AI competitor analysis
     result = analyze_competitor_titles_for_benefits(

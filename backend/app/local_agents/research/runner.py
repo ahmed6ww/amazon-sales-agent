@@ -9,6 +9,9 @@ from app.services.keyword_processing.batch_processor import (
     optimize_keyword_processing_for_agents,
     create_agent_optimized_base_relevancy_scores
 )
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ResearchRunner:
@@ -36,8 +39,8 @@ class ResearchRunner:
             Dict with success flag, analysis text, and raw scraped data
         """
 
-        # 1) Fetch scraped data via helper
-        scraped_result = scrape_amazon_listing(asin_or_url)
+        # 1) Fetch scraped data via helper with marketplace support
+        scraped_result = scrape_amazon_listing(asin_or_url, marketplace)
         if not scraped_result.get("success"):
             return {
                 "success": False,
@@ -108,10 +111,10 @@ class ResearchRunner:
             scores: Dict[str, int] = {}
             if not rows or not competitor_asins:
                 return scores
-            asin_set = [a for a in competitor_asins if isinstance(a, str) and len(a) == 10 and a.startswith('B0')][:top_n]
+            asin_set = [a for a in competitor_asins if isinstance(a, str) and len(a) == 10 and a.startswith('B0')]
             if not asin_set:
                 return scores
-            for row in rows[:top_n]:
+            for row in rows:
                 kw = str(row.get('Keyword Phrase', '')).strip()
                 if not kw:
                     continue
@@ -177,12 +180,12 @@ class ResearchRunner:
         # Build competitor asin lists from the CSV headers
         def _extract_asins_from_rows(rows: List[Dict[str, Any]]) -> List[str]:
             seen = set()
-            for row in rows[:top_n]:
+            for row in rows:
                 for k in row.keys():
                     if isinstance(k, str) and k.startswith('B0') and len(k) == 10:
                         seen.add(k)
-            # keep stable order limited to top_n
-            out = [a for a in list(seen)][:top_n]
+            # keep stable order for all ASINs
+            out = [a for a in list(seen)]
             return out
 
         rev_asins_list = _extract_asins_from_rows(revenue_csv or [])
@@ -217,18 +220,30 @@ class ResearchRunner:
         # Create optimized base relevancy scores (limited set to prevent timeouts)
         optimized_base_relevancy = create_agent_optimized_base_relevancy_scores(
             unique_keywords, 
-            max_keywords_for_agent=100  # Limit to prevent AI timeouts
+            max_keywords_for_agent=100  # Increased limit to process more keywords
         )
         
         # Combine traditional relevancy scores with optimized scores
         base_relevancy = _compute_relevancy_scores(revenue_csv or [], rev_asins_list)
         for k, v in _compute_relevancy_scores(design_csv or [], des_asins_list).items():
             base_relevancy[k] = max(base_relevancy.get(k, 0.0), v)
-        
-        # Use optimized scores for agent processing (prevents timeouts)
-        agent_base_relevancy = optimized_base_relevancy
-        
-        # Keep full analysis for reporting, but use optimized set for agents
+
+        # Filter keywords by relevancy score (>= 2) before agent processing
+        min_relevancy_threshold = 2
+        high_relevancy_keywords = [
+            keyword for keyword, score in base_relevancy.items() 
+            if score >= min_relevancy_threshold
+        ]
+
+        logger.info(f"Filtered keywords by relevancy >= {min_relevancy_threshold}: {len(unique_keywords)} -> {len(high_relevancy_keywords)}")
+
+        # Use only high-relevancy keywords for agent processing
+        agent_base_relevancy = create_agent_optimized_base_relevancy_scores(
+            high_relevancy_keywords, 
+            max_keywords_for_agent=1000  # Process all high-relevancy keywords
+        )
+
+        # Keep full analysis for reporting, but use filtered set for agents
         full_base_relevancy = base_relevancy.copy()
         base_relevancy = agent_base_relevancy  # This goes to the agents
 

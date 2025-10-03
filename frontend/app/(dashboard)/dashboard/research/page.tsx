@@ -1,15 +1,29 @@
-"use client"
+"use client";
 
-import React, { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { CheckCircle, ArrowRight, Upload, Search, BarChart3, FileText } from "lucide-react"
-import { getFullApiUrl } from '@/lib/config';
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  CheckCircle,
+  ArrowRight,
+  Upload,
+  Search,
+  BarChart3,
+  FileText,
+} from "lucide-react";
+import { getFullApiUrl } from "@/lib/config";
+import ResultsDisplay from "@/components/dashboard/results-display";
 
 interface AnalysisStatus {
   analysis_id: string;
-  status: 'pending' | 'processing' | 'completed' | 'failed';
+  status: "pending" | "processing" | "completed" | "failed";
   current_step: string;
   progress: number;
   message: string;
@@ -98,53 +112,83 @@ interface AnalysisResults {
   };
 }
 
-type ResearchStep = "input" | "upload" | "processing" | "results"
+type ResearchStep = "input" | "upload" | "processing" | "results";
 
 export default function ResearchPage() {
-  const [currentStep, setCurrentStep] = useState<ResearchStep>("input")
-  const [asinOrUrl, setAsinOrUrl] = useState('')
-  const [marketplace, setMarketplace] = useState('US')
-  const [mainKeyword, setMainKeyword] = useState('')
-  const [revenueFile, setRevenueFile] = useState<File | null>(null)
-  const [designFile, setDesignFile] = useState<File | null>(null)
-  const [, setIsAnalyzing] = useState(false)
-  const [currentAnalysis, setCurrentAnalysis] = useState<AnalysisStatus | null>(null)
-  const [results, setResults] = useState<AnalysisResults | null>(null)
-  const [analysisId, setAnalysisId] = useState<string | null>(null)
+  const [currentStep, setCurrentStep] = useState<ResearchStep>("input");
+  const [asinOrUrl, setAsinOrUrl] = useState("");
+  const [marketplace, setMarketplace] = useState("US");
+  const [mainKeyword, setMainKeyword] = useState("");
+  const [revenueFile, setRevenueFile] = useState<File | null>(null);
+  const [designFile, setDesignFile] = useState<File | null>(null);
+  const [, setIsAnalyzing] = useState(false);
+  const [currentAnalysis, setCurrentAnalysis] = useState<AnalysisStatus | null>(
+    null
+  );
+  const [results, setResults] = useState<any>(null);
+  const [analysisId, setAnalysisId] = useState<string | null>(null);
 
   const steps = [
-    { id: "input", title: "Product Input", description: "Enter ASIN or product URL", icon: Search },
-    { id: "upload", title: "Data Upload", description: "Upload Helium 10 CSV files", icon: Upload },
-    { id: "processing", title: "AI Analysis", description: "Research → Keywords → Scoring → SEO", icon: BarChart3 },
-    { id: "results", title: "Results", description: "Complete optimization report", icon: FileText }
-  ]
+    {
+      id: "input",
+      title: "Product Input",
+      description: "Enter ASIN or product URL",
+      icon: Search,
+    },
+    {
+      id: "upload",
+      title: "Data Upload",
+      description: "Upload Helium 10 CSV files",
+      icon: Upload,
+    },
+    {
+      id: "processing",
+      title: "AI Analysis",
+      description: "Research → Keywords → Scoring → SEO",
+      icon: BarChart3,
+    },
+    {
+      id: "results",
+      title: "Results",
+      description: "Complete optimization report",
+      icon: FileText,
+    },
+  ];
 
   // Poll for status updates
   useEffect(() => {
-    if (analysisId && (currentAnalysis?.status === 'processing' || currentAnalysis?.status === 'pending')) {
+    if (
+      analysisId &&
+      (currentAnalysis?.status === "processing" ||
+        currentAnalysis?.status === "pending")
+    ) {
       const interval = setInterval(async () => {
         try {
-          const response = await fetch(getFullApiUrl(`/api/v1/analyze/${analysisId}/status`));
+          const response = await fetch(
+            getFullApiUrl(`/api/v1/analyze/${analysisId}/status`)
+          );
           if (response.ok) {
             const status = await response.json();
             setCurrentAnalysis(status);
             
-            if (status.status === 'completed') {
+            if (status.status === "completed") {
               // Fetch results
-              const resultsResponse = await fetch(getFullApiUrl(`/api/v1/analyze/${analysisId}/results`));
+              const resultsResponse = await fetch(
+                getFullApiUrl(`/api/v1/analyze/${analysisId}/results`)
+              );
               if (resultsResponse.ok) {
                 const resultsData = await resultsResponse.json();
                 setResults(resultsData.results);
                 setCurrentStep("results");
                 setIsAnalyzing(false);
               }
-            } else if (status.status === 'failed') {
+            } else if (status.status === "failed") {
               setIsAnalyzing(false);
               setCurrentStep("input");
             }
           }
         } catch (error) {
-          console.error('Error polling status:', error);
+          console.error("Error polling status:", error);
         }
       }, 2000);
 
@@ -153,32 +197,35 @@ export default function ResearchPage() {
   }, [analysisId, currentAnalysis?.status]);
 
   const getStepIndex = (step: ResearchStep) => {
-    return steps.findIndex(s => s.id === step)
-  }
+    return steps.findIndex((s) => s.id === step);
+  };
 
   const handleProductSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (asinOrUrl.trim()) {
-    setCurrentStep("upload")
+      setCurrentStep("upload");
     }
-  }
+  };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, type: 'revenue' | 'design') => {
+  const handleFileChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    type: "revenue" | "design"
+  ) => {
     const file = event.target.files?.[0];
-    if (file && file.type === 'text/csv') {
-      if (type === 'revenue') {
+    if (file && file.type === "text/csv") {
+      if (type === "revenue") {
         setRevenueFile(file);
       } else {
         setDesignFile(file);
       }
     } else {
-      alert('Please select a valid CSV file');
+      alert("Please select a valid CSV file");
     }
   };
 
   const startAnalysis = async () => {
     if (!asinOrUrl || !revenueFile || !designFile) {
-      alert('Please complete all required fields');
+      alert("Please complete all required fields");
       return;
     }
 
@@ -189,75 +236,89 @@ export default function ResearchPage() {
 
     try {
       const formData = new FormData();
-      formData.append('asin_or_url', asinOrUrl);
-      formData.append('marketplace', marketplace);
+      formData.append("asin_or_url", asinOrUrl);
+      formData.append("marketplace", marketplace);
       if (mainKeyword) {
-        formData.append('main_keyword', mainKeyword);
+        formData.append("main_keyword", mainKeyword);
       }
-      formData.append('revenue_csv', revenueFile);
-      formData.append('design_csv', designFile);
+      formData.append("revenue_csv", revenueFile);
+      formData.append("design_csv", designFile);
 
-      const response = await fetch(getFullApiUrl('/api/v1/analyze'), {
-        method: 'POST',
+      const response = await fetch(
+        getFullApiUrl("/api/v1/amazon-sales-intelligence"),
+        {
+          method: "POST",
         body: formData,
-      });
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Analysis failed: ${response.statusText}`);
       }
 
       const data = await response.json();
-      setAnalysisId(data.analysis_id);
-      
-      // Start polling for status
-      setCurrentAnalysis({
-        analysis_id: data.analysis_id,
-        status: 'pending',
-        current_step: 'initializing',
-        progress: 0,
-        message: 'Analysis queued for processing',
-        started_at: new Date().toISOString()
-      });
 
+      if (data.success) {
+        // Direct results from new endpoint
+        setResults(data);
+        setCurrentStep("results");
+        setIsAnalyzing(false);
+      } else {
+        throw new Error(data.error || "Analysis failed");
+      }
     } catch (error) {
-      console.error('Error starting analysis:', error);
-      alert(`Error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+      console.error("Error starting analysis:", error);
+      alert(
+        `Error: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
       setIsAnalyzing(false);
       setCurrentStep("upload");
     }
   };
 
   const resetResearch = () => {
-    setCurrentStep("input")
-    setAsinOrUrl('')
-    setMainKeyword('')
-    setRevenueFile(null)
-    setDesignFile(null)
-    setIsAnalyzing(false)
-    setCurrentAnalysis(null)
-    setResults(null)
-    setAnalysisId(null)
-  }
+    setCurrentStep("input");
+    setAsinOrUrl("");
+    setMainKeyword("");
+    setRevenueFile(null);
+    setDesignFile(null);
+    setIsAnalyzing(false);
+    setCurrentAnalysis(null);
+    setResults(null);
+    setAnalysisId(null);
+  };
 
   const getStepIcon = (step: string) => {
     switch (step) {
-      case 'parsing_data': return '📊';
-      case 'research_analysis': return '🔍';
-      case 'keyword_analysis': return '🏷️';
-      case 'scoring_analysis': return '🎯';
-      case 'seo_optimization': return '📝';
-      case 'finalizing': return '✨';
-      case 'completed': return '🎉';
-      default: return '⚙️';
+      case "parsing_data":
+        return "📊";
+      case "research_analysis":
+        return "🔍";
+      case "keyword_analysis":
+        return "🏷️";
+      case "scoring_analysis":
+        return "🎯";
+      case "seo_optimization":
+        return "📝";
+      case "finalizing":
+        return "✨";
+      case "completed":
+        return "🎉";
+      default:
+        return "⚙️";
     }
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'completed': return 'bg-green-500';
-      case 'processing': return 'bg-blue-500';
-      case 'failed': return 'bg-red-500';
-      default: return 'bg-gray-500';
+      case "completed":
+        return "bg-green-500";
+      case "processing":
+        return "bg-blue-500";
+      case "failed":
+        return "bg-red-500";
+      default:
+        return "bg-gray-500";
     }
   };
 
@@ -265,7 +326,9 @@ export default function ResearchPage() {
     <div className="space-y-8">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-bold text-gray-900">🚀 Start New Research</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          🚀 Start New Research
+        </h1>
         <p className="text-gray-600 mt-2">
           Complete AI-powered Amazon keyword research and SEO optimization
         </p>
@@ -276,20 +339,26 @@ export default function ResearchPage() {
         <CardContent className="p-6">
           <div className="flex items-center justify-between">
             {steps.map((step, index) => {
-              const currentIndex = getStepIndex(currentStep)
-              const isActive = index === currentIndex
-              const isCompleted = index < currentIndex
-              const StepIcon = step.icon
+              const currentIndex = getStepIndex(currentStep);
+              const isActive = index === currentIndex;
+              const isCompleted = index < currentIndex;
+              const StepIcon = step.icon;
               
               return (
                 <div key={step.id} className="flex items-center">
                   <div className="flex items-center">
-                    <div className={`
+                    <div
+                      className={`
                       w-10 h-10 rounded-full flex items-center justify-center border-2 transition-colors
-                      ${isActive ? 'bg-blue-500 border-blue-500 text-white' : 
-                        isCompleted ? 'bg-green-500 border-green-500 text-white' : 
-                        'bg-gray-100 border-gray-300 text-gray-400'}
-                    `}>
+                      ${
+                        isActive
+                          ? "bg-blue-500 border-blue-500 text-white"
+                          : isCompleted
+                          ? "bg-green-500 border-green-500 text-white"
+                          : "bg-gray-100 border-gray-300 text-gray-400"
+                      }
+                    `}
+                    >
                       {isCompleted ? (
                         <CheckCircle className="w-5 h-5" />
                       ) : (
@@ -297,17 +366,27 @@ export default function ResearchPage() {
                       )}
                     </div>
                     <div className="ml-3">
-                      <p className={`text-sm font-medium ${isActive ? 'text-blue-600' : isCompleted ? 'text-green-600' : 'text-gray-500'}`}>
+                      <p
+                        className={`text-sm font-medium ${
+                          isActive
+                            ? "text-blue-600"
+                            : isCompleted
+                            ? "text-green-600"
+                            : "text-gray-500"
+                        }`}
+                      >
                         {step.title}
                       </p>
-                      <p className="text-xs text-gray-500">{step.description}</p>
+                      <p className="text-xs text-gray-500">
+                        {step.description}
+                      </p>
                     </div>
                   </div>
                   {index < steps.length - 1 && (
                     <ArrowRight className="w-5 h-5 text-gray-400 mx-4" />
                   )}
                 </div>
-              )
+              );
             })}
           </div>
         </CardContent>
@@ -398,7 +477,7 @@ export default function ResearchPage() {
                 <input
                   type="file"
                   accept=".csv"
-                  onChange={(e) => handleFileChange(e, 'revenue')}
+                  onChange={(e) => handleFileChange(e, "revenue")}
                   className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
                 />
                 {revenueFile && (
@@ -415,7 +494,7 @@ export default function ResearchPage() {
                 <input
                   type="file"
                   accept=".csv"
-                  onChange={(e) => handleFileChange(e, 'design')}
+                  onChange={(e) => handleFileChange(e, "design")}
                   className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
                 />
                 {designFile && (
@@ -477,25 +556,32 @@ export default function ResearchPage() {
               
               <div className="grid grid-cols-2 md:grid-cols-6 gap-2 text-sm">
                 {[
-                  { step: 'parsing_data', label: 'Parse Data' },
-                  { step: 'research_analysis', label: 'Research' },
-                  { step: 'keyword_analysis', label: 'Keywords' },
-                  { step: 'scoring_analysis', label: 'Scoring' },
-                  { step: 'seo_optimization', label: 'SEO' },
-                  { step: 'completed', label: 'Complete' }
+                  { step: "parsing_data", label: "Parse Data" },
+                  { step: "research_analysis", label: "Research" },
+                  { step: "keyword_analysis", label: "Keywords" },
+                  { step: "scoring_analysis", label: "Scoring" },
+                  { step: "seo_optimization", label: "SEO" },
+                  { step: "completed", label: "Complete" },
                 ].map(({ step, label }) => (
                   <div 
                     key={step}
                     className={`p-2 rounded text-center ${
                       currentAnalysis.current_step === step 
-                        ? 'bg-blue-100 text-blue-800 font-medium' 
-                        : currentAnalysis.progress > (
-                          step === 'parsing_data' ? 0 :
-                          step === 'research_analysis' ? 15 :
-                          step === 'keyword_analysis' ? 35 :
-                          step === 'scoring_analysis' ? 60 :
-                          step === 'seo_optimization' ? 80 : 95
-                        ) ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
+                        ? "bg-blue-100 text-blue-800 font-medium"
+                        : currentAnalysis.progress >
+                          (step === "parsing_data"
+                            ? 0
+                            : step === "research_analysis"
+                            ? 15
+                            : step === "keyword_analysis"
+                            ? 35
+                            : step === "scoring_analysis"
+                            ? 60
+                            : step === "seo_optimization"
+                            ? 80
+                            : 95)
+                        ? "bg-green-100 text-green-800"
+                        : "bg-gray-100 text-gray-600"
                     }`}
                   >
                     {getStepIcon(step)} {label}
@@ -524,10 +610,12 @@ export default function ResearchPage() {
       {currentStep === "results" && results && (
         <div className="space-y-8">
           {/* Debug: Show results structure in development */}
-          {process.env.NODE_ENV === 'development' && (
+          {process.env.NODE_ENV === "development" && (
             <Card className="border-yellow-200 bg-yellow-50">
               <CardHeader>
-                <CardTitle className="text-yellow-800">🐛 Debug: Results Structure</CardTitle>
+                <CardTitle className="text-yellow-800">
+                  🐛 Debug: Results Structure
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <pre className="text-xs bg-white p-2 rounded overflow-auto max-h-40">
@@ -536,179 +624,17 @@ export default function ResearchPage() {
               </CardContent>
             </Card>
           )}
-          {/* Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <Card>
-              <CardContent className="p-6">
-                <div className="text-2xl font-bold text-blue-600">{results.summary?.actionable_keywords || 0}</div>
-                <div className="text-sm text-gray-600">Actionable Keywords</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6">
-                <div className="text-2xl font-bold text-green-600">{results.summary?.quick_wins || 0}</div>
-                <div className="text-sm text-gray-600">Quick Wins</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6">
-                <div className="text-2xl font-bold text-purple-600">{results.summary?.confidence_score || 0}%</div>
-                <div className="text-sm text-gray-600">Confidence Score</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6">
-                <div className="text-2xl font-bold text-orange-600">{results.keyword_analysis?.total_keywords || 0}</div>
-                <div className="text-sm text-gray-600">Total Keywords</div>
-              </CardContent>
-            </Card>
-          </div>
 
-          {/* Priority Distribution */}
-          <Card>
-            <CardHeader>
-              <CardTitle>🎯 Keyword Priority Distribution</CardTitle>
-              <CardDescription>Keywords categorized by business priority and intent</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                <div className="bg-red-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-red-600">{results.scoring_analysis?.priority_distribution?.critical || 0}</div>
-                  <div className="text-sm text-red-800">Critical</div>
-                </div>
-                <div className="bg-orange-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-orange-600">{results.scoring_analysis?.priority_distribution?.high || 0}</div>
-                  <div className="text-sm text-orange-800">High Priority</div>
-                </div>
-                <div className="bg-yellow-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-yellow-600">{results.scoring_analysis?.priority_distribution?.medium || 0}</div>
-                  <div className="text-sm text-yellow-800">Medium</div>
-                </div>
-                <div className="bg-green-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-green-600">{results.scoring_analysis?.priority_distribution?.low || 0}</div>
-                  <div className="text-sm text-green-800">Low Priority</div>
-                </div>
-                <div className="bg-gray-50 p-4 rounded-lg text-center">
-                  <div className="text-2xl font-bold text-gray-600">{results.scoring_analysis?.priority_distribution?.filtered || 0}</div>
-                  <div className="text-sm text-gray-800">Filtered</div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Critical Keywords */}
-          {results.scoring_analysis?.top_critical_keywords?.length > 0 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>🏆 Critical Keywords</CardTitle>
-                <CardDescription>Must-target keywords with highest commercial intent</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="overflow-x-auto">
-                  <table className="min-w-full table-auto">
-                    <thead>
-                      <tr className="bg-gray-50">
-                        <th className="px-4 py-2 text-left">Keyword</th>
-                        <th className="px-4 py-2 text-left">Intent Score</th>
-                        <th className="px-4 py-2 text-left">Priority Score</th>
-                        <th className="px-4 py-2 text-left">Search Volume</th>
-                        <th className="px-4 py-2 text-left">Opportunity</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {results.scoring_analysis?.top_critical_keywords?.map((keyword, index) => (
-                        <tr key={index} className="border-b">
-                          <td className="px-4 py-2 font-medium">{keyword.keyword}</td>
-                          <td className="px-4 py-2">
-                            <Badge className="bg-purple-500">{keyword.intent_score}/3</Badge>
-                          </td>
-                          <td className="px-4 py-2">
-                            <Badge className="bg-red-500">{keyword.priority_score.toFixed(1)}</Badge>
-                          </td>
-                          <td className="px-4 py-2">{keyword.search_volume?.toLocaleString() || 'N/A'}</td>
-                          <td className="px-4 py-2">{keyword.opportunity_score.toFixed(1)}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {/* SEO Recommendations */}
-          <Card>
-            <CardHeader>
-              <CardTitle>📝 SEO Optimization Recommendations</CardTitle>
-              <CardDescription>AI-generated recommendations to improve your listing performance</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Title Optimization */}
-              <div>
-                <h4 className="font-semibold mb-2">📋 Title Optimization</h4>
-                <div className="bg-gray-50 p-4 rounded-lg">
-                  <div className="mb-2">
-                    <span className="text-sm text-gray-600">Current:</span>
-                    <p className="text-gray-800">{results.seo_recommendations.title_optimization.current_title}</p>
-                  </div>
-                  <div className="mb-2">
-                    <span className="text-sm text-gray-600">Recommended:</span>
-                    <p className="text-green-800 font-medium">{results.seo_recommendations.title_optimization.recommended_title}</p>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Badge className="bg-green-500">
-                      {results.seo_recommendations.title_optimization.improvement_score}% Improvement
-                    </Badge>
-                    <span className="text-sm text-gray-600">
-                      Keywords added: {results.seo_recommendations.title_optimization.keywords_added.join(', ')}
-                    </span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bullet Points */}
-              <div>
-                <h4 className="font-semibold mb-2">• Bullet Points Optimization</h4>
-                <div className="space-y-2">
-                  {results.seo_recommendations.bullet_points.recommended_bullets.map((bullet, index) => (
-                    <div key={index} className="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
-                      {bullet}
-                    </div>
-                  ))}
-                </div>
-                <p className="text-sm text-gray-600 mt-2">
-                  Keywords coverage: {results.seo_recommendations.bullet_points.keywords_coverage} keywords
-                </p>
-              </div>
-
-              {/* Backend Keywords */}
-              <div>
-                <h4 className="font-semibold mb-2">🔍 Backend Keywords</h4>
-                <div className="bg-yellow-50 p-4 rounded-lg">
-                  <div className="flex flex-wrap gap-1 mb-2">
-                    {results.seo_recommendations.backend_keywords.recommended_keywords.slice(0, 10).map((keyword, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        {keyword}
-                      </Badge>
-                    ))}
-                    {results.seo_recommendations.backend_keywords.recommended_keywords.length > 10 && (
-                      <Badge variant="outline" className="text-xs">
-                        +{results.seo_recommendations.backend_keywords.recommended_keywords.length - 10} more
-                      </Badge>
-                    )}
-                  </div>
-                  <div className="flex gap-4 text-sm text-gray-600">
-                    <span>Character count: {results.seo_recommendations.backend_keywords.character_count}/250</span>
-                    <span>Coverage improvement: {results.seo_recommendations.backend_keywords.coverage_improvement}</span>
-                  </div>
-                </div>
-                </div>
-              </CardContent>
-            </Card>
+          {/* Use the new ResultsDisplay component */}
+          <ResultsDisplay isLoading={false} results={results} />
 
           {/* Action Buttons */}
           <div className="flex gap-4">
-            <Button onClick={resetResearch} variant="outline" className="flex-1">
+            <Button
+              onClick={resetResearch}
+              variant="outline"
+              className="flex-1"
+            >
               Start New Research
             </Button>
             <Button className="flex-1 bg-green-600 hover:bg-green-700">
@@ -719,5 +645,1450 @@ export default function ResearchPage() {
         </div>
       )}
     </div>
+  );
+} 
+
+
+                <label className="block text-sm font-medium mb-2">
+
+                  Main Keyword (Optional)
+
+                </label>
+
+                <input
+
+                  type="text"
+
+                  value={mainKeyword}
+
+                  onChange={(e) => setMainKeyword(e.target.value)}
+
+                  placeholder="changing pad"
+
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+            />
+
+          </div>
+
+
+
+              <Button type="submit" className="w-full">
+
+                Continue to File Upload
+
+                <ArrowRight className="ml-2 h-4 w-4" />
+
+              </Button>
+
+            </form>
+
+          </CardContent>
+
+        </Card>
+
+      )}
+
+
+
+      {currentStep === "upload" && (
+
+        <Card>
+
+          <CardHeader>
+
+            <CardTitle>Upload Helium 10 Data</CardTitle>
+
+            <CardDescription>
+
+              Upload your Helium 10 Cerebro CSV files for competitor analysis
+
+            </CardDescription>
+
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              <div>
+
+                <label className="block text-sm font-medium mb-2">
+
+                  Revenue Competitors CSV *
+
+                </label>
+
+                <input
+
+                  type="file"
+
+                  accept=".csv"
+
+                  onChange={(e) => handleFileChange(e, 'revenue')}
+
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+
+                />
+
+                {revenueFile && (
+
+                  <p className="text-sm text-green-600 mt-1">
+
+                    ✅ {revenueFile.name}
+
+                  </p>
+
+                )}
+
+              </div>
+
+
+
+              <div>
+
+                <label className="block text-sm font-medium mb-2">
+
+                  Design Competitors CSV *
+
+                </label>
+
+                <input
+
+                  type="file"
+
+                  accept=".csv"
+
+                  onChange={(e) => handleFileChange(e, 'design')}
+
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+
+                />
+
+                {designFile && (
+
+                  <p className="text-sm text-green-600 mt-1">
+
+                    ✅ {designFile.name}
+
+                  </p>
+
+                )}
+
+              </div>
+
+            </div>
+
+
+
+            <div className="flex gap-4">
+
+              <Button 
+
+                variant="outline" 
+
+                onClick={() => setCurrentStep("input")}
+
+                className="flex-1"
+
+              >
+
+                Back
+
+              </Button>
+
+              <Button 
+
+                onClick={startAnalysis}
+
+                disabled={!revenueFile || !designFile}
+
+                className="flex-1 bg-blue-600 hover:bg-blue-700"
+
+              >
+
+                🚀 Start AI Analysis
+
+              </Button>
+
+            </div>
+
+          </CardContent>
+
+        </Card>
+
+      )}
+
+
+
+      {currentStep === "processing" && currentAnalysis && (
+
+        <Card>
+
+          <CardHeader>
+
+            <CardTitle className="flex items-center gap-2">
+
+              {getStepIcon(currentAnalysis.current_step)}
+
+              AI Analysis in Progress
+
+              <Badge className={getStatusColor(currentAnalysis.status)}>
+
+                {currentAnalysis.status.toUpperCase()}
+
+              </Badge>
+
+            </CardTitle>
+
+            <CardDescription>
+
+              Analysis ID: {currentAnalysis.analysis_id}
+
+            </CardDescription>
+
+          </CardHeader>
+
+          <CardContent>
+
+            <div className="space-y-4">
+
+              <div>
+
+                <div className="flex justify-between text-sm mb-1">
+
+                  <span>{currentAnalysis.message}</span>
+
+                  <span>{currentAnalysis.progress}%</span>
+
+                </div>
+
+                <div className="w-full bg-gray-200 rounded-full h-2">
+
+                  <div 
+
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+
+                    style={{ width: `${currentAnalysis.progress}%` }}
+
+                  ></div>
+
+                </div>
+
+              </div>
+
+              
+
+              <div className="grid grid-cols-2 md:grid-cols-6 gap-2 text-sm">
+
+                {[
+
+                  { step: 'parsing_data', label: 'Parse Data' },
+
+                  { step: 'research_analysis', label: 'Research' },
+
+                  { step: 'keyword_analysis', label: 'Keywords' },
+
+                  { step: 'scoring_analysis', label: 'Scoring' },
+
+                  { step: 'seo_optimization', label: 'SEO' },
+
+                  { step: 'completed', label: 'Complete' }
+
+                ].map(({ step, label }) => (
+
+                  <div 
+
+                    key={step}
+
+                    className={`p-2 rounded text-center ${
+
+                      currentAnalysis.current_step === step 
+
+                        ? 'bg-blue-100 text-blue-800 font-medium' 
+
+                        : currentAnalysis.progress > (
+
+                          step === 'parsing_data' ? 0 :
+
+                          step === 'research_analysis' ? 15 :
+
+                          step === 'keyword_analysis' ? 35 :
+
+                          step === 'scoring_analysis' ? 60 :
+
+                          step === 'seo_optimization' ? 80 : 95
+
+                        ) ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
+
+                    }`}
+
+                  >
+
+                    {getStepIcon(step)} {label}
+
+                  </div>
+
+                ))}
+
+              </div>
+
+
+
+              {currentAnalysis.error && (
+
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+
+                  <h4 className="text-red-800 font-medium">Error</h4>
+
+                  <p className="text-red-700">{currentAnalysis.error}</p>
+
+                  <Button 
+
+                    variant="outline" 
+
+                    onClick={resetResearch}
+
+                    className="mt-2"
+
+                  >
+
+                    Start Over
+
+                  </Button>
+
+                </div>
+
+              )}
+
+            </div>
+
+          </CardContent>
+
+        </Card>
+
+      )}
+
+
+
+      {currentStep === "results" && results && (
+
+        <div className="space-y-8">
+
+          {/* Debug: Show results structure in development */}
+
+          {process.env.NODE_ENV === 'development' && (
+
+            <Card className="border-yellow-200 bg-yellow-50">
+
+              <CardHeader>
+
+                <CardTitle className="text-yellow-800">🐛 Debug: Results Structure</CardTitle>
+
+              </CardHeader>
+
+              <CardContent>
+
+                <pre className="text-xs bg-white p-2 rounded overflow-auto max-h-40">
+
+                  {JSON.stringify(results, null, 2)}
+
+                </pre>
+
+              </CardContent>
+
+            </Card>
+
+          )}
+
+          {/* Summary Cards */}
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+            <Card>
+
+              <CardContent className="p-6">
+
+                <div className="text-2xl font-bold text-blue-600">{results.summary?.actionable_keywords || 0}</div>
+
+                <div className="text-sm text-gray-600">Actionable Keywords</div>
+
+              </CardContent>
+
+            </Card>
+
+            <Card>
+
+              <CardContent className="p-6">
+
+                <div className="text-2xl font-bold text-green-600">{results.summary?.quick_wins || 0}</div>
+
+                <div className="text-sm text-gray-600">Quick Wins</div>
+
+              </CardContent>
+
+            </Card>
+
+            <Card>
+
+              <CardContent className="p-6">
+
+                <div className="text-2xl font-bold text-purple-600">{results.summary?.confidence_score || 0}%</div>
+
+                <div className="text-sm text-gray-600">Confidence Score</div>
+
+              </CardContent>
+
+            </Card>
+
+            <Card>
+
+              <CardContent className="p-6">
+
+                <div className="text-2xl font-bold text-orange-600">{results.keyword_analysis?.total_keywords || 0}</div>
+
+                <div className="text-sm text-gray-600">Total Keywords</div>
+
+              </CardContent>
+
+            </Card>
+
+          </div>
+
+
+
+          {/* Priority Distribution */}
+
+          <Card>
+
+            <CardHeader>
+
+              <CardTitle>🎯 Keyword Priority Distribution</CardTitle>
+
+              <CardDescription>Keywords categorized by business priority and intent</CardDescription>
+
+            </CardHeader>
+
+            <CardContent>
+
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+
+                <div className="bg-red-50 p-4 rounded-lg text-center">
+
+                  <div className="text-2xl font-bold text-red-600">{results.scoring_analysis?.priority_distribution?.critical || 0}</div>
+
+                  <div className="text-sm text-red-800">Critical</div>
+
+                </div>
+
+                <div className="bg-orange-50 p-4 rounded-lg text-center">
+
+                  <div className="text-2xl font-bold text-orange-600">{results.scoring_analysis?.priority_distribution?.high || 0}</div>
+
+                  <div className="text-sm text-orange-800">High Priority</div>
+
+                </div>
+
+                <div className="bg-yellow-50 p-4 rounded-lg text-center">
+
+                  <div className="text-2xl font-bold text-yellow-600">{results.scoring_analysis?.priority_distribution?.medium || 0}</div>
+
+                  <div className="text-sm text-yellow-800">Medium</div>
+
+                </div>
+
+                <div className="bg-green-50 p-4 rounded-lg text-center">
+
+                  <div className="text-2xl font-bold text-green-600">{results.scoring_analysis?.priority_distribution?.low || 0}</div>
+
+                  <div className="text-sm text-green-800">Low Priority</div>
+
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-lg text-center">
+
+                  <div className="text-2xl font-bold text-gray-600">{results.scoring_analysis?.priority_distribution?.filtered || 0}</div>
+
+                  <div className="text-sm text-gray-800">Filtered</div>
+
+                </div>
+
+              </div>
+
+            </CardContent>
+
+          </Card>
+
+
+
+          {/* Critical Keywords */}
+
+          {results.scoring_analysis?.top_critical_keywords?.length > 0 && (
+
+            <Card>
+
+              <CardHeader>
+
+                <CardTitle>🏆 Critical Keywords</CardTitle>
+
+                <CardDescription>Must-target keywords with highest commercial intent</CardDescription>
+
+              </CardHeader>
+
+              <CardContent>
+
+                <div className="overflow-x-auto">
+
+                  <table className="min-w-full table-auto">
+
+                    <thead>
+
+                      <tr className="bg-gray-50">
+
+                        <th className="px-4 py-2 text-left">Keyword</th>
+
+                        <th className="px-4 py-2 text-left">Intent Score</th>
+
+                        <th className="px-4 py-2 text-left">Priority Score</th>
+
+                        <th className="px-4 py-2 text-left">Search Volume</th>
+
+                        <th className="px-4 py-2 text-left">Opportunity</th>
+
+                      </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                      {results.scoring_analysis?.top_critical_keywords?.map((keyword, index) => (
+
+                        <tr key={index} className="border-b">
+
+                          <td className="px-4 py-2 font-medium">{keyword.keyword}</td>
+
+                          <td className="px-4 py-2">
+
+                            <Badge className="bg-purple-500">{keyword.intent_score}/3</Badge>
+
+                          </td>
+
+                          <td className="px-4 py-2">
+
+                            <Badge className="bg-red-500">{keyword.priority_score.toFixed(1)}</Badge>
+
+                          </td>
+
+                          <td className="px-4 py-2">{keyword.search_volume?.toLocaleString() || 'N/A'}</td>
+
+                          <td className="px-4 py-2">{keyword.opportunity_score.toFixed(1)}</td>
+
+                        </tr>
+
+                      ))}
+
+                    </tbody>
+
+                  </table>
+
+                </div>
+
+              </CardContent>
+
+            </Card>
+
+          )}
+
+
+
+          {/* SEO Recommendations */}
+
+          <Card>
+
+            <CardHeader>
+
+              <CardTitle>📝 SEO Optimization Recommendations</CardTitle>
+
+              <CardDescription>AI-generated recommendations to improve your listing performance</CardDescription>
+
+            </CardHeader>
+
+            <CardContent className="space-y-6">
+
+              {/* Title Optimization */}
+
+              <div>
+
+                <h4 className="font-semibold mb-2">📋 Title Optimization</h4>
+
+                <div className="bg-gray-50 p-4 rounded-lg">
+
+                  <div className="mb-2">
+
+                    <span className="text-sm text-gray-600">Current:</span>
+
+                    <p className="text-gray-800">{results.seo_recommendations.title_optimization.current_title}</p>
+
+                  </div>
+
+                  <div className="mb-2">
+
+                    <span className="text-sm text-gray-600">Recommended:</span>
+
+                    <p className="text-green-800 font-medium">{results.seo_recommendations.title_optimization.recommended_title}</p>
+
+                  </div>
+
+                  <div className="flex items-center gap-2">
+
+                    <Badge className="bg-green-500">
+
+                      {results.seo_recommendations.title_optimization.improvement_score}% Improvement
+
+                    </Badge>
+
+                    <span className="text-sm text-gray-600">
+
+                      Keywords added: {results.seo_recommendations.title_optimization.keywords_added.join(', ')}
+
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+
+              {/* Bullet Points */}
+
+              <div>
+
+                <h4 className="font-semibold mb-2">• Bullet Points Optimization</h4>
+
+                <div className="space-y-2">
+
+                  {results.seo_recommendations.bullet_points.recommended_bullets.map((bullet, index) => (
+
+                    <div key={index} className="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
+
+                      {bullet}
+
+                    </div>
+
+                  ))}
+
+                </div>
+
+                <p className="text-sm text-gray-600 mt-2">
+
+                  Keywords coverage: {results.seo_recommendations.bullet_points.keywords_coverage} keywords
+
+                </p>
+
+              </div>
+
+
+
+              {/* Backend Keywords */}
+
+              <div>
+
+                <h4 className="font-semibold mb-2">🔍 Backend Keywords</h4>
+
+                <div className="bg-yellow-50 p-4 rounded-lg">
+
+                  <div className="flex flex-wrap gap-1 mb-2">
+
+                    {results.seo_recommendations.backend_keywords.recommended_keywords.slice(0, 10).map((keyword, index) => (
+
+                      <Badge key={index} variant="outline" className="text-xs">
+
+                        {keyword}
+
+                      </Badge>
+
+                    ))}
+
+                    {results.seo_recommendations.backend_keywords.recommended_keywords.length > 10 && (
+
+                      <Badge variant="outline" className="text-xs">
+
+                        +{results.seo_recommendations.backend_keywords.recommended_keywords.length - 10} more
+
+                      </Badge>
+
+                    )}
+
+                  </div>
+
+                  <div className="flex gap-4 text-sm text-gray-600">
+
+                    <span>Character count: {results.seo_recommendations.backend_keywords.character_count}/250</span>
+
+                    <span>Coverage improvement: {results.seo_recommendations.backend_keywords.coverage_improvement}</span>
+
+                  </div>
+
+                </div>
+
+                </div>
+
+              </CardContent>
+
+            </Card>
+
+
+
+          {/* Action Buttons */}
+
+          <div className="flex gap-4">
+
+            <Button onClick={resetResearch} variant="outline" className="flex-1">
+
+              Start New Research
+
+            </Button>
+
+            <Button className="flex-1 bg-green-600 hover:bg-green-700">
+
+              Download Full Report
+
+              <FileText className="ml-2 h-4 w-4" />
+
+            </Button>
+
+          </div>
+
+        </div>
+
+      )}
+
+    </div>
+
   )
+
+} 
+
+                <label className="block text-sm font-medium mb-2">
+
+                  Main Keyword (Optional)
+
+                </label>
+
+                <input
+
+                  type="text"
+
+                  value={mainKeyword}
+
+                  onChange={(e) => setMainKeyword(e.target.value)}
+
+                  placeholder="changing pad"
+
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+
+            />
+
+          </div>
+
+
+
+              <Button type="submit" className="w-full">
+
+                Continue to File Upload
+
+                <ArrowRight className="ml-2 h-4 w-4" />
+
+              </Button>
+
+            </form>
+
+          </CardContent>
+
+        </Card>
+
+      )}
+
+
+
+      {currentStep === "upload" && (
+
+        <Card>
+
+          <CardHeader>
+
+            <CardTitle>Upload Helium 10 Data</CardTitle>
+
+            <CardDescription>
+
+              Upload your Helium 10 Cerebro CSV files for competitor analysis
+
+            </CardDescription>
+
+          </CardHeader>
+
+          <CardContent className="space-y-6">
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+              <div>
+
+                <label className="block text-sm font-medium mb-2">
+
+                  Revenue Competitors CSV *
+
+                </label>
+
+                <input
+
+                  type="file"
+
+                  accept=".csv"
+
+                  onChange={(e) => handleFileChange(e, 'revenue')}
+
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+
+                />
+
+                {revenueFile && (
+
+                  <p className="text-sm text-green-600 mt-1">
+
+                    ✅ {revenueFile.name}
+
+                  </p>
+
+                )}
+
+              </div>
+
+
+
+              <div>
+
+                <label className="block text-sm font-medium mb-2">
+
+                  Design Competitors CSV *
+
+                </label>
+
+                <input
+
+                  type="file"
+
+                  accept=".csv"
+
+                  onChange={(e) => handleFileChange(e, 'design')}
+
+                  className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100"
+
+                />
+
+                {designFile && (
+
+                  <p className="text-sm text-green-600 mt-1">
+
+                    ✅ {designFile.name}
+
+                  </p>
+
+                )}
+
+              </div>
+
+            </div>
+
+
+
+            <div className="flex gap-4">
+
+              <Button 
+
+                variant="outline" 
+
+                onClick={() => setCurrentStep("input")}
+
+                className="flex-1"
+
+              >
+
+                Back
+
+              </Button>
+
+              <Button 
+
+                onClick={startAnalysis}
+
+                disabled={!revenueFile || !designFile}
+
+                className="flex-1 bg-blue-600 hover:bg-blue-700"
+
+              >
+
+                🚀 Start AI Analysis
+
+              </Button>
+
+            </div>
+
+          </CardContent>
+
+        </Card>
+
+      )}
+
+
+
+      {currentStep === "processing" && currentAnalysis && (
+
+        <Card>
+
+          <CardHeader>
+
+            <CardTitle className="flex items-center gap-2">
+
+              {getStepIcon(currentAnalysis.current_step)}
+
+              AI Analysis in Progress
+
+              <Badge className={getStatusColor(currentAnalysis.status)}>
+
+                {currentAnalysis.status.toUpperCase()}
+
+              </Badge>
+
+            </CardTitle>
+
+            <CardDescription>
+
+              Analysis ID: {currentAnalysis.analysis_id}
+
+            </CardDescription>
+
+          </CardHeader>
+
+          <CardContent>
+
+            <div className="space-y-4">
+
+              <div>
+
+                <div className="flex justify-between text-sm mb-1">
+
+                  <span>{currentAnalysis.message}</span>
+
+                  <span>{currentAnalysis.progress}%</span>
+
+                </div>
+
+                <div className="w-full bg-gray-200 rounded-full h-2">
+
+                  <div 
+
+                    className="bg-blue-600 h-2 rounded-full transition-all duration-500"
+
+                    style={{ width: `${currentAnalysis.progress}%` }}
+
+                  ></div>
+
+                </div>
+
+              </div>
+
+              
+
+              <div className="grid grid-cols-2 md:grid-cols-6 gap-2 text-sm">
+
+                {[
+
+                  { step: 'parsing_data', label: 'Parse Data' },
+
+                  { step: 'research_analysis', label: 'Research' },
+
+                  { step: 'keyword_analysis', label: 'Keywords' },
+
+                  { step: 'scoring_analysis', label: 'Scoring' },
+
+                  { step: 'seo_optimization', label: 'SEO' },
+
+                  { step: 'completed', label: 'Complete' }
+
+                ].map(({ step, label }) => (
+
+                  <div 
+
+                    key={step}
+
+                    className={`p-2 rounded text-center ${
+
+                      currentAnalysis.current_step === step 
+
+                        ? 'bg-blue-100 text-blue-800 font-medium' 
+
+                        : currentAnalysis.progress > (
+
+                          step === 'parsing_data' ? 0 :
+
+                          step === 'research_analysis' ? 15 :
+
+                          step === 'keyword_analysis' ? 35 :
+
+                          step === 'scoring_analysis' ? 60 :
+
+                          step === 'seo_optimization' ? 80 : 95
+
+                        ) ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
+
+                    }`}
+
+                  >
+
+                    {getStepIcon(step)} {label}
+
+                  </div>
+
+                ))}
+
+              </div>
+
+
+
+              {currentAnalysis.error && (
+
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+
+                  <h4 className="text-red-800 font-medium">Error</h4>
+
+                  <p className="text-red-700">{currentAnalysis.error}</p>
+
+                  <Button 
+
+                    variant="outline" 
+
+                    onClick={resetResearch}
+
+                    className="mt-2"
+
+                  >
+
+                    Start Over
+
+                  </Button>
+
+                </div>
+
+              )}
+
+            </div>
+
+          </CardContent>
+
+        </Card>
+
+      )}
+
+
+
+      {currentStep === "results" && results && (
+
+        <div className="space-y-8">
+
+          {/* Debug: Show results structure in development */}
+
+          {process.env.NODE_ENV === 'development' && (
+
+            <Card className="border-yellow-200 bg-yellow-50">
+
+              <CardHeader>
+
+                <CardTitle className="text-yellow-800">🐛 Debug: Results Structure</CardTitle>
+
+              </CardHeader>
+
+              <CardContent>
+
+                <pre className="text-xs bg-white p-2 rounded overflow-auto max-h-40">
+
+                  {JSON.stringify(results, null, 2)}
+
+                </pre>
+
+              </CardContent>
+
+            </Card>
+
+          )}
+
+          {/* Summary Cards */}
+
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+
+            <Card>
+
+              <CardContent className="p-6">
+
+                <div className="text-2xl font-bold text-blue-600">{results.summary?.actionable_keywords || 0}</div>
+
+                <div className="text-sm text-gray-600">Actionable Keywords</div>
+
+              </CardContent>
+
+            </Card>
+
+            <Card>
+
+              <CardContent className="p-6">
+
+                <div className="text-2xl font-bold text-green-600">{results.summary?.quick_wins || 0}</div>
+
+                <div className="text-sm text-gray-600">Quick Wins</div>
+
+              </CardContent>
+
+            </Card>
+
+            <Card>
+
+              <CardContent className="p-6">
+
+                <div className="text-2xl font-bold text-purple-600">{results.summary?.confidence_score || 0}%</div>
+
+                <div className="text-sm text-gray-600">Confidence Score</div>
+
+              </CardContent>
+
+            </Card>
+
+            <Card>
+
+              <CardContent className="p-6">
+
+                <div className="text-2xl font-bold text-orange-600">{results.keyword_analysis?.total_keywords || 0}</div>
+
+                <div className="text-sm text-gray-600">Total Keywords</div>
+
+              </CardContent>
+
+            </Card>
+
+          </div>
+
+
+
+          {/* Priority Distribution */}
+
+          <Card>
+
+            <CardHeader>
+
+              <CardTitle>🎯 Keyword Priority Distribution</CardTitle>
+
+              <CardDescription>Keywords categorized by business priority and intent</CardDescription>
+
+            </CardHeader>
+
+            <CardContent>
+
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+
+                <div className="bg-red-50 p-4 rounded-lg text-center">
+
+                  <div className="text-2xl font-bold text-red-600">{results.scoring_analysis?.priority_distribution?.critical || 0}</div>
+
+                  <div className="text-sm text-red-800">Critical</div>
+
+                </div>
+
+                <div className="bg-orange-50 p-4 rounded-lg text-center">
+
+                  <div className="text-2xl font-bold text-orange-600">{results.scoring_analysis?.priority_distribution?.high || 0}</div>
+
+                  <div className="text-sm text-orange-800">High Priority</div>
+
+                </div>
+
+                <div className="bg-yellow-50 p-4 rounded-lg text-center">
+
+                  <div className="text-2xl font-bold text-yellow-600">{results.scoring_analysis?.priority_distribution?.medium || 0}</div>
+
+                  <div className="text-sm text-yellow-800">Medium</div>
+
+                </div>
+
+                <div className="bg-green-50 p-4 rounded-lg text-center">
+
+                  <div className="text-2xl font-bold text-green-600">{results.scoring_analysis?.priority_distribution?.low || 0}</div>
+
+                  <div className="text-sm text-green-800">Low Priority</div>
+
+                </div>
+
+                <div className="bg-gray-50 p-4 rounded-lg text-center">
+
+                  <div className="text-2xl font-bold text-gray-600">{results.scoring_analysis?.priority_distribution?.filtered || 0}</div>
+
+                  <div className="text-sm text-gray-800">Filtered</div>
+
+                </div>
+
+              </div>
+
+            </CardContent>
+
+          </Card>
+
+
+
+          {/* Critical Keywords */}
+
+          {results.scoring_analysis?.top_critical_keywords?.length > 0 && (
+
+            <Card>
+
+              <CardHeader>
+
+                <CardTitle>🏆 Critical Keywords</CardTitle>
+
+                <CardDescription>Must-target keywords with highest commercial intent</CardDescription>
+
+              </CardHeader>
+
+              <CardContent>
+
+                <div className="overflow-x-auto">
+
+                  <table className="min-w-full table-auto">
+
+                    <thead>
+
+                      <tr className="bg-gray-50">
+
+                        <th className="px-4 py-2 text-left">Keyword</th>
+
+                        <th className="px-4 py-2 text-left">Intent Score</th>
+
+                        <th className="px-4 py-2 text-left">Priority Score</th>
+
+                        <th className="px-4 py-2 text-left">Search Volume</th>
+
+                        <th className="px-4 py-2 text-left">Opportunity</th>
+
+                      </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                      {results.scoring_analysis?.top_critical_keywords?.map((keyword, index) => (
+
+                        <tr key={index} className="border-b">
+
+                          <td className="px-4 py-2 font-medium">{keyword.keyword}</td>
+
+                          <td className="px-4 py-2">
+
+                            <Badge className="bg-purple-500">{keyword.intent_score}/3</Badge>
+
+                          </td>
+
+                          <td className="px-4 py-2">
+
+                            <Badge className="bg-red-500">{keyword.priority_score.toFixed(1)}</Badge>
+
+                          </td>
+
+                          <td className="px-4 py-2">{keyword.search_volume?.toLocaleString() || 'N/A'}</td>
+
+                          <td className="px-4 py-2">{keyword.opportunity_score.toFixed(1)}</td>
+
+                        </tr>
+
+                      ))}
+
+                    </tbody>
+
+                  </table>
+
+                </div>
+
+              </CardContent>
+
+            </Card>
+
+          )}
+
+
+
+          {/* SEO Recommendations */}
+
+          <Card>
+
+            <CardHeader>
+
+              <CardTitle>📝 SEO Optimization Recommendations</CardTitle>
+
+              <CardDescription>AI-generated recommendations to improve your listing performance</CardDescription>
+
+            </CardHeader>
+
+            <CardContent className="space-y-6">
+
+              {/* Title Optimization */}
+
+              <div>
+
+                <h4 className="font-semibold mb-2">📋 Title Optimization</h4>
+
+                <div className="bg-gray-50 p-4 rounded-lg">
+
+                  <div className="mb-2">
+
+                    <span className="text-sm text-gray-600">Current:</span>
+
+                    <p className="text-gray-800">{results.seo_recommendations.title_optimization.current_title}</p>
+
+                  </div>
+
+                  <div className="mb-2">
+
+                    <span className="text-sm text-gray-600">Recommended:</span>
+
+                    <p className="text-green-800 font-medium">{results.seo_recommendations.title_optimization.recommended_title}</p>
+
+                  </div>
+
+                  <div className="flex items-center gap-2">
+
+                    <Badge className="bg-green-500">
+
+                      {results.seo_recommendations.title_optimization.improvement_score}% Improvement
+
+                    </Badge>
+
+                    <span className="text-sm text-gray-600">
+
+                      Keywords added: {results.seo_recommendations.title_optimization.keywords_added.join(', ')}
+
+                    </span>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+
+              {/* Bullet Points */}
+
+              <div>
+
+                <h4 className="font-semibold mb-2">• Bullet Points Optimization</h4>
+
+                <div className="space-y-2">
+
+                  {results.seo_recommendations.bullet_points.recommended_bullets.map((bullet, index) => (
+
+                    <div key={index} className="bg-blue-50 p-3 rounded border-l-4 border-blue-500">
+
+                      {bullet}
+
+                    </div>
+
+                  ))}
+
+                </div>
+
+                <p className="text-sm text-gray-600 mt-2">
+
+                  Keywords coverage: {results.seo_recommendations.bullet_points.keywords_coverage} keywords
+
+                </p>
+
+              </div>
+
+
+
+              {/* Backend Keywords */}
+
+              <div>
+
+                <h4 className="font-semibold mb-2">🔍 Backend Keywords</h4>
+
+                <div className="bg-yellow-50 p-4 rounded-lg">
+
+                  <div className="flex flex-wrap gap-1 mb-2">
+
+                    {results.seo_recommendations.backend_keywords.recommended_keywords.slice(0, 10).map((keyword, index) => (
+
+                      <Badge key={index} variant="outline" className="text-xs">
+
+                        {keyword}
+
+                      </Badge>
+
+                    ))}
+
+                    {results.seo_recommendations.backend_keywords.recommended_keywords.length > 10 && (
+
+                      <Badge variant="outline" className="text-xs">
+
+                        +{results.seo_recommendations.backend_keywords.recommended_keywords.length - 10} more
+
+                      </Badge>
+
+                    )}
+
+                  </div>
+
+                  <div className="flex gap-4 text-sm text-gray-600">
+
+                    <span>Character count: {results.seo_recommendations.backend_keywords.character_count}/250</span>
+
+                    <span>Coverage improvement: {results.seo_recommendations.backend_keywords.coverage_improvement}</span>
+
+                  </div>
+
+                </div>
+
+                </div>
+
+              </CardContent>
+
+            </Card>
+
+
+
+          {/* Action Buttons */}
+
+          <div className="flex gap-4">
+
+            <Button onClick={resetResearch} variant="outline" className="flex-1">
+
+              Start New Research
+
+            </Button>
+
+            <Button className="flex-1 bg-green-600 hover:bg-green-700">
+
+              Download Full Report
+
+              <FileText className="ml-2 h-4 w-4" />
+
+            </Button>
+
+          </div>
+
+        </div>
+
+      )}
+
+    </div>
+
+  )
+
 } 
