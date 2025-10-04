@@ -65,8 +65,10 @@ class SEORunner:
             logger.info(f"📄 Extracted current content: {len(current_content.get('bullets', []))} bullets")
             
             # Step 2: Initialize keyword validator to prevent hallucination
-            keyword_validator = SEOKeywordValidator(keyword_items)
-            logger.info(f"🔒 Keyword validator initialized with {len(keyword_items)} research keywords")
+            # Filter to only include "Relevant" keywords for optimization
+            relevant_keywords = [kw for kw in keyword_items if kw.get("category") == "Relevant"]
+            keyword_validator = SEOKeywordValidator(relevant_keywords)
+            logger.info(f"🔒 Keyword validator initialized with {len(relevant_keywords)} relevant keywords (filtered from {len(keyword_items)} total)")
             
             # Step 3: Prepare keyword data for analysis
             keyword_data = prepare_keyword_data_for_analysis(keyword_items)

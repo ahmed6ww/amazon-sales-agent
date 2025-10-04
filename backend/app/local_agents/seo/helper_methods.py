@@ -40,11 +40,15 @@ def extract_keywords_from_content(content: str, keywords_list: List[str]) -> Tup
             found_keywords.append(keyword)
             continue
             
-        # Handle variations and partial matches
+        # Handle variations and partial matches - STRICT sequential matching
         keyword_words = keyword_lower.split()
         if len(keyword_words) > 1:
-            # Check if all words in the keyword are present in content
-            if all(word in content_lower for word in keyword_words):
+            # Require words to appear in sequence (with minor variations)
+            # This prevents false positives where words appear scattered
+            import re
+            # Pattern allows optional plural (s/es) and word boundaries
+            pattern = r'\b' + r'\s+'.join(re.escape(word) + r'(?:s|es)?' for word in keyword_words) + r'\b'
+            if re.search(pattern, content_lower):
                 found_keywords.append(keyword)
                 continue
                 
