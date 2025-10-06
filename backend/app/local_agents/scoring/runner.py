@@ -3,7 +3,6 @@ from __future__ import annotations
 from typing import Any, Dict, List
 import logging
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -48,45 +47,71 @@ class ScoringRunner:
 		scraped_product: Dict[str, Any],
 		base_relevancy_scores: Dict[str, int] | None = None,
 	) -> List[Dict[str, Any]]:
-		"""Append intent_score using the LLM intent_scoring_agent, preserving order. No fallback.
-		"""
+		"""Append intent_score using simple approach - NO MULTI-BATCH COMPLEXITY."""
 		if not items:
 			return items
-		logger.info("[ScoringRunner] Calling IntentScoringSubagent for %d items", len(items))
+		
+		logger.info("[ScoringRunner] Processing %d items with simple intent scoring", len(items))
+		
+		# Simple approach - just process directly with a small delay
+		import time
+		time.sleep(1)  # Simple rate limiting
+		
+		# Use the original simple approach
 		from agents import Runner as _Runner
 		from app.local_agents.scoring.subagents.intent_agent import (
 			intent_scoring_agent,
 			USER_PROMPT_TEMPLATE,
 		)
 		import json as _json
+		
 		prompt = USER_PROMPT_TEMPLATE.format(
 			scraped_product=_json.dumps(scraped_product or {}, separators=(",", ":")),
 			base_relevancy_scores=_json.dumps(base_relevancy_scores or {}, separators=(",", ":")),
 			items=_json.dumps(items or [], separators=(",", ":")),
 		)
-		# Try to attach optional metadata for better tracing; ignore if Runner doesn't support it
-		try:
-			result = _Runner.run_sync(
-				intent_scoring_agent,
-				prompt,
-				metadata={
-					"component": "ScoringRunner",
-					"subagent": "IntentScoringSubagent",
-					"items_count": len(items),
-				},
-			)
-		except TypeError:
-			# Older SDK signature
-			result = _Runner.run_sync(intent_scoring_agent, prompt)
-		output = getattr(result, "final_output", None)
-		if isinstance(output, str):
-			# Log a small preview to aid debugging/parsing issues
-			logger.debug("[ScoringRunner] Intent raw output preview: %s", output[:500])
-		# Expecting a list of objects matching input order
+		
+		result = _Runner.run_sync(intent_scoring_agent, prompt)
+		
+		# Parse and return results
+		if result and hasattr(result, 'final_output'):
+			output = result.final_output
+			if output:
+				try:
+					parsed_result = _json.loads(output)
+					if isinstance(parsed_result, list):
+						return parsed_result
+					elif isinstance(parsed_result, dict) and "items" in parsed_result:
+						return parsed_result["items"]
+				except _json.JSONDecodeError:
+					logger.warning("[ScoringRunner] Failed to parse intent scoring result")
+		elif result and hasattr(result, 'content'):
+			try:
+				parsed_result = _json.loads(result.content)
+				if isinstance(parsed_result, list):
+					return parsed_result
+				elif isinstance(parsed_result, dict) and "items" in parsed_result:
+					return parsed_result["items"]
+			except _json.JSONDecodeError:
+				logger.warning("[ScoringRunner] Failed to parse intent scoring result")
+		
+		# Fallback: return original items with default intent score
+		logger.warning("[ScoringRunner] Intent scoring failed, using fallback")
+		for item in items:
+			if "intent_score" not in item:
+				item["intent_score"] = 5  # Default moderate intent
+		
+		return items
+	
+	
+	@staticmethod
+	def _parse_intent_output(output: Any, items: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+		"""Parse intent scoring output from LLM."""
 		scored = []
+		
 		if output is not None and hasattr(output, "model_dump"):
 			try:
-				scored = output.model_dump()  # type: ignore
+				scored = output.model_dump()
 			except Exception:
 				scored = []
 		elif isinstance(output, list):
@@ -94,6 +119,7 @@ class ScoringRunner:
 		elif isinstance(output, str):
 			# Try to parse a JSON array from text
 			try:
+				import json as _json
 				parsed = _json.loads(output)
 				if isinstance(parsed, list):
 					scored = parsed
@@ -111,34 +137,15 @@ class ScoringRunner:
 							break
 					except Exception:
 						continue
-		# Fallback: if we didn't get a valid scored list aligned with items, use the keyword intent classification subagent per item
+		
+		# Ensure we have the right number of results
 		if not isinstance(scored, list) or len(scored) != len(items):
-			try:
-				from app.local_agents.keyword.subagents.intent_classification_agent import apply_intent_classification_ai
-				logger.warning("[ScoringRunner] Intent subagent output unusable; falling back to Keyword Intent Classification subagent")
-				fallback = apply_intent_classification_ai(items, scraped_product)
-				for idx, it in enumerate(items):
-					try:
-						it["intent_score"] = int((fallback[idx] or {}).get("intent_score", it.get("intent_score", 0)))
-					except Exception:
-						it["intent_score"] = it.get("intent_score", 0)
-				logger.info("[ScoringRunner] Applied fallback intent scores to %d items", len(items))
-				return items
-			except Exception as e:
-				logger.warning(f"[ScoringRunner] Fallback keyword intent classification failed: {e}")
-		# Map back by index to preserve order; write intent_score only
-		for idx, it in enumerate(items):
-			try:
-				it["intent_score"] = int((scored[idx] or {}).get("intent_score", 0))
-			except Exception:
-				it["intent_score"] = 0
-		logger.info("[ScoringRunner] Intent scores applied to %d items", len(items))
+			logger.warning("[ScoringRunner] Intent output length mismatch: expected %d, got %d", 
+						  len(items), len(scored) if isinstance(scored, list) else 0)
+			# Create default scores
+			scored = [{"intent_score": 0} for _ in items]
 		
-		# Apply score alignment to fix inconsistencies
-		aligned_items = ScoringRunner.align_relevancy_and_intent_scores(items)
-		
-		logger.debug("[ScoringRunner] Sample aligned item: %s", aligned_items[:1] if aligned_items else [])
-		return aligned_items
+		return scored
 
 	@staticmethod
 	def merge_metrics(

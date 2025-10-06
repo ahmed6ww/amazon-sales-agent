@@ -145,14 +145,10 @@ def analyze_root_relevance_ai(keywords: List[Dict[str, Any]]) -> Dict[str, Any]:
     
     try:
         # Import the Runner dynamically to avoid circular imports
-        try:
-            from agents.runner import Runner as _Runner
-        except ImportError:
-            # Fallback for different SDK versions
-            from agents import Runner
+        from agents import Runner as _Runner
         
         # Run AI agent
-        result = Runner.run_sync(
+        result = _Runner.run_sync(
             root_relevance_agent,
             prompt
         )

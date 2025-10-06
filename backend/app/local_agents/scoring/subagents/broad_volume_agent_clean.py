@@ -1,4 +1,4 @@
-from agents import Agent
+﻿from agents import Agent
 from typing import Any, Dict, List, Set, Optional
 import re
 import logging
@@ -357,23 +357,3 @@ def _calculate_broad_volume_direct(
         logger.error(f"[BroadVolumeAgent] LLM calculation failed: {e}")
         raise Exception(f"AI-only broad volume calculation failed: {e}")
 
-def calculate_broad_volume(
-    items: List[Dict[str, Any]], 
-    brand_tokens: Optional[Set[str]] = None,
-    use_llm: bool = True
-) -> Dict[str, Any]:
-    """
-    Main function to calculate broad search volume by root words using AI analysis only.
-    
-    Args:
-        items: List of keyword items with phrase and search_volume
-        brand_tokens: Set of brand names to exclude from root extraction
-        use_llm: Whether to use LLM agent (True) or raise error (False not supported)
-    
-    Returns:
-        Dict with enhanced items and broad_search_volume_by_root summary
-    """
-    if not use_llm:
-        raise ValueError("AI-only analysis mode: deterministic calculation not allowed")
-    
-    return calculate_broad_volume_llm(items, brand_tokens)

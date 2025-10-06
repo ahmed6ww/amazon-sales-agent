@@ -357,6 +357,50 @@ def _calculate_broad_volume_direct(
         logger.error(f"[BroadVolumeAgent] LLM calculation failed: {e}")
         raise Exception(f"AI-only broad volume calculation failed: {e}")
 
+def _parse_broad_volume_output(output: Any, items: List[Dict[str, Any]]) -> Dict[str, Any]:
+    """Parse broad volume output from LLM."""
+        if isinstance(output, str):
+            logger.debug(f"[BroadVolumeAgent] Raw LLM output preview: {output[:500]}")
+            
+            # Try direct JSON parsing first
+            try:
+            import json as _json
+                parsed = _json.loads(output.strip())
+                if isinstance(parsed, dict) and "items" in parsed and "broad_search_volume_by_root" in parsed:
+                    return parsed
+            except _json.JSONDecodeError:
+                pass
+            
+            # Try to extract JSON from text if direct parsing fails
+            import re
+            json_pattern = r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}'
+            matches = re.findall(json_pattern, output, re.DOTALL)
+            
+            for match in reversed(matches):  # Try largest JSON blocks first
+                try:
+                    parsed = _json.loads(match)
+                    if isinstance(parsed, dict) and "items" in parsed and "broad_search_volume_by_root" in parsed:
+                        return parsed
+                except _json.JSONDecodeError:
+                    continue
+            
+            # Log the problematic output for debugging
+            logger.error(f"[BroadVolumeAgent] Could not parse LLM output. Full output: {output}")
+            raise Exception(f"LLM returned unparseable JSON: {output[:200]}...")
+        
+        elif hasattr(output, 'model_dump'):
+            # Handle structured output
+            try:
+                parsed = output.model_dump()
+                if isinstance(parsed, dict) and "items" in parsed and "broad_search_volume_by_root" in parsed:
+                    return parsed
+            except Exception as e:
+                logger.error(f"[BroadVolumeAgent] Failed to extract from structured output: {e}")
+                raise Exception(f"Failed to extract structured LLM output: {e}")
+        
+        # No fallback - AI analysis only
+        raise Exception("LLM failed to produce valid broad volume analysis")
+
 def calculate_broad_volume(
     items: List[Dict[str, Any]], 
     brand_tokens: Optional[Set[str]] = None,

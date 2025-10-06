@@ -8,10 +8,12 @@ and finally generates SEO optimization analysis.
 from fastapi import APIRouter, HTTPException, Query, UploadFile, File, Form
 from typing import Dict, Any, Optional
 import logging
+import time
 
 from app.core.config import settings
 from app.services.keyword_processing.root_extraction import get_priority_roots_for_search
 from app.local_agents.keyword.subagents.root_extraction_agent import apply_root_extraction_ai
+from app.services.openai_monitor import monitor
 
 
 logger = logging.getLogger(__name__)
@@ -451,6 +453,14 @@ async def amazon_sales_intelligence_pipeline(
         logger.info(f"   Root optimization: {priority_roots_count} priority roots identified")
         logger.info(f"   Efficiency gain: {efficiency_metrics.get('reduction_percentage', 0)}%")
         logger.info("="*80)
+        
+        # Print OpenAI API monitoring summary
+        if settings.ENABLE_OPENAI_MONITORING:
+            monitor.print_summary()
+        
+        # Add monitoring stats to response
+        if settings.LOG_DETAILED_STATS:
+            response["monitoring_stats"] = monitor.get_detailed_stats()
 
         return response
 

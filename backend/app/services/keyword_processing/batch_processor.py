@@ -370,7 +370,7 @@ def create_agent_optimized_base_relevancy_scores(
         base_scores = {}
         for i, keyword in enumerate(selected_keywords):
             # Score based on position (earlier = higher priority)
-            score = max(1, 10 - (i // 10))  # Scores from 10 down to 1
+            score = max(1, 10 - (i // 20))  # Scores from 10 down to 1 (slower decay)
             base_scores[keyword] = score
             
         return base_scores
@@ -379,5 +379,5 @@ def create_agent_optimized_base_relevancy_scores(
         # Small dataset - create basic relevancy scores for all
         base_scores = {}
         for keyword in keywords:
-            base_scores[keyword] = 5  # Default moderate relevancy
+            base_scores[keyword] = 7  # Default moderate relevancy (higher default)
         return base_scores 
