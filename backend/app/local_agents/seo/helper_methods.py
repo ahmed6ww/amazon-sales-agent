@@ -29,15 +29,21 @@ def extract_keywords_from_content(content: str, keywords_list: List[str]) -> Tup
     content_lower = content.lower()
     found_keywords = []
     
+    logger.debug(f"[KEYWORD_EXTRACTION] Analyzing content: '{content[:100]}{'...' if len(content) > 100 else ''}'")
+    logger.debug(f"[KEYWORD_EXTRACTION] Searching for {len(keywords_list)} keywords")
+    
     for keyword in keywords_list:
         if not keyword:
             continue
             
         keyword_lower = keyword.lower().strip()
+        found = False
         
         # Direct substring match
         if keyword_lower in content_lower:
             found_keywords.append(keyword)
+            found = True
+            logger.debug(f"[KEYWORD_EXTRACTION] ✅ Direct match: '{keyword}' in content")
             continue
             
         # Handle variations and partial matches - STRICT sequential matching
@@ -50,34 +56,26 @@ def extract_keywords_from_content(content: str, keywords_list: List[str]) -> Tup
             pattern = r'\b' + r'\s+'.join(re.escape(word) + r'(?:s|es)?' for word in keyword_words) + r'\b'
             if re.search(pattern, content_lower):
                 found_keywords.append(keyword)
+                found = True
+                logger.debug(f"[KEYWORD_EXTRACTION] ✅ Pattern match: '{keyword}' in content")
                 continue
                 
-        # Handle hyphenated vs non-hyphenated variations
+        # Handle hyphenated vs non-hyphenated variations ONLY if content has that exact variation
         if '-' in keyword_lower:
-            # Try without hyphens
+            # Only match if content ALSO has hyphen OR exact words appear
             keyword_no_hyphen = keyword_lower.replace('-', ' ')
-            if keyword_no_hyphen in content_lower:
+            # Check if content has the spaced version (but NOT the hyphenated version)
+            if keyword_no_hyphen in content_lower and keyword_lower not in content_lower:
                 found_keywords.append(keyword)
+                found = True
+                logger.debug(f"[KEYWORD_EXTRACTION] ✅ Hyphen variation: '{keyword}' -> '{keyword_no_hyphen}' in content")
                 continue
-        else:
-            # Try with hyphens
-            keyword_with_hyphen = keyword_lower.replace(' ', '-')
-            if keyword_with_hyphen in content_lower:
-                found_keywords.append(keyword)
-                continue
-                
-        # Handle plural/singular variations (basic)
-        if keyword_lower.endswith('s') and len(keyword_lower) > 3:
-            singular = keyword_lower[:-1]
-            if singular in content_lower:
-                found_keywords.append(keyword)
-                continue
-        elif not keyword_lower.endswith('s'):
-            plural = keyword_lower + 's'
-            if plural in content_lower:
-                found_keywords.append(keyword)
-                continue
-            
+        # Don't add reverse matching - it creates false positives for "freeze dried" matching "freeze-dried"
+        
+        if not found:
+            logger.debug(f"[KEYWORD_EXTRACTION] ❌ Not found: '{keyword}' not in content")
+    
+    logger.info(f"[KEYWORD_EXTRACTION] Found {len(found_keywords)} keywords in content: {found_keywords[:5]}{'...' if len(found_keywords) > 5 else ''}")
     return found_keywords, len(found_keywords)
 
 
@@ -191,6 +189,9 @@ def analyze_content_piece(content: str, keywords_list: List[str]) -> Dict[str, A
             "opportunities": []
         }
     
+    logger.info(f"[CONTENT_ANALYSIS] Analyzing content piece: '{content[:50]}{'...' if len(content) > 50 else ''}'")
+    logger.info(f"[CONTENT_ANALYSIS] Searching for {len(keywords_list)} keywords")
+    
     found_keywords, count = extract_keywords_from_content(content, keywords_list)
     char_count = len(content)
     
@@ -200,17 +201,20 @@ def analyze_content_piece(content: str, keywords_list: List[str]) -> Dict[str, A
     # Find opportunities (keywords not included)
     opportunities = [kw for kw in keywords_list if kw not in found_keywords][:5]
     
-    # Debug: Print keyword extraction results
-    # Debug output disabled
-    # print(f"\nKEYWORD EXTRACTION DEBUG:")
-    # print(f"  Content: {content[:100]}{'...' if len(content) > 100 else ''}")
-    # print(f"  Keywords to search: {len(keywords_list)}")
-    # print(f"  Keywords found: {count}")
-    # if found_keywords:
-    #     print(f"  Found keywords: {found_keywords[:5]}{'...' if len(found_keywords) > 5 else ''}")
-    # else:
-    #     print(f"  No keywords found in content")
-    # print(f"  Keyword density: {round(density, 2)}%")
+    # Validate that found keywords actually exist in content
+    validated_keywords = []
+    for kw in found_keywords:
+        if kw.lower() in content.lower():
+            validated_keywords.append(kw)
+        else:
+            logger.warning(f"[CONTENT_ANALYSIS] ⚠️  Keyword '{kw}' marked as found but not in content!")
+    
+    if len(validated_keywords) != len(found_keywords):
+        logger.warning(f"[CONTENT_ANALYSIS] ⚠️  Validation failed: {len(found_keywords)} -> {len(validated_keywords)} keywords")
+        found_keywords = validated_keywords
+        count = len(validated_keywords)
+    
+    logger.info(f"[CONTENT_ANALYSIS] ✅ Final result: {count} keywords found in content")
     
     return {
         "content": content,

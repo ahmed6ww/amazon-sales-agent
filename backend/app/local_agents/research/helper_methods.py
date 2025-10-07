@@ -248,3 +248,227 @@ def scrape_competitors(asins: List[str], *, max_items: int = 10, marketplace: st
     return results
 
 
+def filter_keywords_by_original_content(
+    keywords: List[str], 
+    scraped_data: Dict[str, Any]
+) -> Tuple[List[str], Dict[str, Any]]:
+    """
+    Filter keywords to only include those that appear in the original scraped product title and bullets.
+    
+    This addresses Issue #1: Keywords/Bullet points that are not in title
+    - Only shows keywords that exist in the ORIGINAL scraped listing
+    - Prevents showing irrelevant keywords from CSV files
+    - Uses fuzzy matching to handle plurals and variations
+    
+    Args:
+        keywords: List of keyword phrases from CSV files
+        scraped_data: Scraped Amazon product data with title and bullets
+    
+    Returns:
+        Tuple of (filtered_keywords, filter_stats)
+        - filtered_keywords: Keywords that appear in original content
+        - filter_stats: Statistics about the filtering process
+    """
+    import re
+    import logging
+    
+    logger = logging.getLogger(__name__)
+    
+    # Extract original title from scraped data
+    title = ""
+    elements = scraped_data.get("elements", {})
+    if elements:
+        title_data = elements.get("productTitle", {})
+        if title_data:
+            title_text = title_data.get("text", "")
+            if isinstance(title_text, list):
+                title = title_text[0] if title_text else ""
+            else:
+                title = str(title_text)
+    
+    # Extract original bullet points from scraped data
+    bullets = []
+    if elements:
+        bullets_data = elements.get("feature-bullets", {})
+        if bullets_data:
+            bullets = bullets_data.get("bullets", [])
+    
+    # Combine title and bullets into searchable content
+    # Convert to lowercase for case-insensitive matching
+    content = (title + " " + " ".join(bullets)).lower()
+    
+    logger.info(f"[FILTER] Original content length: {len(content)} characters")
+    logger.info(f"[FILTER] Title: {title[:100]}...")
+    logger.info(f"[FILTER] Bullets count: {len(bullets)}")
+    
+    # Helper function to check if keyword exists in content
+    def keyword_exists_in_content(keyword: str, content: str) -> bool:
+        """
+        Check if keyword phrase exists in content.
+        Handles:
+        - Exact matches
+        - Plural variations (e.g., "strawberry" vs "strawberries")
+        - Word boundaries to avoid partial matches
+        """
+        kw_lower = keyword.lower().strip()
+        if not kw_lower:
+            return False
+        
+        # Check exact match first
+        if kw_lower in content:
+            return True
+        
+        # Check plural variations
+        # Handle "y" -> "ies" (e.g., strawberry -> strawberries)
+        if kw_lower.endswith('y'):
+            plural = kw_lower[:-1] + 'ies'
+            if plural in content:
+                return True
+        
+        # Handle regular plurals (add 's')
+        if not kw_lower.endswith('s'):
+            if (kw_lower + 's') in content:
+                return True
+        else:
+            # Try singular form (remove 's')
+            singular = kw_lower[:-1]
+            if singular in content and len(singular) > 2:
+                return True
+        
+        # Check if all significant words from keyword appear in content
+        # This handles multi-word keywords with word order variations
+        keyword_tokens = [t for t in re.split(r'[^a-z0-9]+', kw_lower) if len(t) > 2]
+        if keyword_tokens:
+            matches = sum(1 for token in keyword_tokens if token in content)
+            # Require at least 80% of tokens to match for multi-word keywords
+            if len(keyword_tokens) > 1 and matches >= len(keyword_tokens) * 0.8:
+                return True
+            # Require 100% match for single-word keywords
+            elif len(keyword_tokens) == 1 and matches == 1:
+                return True
+        
+        return False
+    
+    # Filter keywords: keep only those that exist in original content
+    filtered_keywords = []
+    keywords_found = []
+    keywords_not_found = []
+    
+    for keyword in keywords:
+        if keyword_exists_in_content(keyword, content):
+            filtered_keywords.append(keyword)
+            keywords_found.append(keyword)
+        else:
+            keywords_not_found.append(keyword)
+    
+    # Compile statistics for logging and debugging
+    filter_stats = {
+        "original_count": len(keywords),
+        "filtered_count": len(filtered_keywords),
+        "removed_count": len(keywords_not_found),
+        "filter_percentage": round((len(filtered_keywords) / len(keywords) * 100) if keywords else 0, 1),
+        "keywords_found_sample": keywords_found[:10],  # First 10 for debugging
+        "keywords_removed_sample": keywords_not_found[:10]  # First 10 for debugging
+    }
+    
+    logger.info(f"[FILTER] Keywords filtered: {filter_stats['original_count']} -> {filter_stats['filtered_count']} ({filter_stats['filter_percentage']}% kept)")
+    logger.info(f"[FILTER] Sample found: {filter_stats['keywords_found_sample']}")
+    logger.info(f"[FILTER] Sample removed: {filter_stats['keywords_removed_sample']}")
+    
+    return filtered_keywords, filter_stats
+
+
+def deduplicate_keywords_with_scores(
+    keywords: List[str],
+    relevancy_scores: Dict[str, int]
+) -> Tuple[List[str], Dict[str, int], Dict[str, Any]]:
+    """
+    Deduplicate keywords while preserving the highest relevancy score for each unique keyword.
+    
+    This addresses Issue #2: Duplicate keywords counted multiple times in total score
+    - Removes duplicate keywords that appear in both revenue.csv and design.csv
+    - Keeps the highest relevancy score when duplicates exist
+    - Ensures accurate total counts and scores
+    
+    Args:
+        keywords: List of keyword phrases (may contain duplicates)
+        relevancy_scores: Dictionary mapping keywords to relevancy scores (0-10)
+    
+    Returns:
+        Tuple of (unique_keywords, unique_scores, dedup_stats)
+        - unique_keywords: Deduplicated list of keywords
+        - unique_scores: Relevancy scores for unique keywords (highest score kept)
+        - dedup_stats: Statistics about deduplication process
+    """
+    import logging
+    
+    logger = logging.getLogger(__name__)
+    
+    # Track unique keywords with their highest scores
+    unique_keyword_scores: Dict[str, int] = {}
+    duplicate_tracking: Dict[str, List[int]] = {}  # Track all scores for each keyword
+    
+    for keyword in keywords:
+        # Normalize keyword: strip whitespace and convert to lowercase for comparison
+        normalized_kw = keyword.strip().lower()
+        
+        # Get the relevancy score for this keyword
+        score = relevancy_scores.get(keyword, 0)
+        
+        # Track all scores for this keyword (for statistics)
+        if normalized_kw not in duplicate_tracking:
+            duplicate_tracking[normalized_kw] = []
+        duplicate_tracking[normalized_kw].append(score)
+        
+        # Keep the highest score if duplicate exists
+        if normalized_kw in unique_keyword_scores:
+            # Duplicate found - keep the higher score
+            unique_keyword_scores[normalized_kw] = max(unique_keyword_scores[normalized_kw], score)
+        else:
+            # First occurrence of this keyword
+            unique_keyword_scores[normalized_kw] = score
+    
+    # Create deduplicated keyword list (preserving original case from first occurrence)
+    # We need to map normalized keywords back to original case
+    keyword_case_map: Dict[str, str] = {}
+    for keyword in keywords:
+        normalized = keyword.strip().lower()
+        if normalized not in keyword_case_map:
+            keyword_case_map[normalized] = keyword.strip()
+    
+    unique_keywords = [keyword_case_map[norm_kw] for norm_kw in unique_keyword_scores.keys()]
+    
+    # Create the deduplicated relevancy scores dictionary
+    unique_scores = {
+        keyword_case_map[norm_kw]: score 
+        for norm_kw, score in unique_keyword_scores.items()
+    }
+    
+    # Compile deduplication statistics
+    duplicates_found = {
+        keyword_case_map[norm_kw]: scores 
+        for norm_kw, scores in duplicate_tracking.items() 
+        if len(scores) > 1
+    }
+    
+    dedup_stats = {
+        "original_count": len(keywords),
+        "unique_count": len(unique_keywords),
+        "duplicates_removed": len(keywords) - len(unique_keywords),
+        "duplicates_found_count": len(duplicates_found),
+        "duplicates_sample": list(duplicates_found.items())[:5],  # First 5 for debugging
+        "score_improvements": {
+            kw: {"scores": scores, "max_kept": max(scores)}
+            for kw, scores in list(duplicates_found.items())[:5]
+        }
+    }
+    
+    logger.info(f"[DEDUP] Keywords deduplicated: {dedup_stats['original_count']} -> {dedup_stats['unique_count']}")
+    logger.info(f"[DEDUP] Duplicates removed: {dedup_stats['duplicates_removed']}")
+    logger.info(f"[DEDUP] Duplicate keywords found: {dedup_stats['duplicates_found_count']}")
+    if dedup_stats['score_improvements']:
+        logger.info(f"[DEDUP] Score improvements sample: {dedup_stats['score_improvements']}")
+    
+    return unique_keywords, unique_scores, dedup_stats
+
+

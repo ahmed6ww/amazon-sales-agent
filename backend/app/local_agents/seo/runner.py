@@ -21,6 +21,7 @@ from .helper_methods import (
     extract_keywords_from_content
 )
 from .keyword_validator import SEOKeywordValidator, validate_seo_output_keywords
+from .seo_keyword_filter import validate_and_correct_keywords_included
 from .schemas import (
     SEOAnalysisResult, CurrentSEO, OptimizedSEO, SEOComparison,
     KeywordCoverage, RootCoverage, ContentAnalysis
@@ -125,6 +126,15 @@ class SEORunner:
                 optimized_seo = self._correct_keyword_hallucination(optimized_seo, keyword_validator)
             else:
                 logger.info("✅ SEO output validation passed - no keyword hallucination")
+            
+            # Step 5.6: Validate keywords_included fields to ensure only actual keywords are reported
+            logger.info("🔍 Validating keywords_included fields...")
+            optimized_seo_dict = optimized_seo.model_dump()
+            validated_seo_dict, validation_stats = validate_and_correct_keywords_included(optimized_seo_dict)
+            
+            # Reconstruct the Pydantic model with validated data
+            optimized_seo = OptimizedSEO(**validated_seo_dict)
+            logger.info("✅ Keywords_included fields validated")
             
             # Step 5: Calculate comparison metrics
             comparison = self._calculate_comparison_metrics(current_seo, optimized_seo, keyword_data)
@@ -273,15 +283,25 @@ class SEORunner:
                 root_volumes=keyword_data["root_volumes"]
             )
         
-        # Analyze individual content pieces
-        title_analysis = ContentAnalysis(**analyze_content_piece(
-            current_content["title"], keyword_phrases
-        ))
+        # Analyze individual content pieces with deduplication
+        # Analyze title first
+        title_analysis_data = analyze_content_piece(current_content["title"], keyword_phrases)
+        title_analysis = ContentAnalysis(**title_analysis_data)
         
+        # Track keywords already found in title
+        found_in_title = set(kw.lower() for kw in title_analysis_data.get("keywords_found", []))
+        
+        # Analyze bullets with remaining keywords (excluding title keywords)
         bullets_analysis = []
         for bullet in current_content["bullets"]:
-            analysis = ContentAnalysis(**analyze_content_piece(bullet, keyword_phrases))
+            # Filter out keywords already in title
+            remaining_keywords = [kw for kw in keyword_phrases if kw.lower() not in found_in_title]
+            analysis = ContentAnalysis(**analyze_content_piece(bullet, remaining_keywords))
             bullets_analysis.append(analysis)
+            
+            # Track keywords found in this bullet to avoid double-counting in next bullets
+            found_in_bullet = set(kw.lower() for kw in analysis.keywords_found)
+            found_in_title.update(found_in_bullet)
         
         # Calculate character usage
         char_usage = calculate_character_usage(current_content)

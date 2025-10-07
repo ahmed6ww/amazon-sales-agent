@@ -24,7 +24,7 @@ USER_PROMPT_TEMPLATE = (
     "BASE_RELEVANCY_SCORES (0-10):\n{base_relevancy_scores}\n\n"
     "ITEMS (preserve order):\n{items}\n\n"
     "Return ONLY a JSON array where each element corresponds to the input ITEMS order and contains: \n"
-    "{{\"phrase\": \"string\", \"category\": \"string\", \"base_relevancy_score\": number, \"intent_score\": 0|1|2|3}}."
+    "{{\"phrase\": \"string\", \"category\": \"string\", \"relevancy_score\": number, \"intent_score\": 0|1|2|3}}."
 )
 
 

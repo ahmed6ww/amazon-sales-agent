@@ -60,6 +60,37 @@ class KeywordRunner:
 		if not structured and isinstance(raw_output, dict):
 			structured = raw_output
 
+		# Post-process: Normalize field names (base_relevancy_score -> relevancy_score)
+		if structured and "items" in structured:
+			logger.info(f"[KeywordRunner] Post-processing {len(structured['items'])} items to normalize field names")
+			for item in structured["items"]:
+				# Handle both field name scenarios
+				if "base_relevancy_score" in item and "relevancy_score" not in item:
+					# AI returned base_relevancy_score, rename to relevancy_score
+					item["relevancy_score"] = item.pop("base_relevancy_score")
+					logger.debug(f"[KeywordRunner] Renamed base_relevancy_score -> relevancy_score for '{item.get('phrase', 'unknown')}'")
+				elif "relevancy_score" in item and "base_relevancy_score" in item:
+					# Both fields exist, keep relevancy_score and remove base_relevancy_score
+					item.pop("base_relevancy_score", None)
+					logger.debug(f"[KeywordRunner] Removed duplicate base_relevancy_score for '{item.get('phrase', 'unknown')}'")
+				elif "relevancy_score" not in item and "base_relevancy_score" not in item:
+					# Neither field exists, this shouldn't happen
+					logger.error(f"[KeywordRunner] No relevancy score found for '{item.get('phrase', 'unknown')}'")
+				
+				# Ensure relevancy_score is always present
+				if "relevancy_score" not in item:
+					logger.error(f"[KeywordRunner] ❌ relevancy_score still missing for '{item.get('phrase', 'unknown')}' after processing!")
+					# Try to get from base_relevancy_score as last resort
+					if "base_relevancy_score" in item:
+						item["relevancy_score"] = item.pop("base_relevancy_score")
+						logger.warning(f"[KeywordRunner] Emergency fix: copied base_relevancy_score to relevancy_score for '{item.get('phrase', 'unknown')}'")
+				
+				# Log the final relevancy_score
+				if "relevancy_score" in item:
+					logger.debug(f"[KeywordRunner] ✅ '{item.get('phrase', 'unknown')}': relevancy_score={item['relevancy_score']}/10")
+				else:
+					logger.error(f"[KeywordRunner] ❌ relevancy_score MISSING for '{item.get('phrase', 'unknown')}'")
+
 		# Best-effort JSON extraction if narrative string
 		if not structured and isinstance(raw_output, str):
 			try:

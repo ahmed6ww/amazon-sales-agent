@@ -34,15 +34,15 @@ const Section = ({
   children,
   isExpandable = false,
 }: {
-  title: string; 
-  children: React.ReactNode; 
+  title: string;
+  children: React.ReactNode;
   isExpandable?: boolean;
 }) => {
   const [isExpanded, setIsExpanded] = useState(!isExpandable);
-  
+
   return (
     <Card className="mb-6">
-      <CardHeader 
+      <CardHeader
         className={isExpandable ? "cursor-pointer hover:bg-gray-50" : ""}
         onClick={() => isExpandable && setIsExpanded(!isExpanded)}
       >
@@ -160,17 +160,44 @@ const TestResultsPage = () => {
 
   // Keep hooks stable: compute keyword items from response safely (works even when response is null)
   const keywordItems = useMemo(() => {
-    return toArr(
+    const items = toArr(
       (response?.ai_analysis_keywords?.structured_data as any)?.items
     ) as Array<{
       phrase: string;
       search_volume: number;
       intent_score: number;
       relevancy_score: number;
+      base_relevancy_score?: number;
       title_density: number;
       category: string;
       root: string;
     }>;
+
+    // Normalize field names: use base_relevancy_score if relevancy_score is missing
+    items.forEach((item: any) => {
+      if (
+        typeof item.relevancy_score === "undefined" &&
+        typeof item.base_relevancy_score !== "undefined"
+      ) {
+        console.warn(
+          `[Frontend] Item "${item.phrase}" has base_relevancy_score but not relevancy_score, using base_relevancy_score`
+        );
+        item.relevancy_score = item.base_relevancy_score;
+      }
+
+      // Log relevancy scores for debugging
+      if (typeof item.relevancy_score !== "undefined") {
+        console.log(
+          `[Frontend] "${item.phrase}": relevancy_score=${item.relevancy_score}/10`
+        );
+      } else {
+        console.error(
+          `[Frontend] Missing relevancy_score for "${item.phrase}"`
+        );
+      }
+    });
+
+    return items;
   }, [response]);
 
   // Map keyword phrase -> search volume (case-insensitive)
@@ -520,7 +547,7 @@ const TestResultsPage = () => {
                 />
               </div>
             </div>
-                      <div className="flex items-center gap-3 mb-2">
+            <div className="flex items-center gap-3 mb-2">
               <Button
                 onClick={handleRun}
                 disabled={loading || !asinOrUrl.trim()}
@@ -528,7 +555,7 @@ const TestResultsPage = () => {
                 {loading
                   ? "Running Analysis…"
                   : "Run Amazon Sales Intelligence"}
-            </Button>
+              </Button>
               <span className="text-xs text-gray-500">
                 Real API: /api/v1/amazon-sales-intelligence
               </span>
@@ -549,7 +576,7 @@ const TestResultsPage = () => {
   }
 
   return (
-        <div className="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
+    <div className="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
       {/* Header + Controls */}
       <Card className="mb-6">
         <CardContent className="p-6">
@@ -913,9 +940,9 @@ const TestResultsPage = () => {
                 )}
               </div>
               <div className="overflow-x-auto">
-              <table className="w-full table-auto">
-                <thead>
-                  <tr className="border-b bg-gray-50">
+                <table className="w-full table-auto">
+                  <thead>
+                    <tr className="border-b bg-gray-50">
                       <th className="text-left py-3 px-4 font-medium">
                         Keyword
                       </th>
@@ -969,44 +996,44 @@ const TestResultsPage = () => {
                           )}
                         </button>
                       </th>
-                  </tr>
-                </thead>
-                <tbody>
+                    </tr>
+                  </thead>
+                  <tbody>
                     {displayItems.map(
                       (
                         kw: {
-                    phrase: string; 
-                    search_volume: number; 
-                    intent_score: number; 
-                    relevancy_score: number; 
-                    title_density: number; 
-                    category: string; 
-                    root: string; 
+                          phrase: string;
+                          search_volume: number;
+                          intent_score: number;
+                          relevancy_score: number;
+                          title_density: number;
+                          category: string;
+                          root: string;
                         },
                         i: number
                       ) => (
-                    <tr key={i} className="border-b hover:bg-gray-50">
-                      <td className="py-3 px-4 font-medium text-sm">
-                        <a
+                        <tr key={i} className="border-b hover:bg-gray-50">
+                          <td className="py-3 px-4 font-medium text-sm">
+                            <a
                               href={buildAmazonSearchUrl(
                                 kw.phrase,
                                 resMarketplace || marketplace
                               )}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-blue-600 hover:underline"
-                          title={`Search on Amazon for ${kw.phrase}`}
-                        >
-                          {kw.phrase}
-                        </a>
-                      </td>
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:underline"
+                              title={`Search on Amazon for ${kw.phrase}`}
+                            >
+                              {kw.phrase}
+                            </a>
+                          </td>
                           <td className="text-right py-3 px-4 text-sm">
                             {fmtNumber(kw.search_volume)}
                           </td>
-                      <td className="text-center py-3 px-4">
+                          <td className="text-center py-3 px-4">
                             {getIntentBadge(kw.intent_score ?? 0)}
-                      </td>
-                      <td className="text-center py-3 px-4">
+                          </td>
+                          <td className="text-center py-3 px-4">
                             <Badge variant="outline">
                               {kw.relevancy_score}/10
                             </Badge>
@@ -1018,25 +1045,25 @@ const TestResultsPage = () => {
                             <Badge className={getCategoryColor(kw.category)}>
                               {kw.category}
                             </Badge>
-                      </td>
-                      <td className="text-center py-3 px-4">
-                        <Badge variant="secondary">{kw.root}</Badge>
-                      </td>
-                    </tr>
+                          </td>
+                          <td className="text-center py-3 px-4">
+                            <Badge variant="secondary">{kw.root}</Badge>
+                          </td>
+                        </tr>
                       )
                     )}
-                  {displayItems.length === 0 && (
-                    <tr>
+                    {displayItems.length === 0 && (
+                      <tr>
                         <td
                           colSpan={7}
                           className="text-center py-6 text-sm text-gray-500"
                         >
                           No keywords match the selected filters.
                         </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
+                      </tr>
+                    )}
+                  </tbody>
+                </table>
               </div>
             </div>
           </Section>
@@ -1065,16 +1092,22 @@ const TestResultsPage = () => {
                     const total = sumVolumes(list);
                     return (
                       <>
-                        Keywords found: 
+                        Keywords found:
                         <div className="flex flex-wrap gap-1 mt-1">
-                          {list.map((kw: string, j: number) => (
-                            <Badge 
-                              key={j} 
-                              className="text-xs bg-gray-200 text-gray-800 border border-gray-300"
-                            >
-                              {labelWithVolume(kw)}
-                            </Badge>
-                          ))}
+                          {list.map((kw: string, j: number) => {
+                            // Log each keyword for debugging
+                            console.log(
+                              `[Frontend] Title keyword ${j + 1}: "${kw}"`
+                            );
+                            return (
+                              <Badge
+                                key={j}
+                                className="text-xs bg-gray-200 text-gray-800 border border-gray-300"
+                              >
+                                {labelWithVolume(kw)}
+                              </Badge>
+                            );
+                          })}
                         </div>
                         <span className="ml-2 text-gray-500">
                           • Total: {fmtNumber(total)}
@@ -1106,11 +1139,11 @@ const TestResultsPage = () => {
                     const total = sumVolumes(list);
                     return (
                       <>
-                        Keywords included: 
+                        Keywords included:
                         <div className="flex flex-wrap gap-1 mt-1">
                           {list.map((kw: string, j: number) => (
-                            <Badge 
-                              key={j} 
+                            <Badge
+                              key={j}
                               className="text-xs bg-green-600 text-white border border-green-700"
                             >
                               {labelWithVolume(kw)}
@@ -1169,13 +1202,19 @@ const TestResultsPage = () => {
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {toArr(c?.keywords_found).map(
                                     (kw: string, j: number) => {
+                                      // Log each bullet keyword for debugging
+                                      console.log(
+                                        `[Frontend] Bullet ${i + 1} keyword ${
+                                          j + 1
+                                        }: "${kw}"`
+                                      );
                                       const isDuplicate =
                                         currentTitleKeywords.has(
                                           String(kw).toLowerCase()
                                         );
-                                    return (
-                                      <Badge 
-                                        key={j} 
+                                      return (
+                                        <Badge
+                                          key={j}
                                           className={`text-xs ${
                                             isDuplicate
                                               ? "bg-yellow-400 text-yellow-900"
@@ -1186,10 +1225,10 @@ const TestResultsPage = () => {
                                               ? "This keyword is also in the current title"
                                               : ""
                                           }
-                                      >
-                                        {labelWithVolume(kw)}
-                                      </Badge>
-                                    );
+                                        >
+                                          {labelWithVolume(kw)}
+                                        </Badge>
+                                      );
                                     }
                                   )}
                                 </div>
@@ -1271,9 +1310,9 @@ const TestResultsPage = () => {
                                         optimizedTitleKeywords.has(
                                           String(kw).toLowerCase()
                                         );
-                                    return (
-                                      <Badge 
-                                        key={j} 
+                                      return (
+                                        <Badge
+                                          key={j}
                                           className={`text-xs ${
                                             isDuplicate
                                               ? "bg-yellow-400 text-yellow-900"
@@ -1284,10 +1323,10 @@ const TestResultsPage = () => {
                                               ? "This keyword is also in the optimized title"
                                               : ""
                                           }
-                                      >
-                                        {labelWithVolume(kw)}
-                                      </Badge>
-                                    );
+                                        >
+                                          {labelWithVolume(kw)}
+                                        </Badge>
+                                      );
                                     }
                                   )}
                                 </div>
@@ -1297,7 +1336,7 @@ const TestResultsPage = () => {
                                 <ul className="list-disc list-inside mt-1 text-xs text-gray-600">
                                   {toArr(o?.improvements).map(
                                     (imp: string, j: number) => (
-                                    <li key={j}>{imp}</li>
+                                      <li key={j}>{imp}</li>
                                     )
                                   )}
                                 </ul>
@@ -1621,15 +1660,15 @@ const TestResultsPage = () => {
                 </div>
                 <span className="text-gray-600">93 ratings</span>
               </div>
-              
+
               <div className="space-y-3">
                 {toArr(scraped_product?.reviews?.sample_reviews).map(
                   (review: string, i: number) => (
-                  <div key={i} className="p-4 bg-gray-50 rounded-lg border">
+                    <div key={i} className="p-4 bg-gray-50 rounded-lg border">
                       <p className="text-sm text-gray-700 italic">
                         &quot;{review}&quot;
                       </p>
-                  </div>
+                    </div>
                   )
                 )}
               </div>
@@ -1640,8 +1679,8 @@ const TestResultsPage = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {Object.entries(analysis_metadata as Record<string, unknown>).map(
                 ([key, value]) => (
-                <KeyValue 
-                  key={key} 
+                  <KeyValue
+                    key={key}
                     label={key
                       .replace(/_/g, " ")
                       .replace(/\b\w/g, (l) => l.toUpperCase())}

@@ -146,12 +146,21 @@ def analyze_root_relevance_ai(keywords: List[Dict[str, Any]]) -> Dict[str, Any]:
     try:
         # Import the Runner dynamically to avoid circular imports
         from agents import Runner as _Runner
+        import asyncio
         
-        # Run AI agent
-        result = _Runner.run_sync(
-            root_relevance_agent,
-            prompt
-        )
+        # Run AI agent with proper async handling
+        try:
+            # Check if event loop exists
+            loop = asyncio.get_running_loop()
+            # Event loop already running - use fallback instead
+            logger.warning(f"[RootRelevanceAgent] Event loop running, using fallback analysis")
+            return _create_fallback_analysis(keywords)
+        except RuntimeError:
+            # No event loop - safe to use run_sync
+            result = _Runner.run_sync(
+                root_relevance_agent,
+                prompt
+            )
         
         output = getattr(result, "final_output", None)
         

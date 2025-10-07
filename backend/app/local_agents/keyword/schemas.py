@@ -14,12 +14,16 @@ class KeywordCategory(str, Enum):
 
 
 class KeywordData(BaseModel):
-	model_config = ConfigDict(extra="forbid")
+	model_config = ConfigDict(extra="allow")  # Changed from "forbid" to "allow" to accept base_relevancy_score
 	phrase: str = Field(..., description="The keyword phrase")
 	category: KeywordCategory = Field(..., description="Full category name (e.g., 'Relevant', 'Design-Specific')")
 	reason: str = Field(..., description="Short rationale for the category")
 	relevancy_score: int = Field(
-		..., ge=0, le=10, description="Relevancy score (0-10) from research CSVs"
+		None, ge=0, le=10, description="Relevancy score (0-10) from research CSVs"
+	)
+	# Accept both field names - AI might return either
+	base_relevancy_score: int = Field(
+		None, ge=0, le=10, description="Alternative field name for relevancy score"
 	)
 
 

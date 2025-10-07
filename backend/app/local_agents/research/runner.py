@@ -1,13 +1,19 @@
 from agents import Runner
 from typing import Dict, Any, Optional, List
 from .agent import research_agent
-from .helper_methods import scrape_amazon_listing, select_top_rows, collect_asins, scrape_competitors
+from .helper_methods import (
+    scrape_amazon_listing, 
+    select_top_rows, 
+    collect_asins, 
+    scrape_competitors,
+    filter_keywords_by_original_content,  # NEW: Filter keywords by original content
+    deduplicate_keywords_with_scores      # NEW: Deduplicate keywords with scores
+)
 from app.core.config import settings
 from app.local_agents.scoring.subagents.intent_agent import USER_PROMPT_TEMPLATE
 from app.services.keyword_processing.root_extraction import get_priority_roots_for_search
 from app.services.keyword_processing.batch_processor import (
-    optimize_keyword_processing_for_agents,
-    create_agent_optimized_base_relevancy_scores
+    optimize_keyword_processing_for_agents
 )
 import logging
 
@@ -129,7 +135,7 @@ class ResearchRunner:
                             ranks_in_top10 += 1
                     except Exception:
                         continue
-                score10 = int(round((ranks_in_top10 / max(1, len(asin_set))) * 10.0))
+                score10 = min(10, int(round((ranks_in_top10 / max(1, len(asin_set))) * 20.0)))
                 # Keep max score across revenue/design rows for same keyword
                 scores[kw] = max(scores.get(kw, 0), score10)
             return scores
@@ -217,35 +223,132 @@ class ResearchRunner:
         unique_keywords = revenue_keywords + design_keywords
         unique_keywords = list(dict.fromkeys([kw for kw in unique_keywords if kw.strip()]))
         
-        # Create optimized base relevancy scores (limited set to prevent timeouts)
-        optimized_base_relevancy = create_agent_optimized_base_relevancy_scores(
-            unique_keywords, 
-            max_keywords_for_agent=100  # Increased limit to process more keywords
+        # ==================================================================================
+        # STEP 1: DEDUPLICATE KEYWORDS (Issue #2 Fix)
+        # Remove duplicate keywords that appear in both revenue.csv and design.csv
+        # Keep the highest relevancy score for each unique keyword
+        # ==================================================================================
+        
+        logger.info("")
+        logger.info("="*80)
+        logger.info("🔧 [DEDUPLICATION] Starting keyword deduplication process...")
+        logger.info("="*80)
+        
+        # First, compute traditional relevancy scores before deduplication
+        pre_dedup_relevancy = _compute_relevancy_scores(revenue_csv or [], rev_asins_list)
+        for k, v in _compute_relevancy_scores(design_csv or [], des_asins_list).items():
+            pre_dedup_relevancy[k] = max(pre_dedup_relevancy.get(k, 0.0), v)
+        
+        # Apply deduplication: Remove duplicate keywords and keep highest scores
+        unique_keywords, base_relevancy, dedup_stats = deduplicate_keywords_with_scores(
+            keywords=unique_keywords,
+            relevancy_scores=pre_dedup_relevancy
         )
         
-        # Combine traditional relevancy scores with optimized scores
-        base_relevancy = _compute_relevancy_scores(revenue_csv or [], rev_asins_list)
-        for k, v in _compute_relevancy_scores(design_csv or [], des_asins_list).items():
-            base_relevancy[k] = max(base_relevancy.get(k, 0.0), v)
+        logger.info(f"✅ [DEDUPLICATION] Complete:")
+        logger.info(f"   - Original keywords: {dedup_stats['original_count']}")
+        logger.info(f"   - Unique keywords: {dedup_stats['unique_count']}")
+        logger.info(f"   - Duplicates removed: {dedup_stats['duplicates_removed']}")
+        logger.info(f"   - Duplicate keywords found: {dedup_stats['duplicates_found_count']}")
+        logger.info("="*80)
+        logger.info("")
+        
+        # ==================================================================================
+        # STEP 2: FILTER KEYWORDS BY ORIGINAL CONTENT (Issue #1 Fix)
+        # Only keep keywords that appear in the original scraped title and bullet points
+        # This ensures we only show relevant keywords that exist in the actual listing
+        # ==================================================================================
+        
+        logger.info("")
+        logger.info("="*80)
+        logger.info("🔧 [CONTENT FILTER] Filtering keywords against original listing...")
+        logger.info("="*80)
+        
+        # Apply content filtering: Only keep keywords present in original title/bullets
+        filtered_keywords, filter_stats = filter_keywords_by_original_content(
+            keywords=unique_keywords,
+            scraped_data=scraped_data
+        )
+        
+        logger.info(f"✅ [CONTENT FILTER] Complete:")
+        logger.info(f"   - Keywords before filtering: {filter_stats['original_count']}")
+        logger.info(f"   - Keywords after filtering: {filter_stats['filtered_count']}")
+        logger.info(f"   - Keywords removed: {filter_stats['removed_count']}")
+        logger.info(f"   - Filter percentage: {filter_stats['filter_percentage']}% kept")
+        logger.info("="*80)
+        logger.info("")
+        
+        # Update unique_keywords to use filtered list
+        unique_keywords = filtered_keywords
+        
+        # Update base_relevancy to only include filtered keywords
+        # Use case-insensitive lookup to preserve scores
+        logger.info("🔍 [RELEVANCY MAPPING] Matching filtered keywords to relevancy scores...")
+        filtered_base_relevancy = {}
+        exact_matches = 0
+        case_insensitive_matches = 0
+        missing_keywords = 0
+        
+        for kw in filtered_keywords:
+            # Try exact match first
+            if kw in base_relevancy:
+                score = base_relevancy[kw]
+                filtered_base_relevancy[kw] = score
+                exact_matches += 1
+                logger.debug(f"[RELEVANCY] Exact match: '{kw}' → score {score}")
+            else:
+                # Try case-insensitive match
+                kw_lower = kw.lower()
+                found = False
+                for original_kw, score in base_relevancy.items():
+                    if original_kw.lower() == kw_lower:
+                        filtered_base_relevancy[kw] = score
+                        case_insensitive_matches += 1
+                        found = True
+                        logger.debug(f"[RELEVANCY] Case-insensitive match: '{kw}' ↔ '{original_kw}' → score {score}")
+                        break
+                if not found:
+                    # Keyword passed content filter but has no relevancy score
+                    # This shouldn't happen, but use reasonable default
+                    filtered_base_relevancy[kw] = 5
+                    missing_keywords += 1
+                    logger.warning(f"[RELEVANCY] No relevancy score found for '{kw}', using default 5")
+        
+        logger.info(f"✅ [RELEVANCY MAPPING] Complete:")
+        logger.info(f"   - Exact matches: {exact_matches}")
+        logger.info(f"   - Case-insensitive matches: {case_insensitive_matches}")
+        logger.info(f"   - Missing keywords (defaulted to 5): {missing_keywords}")
+        logger.info(f"   - Total keywords mapped: {len(filtered_base_relevancy)}")
+        
+        # Log sample of mapped keywords with scores
+        sample_keywords = list(filtered_base_relevancy.items())[:10]
+        logger.info(f"📊 [RELEVANCY SAMPLE] First 10 keywords with scores:")
+        for kw, score in sample_keywords:
+            logger.info(f"   - '{kw}': {score}/10")
+        
+        base_relevancy = filtered_base_relevancy
+        
+        logger.info(f"📊 [FINAL STATS] Processing {len(unique_keywords)} deduplicated and filtered keywords")
+        
+        # ==================================================================================
+        # END OF FILTERING AND DEDUPLICATION
+        # ==================================================================================
 
         # Filter keywords by relevancy score (>= 2) before agent processing
         min_relevancy_threshold = 2
-        high_relevancy_keywords = [
-            keyword for keyword, score in base_relevancy.items() 
-            if score >= min_relevancy_threshold
-        ]
+        high_relevancy_keywords = []
+        high_relevancy_scores = {}
+        
+        for keyword, score in base_relevancy.items():
+            if score >= min_relevancy_threshold:
+                high_relevancy_keywords.append(keyword)
+                high_relevancy_scores[keyword] = score  # ✅ PRESERVE ORIGINAL SCORES
 
-        logger.info(f"Filtered keywords by relevancy >= {min_relevancy_threshold}: {len(unique_keywords)} -> {len(high_relevancy_keywords)}")
+        logger.info(f"Filtered keywords by relevancy >= {min_relevancy_threshold}: {len(base_relevancy)} -> {len(high_relevancy_keywords)}")
 
-        # Use only high-relevancy keywords for agent processing
-        agent_base_relevancy = create_agent_optimized_base_relevancy_scores(
-            high_relevancy_keywords, 
-            max_keywords_for_agent=1000  # Process all high-relevancy keywords
-        )
-
-        # Keep full analysis for reporting, but use filtered set for agents
+        # Use filtered keywords with PRESERVED scores for agents
         full_base_relevancy = base_relevancy.copy()
-        base_relevancy = agent_base_relevancy  # This goes to the agents
+        base_relevancy = high_relevancy_scores  # ✅ KEEPS ORIGINAL SCORES (3, 4, etc.)
 
         # Perform AI-powered root extraction for richer analysis context (non-blocking if fails)
         ai_keyword_root_analysis: Dict[str, Any] = {}

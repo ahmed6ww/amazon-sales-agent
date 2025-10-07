@@ -172,6 +172,13 @@ async def amazon_sales_intelligence_pipeline(
         base_relevancy_scores = (research_ai_result or {}).get(
             "base_relevancy_scores", {}
         )
+        
+        logger.info(f"📊 [API] Extracted from research_ai_result:")
+        logger.info(f"   - base_relevancy_scores: {len(base_relevancy_scores)} keywords")
+        if base_relevancy_scores:
+            # Log sample scores
+            sample_scores = list(base_relevancy_scores.items())[:10]
+            logger.info(f"   - Sample scores: {sample_scores}")
 
         logger.info(f"✅ [STEP 1/4] RESEARCH COMPLETE")
         logger.info(f"   Total unique keywords: {total_unique_keywords}")
@@ -211,6 +218,15 @@ async def amazon_sales_intelligence_pipeline(
             logger.info(f"   Relevant: {stats.get('Relevant', {}).get('count', 0)}")
             logger.info(f"   Design-Specific: {stats.get('Design-Specific', {}).get('count', 0)}")
             logger.info(f"   Irrelevant: {stats.get('Irrelevant', {}).get('count', 0)}")
+            
+            # Check if items have relevancy_score after keyword categorization
+            if items:
+                sample_item = items[0]
+                logger.info(f"📊 [API] After keyword categorization, sample item keys: {list(sample_item.keys())}")
+                if 'relevancy_score' in sample_item:
+                    logger.info(f"   - ✅ relevancy_score present: {sample_item.get('relevancy_score')}/10")
+                else:
+                    logger.warning(f"   - ❌ relevancy_score MISSING!")
 
         # Enrich: append intent_score then merge CSV metrics into keyword items
         logger.info("")
@@ -246,6 +262,16 @@ async def amazon_sales_intelligence_pipeline(
                     keyword_ai_result.setdefault("structured_data", {})["items"] = enriched
                     logger.info(f"✅ [STEP 3/4] SCORING COMPLETE")
                     logger.info(f"   Enriched {len(enriched)} keywords with intent scores and metrics")
+                    
+                    # Check if enriched items have relevancy_score after scoring
+                    if enriched:
+                        sample_enriched = enriched[0]
+                        logger.info(f"📊 [API] After scoring, sample item keys: {list(sample_enriched.keys())}")
+                        if 'relevancy_score' in sample_enriched:
+                            logger.info(f"   - ✅ relevancy_score present: {sample_enriched.get('relevancy_score')}/10")
+                        else:
+                            logger.error(f"   - ❌ relevancy_score MISSING in final output!")
+                            logger.error(f"   - Sample item: {sample_enriched}")
         except Exception as _enrich_err:
             # Non-fatal: continue with original keyword result if enrichment fails
             logger.warning(f"⚠️  [STEP 3/4] Keyword enrichment skipped: {_enrich_err!s}")
@@ -414,6 +440,10 @@ async def amazon_sales_intelligence_pipeline(
                 'api_optimization': f"Reduced Amazon search calls from {original_keyword_count} to {priority_roots_count}"
             }
 
+        # Add scraped_product to keyword_ai_result for frontend (contains images)
+        if isinstance(keyword_ai_result, dict) and scraped_product:
+            keyword_ai_result["scraped_product"] = scraped_product
+
         # Compile the final response with all 4 agent outputs + keyword root analysis
         response = {
             "success": True,
@@ -443,7 +473,7 @@ async def amazon_sales_intelligence_pipeline(
             "source": "amazon_sales_intelligence_pipeline",
         }
         
-        # Final success log
+        # Final success log with detailed output summary
         logger.info("")
         logger.info("="*80)
         logger.info("✅ [PIPELINE COMPLETE] Response ready")
@@ -453,6 +483,27 @@ async def amazon_sales_intelligence_pipeline(
         logger.info(f"   Root optimization: {priority_roots_count} priority roots identified")
         logger.info(f"   Efficiency gain: {efficiency_metrics.get('reduction_percentage', 0)}%")
         logger.info("="*80)
+        logger.info("")
+        logger.info("📊 [OUTPUT SUMMARY] Complete Response Structure:")
+        logger.info(f"   - keywords_analyzed: {len(items)} items")
+        if items and len(items) > 0:
+            # Count keywords by category
+            relevant_count = sum(1 for item in items if item.get('category') == 'Relevant')
+            design_count = sum(1 for item in items if item.get('category') == 'Design-Specific')
+            logger.info(f"   - Relevant keywords: {relevant_count}")
+            logger.info(f"   - Design-Specific keywords: {design_count}")
+            # Show sample with relevancy scores
+            sample_with_scores = [(item.get('phrase'), item.get('relevancy_score'), item.get('intent_score')) 
+                                  for item in items[:5]]
+            logger.info(f"   - Sample keywords (phrase, relevancy, intent):")
+            for phrase, rel, intent in sample_with_scores:
+                logger.info(f"     • {phrase}: relevancy={rel}/10, intent={intent}")
+        if seo_analysis_result.get('success'):
+            seo_data = seo_analysis_result.get('data', {})
+            optimized = seo_data.get('optimized_seo', {})
+            logger.info(f"   - SEO title: {optimized.get('optimized_title', {}).get('content', 'N/A')[:80]}...")
+            logger.info(f"   - SEO bullets: {len(optimized.get('optimized_bullets', []))} generated")
+        logger.info("="*80)
         
         # Print OpenAI API monitoring summary
         if settings.ENABLE_OPENAI_MONITORING:
@@ -461,6 +512,19 @@ async def amazon_sales_intelligence_pipeline(
         # Add monitoring stats to response
         if settings.LOG_DETAILED_STATS:
             response["monitoring_stats"] = monitor.get_detailed_stats()
+
+        # Save complete response to JSON file for debugging (in case frontend disconnects)
+        import json
+        from pathlib import Path
+        output_file = Path("complete_pipeline_result.json")
+        try:
+            with open(output_file, 'w', encoding='utf-8') as f:
+                json.dump(response, f, indent=2, ensure_ascii=False)
+            logger.info(f"💾 [OUTPUT] Complete response saved to: {output_file.absolute()}")
+            logger.info(f"   - File size: {output_file.stat().st_size / 1024:.1f} KB")
+            logger.info(f"   - You can view the full output even if frontend disconnects!")
+        except Exception as save_err:
+            logger.warning(f"Failed to save output file: {save_err}")
 
         return response
 

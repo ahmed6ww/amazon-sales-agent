@@ -51,57 +51,87 @@ class ScoringRunner:
 		if not items:
 			return items
 		
-		logger.info("[ScoringRunner] Processing %d items with simple intent scoring", len(items))
-		
-		# Simple approach - just process directly with a small delay
-		import time
-		time.sleep(1)  # Simple rate limiting
-		
-		# Use the original simple approach
-		from agents import Runner as _Runner
-		from app.local_agents.scoring.subagents.intent_agent import (
-			intent_scoring_agent,
-			USER_PROMPT_TEMPLATE,
-		)
-		import json as _json
-		
-		prompt = USER_PROMPT_TEMPLATE.format(
-			scraped_product=_json.dumps(scraped_product or {}, separators=(",", ":")),
-			base_relevancy_scores=_json.dumps(base_relevancy_scores or {}, separators=(",", ":")),
-			items=_json.dumps(items or [], separators=(",", ":")),
-		)
-		
-		result = _Runner.run_sync(intent_scoring_agent, prompt)
-		
-		# Parse and return results
-		if result and hasattr(result, 'final_output'):
-			output = result.final_output
-			if output:
-				try:
-					parsed_result = _json.loads(output)
-					if isinstance(parsed_result, list):
-						return parsed_result
-					elif isinstance(parsed_result, dict) and "items" in parsed_result:
-						return parsed_result["items"]
-				except _json.JSONDecodeError:
-					logger.warning("[ScoringRunner] Failed to parse intent scoring result")
-		elif result and hasattr(result, 'content'):
+	logger.info("[ScoringRunner] Processing %d items with simple intent scoring", len(items))
+	
+	# Simple approach - just process directly with a small delay
+	import time
+	time.sleep(1)  # Simple rate limiting
+	
+	# Use the original simple approach
+	from agents import Runner as _Runner
+	from app.local_agents.scoring.subagents.intent_agent import (
+		intent_scoring_agent,
+		USER_PROMPT_TEMPLATE,
+	)
+	import json as _json
+	
+	prompt = USER_PROMPT_TEMPLATE.format(
+		scraped_product=_json.dumps(scraped_product or {}, separators=(",", ":")),
+		base_relevancy_scores=_json.dumps(base_relevancy_scores or {}, separators=(",", ":")),
+		items=_json.dumps(items or [], separators=(",", ":")),
+	)
+	
+	result = _Runner.run_sync(intent_scoring_agent, prompt)
+	
+	# Parse and return results
+	if result and hasattr(result, 'final_output'):
+		output = result.final_output
+		if output:
 			try:
-				parsed_result = _json.loads(result.content)
+				parsed_result = _json.loads(output)
 				if isinstance(parsed_result, list):
 					return parsed_result
 				elif isinstance(parsed_result, dict) and "items" in parsed_result:
 					return parsed_result["items"]
 			except _json.JSONDecodeError:
 				logger.warning("[ScoringRunner] Failed to parse intent scoring result")
+	elif result and hasattr(result, 'content'):
+		try:
+			parsed_result = _json.loads(result.content)
+			if isinstance(parsed_result, list):
+				return parsed_result
+			elif isinstance(parsed_result, dict) and "items" in parsed_result:
+				return parsed_result["items"]
+		except _json.JSONDecodeError:
+			logger.warning("[ScoringRunner] Failed to parse intent scoring result")
+	
+	# Fallback: return original items with default intent score
+	logger.warning("[ScoringRunner] Intent scoring failed, using fallback")
+	logger.info(f"[ScoringRunner] Applying fallback logic to {len(items)} items...")
+	
+	fallback_stats = {"intent_added": 0, "relevancy_from_base": 0, "relevancy_defaulted": 0, "relevancy_preserved": 0}
+	
+	for item in items:
+		if "intent_score" not in item:
+			item["intent_score"] = 5  # Default moderate intent
+			fallback_stats["intent_added"] += 1
 		
-		# Fallback: return original items with default intent score
-		logger.warning("[ScoringRunner] Intent scoring failed, using fallback")
-		for item in items:
-			if "intent_score" not in item:
-				item["intent_score"] = 5  # Default moderate intent
-		
-		return items
+		# Ensure relevancy_score is present from base_relevancy_scores
+		if "relevancy_score" not in item:
+			if base_relevancy_scores:
+				phrase = item.get("phrase", "")
+				if phrase in base_relevancy_scores:
+					item["relevancy_score"] = base_relevancy_scores[phrase]
+					fallback_stats["relevancy_from_base"] += 1
+					logger.debug(f"[ScoringRunner] Set relevancy_score for '{phrase}': {base_relevancy_scores[phrase]}")
+				else:
+					item["relevancy_score"] = 5  # Default moderate relevancy
+					fallback_stats["relevancy_defaulted"] += 1
+					logger.debug(f"[ScoringRunner] No base score for '{phrase}', defaulted to 5")
+			else:
+				item["relevancy_score"] = 5
+				fallback_stats["relevancy_defaulted"] += 1
+		else:
+			fallback_stats["relevancy_preserved"] += 1
+			logger.debug(f"[ScoringRunner] Preserved existing relevancy_score for '{item.get('phrase', '')}': {item['relevancy_score']}")
+	
+	logger.info(f"[ScoringRunner] Fallback stats:")
+	logger.info(f"   - Intent scores added: {fallback_stats['intent_added']}")
+	logger.info(f"   - Relevancy from base_relevancy_scores: {fallback_stats['relevancy_from_base']}")
+	logger.info(f"   - Relevancy defaulted to 5: {fallback_stats['relevancy_defaulted']}")
+	logger.info(f"   - Relevancy preserved from items: {fallback_stats['relevancy_preserved']}")
+	
+	return items
 	
 	
 	@staticmethod
