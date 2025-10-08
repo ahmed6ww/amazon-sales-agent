@@ -114,6 +114,23 @@ class ResearchRunner:
 
         # Compute base relevancy scores from CSVs (fraction of tracked ASINs with rank <= 10)
         def _compute_relevancy_scores(rows: List[Dict[str, Any]], competitor_asins: List[str]) -> Dict[str, int]:
+            """
+            Calculate relevancy score (0-10) based on keyword ranking in top 10 for competitor ASINs.
+            
+            HOW IT WORKS:
+            1. Check each keyword's rank for each competitor ASIN
+            2. Count how many competitors rank in top 10 for this keyword
+            3. Formula: (top10_count / total_asins) * 20, capped at 10
+            
+            EXAMPLE:
+            - Keyword: "freeze dried strawberries"
+            - 5 competitor ASINs analyzed
+            - Ranks in top 10 for: 3 ASINs
+            - Score: (3/5) * 20 = 12 → capped at 10/10
+            
+            WHY *20? To scale 50% performance to ~10/10. If keyword ranks top 10 for half
+            the competitors, it gets high score since that's strong performance.
+            """
             scores: Dict[str, int] = {}
             if not rows or not competitor_asins:
                 return scores
@@ -135,6 +152,7 @@ class ResearchRunner:
                             ranks_in_top10 += 1
                     except Exception:
                         continue
+                # Score formula: Scale to 0-10 range (doubled to reward 50%+ performance)
                 score10 = min(10, int(round((ranks_in_top10 / max(1, len(asin_set))) * 20.0)))
                 # Keep max score across revenue/design rows for same keyword
                 scores[kw] = max(scores.get(kw, 0), score10)
@@ -224,14 +242,23 @@ class ResearchRunner:
         unique_keywords = list(dict.fromkeys([kw for kw in unique_keywords if kw.strip()]))
         
         # ==================================================================================
-        # STEP 1: DEDUPLICATE KEYWORDS (Issue #2 Fix)
-        # Remove duplicate keywords that appear in both revenue.csv and design.csv
-        # Keep the highest relevancy score for each unique keyword
+        # STEP 1: DEDUPLICATE KEYWORDS
+        # ==================================================================================
+        # PURPOSE: Remove duplicate keywords that appear in both revenue.csv and design.csv
+        # WHY: When keywords appear in multiple CSVs, we need to:
+        #      1. Keep only one instance (avoid showing "strawberry powder" twice)
+        #      2. Preserve the HIGHEST relevancy score across all sources
+        # EXAMPLE: If "freeze dried" appears in both CSVs with scores 7 and 9, keep score 9
+        # OUTPUT: Deduplicated keyword list + unified relevancy scores
         # ==================================================================================
         
         logger.info("")
         logger.info("="*80)
-        logger.info("🔧 [DEDUPLICATION] Starting keyword deduplication process...")
+        logger.info("🔧 [STEP 1: KEYWORD DEDUPLICATION]")
+        logger.info("="*80)
+        logger.info("📋 What: Remove duplicate keywords across revenue.csv and design.csv")
+        logger.info("🎯 Why: Prevent duplicate keywords, keep highest relevancy score")
+        logger.info("💡 How: Case-insensitive matching, score aggregation")
         logger.info("="*80)
         
         # First, compute traditional relevancy scores before deduplication
@@ -245,23 +272,36 @@ class ResearchRunner:
             relevancy_scores=pre_dedup_relevancy
         )
         
-        logger.info(f"✅ [DEDUPLICATION] Complete:")
-        logger.info(f"   - Original keywords: {dedup_stats['original_count']}")
-        logger.info(f"   - Unique keywords: {dedup_stats['unique_count']}")
-        logger.info(f"   - Duplicates removed: {dedup_stats['duplicates_removed']}")
-        logger.info(f"   - Duplicate keywords found: {dedup_stats['duplicates_found_count']}")
+        logger.info("")
+        logger.info(f"✅ [DEDUPLICATION RESULTS]")
+        logger.info(f"   📊 Input: {dedup_stats['original_count']} total keywords")
+        logger.info(f"   🎯 Output: {dedup_stats['unique_count']} unique keywords")
+        logger.info(f"   🗑️  Removed: {dedup_stats['duplicates_removed']} duplicates")
+        logger.info(f"   📝 Note: {dedup_stats['duplicates_found_count']} keywords had multiple scores (kept highest)")
         logger.info("="*80)
         logger.info("")
         
         # ==================================================================================
-        # STEP 2: FILTER KEYWORDS BY ORIGINAL CONTENT (Issue #1 Fix)
-        # Only keep keywords that appear in the original scraped title and bullet points
-        # This ensures we only show relevant keywords that exist in the actual listing
+        # STEP 2: CONTENT FILTER (RESTORED)
+        # ==================================================================================
+        # PURPOSE: Only keep keywords that actually appear in the original product listing
+        # WHY: Filters out keywords from CSVs that don't match the current product
+        # EXAMPLE: If CSV has "strawberry jam" but listing only mentions "strawberry slices",
+        #          this removes "strawberry jam" from analysis
+        # IMPACT: 
+        #   - PROS: Shows only keywords present in current listing
+        #   - CONS: May remove valuable keywords for SEO optimization
+        # NOTE: Can be disabled to allow SEO agent to suggest new keywords
         # ==================================================================================
         
         logger.info("")
         logger.info("="*80)
-        logger.info("🔧 [CONTENT FILTER] Filtering keywords against original listing...")
+        logger.info("🔧 [STEP 2: CONTENT FILTER]")
+        logger.info("="*80)
+        logger.info("📋 What: Filter keywords to only those in original title/bullets")
+        logger.info("🎯 Why: Remove CSV keywords that don't match current product")
+        logger.info("💡 How: Text matching against scraped title and bullet points")
+        logger.info("⚠️  Impact: Removes keywords not in current listing")
         logger.info("="*80)
         
         # Apply content filtering: Only keep keywords present in original title/bullets
@@ -270,11 +310,13 @@ class ResearchRunner:
             scraped_data=scraped_data
         )
         
-        logger.info(f"✅ [CONTENT FILTER] Complete:")
-        logger.info(f"   - Keywords before filtering: {filter_stats['original_count']}")
-        logger.info(f"   - Keywords after filtering: {filter_stats['filtered_count']}")
-        logger.info(f"   - Keywords removed: {filter_stats['removed_count']}")
-        logger.info(f"   - Filter percentage: {filter_stats['filter_percentage']}% kept")
+        logger.info("")
+        logger.info(f"✅ [CONTENT FILTER RESULTS]")
+        logger.info(f"   📊 Input: {filter_stats['original_count']} keywords")
+        logger.info(f"   🎯 Output: {filter_stats['filtered_count']} keywords (found in listing)")
+        logger.info(f"   🗑️  Removed: {filter_stats['removed_count']} keywords (not in listing)")
+        logger.info(f"   📈 Retention: {filter_stats['filter_percentage']}% of keywords kept")
+        logger.info(f"   💡 These {filter_stats['filtered_count']} keywords exist in current title/bullets")
         logger.info("="*80)
         logger.info("")
         

@@ -1168,14 +1168,44 @@ const TestResultsPage = () => {
                 const curr = toArr(current_seo?.bullets_analysis);
                 const opt = toArr(optimized_seo?.optimized_bullets);
                 const maxLen = Math.max(curr.length, opt.length);
+
+                // Get all keywords from title (for deduplication)
+                const currentTitleKeywordsList = toArr(
+                  current_seo?.title_analysis?.keywords_found
+                );
+                const optimizedTitleKeywordsList = toArr(
+                  optimized_seo?.optimized_title?.keywords_included
+                );
+
+                // Get all keywords from bullets
                 const currentAllKeywords = curr.flatMap((b: any) =>
                   toArr(b?.keywords_found)
                 );
                 const optimizedAllKeywords = opt.flatMap((b: any) =>
                   toArr(b?.keywords_included)
                 );
-                const currentBulletsTotal = sumVolumes(currentAllKeywords);
-                const optimizedBulletsTotal = sumVolumes(optimizedAllKeywords);
+
+                // Calculate bullets total: exclude keywords already in title to avoid double-counting
+                const currentBulletsTotal = sumVolumes(
+                  currentAllKeywords.filter(
+                    (kw: string) =>
+                      !currentTitleKeywordsList.some(
+                        (titleKw: string) =>
+                          String(kw).toLowerCase() ===
+                          String(titleKw).toLowerCase()
+                      )
+                  )
+                );
+                const optimizedBulletsTotal = sumVolumes(
+                  optimizedAllKeywords.filter(
+                    (kw: string) =>
+                      !optimizedTitleKeywordsList.some(
+                        (titleKw: string) =>
+                          String(kw).toLowerCase() ===
+                          String(titleKw).toLowerCase()
+                      )
+                  )
+                );
                 // Track suggestions we have already shown across current bullets to avoid repeats
                 const seenCurrentSuggestions = new Set<string>();
                 return (
@@ -1233,59 +1263,8 @@ const TestResultsPage = () => {
                                   )}
                                 </div>
                               </div>
-                              {(() => {
-                                const normalize = (s: string) =>
-                                  String(s || "")
-                                    .trim()
-                                    .toLowerCase();
-                                const bulletKeywordSet = new Set(
-                                  toArr(c?.keywords_found).map((k: string) =>
-                                    normalize(k)
-                                  )
-                                );
-                                const localSeen = new Set<string>();
-                                const filtered: string[] = [];
-                                for (const raw of toArr(c?.opportunities)) {
-                                  const norm = normalize(raw as string);
-                                  if (!norm) continue;
-                                  // Skip duplicates within this bullet, across earlier bullets, or already present in title/bullet keywords
-                                  if (
-                                    localSeen.has(norm) ||
-                                    seenCurrentSuggestions.has(norm)
-                                  )
-                                    continue;
-                                  if (
-                                    bulletKeywordSet.has(norm) ||
-                                    currentTitleKeywords.has(norm)
-                                  )
-                                    continue;
-                                  localSeen.add(norm);
-                                  seenCurrentSuggestions.add(norm);
-                                  filtered.push(String(raw));
-                                }
-                                if (filtered.length === 0) return null;
-                                return (
-                                  <div>
-                                    <strong>Opportunities:</strong>
-                                    <div className="flex flex-wrap gap-1 mt-1">
-                                      {filtered.map((op: string, j: number) => (
-                                        <Badge
-                                          key={j}
-                                          variant="secondary"
-                                          className="text-xs"
-                                        >
-                                          {op}
-                                        </Badge>
-                                      ))}
-                                    </div>
-                                  </div>
-                                );
-                              })()}
                             </div>
                             <div className="flex gap-4 mt-3 text-xs text-gray-600">
-                              <span title="Count of distinct keywords detected in this bullet">
-                                Keywords: {c?.keyword_count ?? 0}
-                              </span>
                               <span title="Total number of characters in the bullet text (not just keywords)">
                                 Characters: {c?.character_count ?? 0}
                               </span>

@@ -47,37 +47,66 @@ class SEORunner:
     ) -> Dict[str, Any]:
         """
         Run complete SEO analysis and optimization.
-        
-        Args:
+    
+    Args:
             scraped_product: Product data from research agent
             keyword_items: Categorized and scored keywords from scoring agent
             broad_search_volume_by_root: Root volume data (optional)
             competitor_data: Competitor ASIN data for Task 6 analysis (optional)
-            
-        Returns:
+        
+    Returns:
             Complete SEO analysis result
         """
         
         try:
-            logger.info("🔍 Starting SEO analysis and optimization")
+            logger.info("")
+            logger.info("="*80)
+            logger.info("🎨 [SEO OPTIMIZATION AGENT]")
+            logger.info("="*80)
+            logger.info("📋 What: Analyze current SEO and generate optimized content")
+            logger.info("🎯 Why: Maximize keyword coverage and search volume potential")
+            logger.info("💡 Output: Optimized title, bullets, backend keywords + comparison")
+            logger.info("="*80)
             
             # Step 1: Extract current listing content
             current_content = self._extract_current_content(scraped_product)
-            logger.info(f"📄 Extracted current content: {len(current_content.get('bullets', []))} bullets")
+            logger.info(f"")
+            logger.info(f"📄 [STEP 1] Extracting current product listing")
+            logger.info(f"   Title: {len(current_content.get('title', ''))} chars")
+            logger.info(f"   Bullets: {len(current_content.get('bullets', []))} bullet points")
+            logger.info(f"   Backend: {len(current_content.get('backend_keywords', []))} keywords")
             
             # Step 2: Initialize keyword validator to prevent hallucination
-            # Filter to only include "Relevant" keywords for optimization
-            relevant_keywords = [kw for kw in keyword_items if kw.get("category") == "Relevant"]
+            # Use ALL keywords for optimization (all categories)
+            relevant_keywords = keyword_items  # Use all keywords, not just "Relevant" category
             keyword_validator = SEOKeywordValidator(relevant_keywords)
-            logger.info(f"🔒 Keyword validator initialized with {len(relevant_keywords)} relevant keywords (filtered from {len(keyword_items)} total)")
+            logger.info(f"")
+            logger.info(f"🔒 [STEP 2] Keyword validator initialized")
+            logger.info(f"   📋 What: Prevent AI from hallucinating non-existent keywords")
+            logger.info(f"   🎯 Loaded: {len(relevant_keywords)} keywords (all categories)")
+            logger.info(f"   💡 Validator will reject any keyword not in this list")
             
             # Step 3: Prepare keyword data for analysis
             keyword_data = prepare_keyword_data_for_analysis(keyword_items)
-            logger.info(f"📊 Prepared keyword data: {keyword_data['total_keywords']} total keywords")
+            logger.info(f"")
+            logger.info(f"📊 [STEP 3] Organizing keywords for analysis")
+            logger.info(f"   Total: {keyword_data['total_keywords']} keywords")
+            logger.info(f"   Relevant: {len(keyword_data['relevant_keywords'])} keywords")
+            logger.info(f"   Design-Specific: {len(keyword_data['design_keywords'])} keywords")
+            logger.info(f"   High Intent (2-3): {len(keyword_data['high_intent_keywords'])} keywords")
+            logger.info(f"   High Volume (>500): {len(keyword_data['high_volume_keywords'])} keywords")
             
-            # Step 3: Perform deterministic current SEO analysis
+            # Step 4: Perform deterministic current SEO analysis
+            logger.info(f"")
+            logger.info(f"🔍 [STEP 4] Analyzing current SEO performance")
+            logger.info(f"   📋 What: Measure current keyword coverage and root distribution")
+            logger.info(f"   💡 Uses: Relevant + Design-Specific keywords only")
             current_seo = self._analyze_current_seo(current_content, keyword_data, broad_search_volume_by_root)
-            logger.info(f"✅ Current SEO analysis complete: {current_seo.keyword_coverage.coverage_percentage}% coverage")
+            logger.info(f"")
+            logger.info(f"✅ [CURRENT SEO RESULTS]")
+            logger.info(f"   Keyword Coverage: {current_seo.keyword_coverage.coverage_percentage}%")
+            logger.info(f"   Keywords Found: {current_seo.keyword_coverage.covered_keywords}/{current_seo.keyword_coverage.total_keywords}")
+            logger.info(f"   Root Coverage: {current_seo.root_coverage.coverage_percentage}%")
             
             # Step 4: Task 6 - Analyze competitor titles for benefit-focused optimization
             competitor_analysis = None
@@ -283,25 +312,53 @@ class SEORunner:
                 root_volumes=keyword_data["root_volumes"]
             )
         
-        # Analyze individual content pieces with deduplication
+        # ==================================================================================
+        # ANALYZE CURRENT CONTENT WITH SMART DEDUPLICATION
+        # ==================================================================================
+        # PURPOSE: Find which keywords are in current title and bullets
+        # DEDUPLICATION STRATEGY:
+        #   1. Analyze title FIRST → finds keywords in title
+        #   2. Analyze bullets → CAN include title keywords (for yellow highlighting)
+        #   3. BUT prevent bullet-to-bullet duplication (same keyword in multiple bullets)
+        # WHY: Frontend needs to see duplicates for yellow highlighting, but we prevent
+        #      keywords appearing in multiple bullets
+        # EXAMPLE: "freeze dried" in title + bullet 1 → Both shown (bullet gets yellow badge)
+        #          "organic" in bullet 1 + bullet 2 → Only bullet 1 (prevent duplication)
+        # ==================================================================================
+        
+        logger.info(f"")
+        logger.info(f"🔍 [CURRENT CONTENT ANALYSIS]")
+        logger.info(f"   📋 What: Extract keywords from title and bullets")
+        logger.info(f"   💡 Strategy: Allow title-bullet duplicates (for highlighting)")
+        logger.info(f"   🚫 Strategy: Prevent bullet-to-bullet duplicates")
+        
         # Analyze title first
         title_analysis_data = analyze_content_piece(current_content["title"], keyword_phrases)
         title_analysis = ContentAnalysis(**title_analysis_data)
         
         # Track keywords already found in title
         found_in_title = set(kw.lower() for kw in title_analysis_data.get("keywords_found", []))
+        logger.info(f"   ✅ Title: {len(found_in_title)} keywords found")
         
-        # Analyze bullets with remaining keywords (excluding title keywords)
+        # Analyze bullets with ALL keywords (don't filter by title)
+        # The frontend will handle duplicate highlighting and volume deduplication
         bullets_analysis = []
-        for bullet in current_content["bullets"]:
-            # Filter out keywords already in title
-            remaining_keywords = [kw for kw in keyword_phrases if kw.lower() not in found_in_title]
+        found_in_bullets_cumulative = set()  # Track across bullets only
+        
+        for i, bullet in enumerate(current_content["bullets"], 1):
+            # Filter out keywords already found in PREVIOUS bullets (not title)
+            remaining_keywords = [kw for kw in keyword_phrases if kw.lower() not in found_in_bullets_cumulative]
             analysis = ContentAnalysis(**analyze_content_piece(bullet, remaining_keywords))
             bullets_analysis.append(analysis)
             
-            # Track keywords found in this bullet to avoid double-counting in next bullets
+            # Track keywords found in this bullet to avoid double-counting in NEXT bullets
             found_in_bullet = set(kw.lower() for kw in analysis.keywords_found)
-            found_in_title.update(found_in_bullet)
+            duplicates_with_title = found_in_bullet & found_in_title
+            if duplicates_with_title:
+                logger.info(f"   ✅ Bullet {i}: {len(found_in_bullet)} keywords ({len(duplicates_with_title)} also in title)")
+            else:
+                logger.info(f"   ✅ Bullet {i}: {len(found_in_bullet)} keywords")
+            found_in_bullets_cumulative.update(found_in_bullet)
         
         # Calculate character usage
         char_usage = calculate_character_usage(current_content)

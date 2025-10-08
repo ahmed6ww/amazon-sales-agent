@@ -57,11 +57,26 @@ async def amazon_sales_intelligence_pipeline(
     try:
         logger.info("="*80)
         logger.info("🚀 [REQUEST RECEIVED] Amazon Sales Intelligence Pipeline")
-        logger.info(f"   ASIN/URL: {asin_or_url}")
-        logger.info(f"   Marketplace: {marketplace}")
-        logger.info(f"   Main Keyword: {main_keyword or 'Auto-detect'}")
-        logger.info(f"   Revenue CSV: {'Provided' if revenue_csv else 'Not provided'}")
-        logger.info(f"   Design CSV: {'Provided' if design_csv else 'Not provided'}")
+        # ==================================================================================
+        # PIPELINE OVERVIEW
+        # ==================================================================================
+        # STEP 1: Research Agent → Scrape product + calculate relevancy scores (0-10)
+        # STEP 2: Keyword Agent → Categorize keywords (Relevant, Design-Specific, etc.)
+        # STEP 3: Scoring Agent → Add intent scores (0-3) and metrics
+        # STEP 4: SEO Agent → Analyze current SEO + generate optimizations
+        # ==================================================================================
+        
+        logger.info("")
+        logger.info("="*100)
+        logger.info("🚀 AMAZON SALES INTELLIGENCE PIPELINE")
+        logger.info("="*100)
+        logger.info(f"📦 Product: {asin_or_url}")
+        logger.info(f"🌍 Marketplace: {marketplace}")
+        logger.info(f"🔑 Main Keyword: {main_keyword or '❌ Auto-detect'}")
+        logger.info(f"📊 Data Sources:")
+        logger.info(f"   - Revenue CSV: {'✅ ' + revenue_csv.filename if revenue_csv else '❌ Not provided'}")
+        logger.info(f"   - Design CSV: {'✅ ' + design_csv.filename if design_csv else '❌ Not provided'}")
+        logger.info("="*100)
         logger.info("="*80)
         
         # Validate OpenAI setup
@@ -180,14 +195,27 @@ async def amazon_sales_intelligence_pipeline(
             sample_scores = list(base_relevancy_scores.items())[:10]
             logger.info(f"   - Sample scores: {sample_scores}")
 
+        logger.info("")
+        logger.info("="*80)
         logger.info(f"✅ [STEP 1/4] RESEARCH COMPLETE")
-        logger.info(f"   Total unique keywords: {total_unique_keywords}")
-        logger.info(f"   Priority roots: {len(priority_roots)}")
+        logger.info("="*80)
+        logger.info(f"📊 Results:")
+        logger.info(f"   - Keywords analyzed: {total_unique_keywords}")
+        logger.info(f"   - Keywords with relevancy >0: {len(base_relevancy_scores)}")
+        logger.info(f"   - Priority roots identified: {len(priority_roots)}")
+        logger.info(f"   - Product scraped: ✅")
+        logger.info("="*80)
 
         # Run Keyword Agent
         logger.info("")
-        logger.info("🎯 [STEP 2/4] KEYWORD AGENT - Categorization")
-        logger.info(f"   Analyzing {len(base_relevancy_scores)} keywords...")
+        logger.info("="*80)
+        logger.info("🎯 [STEP 2/4] KEYWORD CATEGORIZATION AGENT")
+        logger.info("="*80)
+        logger.info("📋 What: AI categorizes keywords into 6 categories")
+        logger.info("🎯 Input: Keywords with relevancy scores + scraped product")
+        logger.info("💡 Output: Categorized keywords (Relevant, Design-Specific, Irrelevant, etc.)")
+        logger.info(f"📊 Processing: {len(base_relevancy_scores)} keywords")
+        logger.info("="*80)
         
         from app.local_agents.keyword.runner import KeywordRunner
 
@@ -213,11 +241,19 @@ async def amazon_sales_intelligence_pipeline(
             structured = keyword_ai_result.get("structured_data") or {}
             items = structured.get("items") or []
             stats = structured.get("stats") or {}
+            logger.info("")
+            logger.info("="*80)
             logger.info(f"✅ [STEP 2/4] KEYWORD CATEGORIZATION COMPLETE")
-            logger.info(f"   Total keywords: {len(items)}")
-            logger.info(f"   Relevant: {stats.get('Relevant', {}).get('count', 0)}")
-            logger.info(f"   Design-Specific: {stats.get('Design-Specific', {}).get('count', 0)}")
-            logger.info(f"   Irrelevant: {stats.get('Irrelevant', {}).get('count', 0)}")
+            logger.info("="*80)
+            logger.info(f"📊 Category Breakdown:")
+            logger.info(f"   - Total keywords: {len(items)}")
+            logger.info(f"   - Relevant: {stats.get('Relevant', {}).get('count', 0)}")
+            logger.info(f"   - Design-Specific: {stats.get('Design-Specific', {}).get('count', 0)}")
+            logger.info(f"   - Irrelevant: {stats.get('Irrelevant', {}).get('count', 0)}")
+            logger.info(f"   - Branded: {stats.get('Branded', {}).get('count', 0)}")
+            logger.info(f"   - Spanish: {stats.get('Spanish', {}).get('count', 0)}")
+            logger.info(f"   - Outlier: {stats.get('Outlier', {}).get('count', 0)}")
+            logger.info("="*80)
             
             # Check if items have relevancy_score after keyword categorization
             if items:

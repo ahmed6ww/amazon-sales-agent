@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { 
-  Download, 
-  BarChart3, 
+import {
+  Download,
+  BarChart3,
   Filter,
   Star,
   Copy,
@@ -184,26 +184,26 @@ export default function ResultsDisplay({
               <span className="text-blue-600">100%</span>
             </div>
             <Progress value={100} className="h-2" />
-            
+
             <div className="flex justify-between text-sm">
               <span>Keyword Agent: Processing keywords</span>
               <span className="text-blue-600">75%</span>
             </div>
             <Progress value={75} className="h-2" />
-            
+
             <div className="flex justify-between text-sm">
               <span>Scoring Agent: Analyzing relevancy</span>
               <span className="text-blue-600">45%</span>
             </div>
             <Progress value={45} className="h-2" />
-            
+
             <div className="flex justify-between text-sm">
               <span>SEO Agent: Generating optimizations</span>
               <span className="text-gray-400">0%</span>
             </div>
             <Progress value={0} className="h-2" />
           </div>
-          
+
           <div className="text-center text-sm text-muted-foreground">
             Estimated completion time: 2-3 minutes
           </div>
@@ -248,7 +248,7 @@ export default function ResultsDisplay({
             </Button>
           </div>
         </CardHeader>
-        
+
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="text-center p-4 bg-blue-50 rounded-lg">
@@ -373,17 +373,17 @@ export default function ResultsDisplay({
           </Card>
 
           {/* Full Title and Bullets */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
-            <CardHeader>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
                 <CardTitle className="text-green-600">
                   Optimized Title
                 </CardTitle>
-              <CardDescription>
+                <CardDescription>
                   Amazon-compliant title with keyword optimization
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 <div className="p-3 bg-green-50 border border-green-200 rounded-md">
                   <p className="text-sm">
                     {seoAnalysis.optimized_title.content}
@@ -396,10 +396,10 @@ export default function ResultsDisplay({
                       <Copy className="h-3 w-3 mr-1" />
                       Copy
                     </Button>
+                  </div>
                 </div>
-              </div>
-              
-              <div className="pt-2 border-t">
+
+                <div className="pt-2 border-t">
                   <div className="text-sm font-medium mb-2">
                     Keywords Included:
                   </div>
@@ -412,24 +412,24 @@ export default function ResultsDisplay({
                           className="text-xs"
                         >
                           {keyword}
-                  </Badge>
+                        </Badge>
                       )
                     )}
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
+              </CardContent>
+            </Card>
 
-          <Card>
-            <CardHeader>
+            <Card>
+              <CardHeader>
                 <CardTitle className="text-green-600">
                   Optimized Bullet Points
                 </CardTitle>
-              <CardDescription>
+                <CardDescription>
                   Benefit-focused bullets with keyword integration
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
                 {seoAnalysis.optimized_bullets.map((bullet, index) => (
                   <div
                     key={index}
@@ -449,16 +449,16 @@ export default function ResultsDisplay({
                         ))}
                       </div>
                       <Button variant="ghost" size="sm" className="h-6 px-2">
-                    <Copy className="h-3 w-3 mr-1" />
-                    Copy
-                  </Button>
-                </div>
+                        <Copy className="h-3 w-3 mr-1" />
+                        Copy
+                      </Button>
                     </div>
-                  ))}
+                  </div>
+                ))}
               </CardContent>
             </Card>
-              </div>
-              
+          </div>
+
           {/* Compliance Status */}
           <Card>
             <CardHeader>
@@ -487,8 +487,8 @@ export default function ResultsDisplay({
                       }
                     >
                       {value}
-                  </Badge>
-                </div>
+                    </Badge>
+                  </div>
                 ))}
               </div>
             </CardContent>
@@ -509,7 +509,7 @@ export default function ResultsDisplay({
               </div>
               <div className="flex items-center gap-2">
                 <Filter className="h-4 w-4 text-muted-foreground" />
-                <select 
+                <select
                   value={selectedCategory}
                   onChange={(e) => setSelectedCategory(e.target.value)}
                   className="text-sm border rounded px-2 py-1"
@@ -525,7 +525,7 @@ export default function ResultsDisplay({
               </div>
             </div>
           </CardHeader>
-          
+
           <CardContent>
             <div className="space-y-3">
               {filteredKeywords.map((keyword, index) => (
@@ -555,7 +555,7 @@ export default function ResultsDisplay({
                       <ExternalLink className="h-3 w-3" />
                     </Button>
                   </div>
-                  
+
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-4 text-sm">
                     <div>
                       <span className="text-muted-foreground">
@@ -571,7 +571,7 @@ export default function ResultsDisplay({
                       </span>
                       <div className="font-medium">
                         {keyword.title_density}%
-                    </div>
+                      </div>
                     </div>
                     <div>
                       <span className="text-muted-foreground">CPR</span>
@@ -596,7 +596,7 @@ export default function ResultsDisplay({
                       </Badge>
                     </div>
                   </div>
-                  
+
                   <div className="mt-2 text-xs text-muted-foreground">
                     Root: {keyword.root} | {keyword.opportunity_reason}
                   </div>
@@ -690,8 +690,8 @@ export default function ResultsDisplay({
                           className="text-sm text-muted-foreground bg-gray-50 p-2 rounded"
                         >
                           {note}
-    </div>
-  )
+                        </div>
+                      )
                     )}
                   </div>
                 </div>

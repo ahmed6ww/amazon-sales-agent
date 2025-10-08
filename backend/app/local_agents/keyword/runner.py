@@ -29,14 +29,32 @@ class KeywordRunner:
 		asin_or_url: str = "",
 		csv_products: List[Dict[str, Any]] = None,
 	) -> Dict[str, Any]:
-		"""Run keyword categorization agent."""
+		"""
+		Run AI-powered keyword categorization.
+		
+		PURPOSE: Categorize keywords into: Relevant, Design-Specific, Irrelevant, Branded, Spanish, Outlier
+		INPUT: Keywords with relevancy scores (0-10) from research agent
+		OUTPUT: Categorized keywords with assigned categories and reasons
+		"""
+		logger.info("")
+		logger.info("="*80)
+		logger.info("🤖 [KEYWORD CATEGORIZATION AGENT]")
+		logger.info("="*80)
+		logger.info("📋 What: AI categorizes keywords into 6 categories")
+		logger.info("🎯 Why: Separate relevant keywords from irrelevant/branded/outliers")
+		logger.info("💡 Categories: Relevant, Design-Specific, Irrelevant, Branded, Spanish, Outlier")
+		logger.info("="*80)
+		
 		# Filter out zero relevancy scores
 		filtered_relevancy_scores = {
 			keyword: score for keyword, score in base_relevancy_scores.items()
 			if score > 0
 		}
-		logger.info(f"Filtered {len(base_relevancy_scores) - len(filtered_relevancy_scores)} keywords with relevancy score 0")
-		logger.info(f"Processing {len(filtered_relevancy_scores)} keywords with relevancy score 1-10")
+		logger.info(f"")
+		logger.info(f"🔍 [PRE-FILTER] Removing keywords with 0 relevancy score")
+		logger.info(f"   📊 Input: {len(base_relevancy_scores)} keywords")
+		logger.info(f"   🎯 Output: {len(filtered_relevancy_scores)} keywords (score 1-10)")
+		logger.info(f"   🗑️  Filtered: {len(base_relevancy_scores) - len(filtered_relevancy_scores)} keywords (score 0)")
 
 		prompt = (
 			f"SCRAPED PRODUCT (exact):\n{json.dumps(scraped_product or {}, separators=(',', ':'))}\n\n"
@@ -62,7 +80,11 @@ class KeywordRunner:
 
 		# Post-process: Normalize field names (base_relevancy_score -> relevancy_score)
 		if structured and "items" in structured:
-			logger.info(f"[KeywordRunner] Post-processing {len(structured['items'])} items to normalize field names")
+			logger.info(f"")
+			logger.info(f"🔧 [POST-PROCESSING] Normalizing AI output field names")
+			logger.info(f"   📋 What: Ensure 'relevancy_score' field is present")
+			logger.info(f"   💡 Why: AI may return 'base_relevancy_score' instead")
+			logger.info(f"   🎯 Processing: {len(structured['items'])} keywords")
 			for item in structured["items"]:
 				# Handle both field name scenarios
 				if "base_relevancy_score" in item and "relevancy_score" not in item:
