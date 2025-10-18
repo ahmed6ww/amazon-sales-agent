@@ -45,6 +45,66 @@ class KeywordRunner:
 		logger.info("💡 Categories: Relevant, Design-Specific, Irrelevant, Branded, Spanish, Outlier")
 		logger.info("="*80)
 		
+		# ========================================================================
+		# TASK 1 ENHANCEMENT: Extract product context for better categorization
+		# ========================================================================
+		
+		# Extract product title
+		title = scraped_product.get("title", "")
+		if not title:
+			# Fallback to elements if direct title not available
+			elements = scraped_product.get("elements", {})
+			product_title_elem = elements.get("productTitle", {})
+			title_text = product_title_elem.get("text", "")
+			if isinstance(title_text, list):
+				title = title_text[0] if title_text else ""
+			else:
+				title = title_text or ""
+		
+		# Extract brand
+		brand = ""
+		elements = scraped_product.get("elements", {})
+		overview = elements.get("productOverview_feature_div", {})
+		if overview.get("present"):
+			kv_data = overview.get("kv", {})
+			brand = kv_data.get("Brand", "")
+		
+		# Extract base product form from title using pattern matching
+		base_form = "unknown"
+		title_lower = title.lower()
+		
+		# Common product forms (order matters - check longer forms first)
+		form_keywords = {
+			"slices": ["slices", "slice", "sliced"],
+			"powder": ["powder", "powdered"],
+			"whole": ["whole", "entire"],
+			"liquid": ["liquid", "juice", "syrup"],
+			"capsules": ["capsules", "capsule", "caps"],
+			"tablets": ["tablets", "tablet", "tabs"],
+			"oil": ["oil", "oils"],
+			"chunks": ["chunks", "chunk", "chunked"],
+			"pieces": ["pieces", "piece"],
+			"flakes": ["flakes", "flake"],
+			"granules": ["granules", "granule"],
+			"crystals": ["crystals", "crystal"],
+			"drops": ["drops", "drop"],
+			"gummies": ["gummies", "gummy"],
+			"bars": ["bars", "bar"],
+			"bites": ["bites", "bite"]
+		}
+		
+		for form, keywords in form_keywords.items():
+			if any(kw in title_lower for kw in keywords):
+				base_form = form
+				break
+		
+		logger.info(f"")
+		logger.info(f"🔍 [PRODUCT CONTEXT EXTRACTION]")
+		logger.info(f"   📦 Product Title: {title[:100]}{'...' if len(title) > 100 else ''}")
+		logger.info(f"   🏷️  Brand: {brand or 'NOT FOUND'}")
+		logger.info(f"   📐 Base Product Form: {base_form}")
+		logger.info(f"")
+		
 		# Filter out zero relevancy scores
 		filtered_relevancy_scores = {
 			keyword: score for keyword, score in base_relevancy_scores.items()
@@ -56,13 +116,29 @@ class KeywordRunner:
 		logger.info(f"   🎯 Output: {len(filtered_relevancy_scores)} keywords (score 1-10)")
 		logger.info(f"   🗑️  Filtered: {len(base_relevancy_scores) - len(filtered_relevancy_scores)} keywords (score 0)")
 
-		prompt = (
-			f"SCRAPED PRODUCT (exact):\n{json.dumps(scraped_product or {}, separators=(',', ':'))}\n\n"
-			f"BASE RELEVANCY (1-10) — keyword->score (filtered to exclude score 0):\n{json.dumps(filtered_relevancy_scores, separators=(',', ':'))}\n\n"
-			f"MARKETPLACE: {marketplace}\n\n"
-			f"ASIN/URL: {asin_or_url}\n\n"
-			"Return a KeywordAnalysisResult."
-		)
+		# Build enhanced prompt with explicit product context
+		prompt = f"""
+PRODUCT CONTEXT (for categorization):
+- Title: {title}
+- Brand: {brand or "NOT FOUND"}
+- Base Product Form: {base_form}
+- Marketplace: {marketplace}
+- ASIN/URL: {asin_or_url}
+
+CRITICAL INSTRUCTIONS:
+1. The product is in "{base_form}" form
+2. Keywords describing DIFFERENT forms (powder/slices/whole/liquid) must be marked IRRELEVANT
+3. Keywords describing ATTRIBUTES of "{base_form}" can be Design-Specific or Relevant
+4. Brand is "{brand or 'UNKNOWN'}" - check for this and other brand names
+
+SCRAPED PRODUCT (full details):
+{json.dumps(scraped_product or {}, separators=(',', ':'))}
+
+BASE RELEVANCY (1-10) — keyword->score (filtered to exclude score 0):
+{json.dumps(filtered_relevancy_scores, separators=(',', ':'))}
+
+Return a KeywordAnalysisResult with strict categorization following the algorithm in your instructions.
+"""
 
 		result = Runner.run_sync(keyword_agent, prompt)
 		raw_output = getattr(result, "final_output", None)

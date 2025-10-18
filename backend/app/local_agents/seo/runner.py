@@ -13,6 +13,7 @@ from .agent import seo_optimization_agent
 from .prompts import SEO_ANALYSIS_PROMPT_TEMPLATE
 from .helper_methods import (
     calculate_keyword_coverage,
+    calculate_keyword_coverage_from_analysis,
     analyze_root_coverage,
     analyze_content_piece,
     prepare_keyword_data_for_analysis,
@@ -56,8 +57,7 @@ class SEORunner:
         
     Returns:
             Complete SEO analysis result
-        """
-        
+    """
         try:
             logger.info("")
             logger.info("="*80)
@@ -294,9 +294,15 @@ class SEORunner:
         all_relevant = keyword_data["relevant_keywords"] + keyword_data["design_keywords"]
         keyword_phrases = [kw.get("phrase", "") for kw in all_relevant]
         
-        # Analyze keyword coverage
-        coverage_data = calculate_keyword_coverage(current_content, all_relevant)
-        keyword_coverage = KeywordCoverage(**coverage_data)
+        # Build keyword volumes map for Task 2 enhancement
+        keyword_volumes = {}
+        for kw in all_relevant:
+            phrase = kw.get("phrase", "")
+            volume = kw.get("search_volume", 0)
+            if phrase and volume:
+                keyword_volumes[phrase] = volume
+        
+        logger.info(f"📊 [TASK 2] Built keyword volumes map: {len(keyword_volumes)} keywords have volume data")
         
         # Analyze root coverage
         if root_volumes:
@@ -311,10 +317,10 @@ class SEORunner:
                 missing_roots=list(keyword_data["root_volumes"].keys()),
                 root_volumes=keyword_data["root_volumes"]
             )
-        
-        # ==================================================================================
+    
+    # ==================================================================================
         # ANALYZE CURRENT CONTENT WITH SMART DEDUPLICATION
-        # ==================================================================================
+    # ==================================================================================
         # PURPOSE: Find which keywords are in current title and bullets
         # DEDUPLICATION STRATEGY:
         #   1. Analyze title FIRST → finds keywords in title
@@ -332,33 +338,68 @@ class SEORunner:
         logger.info(f"   💡 Strategy: Allow title-bullet duplicates (for highlighting)")
         logger.info(f"   🚫 Strategy: Prevent bullet-to-bullet duplicates")
         
-        # Analyze title first
-        title_analysis_data = analyze_content_piece(current_content["title"], keyword_phrases)
+        # Analyze title first (with volume calculation - Task 2)
+        title_analysis_data = analyze_content_piece(current_content["title"], keyword_phrases, keyword_volumes)
         title_analysis = ContentAnalysis(**title_analysis_data)
+        
+        # Log volume
+        title_volume = title_analysis_data.get("total_search_volume", 0)
+        logger.info(f"   ✅ Title: {len(title_analysis_data.get('keywords_found', []))} keywords (volume: {title_volume:,})")
         
         # Track keywords already found in title
         found_in_title = set(kw.lower() for kw in title_analysis_data.get("keywords_found", []))
-        logger.info(f"   ✅ Title: {len(found_in_title)} keywords found")
         
-        # Analyze bullets with ALL keywords (don't filter by title)
-        # The frontend will handle duplicate highlighting and volume deduplication
+        # Analyze bullets with ALL keywords (for accurate detection)
+        # Store both original and filtered results for different purposes
         bullets_analysis = []
+        bullets_analysis_for_display = []  # For frontend display (shows all keywords)
         found_in_bullets_cumulative = set()  # Track across bullets only
         
         for i, bullet in enumerate(current_content["bullets"], 1):
-            # Filter out keywords already found in PREVIOUS bullets (not title)
-            remaining_keywords = [kw for kw in keyword_phrases if kw.lower() not in found_in_bullets_cumulative]
-            analysis = ContentAnalysis(**analyze_content_piece(bullet, remaining_keywords))
-            bullets_analysis.append(analysis)
+            # Analyze each bullet with ALL keywords (for accurate detection) + volumes (Task 2)
+            analysis_data = analyze_content_piece(bullet, keyword_phrases, keyword_volumes)
+            analysis = ContentAnalysis(**analysis_data)
             
-            # Track keywords found in this bullet to avoid double-counting in NEXT bullets
+            # Store original analysis for frontend display (shows all keywords found)
+            bullets_analysis_for_display.append(analysis)
+            
+            # Filter results to prevent double-counting in coverage calculations
+            filtered_keywords = []
+            filtered_volume = 0
+            for kw in analysis.keywords_found:
+                if kw.lower() not in found_in_bullets_cumulative:
+                    filtered_keywords.append(kw)
+                    found_in_bullets_cumulative.add(kw.lower())
+                    # Add volume for this keyword
+                    if kw in keyword_volumes:
+                        filtered_volume += keyword_volumes[kw]
+            
+            # Create analysis with filtered keywords for coverage calculation
+            filtered_analysis = ContentAnalysis(
+                content=analysis.content,
+                keywords_found=filtered_keywords,  # For coverage calculation
+                keyword_count=len(filtered_keywords),
+                character_count=analysis.character_count,
+                keyword_density=analysis.keyword_density,
+                opportunities=analysis.opportunities,
+                total_search_volume=filtered_volume  # Task 2: Add filtered volume
+            )
+            bullets_analysis.append(filtered_analysis)
+            
+            # Track keywords found in this bullet for logging
             found_in_bullet = set(kw.lower() for kw in analysis.keywords_found)
+            bullet_volume = analysis_data.get("total_search_volume", 0)
             duplicates_with_title = found_in_bullet & found_in_title
             if duplicates_with_title:
-                logger.info(f"   ✅ Bullet {i}: {len(found_in_bullet)} keywords ({len(duplicates_with_title)} also in title)")
+                logger.info(f"   ✅ Bullet {i}: {len(found_in_bullet)} keywords ({len(duplicates_with_title)} also in title), {len(filtered_keywords)} unique (volume: {bullet_volume:,})")
             else:
-                logger.info(f"   ✅ Bullet {i}: {len(found_in_bullet)} keywords")
-            found_in_bullets_cumulative.update(found_in_bullet)
+                logger.info(f"   ✅ Bullet {i}: {len(found_in_bullet)} keywords, {len(filtered_keywords)} unique (volume: {bullet_volume:,})")
+        
+        # Calculate keyword coverage using filtered bullet analysis (no duplicates)
+        coverage_data = calculate_keyword_coverage_from_analysis(
+            title_analysis, bullets_analysis, current_content["backend_keywords"], all_relevant
+        )
+        keyword_coverage = KeywordCoverage(**coverage_data)
         
         # Calculate character usage
         char_usage = calculate_character_usage(current_content)
@@ -366,6 +407,7 @@ class SEORunner:
         return CurrentSEO(
             title_analysis=title_analysis,
             bullets_analysis=bullets_analysis,
+            bullets_analysis_for_display=bullets_analysis_for_display,
             backend_keywords=current_content["backend_keywords"],
             keyword_coverage=keyword_coverage,
             root_coverage=root_coverage,
@@ -435,13 +477,12 @@ class SEORunner:
             # Enhanced prompt with Task 7 requirements
             enhanced_prompt = SEO_ANALYSIS_PROMPT_TEMPLATE.format(**prompt_data)
             enhanced_prompt += """
-
-## REQUIREMENTS:
-- Follow Amazon Title Guidelines (https://sellercentral.amazon.com/help/hub/reference/external/GYTR6SYGFA5E3EQC?locale=en-US)
-- Follow Amazon Bullet Point Guidelines (https://sellercentral.amazon.com/help/hub/reference/external/GX5L8BF8GLMML6CX?locale=en-US)
-- OPTIMIZE FIRST 80 CHARACTERS: Must include main keyword root + design-specific keyword root + key benefit
-- No promotional language, proper capitalization, compliance with all Amazon guidelines
-"""
+            ## REQUIREMENTS:
+            - Follow Amazon Title Guidelines (https://sellercentral.amazon.com/help/hub/reference/external/GYTR6SYGFA5E3EQC?locale=en-US)
+            - Follow Amazon Bullet Point Guidelines (https://sellercentral.amazon.com/help/hub/reference/external/GX5L8BF8GLMML6CX?locale=en-US)
+            - OPTIMIZE FIRST 80 CHARACTERS: Must include main keyword root + design-specific keyword root + key benefit
+            - No promotional language, proper capitalization, compliance with all Amazon guidelines
+            """
             
             try:
                 # Run standard AI agent with enhanced prompt
@@ -458,35 +499,63 @@ class SEORunner:
         compliance_result: Dict[str, Any], 
         keyword_data: Dict[str, Any]
     ) -> OptimizedSEO:
-        """Convert compliance result to OptimizedSEO format."""
+        """Convert compliance result to OptimizedSEO format with Task 2 volume calculation."""
         from .schemas import OptimizedContent
+        from .helper_methods import extract_keywords_from_content
         
-        # Extract optimized title
+        # Build keyword volumes map and phrases list
+        all_keywords = keyword_data.get("relevant_keywords", []) + keyword_data.get("design_keywords", [])
+        keyword_volumes = {kw.get("phrase", ""): kw.get("search_volume", 0) for kw in all_keywords if kw.get("phrase")}
+        keyword_phrases = list(keyword_volumes.keys())
+        
+        logger.info(f"📊 [TASK 2] Converting compliance result with volume calculation")
+        
+        # Extract optimized title with enhanced keyword detection
         title_data = compliance_result.get("optimized_title", {})
+        title_content = title_data.get("content", "")
+        
+        # Use enhanced extraction to find ALL keywords in title (Task 2)
+        title_keywords_found, title_volume = extract_keywords_from_content(
+            title_content, keyword_phrases, keyword_volumes
+        )
+        
+        logger.info(f"   ✅ Title: {len(title_keywords_found)} keywords found (volume: {title_volume:,})")
+        
         optimized_title = OptimizedContent(
-            content=title_data.get("content", ""),
-            keywords_included=title_data.get("keywords_included", []),
+            content=title_content,
+            keywords_included=title_keywords_found,  # Use enhanced detection
             improvements=[
                 f"Amazon Guidelines Compliant",
                 f"80-char optimized: {title_data.get('first_80_chars', '')[:50]}...",
                 f"Main root included: {title_data.get('main_root_included', False)}",
                 f"Design root included: {title_data.get('design_root_included', False)}"
             ],
-            character_count=title_data.get("character_count", 0)
+            character_count=len(title_content),
+            total_search_volume=title_volume  # Task 2: Add volume
         )
         
-        # Extract optimized bullets
+        # Extract optimized bullets with enhanced keyword detection
         bullets_data = compliance_result.get("optimized_bullets", [])
         optimized_bullets = []
-        for bullet in bullets_data:
+        for idx, bullet in enumerate(bullets_data, 1):
+            bullet_content = bullet.get("content", "")
+            
+            # Use enhanced extraction to find ALL keywords in bullet (Task 2)
+            bullet_keywords_found, bullet_volume = extract_keywords_from_content(
+                bullet_content, keyword_phrases, keyword_volumes
+            )
+            
+            logger.info(f"   ✅ Bullet {idx}: {len(bullet_keywords_found)} keywords found (volume: {bullet_volume:,})")
+            
             optimized_bullets.append(OptimizedContent(
-                content=bullet.get("content", ""),
-                keywords_included=bullet.get("keywords_included", []),
+                content=bullet_content,
+                keywords_included=bullet_keywords_found,  # Use enhanced detection
                 improvements=[
                     f"Benefit-focused: {bullet.get('primary_benefit', '')}",
                     f"Guideline compliant: {bullet.get('guideline_compliance', 'PASS')}"
                 ],
-                character_count=bullet.get("character_count", 0)
+                character_count=len(bullet_content),
+                total_search_volume=bullet_volume  # Task 2: Add volume
             ))
         
         # Generate backend keywords (enhanced with compliance awareness)

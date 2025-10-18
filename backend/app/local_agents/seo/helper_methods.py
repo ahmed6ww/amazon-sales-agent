@@ -12,71 +12,235 @@ from collections import defaultdict
 logger = logging.getLogger(__name__)
 
 
-def extract_keywords_from_content(content: str, keywords_list: List[str]) -> Tuple[List[str], int]:
+def extract_keywords_from_content(content: str, keywords_list: List[str], keyword_volumes: Dict[str, int] = None) -> Tuple[List[str], int]:
     """
-    Extract keywords found in content and return them with count.
+    Enhanced keyword extraction that finds all keywords present in content,
+    including partial matches and sub-phrases.
+    
+    TASK 2 ENHANCEMENT: If content is "freeze dried strawberry slices", this will also find:
+    - "freeze dried strawberries" (sub-phrase match)
+    - "dried strawberries" (sub-phrase match)  
+    - "strawberry slices" (sub-phrase match)
     
     Args:
         content: Text content to analyze
         keywords_list: List of keywords to search for
+        keyword_volumes: Optional dict mapping keywords to search volumes
         
     Returns:
-        Tuple of (found_keywords, count)
+        Tuple of (found_keywords, total_search_volume)
     """
     if not content:
         return [], 0
         
-    content_lower = content.lower()
+    content_lower = content.lower().strip()
     found_keywords = []
+    found_keywords_set = set()
+    total_volume = 0
     
     logger.debug(f"[KEYWORD_EXTRACTION] Analyzing content: '{content[:100]}{'...' if len(content) > 100 else ''}'")
     logger.debug(f"[KEYWORD_EXTRACTION] Searching for {len(keywords_list)} keywords")
     
-    for keyword in keywords_list:
+    # Sort keywords by length (longest first) to catch full phrases before sub-phrases
+    sorted_keywords = sorted(keywords_list, key=len, reverse=True)
+    
+    for keyword in sorted_keywords:
         if not keyword:
             continue
             
         keyword_lower = keyword.lower().strip()
-        found = False
         
-        # Direct substring match
+        # Skip if already found (avoid duplicates)
+        if keyword_lower in found_keywords_set:
+            continue
+        
+        # ================================================================
+        # METHOD 1: Direct Substring Match
+        # ================================================================
         if keyword_lower in content_lower:
             found_keywords.append(keyword)
-            found = True
-            logger.debug(f"[KEYWORD_EXTRACTION] ✅ Direct match: '{keyword}' in content")
-            continue
+            found_keywords_set.add(keyword_lower)
             
-        # Handle variations and partial matches - STRICT sequential matching
-        keyword_words = keyword_lower.split()
-        if len(keyword_words) > 1:
-            # Require words to appear in sequence (with minor variations)
-            # This prevents false positives where words appear scattered
-            import re
-            # Pattern allows optional plural (s/es) and word boundaries
-            pattern = r'\b' + r'\s+'.join(re.escape(word) + r'(?:s|es)?' for word in keyword_words) + r'\b'
-            if re.search(pattern, content_lower):
-                found_keywords.append(keyword)
-                found = True
-                logger.debug(f"[KEYWORD_EXTRACTION] ✅ Pattern match: '{keyword}' in content")
-                continue
+            # Add volume if available
+            if keyword_volumes and keyword in keyword_volumes:
+                volume = keyword_volumes[keyword]
+                total_volume += volume
+                logger.debug(f"[KEYWORD_EXTRACTION] ✅ Direct match: '{keyword}' (volume: {volume})")
+            else:
+                logger.debug(f"[KEYWORD_EXTRACTION] ✅ Direct match: '{keyword}'")
+            continue
+        
+        # ================================================================
+        # METHOD 2: Sub-phrase Detection (TASK 2 NEW!)
+        # ================================================================
+        # Check if ALL tokens of the keyword appear in content (with plural handling)
+        keyword_tokens = keyword_lower.split()
+        
+        if len(keyword_tokens) > 1:
+            # For each token, check if it OR its singular/plural variant appears
+            def token_matches(token: str, text: str) -> Tuple[bool, int]:
+                """Check if token or its variants appear in text. Returns (found, position)."""
+                # Direct match
+                if token in text:
+                    return True, text.find(token)
                 
-        # Handle hyphenated vs non-hyphenated variations ONLY if content has that exact variation
+                # Plural to singular (strawberries -> strawberry)
+                if token.endswith('ies') and len(token) > 4:
+                    singular = token[:-3] + 'y'
+                    if singular in text:
+                        return True, text.find(singular)
+                elif token.endswith('es') and len(token) > 3:
+                    singular = token[:-2]
+                    if singular in text:
+                        return True, text.find(singular)
+                elif token.endswith('s') and len(token) > 2:
+                    singular = token[:-1]
+                    if singular in text:
+                        return True, text.find(singular)
+                
+                # Singular to plural (strawberry -> strawberries)
+                plural_ies = token[:-1] + 'ies' if token.endswith('y') and len(token) > 2 else None
+                plural_es = token + 'es'
+                plural_s = token + 's'
+                
+                if plural_ies and plural_ies in text:
+                    return True, text.find(plural_ies)
+                if plural_es in text:
+                    return True, text.find(plural_es)
+                if plural_s in text:
+                    return True, text.find(plural_s)
+                
+                return False, -1
+            
+            # Check if all tokens (or their variants) appear
+            token_positions = []
+            all_tokens_match = True
+            
+            for token in keyword_tokens:
+                matches, pos = token_matches(token, content_lower)
+                if matches:
+                    token_positions.append(pos)
+                else:
+                    all_tokens_match = False
+                    break
+            
+            # If all tokens found (with variants), check if they're close enough
+            if all_tokens_match and token_positions:
+                # For sub-phrases, we don't require strict keyword order
+                # Just check that all tokens appear within reasonable distance
+                min_pos = min(token_positions)
+                max_pos = max(token_positions)
+                distance = max_pos - min_pos
+                
+                # Allow up to 80 characters between first and last token
+                # This catches distributed keywords like "bulk strawberry slices" in "strawberry slices bulk"
+                if distance <= 80:
+                    found_keywords.append(keyword)
+                    found_keywords_set.add(keyword_lower)
+                    
+                    if keyword_volumes and keyword in keyword_volumes:
+                        volume = keyword_volumes[keyword]
+                        total_volume += volume
+                        logger.debug(f"[KEYWORD_EXTRACTION] ✅ Sub-phrase: '{keyword}' (volume: {volume}, distance: {distance})")
+                    else:
+                        logger.debug(f"[KEYWORD_EXTRACTION] ✅ Sub-phrase: '{keyword}' (distance: {distance})")
+                    continue
+        
+        # ================================================================
+        # METHOD 3: Hyphen Variations
+        # ================================================================
         if '-' in keyword_lower:
-            # Only match if content ALSO has hyphen OR exact words appear
             keyword_no_hyphen = keyword_lower.replace('-', ' ')
-            # Check if content has the spaced version (but NOT the hyphenated version)
             if keyword_no_hyphen in content_lower and keyword_lower not in content_lower:
                 found_keywords.append(keyword)
-                found = True
-                logger.debug(f"[KEYWORD_EXTRACTION] ✅ Hyphen variation: '{keyword}' -> '{keyword_no_hyphen}' in content")
+                found_keywords_set.add(keyword_lower)
+                
+                if keyword_volumes and keyword in keyword_volumes:
+                    volume = keyword_volumes[keyword]
+                    total_volume += volume
+                    logger.debug(f"[KEYWORD_EXTRACTION] ✅ Hyphen variant: '{keyword}' (volume: {volume})")
+                else:
+                    logger.debug(f"[KEYWORD_EXTRACTION] ✅ Hyphen variant: '{keyword}'")
                 continue
-        # Don't add reverse matching - it creates false positives for "freeze dried" matching "freeze-dried"
         
-        if not found:
-            logger.debug(f"[KEYWORD_EXTRACTION] ❌ Not found: '{keyword}' not in content")
+        # Not found
+        logger.debug(f"[KEYWORD_EXTRACTION] ❌ Not found: '{keyword}'")
     
-    logger.info(f"[KEYWORD_EXTRACTION] Found {len(found_keywords)} keywords in content: {found_keywords[:5]}{'...' if len(found_keywords) > 5 else ''}")
-    return found_keywords, len(found_keywords)
+    logger.info(f"[KEYWORD_EXTRACTION] Found {len(found_keywords)} keywords (volume: {total_volume:,})")
+    logger.info(f"[KEYWORD_EXTRACTION] Keywords: {found_keywords[:5]}{'...' if len(found_keywords) > 5 else ''}")
+    
+    return found_keywords, total_volume
+
+
+def calculate_keyword_coverage_from_analysis(
+    title_analysis: Any, 
+    bullets_analysis: List[Any], 
+    backend_keywords: List[str], 
+    relevant_keywords: List[Dict[str, Any]]
+) -> Dict[str, Any]:
+    """
+    Calculate keyword coverage from analysis results (no duplicates).
+    
+    Args:
+        title_analysis: Title analysis result
+        bullets_analysis: List of bullet analysis results (filtered)
+        backend_keywords: List of backend keywords
+        relevant_keywords: List of keyword dicts with phrase, intent_score, search_volume
+        
+    Returns:
+        Coverage analysis dict
+    """
+    # Collect all unique keywords found (no duplicates)
+    found_keywords = []
+    
+    # Add title keywords
+    if hasattr(title_analysis, 'keywords_found'):
+        found_keywords.extend(title_analysis.keywords_found)
+    
+    # Add bullet keywords (already filtered for duplicates)
+    for bullet_analysis in bullets_analysis:
+        if hasattr(bullet_analysis, 'keywords_found'):
+            found_keywords.extend(bullet_analysis.keywords_found)
+    
+    # Add backend keywords (if any found in backend content)
+    # Note: Backend keywords are typically not in the scraped data, so this is usually empty
+    backend_content = " ".join(backend_keywords).lower()
+    keyword_phrases = [kw.get("phrase", "") for kw in relevant_keywords]
+    backend_found, _ = extract_keywords_from_content(backend_content, keyword_phrases)
+    found_keywords.extend(backend_found)
+    
+    # Remove duplicates while preserving order
+    seen = set()
+    unique_found_keywords = []
+    for kw in found_keywords:
+        if kw.lower() not in seen:
+            unique_found_keywords.append(kw)
+            seen.add(kw.lower())
+    
+    # Analyze high-intent and high-volume misses
+    missing_high_intent = []
+    missing_high_volume = []
+    
+    for kw in relevant_keywords:
+        phrase = kw.get("phrase", "")
+        intent_score = kw.get("intent_score", 0)
+        search_volume = kw.get("search_volume", 0)
+        
+        if phrase not in unique_found_keywords:
+            if intent_score >= 2:
+                missing_high_intent.append(phrase)
+            if search_volume > 500:
+                missing_high_volume.append(phrase)
+    
+    coverage_percentage = (len(unique_found_keywords) / len(keyword_phrases) * 100) if keyword_phrases else 0
+    
+    return {
+        "total_keywords": len(keyword_phrases),
+        "covered_keywords": len(unique_found_keywords),
+        "coverage_percentage": round(coverage_percentage, 1),
+        "missing_high_intent": missing_high_intent[:10],  # Top 10
+        "missing_high_volume": missing_high_volume[:10]   # Top 10
+    }
 
 
 def calculate_keyword_coverage(current_content: Dict[str, Any], relevant_keywords: List[Dict[str, Any]]) -> Dict[str, Any]:
@@ -168,16 +332,18 @@ def analyze_root_coverage(current_content: Dict[str, Any], root_volumes: Dict[st
     }
 
 
-def analyze_content_piece(content: str, keywords_list: List[str]) -> Dict[str, Any]:
+def analyze_content_piece(content: str, keywords_list: List[str], keyword_volumes: Dict[str, int] = None) -> Dict[str, Any]:
     """
     Analyze a specific piece of content (title, bullet, etc.) for SEO metrics.
+    TASK 2: Now includes search volume calculation.
     
     Args:
         content: The content string to analyze
         keywords_list: List of relevant keyword phrases
+        keyword_volumes: Optional dict mapping keywords to search volumes
         
     Returns:
-        Analysis dict with metrics
+        Analysis dict with metrics including total_search_volume
     """
     if not content:
         return {
@@ -186,17 +352,19 @@ def analyze_content_piece(content: str, keywords_list: List[str]) -> Dict[str, A
             "keyword_count": 0,
             "character_count": 0,
             "keyword_density": 0.0,
-            "opportunities": []
+            "opportunities": [],
+            "total_search_volume": 0
         }
     
     logger.info(f"[CONTENT_ANALYSIS] Analyzing content piece: '{content[:50]}{'...' if len(content) > 50 else ''}'")
     logger.info(f"[CONTENT_ANALYSIS] Searching for {len(keywords_list)} keywords")
     
-    found_keywords, count = extract_keywords_from_content(content, keywords_list)
+    # Use enhanced extraction with volume calculation (Task 2)
+    found_keywords, total_volume = extract_keywords_from_content(content, keywords_list, keyword_volumes)
     char_count = len(content)
     
     # Calculate keyword density (keywords per 100 characters)
-    density = (count / char_count * 100) if char_count > 0 else 0
+    density = (len(found_keywords) / char_count * 100) if char_count > 0 else 0
     
     # Find opportunities (keywords not included)
     opportunities = [kw for kw in keywords_list if kw not in found_keywords][:5]
@@ -212,17 +380,17 @@ def analyze_content_piece(content: str, keywords_list: List[str]) -> Dict[str, A
     if len(validated_keywords) != len(found_keywords):
         logger.warning(f"[CONTENT_ANALYSIS] ⚠️  Validation failed: {len(found_keywords)} -> {len(validated_keywords)} keywords")
         found_keywords = validated_keywords
-        count = len(validated_keywords)
     
-    logger.info(f"[CONTENT_ANALYSIS] ✅ Final result: {count} keywords found in content")
+    logger.info(f"[CONTENT_ANALYSIS] ✅ Final result: {len(found_keywords)} keywords (volume: {total_volume:,})")
     
     return {
         "content": content,
         "keywords_found": found_keywords,
-        "keyword_count": count,
+        "keyword_count": len(found_keywords),
         "character_count": char_count,
         "keyword_density": round(density, 2),
-        "opportunities": opportunities
+        "opportunities": opportunities,
+        "total_search_volume": total_volume
     }
 
 

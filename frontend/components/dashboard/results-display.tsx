@@ -72,6 +72,7 @@ interface SEOAnalysis {
     primary_benefit: string;
     keywords_included: string[];
     guideline_compliance: string;
+    total_search_volume?: number; // Task 6: Total search volume for this bullet
   }>;
   strategy: {
     first_80_optimization: string;
@@ -435,7 +436,20 @@ export default function ResultsDisplay({
                     key={index}
                     className="p-3 bg-green-50 border border-green-200 rounded-md"
                   >
-                    <p className="text-sm mb-2">{bullet.content}</p>
+                    <div className="flex items-start justify-between mb-2">
+                      <p className="text-sm flex-1">{bullet.content}</p>
+                      {/* Task 6: Display total search volume for this bullet */}
+                      {bullet.total_search_volume !== undefined &&
+                        bullet.total_search_volume > 0 && (
+                          <Badge
+                            variant="secondary"
+                            className="ml-2 bg-blue-100 text-blue-700 border-blue-300"
+                          >
+                            <TrendingUp className="h-3 w-3 mr-1" />
+                            {bullet.total_search_volume.toLocaleString()} vol
+                          </Badge>
+                        )}
+                    </div>
                     <div className="flex items-center justify-between">
                       <div className="flex flex-wrap gap-1">
                         {bullet.keywords_included.map((keyword, idx) => (

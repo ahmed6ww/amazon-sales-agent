@@ -5,2638 +5,927 @@
   "ai_analysis_keywords": {
     "structured_data": {
       "product_context": {
-        "asin": "B0D5BL35MS",
         "title": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) Organic Freeze Dried Strawberries No Sugar Added, Dry Strawberry Gluten Free Fruit Snack for Baking, Smoothies, Cereals & Travel",
         "brand": "Brewer Outdoor Solutions",
-        "size": "4 Pack",
-        "number_of_pieces": "4",
-        "item_weight": "4.8 Ounces",
-        "key_attributes": [
-          "freeze-dried strawberry slices",
-          "organic",
-          "no sugar added",
-          "gluten free",
-          "bulk 4-pack"
-        ]
+        "base_product_form": "slices"
       },
       "items": [
         {
           "phrase": "strawberry freeze dried",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries.",
+          "reason": "Describes freeze dried strawberries, matching the product form (slices) context.",
           "relevancy_score": 9,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 424,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 689,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 14.1,
+            "competitor_performance_score": 10.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but derivative/word-order variant of head term; not a distinct opportunity."
         },
         {
           "phrase": "strawberries freeze dried",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries.",
+          "reason": "Describes freeze dried strawberries, matching the product form (slices) context.",
           "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 303,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 728,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 15.2,
+            "competitor_performance_score": 10.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but derivative/word-order variant of head term; not a distinct opportunity."
         },
         {
           "phrase": "dried freeze strawberries",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries.",
+          "reason": "Semantic variation of 'freeze dried strawberries', matching product form.",
           "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 204,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 643,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 15.7,
+            "competitor_performance_score": 10.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but derivative phrasing of the head term; not distinct."
         },
         {
           "phrase": "freeze-dried strawberries",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries.",
+          "reason": "Describes freeze dried strawberries, matching the product form (slices) context.",
           "relevancy_score": 9,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 4,
+          "search_volume": 470,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 548,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 15.9,
+            "competitor_performance_score": 10.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Title density above low-threshold; not a zero/low-density gap."
         },
         {
           "phrase": "freeze dried strawberries bulk",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries with a core pack attribute.",
+          "reason": "Describes freeze dried strawberries in bulk, relevant to slices context.",
           "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freez dried apples",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 10,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried apples",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 9,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried apple slices",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 10,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried apples bulk",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 10,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 909,
+          "cpr": 12,
+          "competition": {
+            "competing_products": 640,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 15.9,
+            "competitor_performance_score": 10.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "opportunity",
+          "opportunity_reason": "Zero title density with strong volume and distinct 'bulk' intent."
         },
         {
           "phrase": "freeze dried strawberry",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries.",
+          "reason": "Describes freeze dried strawberry, matching the product form (slices) context.",
           "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freezedried strawberry",
-          "category": "Relevant",
-          "reason": "Misspelling/variant for freeze-dried strawberries.",
-          "relevancy_score": 9,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 5,
+          "search_volume": 847,
+          "cpr": 11,
+          "competition": {
+            "competing_products": 632,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 16.4,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Title density above low-threshold; not a zero/low-density gap."
         },
         {
           "phrase": "freeze dried strawberries organic",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries with a core attribute.",
+          "reason": "Describes organic freeze dried strawberries, relevant to slices context.",
           "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 1,
+          "search_volume": 422,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 404,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 16.9,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "opportunity",
+          "opportunity_reason": "Low title density (<=2) with solid search volume and 'organic' intent."
         },
         {
           "phrase": "freeze dry strawberry",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries.",
+          "reason": "Semantic variation of 'freeze dried strawberries', matching product form.",
           "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry chips",
-          "category": "Relevant",
-          "reason": "Common term for crunchy freeze-dried strawberry pieces.",
-          "relevancy_score": 9,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried strawberries 365",
-          "category": "Branded",
-          "reason": "Contains brand name '365'.",
-          "relevancy_score": 9,
-          "intent_score": 0
-        },
-        {
-          "phrase": "simply nature freeze dried strawberries",
-          "category": "Branded",
-          "reason": "Contains brand name 'Simply Nature'.",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "nutristore freeze dried strawberries",
-          "category": "Branded",
-          "reason": "Contains brand name 'Nutristore'.",
-          "relevancy_score": 9,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 169,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 1000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 17.8,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but derivative/DIY intent phrase; not a distinct product keyword."
         },
         {
           "phrase": "freeze dry strawberries",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries.",
+          "reason": "Semantic variation of 'freeze dried strawberries', matching product form.",
           "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 433,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 618,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 19.8,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but derivative/DIY intent phrase; not a distinct product keyword."
         },
         {
           "phrase": "dry strawberry fruit",
-          "category": "Relevant",
-          "reason": "Describes dried strawberry fruit.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'dry fruit', not matching slices form.",
           "relevancy_score": 4,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 2,
+          "search_volume": 297,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 21.0,
+            "competitor_performance_score": 8.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Irrelevant to the product; ignore even with low title density."
         },
         {
           "phrase": "freeze dried organic strawberries",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries with a core attribute.",
+          "reason": "Describes organic freeze dried strawberries, relevant to slices context.",
           "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freezer dried strawberries",
-          "category": "Relevant",
-          "reason": "Variant phrasing for freeze-dried strawberries.",
-          "relevancy_score": 10,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 242,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 371,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 21.2,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "opportunity",
+          "opportunity_reason": "Zero title density with decent volume and distinct 'organic' intent."
         },
         {
           "phrase": "free dried strawberries",
           "category": "Relevant",
-          "reason": "Misspelling for freeze-dried strawberries.",
+          "reason": "Semantic variation of 'freeze dried strawberries', matching product form.",
           "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 128,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 514,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 21.6,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but misspelling variant (‘free’ vs ‘freeze’); ignore."
         },
         {
           "phrase": "organic freeze dried strawberries",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries with a core attribute.",
+          "reason": "Describes organic freeze dried strawberries, relevant to slices context.",
           "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 1,
+          "search_volume": 1163,
+          "cpr": 26,
+          "competition": {
+            "competing_products": 400,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 21.9,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "opportunity",
+          "opportunity_reason": "Low title density (<=2) with high search volume and 'organic' intent."
         },
         {
           "phrase": "bulk freeze dried strawberries",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries with a core pack attribute.",
+          "reason": "Describes bulk freeze dried strawberries, relevant to slices context.",
           "relevancy_score": 3,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 1,
+          "search_volume": 482,
+          "cpr": 9,
+          "competition": {
+            "competing_products": 712,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 22.1,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "opportunity",
+          "opportunity_reason": "Low title density (<=2) with solid volume and clear 'bulk' intent."
         },
         {
           "phrase": "freeze dried strawberries",
           "category": "Relevant",
-          "reason": "Directly describes freeze-dried strawberries.",
+          "reason": "Describes freeze dried strawberries, matching the product form (slices) context.",
           "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "toddler freeze dried fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 4,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 21,
+          "search_volume": 30664,
+          "cpr": 67,
+          "competition": {
+            "competing_products": 680,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 22.3,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Title density is high; not a zero/low-density opportunity."
         },
         {
           "phrase": "dried strawberry",
-          "category": "Relevant",
-          "reason": "Directly describes dried strawberries.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'dried', which does not match slices form.",
           "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "natierra freeze dried strawberries",
-          "category": "Branded",
-          "reason": "Contains brand name 'Natierra'.",
-          "relevancy_score": 4,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 10,
+          "search_volume": 534,
+          "cpr": 9,
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 24.9,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Irrelevant to the product."
         },
         {
           "phrase": "strawberries dried",
-          "category": "Relevant",
-          "reason": "Directly describes dried strawberries.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'dried', which does not match slices form.",
           "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crispy fruit strawberry",
-          "category": "Branded",
-          "reason": "Contains product line name 'Crispy Fruit'.",
-          "relevancy_score": 4,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 3,
+          "search_volume": 279,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 3000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 25.8,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Irrelevant to the product."
         },
         {
           "phrase": "dried strawberries bulk",
-          "category": "Relevant",
-          "reason": "Directly describes dried strawberries with a core pack attribute.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'dried', which does not match slices form.",
           "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "handful freeze dried fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 1,
+          "search_volume": 268,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 26.8,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Irrelevant to the product despite low title density."
         },
         {
           "phrase": "dry strawberries organic",
-          "category": "Relevant",
-          "reason": "Directly describes dried strawberries with a core attribute.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'dry strawberries', which does not match slices form.",
           "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 116,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 493,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 27.4,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but irrelevant to the product; ignore."
         },
         {
           "phrase": "freeze dried strawberries freeze-dried strawberries slices",
-          "category": "Design-Specific",
-          "reason": "Specifies a distinct cut/format (slices).",
-          "relevancy_score": 10,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried strawberrries",
           "category": "Relevant",
-          "reason": "Misspelling for dried strawberries.",
-          "relevancy_score": 7,
-          "intent_score": 0
+          "reason": "Describes freeze dried strawberries slices, matching the product form.",
+          "relevancy_score": 10,
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 101,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 312,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 27.9,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but keyword-stuffed/derivative phrasing; not a clean distinct query."
         },
         {
           "phrase": "strawberry dried",
-          "category": "Relevant",
-          "reason": "Directly describes dried strawberries.",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crunchies freeze dried strawberries",
-          "category": "Branded",
-          "reason": "Contains brand name 'Crunchies'.",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dehydrated strawberry",
-          "category": "Relevant",
-          "reason": "Describes the same product type (dried strawberries).",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried apple sauce",
           "category": "Irrelevant",
-          "reason": "Different product (apple sauce).",
+          "reason": "Describes a different type, 'dried', which does not match slices form.",
           "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried pears",
-          "category": "Irrelevant",
-          "reason": "Different product (pears).",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crispy green freeze dried apples",
-          "category": "Branded",
-          "reason": "Contains brand name 'Crispy Green'.",
-          "relevancy_score": 9,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried apple",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 10,
-          "intent_score": 0
-        },
-        {
-          "phrase": "brothers all natural fruit crisps",
-          "category": "Branded",
-          "reason": "Contains brand name 'Brothers All Natural'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "nutristore strawberries",
-          "category": "Branded",
-          "reason": "Contains brand name 'Nutristore'.",
-          "relevancy_score": 9,
-          "intent_score": 0
-        },
-        {
-          "phrase": "treetop apple crisps",
-          "category": "Branded",
-          "reason": "Contains brand name 'Tree Top'.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crisp apples",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "tree top apple crisps",
-          "category": "Branded",
-          "reason": "Contains brand name 'Tree Top'.",
-          "relevancy_score": 2,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 245,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 879,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 28.3,
+            "competitor_performance_score": 8.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but irrelevant to the product; ignore."
         },
         {
           "phrase": "dry strawberries",
-          "category": "Relevant",
-          "reason": "Directly describes dried strawberries.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'dry strawberries', which does not match slices form.",
           "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 713,
+          "cpr": 10,
+          "competition": {
+            "competing_products": 933,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 32.1,
+            "competitor_performance_score": 6.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but irrelevant to the product; ignore."
         },
         {
           "phrase": "freeze dried fruits",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'fruits', without specifying slices.",
           "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "natures turn freeze dried fruit",
-          "category": "Branded",
-          "reason": "Contains brand name 'Nature's Turn'.",
-          "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 773,
+          "cpr": 11,
+          "competition": {
+            "competing_products": 6000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 32.2,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but too broad/irrelevant to specific product."
         },
         {
           "phrase": "freeze dried strawberries slices",
-          "category": "Design-Specific",
-          "reason": "Specifies a distinct cut/format (slices).",
+          "category": "Relevant",
+          "reason": "Describes freeze dried strawberries slices, matching the product form.",
           "relevancy_score": 10,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 2,
+          "search_volume": 415,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 297,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 33.1,
+            "competitor_performance_score": 6.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "opportunity",
+          "opportunity_reason": "Low title density (<=2) with solid volume; matches 'slices' intent."
         },
         {
           "phrase": "dried freeze fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'freeze fruit', which does not relate to slices.",
           "relevancy_score": 4,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 106,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 34.2,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but irrelevant/broad; ignore."
         },
         {
           "phrase": "freeze dried strawberry slices",
-          "category": "Design-Specific",
-          "reason": "Specifies a distinct cut/format (slices).",
+          "category": "Relevant",
+          "reason": "Describes freeze dried strawberry slices, matching the product form.",
           "relevancy_score": 10,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 4,
+          "search_volume": 713,
+          "cpr": 10,
+          "competition": {
+            "competing_products": 301,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 36.0,
+            "competitor_performance_score": 6.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Title density above low-threshold; not a zero/low-density gap."
         },
         {
           "phrase": "organic dried strawberries",
-          "category": "Relevant",
-          "reason": "Directly describes dried strawberries with a core attribute.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'dried strawberries', which does not match slices form.",
           "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 5,
+          "search_volume": 445,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 573,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 36.0,
+            "competitor_performance_score": 6.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Irrelevant to the product."
         },
         {
           "phrase": "dried strawberries organic",
-          "category": "Relevant",
-          "reason": "Directly describes dried strawberries with a core attribute.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'dried strawberries', which does not match slices form.",
           "relevancy_score": 3,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 1,
+          "search_volume": 170,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 631,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 36.6,
+            "competitor_performance_score": 6.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Irrelevant to the product despite low title density."
         },
         {
           "phrase": "freeze dried organic fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'organic fruit', without specifying slices.",
           "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried strawberries whole",
-          "category": "Design-Specific",
-          "reason": "Specifies a distinct cut/format (whole).",
-          "relevancy_score": 2,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 229,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 1000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 37.7,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but broad/irrelevant to the specific product."
         },
         {
           "phrase": "freeze-dried fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'fruit', which does not match slices form.",
           "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fresas deshidratadas",
-          "category": "Spanish",
-          "reason": "Non-English (Spanish) keyword for dried strawberries.",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dehydrated strawberries",
-          "category": "Relevant",
-          "reason": "Describes the same product type (dried strawberries).",
-          "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 11,
+          "search_volume": 399,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 39.0,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Irrelevant to the product."
         },
         {
           "phrase": "organic freeze dried fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'freeze dried fruit', without specifying slices.",
           "relevancy_score": 3,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 714,
+          "cpr": 10,
+          "competition": {
+            "competing_products": 1000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 40.4,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but broad/irrelevant to the specific product."
         },
         {
           "phrase": "dried strawberries no sugar added",
-          "category": "Relevant",
-          "reason": "Directly describes dried strawberries with a core attribute.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'dried strawberries', which does not match slices form.",
           "relevancy_score": 7,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 1,
+          "search_volume": 1101,
+          "cpr": 26,
+          "competition": {
+            "competing_products": 558,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 42.6,
+            "competitor_performance_score": 6.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Irrelevant to the product despite low title density."
         },
         {
           "phrase": "crispy fruit freeze dried fruit",
-          "category": "Branded",
-          "reason": "Contains product line name 'Crispy Fruit'.",
+          "category": "Irrelevant",
+          "reason": "Describes 'freeze dried fruit', which does not specify slices.",
           "relevancy_score": 2,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 442,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 627,
+            "ranking_competitors": 8,
+            "competitor_rank_avg": 43.6,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but broad/brand-like term; not specific to product."
         },
         {
           "phrase": "freeze dried fruit bulk",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'fruit', without specifying slices.",
           "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freezer dried fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dries fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 4,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 644,
+          "cpr": 10,
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 43.7,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but broad/irrelevant to the specific product."
         },
         {
           "phrase": "freeze fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'fruit', without specifying slices.",
           "relevancy_score": 4,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 160,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 44.3,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but irrelevant/broad; ignore."
         },
         {
           "phrase": "dried strawberries",
-          "category": "Relevant",
-          "reason": "Directly describes dried strawberries.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'dried strawberries', which does not match slices form.",
           "relevancy_score": 10,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 21,
+          "search_volume": 8603,
+          "cpr": 41,
+          "competition": {
+            "competing_products": 819,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 44.4,
+            "competitor_performance_score": 6.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Irrelevant to the product."
         },
         {
           "phrase": "freeze dried fruit no sugar added",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'freeze dried fruit', not specific to slices.",
           "relevancy_score": 3,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 153,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 429,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 44.6,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but broad/irrelevant to the specific product."
         },
         {
           "phrase": "dry freeze fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'freeze fruit', which does not match slices form.",
           "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "whole freeze dried strawberries",
-          "category": "Design-Specific",
-          "reason": "Specifies a distinct cut/format (whole).",
-          "relevancy_score": 2,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 280,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 45.1,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but irrelevant/broad; ignore."
         },
         {
           "phrase": "bulk freeze dried fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'freeze dried fruit', which does not specify slices.",
           "relevancy_score": 2,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 364,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 45.9,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but broad/irrelevant to the specific product."
         },
         {
           "phrase": "freeze dried fruit variety pack",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
+          "category": "Irrelevant",
+          "reason": "Describes a variety pack, not specific to slices.",
           "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried fruit crisps",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 9,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 6,
+          "search_volume": 103,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 658,
+            "ranking_competitors": 8,
+            "competitor_rank_avg": 47.6,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Irrelevant to the product."
         },
         {
           "phrase": "dried strawberry slices",
-          "category": "Design-Specific",
-          "reason": "Specifies a distinct cut/format (slices).",
+          "category": "Relevant",
+          "reason": "Describes dried strawberry slices, relevant to the base form (slices).",
           "relevancy_score": 10,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 6,
+          "search_volume": 355,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 324,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 48.9,
+            "competitor_performance_score": 6.0
+          },
+          "root": "strawberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Title density above low-threshold; not a zero/low-density gap."
         },
         {
           "phrase": "so natural freeze dried fruit",
-          "category": "Branded",
-          "reason": "Contains brand name 'So Natural'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried fruit organic",
           "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dehydrated strawberries bulk",
-          "category": "Relevant",
-          "reason": "Directly describes dried strawberries with a core pack attribute.",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "emergency essentials freeze dried fruit",
-          "category": "Branded",
-          "reason": "Contains brand name 'Emergency Essentials'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dehydrated strawberry slices",
-          "category": "Design-Specific",
-          "reason": "Specifies a distinct cut/format (slices).",
-          "relevancy_score": 10,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dry fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawverries",
-          "category": "Relevant",
-          "reason": "Misspelling of strawberries; still directly about the product.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crunchies freeze dried fruit",
-          "category": "Branded",
-          "reason": "Contains brand name 'Crunchies'.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried strawberries and bananas",
-          "category": "Irrelevant",
-          "reason": "Different product mix (strawberries with bananas).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried fruit snacks",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 9,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried mixed fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried smoothie",
-          "category": "Irrelevant",
-          "reason": "Different product type (smoothie).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried whole strawberries",
-          "category": "Design-Specific",
-          "reason": "Specifies a distinct cut/format (whole).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic fresh strawberries",
-          "category": "Irrelevant",
-          "reason": "Different format (fresh, not freeze-dried).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "yozz freeze dried yogurt with real strawberry bites",
-          "category": "Branded",
-          "reason": "Contains brand name 'Yozz'.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fuji apple fruit crisps",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fresh bellies strawberries",
-          "category": "Branded",
-          "reason": "Contains brand name 'Fresh Bellies'.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "simply nature freeze dried",
-          "category": "Branded",
-          "reason": "Contains brand name 'Simply Nature'.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fuji apple chips",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crispy fruit apple",
-          "category": "Branded",
-          "reason": "Contains product line name 'Crispy Fruit'.",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "ruh roh freeze dried strawberry shortcake",
-          "category": "Irrelevant",
-          "reason": "Dessert flavor/treat, not freeze-dried fruit slices.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fuji apple crisps",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "bare crispy reds apple chips",
-          "category": "Branded",
-          "reason": "Contains brand name 'Bare'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried apples",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "berry well freeze dried",
-          "category": "Irrelevant",
-          "reason": "Ambiguous phrase not specifically about our product.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried apple",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "atrawberries",
-          "category": "Relevant",
-          "reason": "Misspelling of strawberries; still directly about the product.",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried fuji apples",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "frozen organic strawberries",
-          "category": "Irrelevant",
-          "reason": "Different format (frozen, not freeze-dried).",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried fruit snack packs",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "apple snacks",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried cantaloupe",
-          "category": "Irrelevant",
-          "reason": "Different product (cantaloupe).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "apple crisps",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crisps dried fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "apple crisps snacks",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried apple chips",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "frozen sliced strawberries",
-          "category": "Irrelevant",
-          "reason": "Different format (frozen, not freeze-dried).",
-          "relevancy_score": 10,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crispy green freeze dried fruit",
-          "category": "Branded",
-          "reason": "Contains brand name 'Crispy Green'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried fruit kids",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fruit crisps",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "harvest snaps kids",
-          "category": "Branded",
-          "reason": "Contains brand name 'Harvest Snaps'.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "branch out crispy pineapple chips",
-          "category": "Branded",
-          "reason": "Contains brand name 'BranchOut'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "peak banana berry",
-          "category": "Irrelevant",
-          "reason": "Different product (banana/other fruit).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried peach powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "فواكه مجففه بالتبريد",
-          "category": "Spanish",
-          "reason": "Non-English (Arabic) keyword for freeze-dried fruit.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fresh bellies mango",
-          "category": "Branded",
-          "reason": "Contains brand name 'Fresh Bellies'.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "anthony's organic strawberry powder",
-          "category": "Branded",
-          "reason": "Contains brand name 'Anthony's'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crispy peaches chinese",
-          "category": "Irrelevant",
-          "reason": "Different product (peaches).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "turns",
-          "category": "Irrelevant",
-          "reason": "Not applicable to the product.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "driscoll strawberries",
-          "category": "Branded",
-          "reason": "Contains brand name 'Driscoll'.",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dole good crunch",
-          "category": "Branded",
-          "reason": "Contains brand name 'Dole'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "liofilizado fruit",
-          "category": "Spanish",
-          "reason": "Non-English (Spanish/Portuguese) term including 'liofilizado'.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic dried strawberries no sugar added",
-          "category": "Relevant",
-          "reason": "Directly describes dried strawberries with a core attribute.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried raspberry pieces",
-          "category": "Irrelevant",
-          "reason": "Different product (raspberries).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fruit crisps freeze dried",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 9,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried bananas bulk",
-          "category": "Irrelevant",
-          "reason": "Different product (bananas).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dehydrated strawberries sliced",
-          "category": "Design-Specific",
-          "reason": "Specifies a distinct cut/format (sliced).",
-          "relevancy_score": 10,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried raspberries organic",
-          "category": "Irrelevant",
-          "reason": "Different product (raspberries).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried berries",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many berry types.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried bananas",
-          "category": "Irrelevant",
-          "reason": "Different product (bananas).",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried watermelon",
-          "category": "Irrelevant",
-          "reason": "Different product (watermelon).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried mangoes",
-          "category": "Irrelevant",
-          "reason": "Different product (mangoes).",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry freeze dried powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried raspberry",
-          "category": "Irrelevant",
-          "reason": "Different product (raspberries).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried banana",
-          "category": "Irrelevant",
-          "reason": "Different product (bananas).",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried mango",
-          "category": "Irrelevant",
-          "reason": "Different product (mango).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze-dried raspberries",
-          "category": "Irrelevant",
-          "reason": "Different product (raspberries).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic fuji apples",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried fruit baby",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "apple chips individual bags",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried pear",
-          "category": "Irrelevant",
-          "reason": "Different product (pears).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "simple slices apple chips",
-          "category": "Irrelevant",
-          "reason": "Different product (apple chips).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "rind apple chips",
-          "category": "Branded",
-          "reason": "Contains brand name 'RIND'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "apple fruit snacks",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "apple chip",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "sliced strawberries",
-          "category": "Design-Specific",
-          "reason": "Specifies a distinct cut/format (sliced).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried jack fruit chips",
-          "category": "Irrelevant",
-          "reason": "Different product (jackfruit).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fruit for thought dried mango",
-          "category": "Branded",
-          "reason": "Contains brand name 'Fruit For Thought'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "nature's finest dried mango",
-          "category": "Branded",
-          "reason": "Contains brand name 'Nature's Finest'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "apple chips snack bags",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried pineapple chunks",
-          "category": "Irrelevant",
-          "reason": "Different product (pineapple).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried oranges",
-          "category": "Irrelevant",
-          "reason": "Different product (oranges).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "apple crisp",
-          "category": "Irrelevant",
-          "reason": "Different product (apples/dessert).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried pears",
-          "category": "Irrelevant",
-          "reason": "Different product (pears).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "frozen strawberries whole",
-          "category": "Irrelevant",
-          "reason": "Different format (frozen, not freeze-dried).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crispy green",
-          "category": "Branded",
-          "reason": "Contains brand name 'Crispy Green'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "nopainapple",
-          "category": "Irrelevant",
-          "reason": "Not applicable to the product.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried kiwi no sugar added",
-          "category": "Irrelevant",
-          "reason": "Different product (kiwi).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "anthony's strawberry powder",
-          "category": "Branded",
-          "reason": "Contains brand name 'Anthony's'.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "try strawberry",
-          "category": "Irrelevant",
-          "reason": "Not a shopping-intent term for the product.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic freeze dried",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic apple chips",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crisp apple",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "essentials dried fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crispy fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dehydrated bananas",
-          "category": "Irrelevant",
-          "reason": "Different product (bananas).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "apple slices snack packs",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "apple chips",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried banana chips",
-          "category": "Irrelevant",
-          "reason": "Different product (bananas).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried pineapple",
-          "category": "Irrelevant",
-          "reason": "Different product (pineapple).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry snacks",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "apple chips organic apple chips",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried peach",
-          "category": "Irrelevant",
-          "reason": "Different product (peach).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried kiwi",
-          "category": "Irrelevant",
-          "reason": "Different product (kiwi).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "emergency food fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "anthony strawberry powder",
-          "category": "Branded",
-          "reason": "Contains brand name 'Anthony's'.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried cantaloupe",
-          "category": "Irrelevant",
-          "reason": "Different product (cantaloupe).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry life",
-          "category": "Irrelevant",
-          "reason": "Not applicable to the product.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic strawberry extract",
-          "category": "Irrelevant",
-          "reason": "Different product format (extract).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry powder for drinks",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "mickey fruit snacks",
-          "category": "Branded",
-          "reason": "Contains brand name 'Mickey' (Disney).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "nutristore",
-          "category": "Branded",
-          "reason": "Contains brand name 'Nutristore'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried kiwi unsweetened",
-          "category": "Irrelevant",
-          "reason": "Different product (kiwi).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry powder for baking",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "disney fruit snacks",
-          "category": "Branded",
-          "reason": "Contains brand name 'Disney'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic berry powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "red ripe strawberry",
-          "category": "Irrelevant",
-          "reason": "Generic fresh strawberry term, not freeze-dried product.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "mickey snacks",
-          "category": "Branded",
-          "reason": "Contains brand name 'Mickey' (Disney).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "natural strawberry extract",
-          "category": "Irrelevant",
-          "reason": "Different product format (extract).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried orange",
-          "category": "Irrelevant",
-          "reason": "Different product (orange).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic frozen strawberry",
-          "category": "Irrelevant",
-          "reason": "Different format (frozen, not freeze-dried).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried raspberries",
-          "category": "Irrelevant",
-          "reason": "Different product (raspberries).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried pears no sugar added",
-          "category": "Irrelevant",
-          "reason": "Different product (pears).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic strawberries frozen",
-          "category": "Irrelevant",
-          "reason": "Different format (frozen, not freeze-dried).",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dehydrated peaches",
-          "category": "Irrelevant",
-          "reason": "Different product (peaches).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dry raspberry",
-          "category": "Irrelevant",
-          "reason": "Different product (raspberries).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried peaches no sugar added",
-          "category": "Irrelevant",
-          "reason": "Different product (peaches).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "lyons raw dried fruit powder",
-          "category": "Branded",
-          "reason": "Contains brand name 'Lyons'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried mouse",
-          "category": "Irrelevant",
-          "reason": "Not a food product applicable to this item.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "lyons raw fruit powder",
-          "category": "Branded",
-          "reason": "Contains brand name 'Lyons'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "rishi snacks",
-          "category": "Branded",
-          "reason": "Contains brand name 'Rishi'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "auguson farms peaches",
-          "category": "Branded",
-          "reason": "Contains brand name 'Augason Farms'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "nutristore freeze dried food",
-          "category": "Branded",
-          "reason": "Contains brand name 'Nutristore'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "natural flavoring powder",
-          "category": "Irrelevant",
-          "reason": "Different format/category (flavoring powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "powdered fruit",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry cold foam for matcha",
-          "category": "Irrelevant",
-          "reason": "Different product (beverage foam).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry powder for matcha",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fruit powders",
-          "category": "Irrelevant",
-          "reason": "Different format/category (powders).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "flavoring powders",
-          "category": "Irrelevant",
-          "reason": "Different format/category (powders).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fruitriot",
-          "category": "Branded",
-          "reason": "Contains brand name 'FruitRiot'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "anthonys apple pectin powder organic",
-          "category": "Branded",
-          "reason": "Contains brand name 'Anthony's'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "anthony's fruit pectin",
-          "category": "Branded",
-          "reason": "Contains brand name 'Anthony's'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "anthonys fruit pectin",
-          "category": "Branded",
-          "reason": "Contains brand name 'Anthony's'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "mickey mouse snacks",
-          "category": "Branded",
-          "reason": "Contains brand name 'Mickey Mouse' (Disney).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry powder supplement",
-          "category": "Irrelevant",
-          "reason": "Different format (supplement powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "disney snacks for kids",
-          "category": "Branded",
-          "reason": "Contains brand name 'Disney'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry nesquik powder",
-          "category": "Branded",
-          "reason": "Contains brand name 'Nesquik'.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "flavor delights strawberry powder",
-          "category": "Irrelevant",
-          "reason": "Different format (flavored powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "sweetest batch strawberries",
-          "category": "Irrelevant",
-          "reason": "Refers to fresh produce line, not freeze-dried fruit.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "disney snack",
-          "category": "Branded",
-          "reason": "Contains brand name 'Disney'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry latte",
-          "category": "Irrelevant",
-          "reason": "Different product (beverage).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "vinamit",
-          "category": "Branded",
-          "reason": "Contains brand name 'Vinamit'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "yammy",
-          "category": "Branded",
-          "reason": "Contains brand name 'Yammy'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry milkshake powder",
-          "category": "Irrelevant",
-          "reason": "Different format (beverage powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry condensed milk",
-          "category": "Irrelevant",
-          "reason": "Different product (condensed milk).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "oishii strawberries",
-          "category": "Branded",
-          "reason": "Contains brand name 'Oishii'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "good2grow snackers",
-          "category": "Branded",
-          "reason": "Contains brand name 'good2grow'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "anthonys protein powder",
-          "category": "Branded",
-          "reason": "Contains brand name 'Anthony's'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "alo crisp fuji apple pear",
-          "category": "Irrelevant",
-          "reason": "Different product (apple/pear beverage/snack).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "natural flavor powder",
-          "category": "Irrelevant",
-          "reason": "Different format/category (flavor powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "nesquik strawberry powder",
-          "category": "Branded",
-          "reason": "Contains brand name 'Nesquik'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fiji apples",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "jack fruit chips phenomenal",
-          "category": "Irrelevant",
-          "reason": "Different product (jackfruit).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry matcha powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic flavorings",
-          "category": "Irrelevant",
-          "reason": "Different category (flavorings).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "disney themed snacks",
-          "category": "Branded",
-          "reason": "Contains brand name 'Disney'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "disney snacks",
-          "category": "Branded",
-          "reason": "Contains brand name 'Disney'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "awesome fruit nuggets",
-          "category": "Irrelevant",
-          "reason": "Different product (candy/snack nuggets).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "watermelon powder organic",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "ausome fruit nuggets",
-          "category": "Branded",
-          "reason": "Contains brand name 'Ausome'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "raspberry potato chips",
-          "category": "Irrelevant",
-          "reason": "Different product (chips).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "nature's wild berry shark tank",
-          "category": "Branded",
-          "reason": "Contains brand name 'Nature's Wild Berry'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "wapples",
-          "category": "Irrelevant",
-          "reason": "Not applicable to the product.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried tarantula",
-          "category": "Irrelevant",
-          "reason": "Not a food product applicable to this item.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic strawberry protein powder",
-          "category": "Irrelevant",
-          "reason": "Different format (protein powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "mickey mouse fruit snacks",
-          "category": "Branded",
-          "reason": "Contains brand name 'Mickey Mouse' (Disney).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "frozen banana",
-          "category": "Irrelevant",
-          "reason": "Different product (frozen banana).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "yogurt powder organic",
-          "category": "Irrelevant",
-          "reason": "Different format (yogurt powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fruit slaps",
-          "category": "Irrelevant",
-          "reason": "Different product (candy/snack).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "luxe slim cantaloupe",
-          "category": "Branded",
-          "reason": "Contains brand name 'Luxe Slim'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "can-berry",
-          "category": "Irrelevant",
-          "reason": "Not applicable to the product.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "mickey mouse shaped snacks",
-          "category": "Branded",
-          "reason": "Contains brand name 'Mickey Mouse' (Disney).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "crispy green beans",
-          "category": "Irrelevant",
-          "reason": "Different product (vegetable).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "apples green",
-          "category": "Irrelevant",
-          "reason": "Different product (apples).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "mickey mouse food",
-          "category": "Branded",
-          "reason": "Contains brand name 'Mickey Mouse' (Disney).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "anthony's organic cocoa powder",
-          "category": "Branded",
-          "reason": "Contains brand name 'Anthony's'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fruits powder",
-          "category": "Irrelevant",
-          "reason": "Different format/category (powders).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "matcha powder strawberry",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "banana peach",
-          "category": "Irrelevant",
-          "reason": "Different product (other fruits).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "powder fruit flavor",
-          "category": "Irrelevant",
-          "reason": "Different format/category (flavor powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fresas",
-          "category": "Spanish",
-          "reason": "Non-English (Spanish) term for strawberries.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberries organic fresh",
-          "category": "Irrelevant",
-          "reason": "Different format (fresh, not freeze-dried).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried fruit chips",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried fruit for drinks",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/uses.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried strawberries powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "essentials freeze dried fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dehydrated raspberries",
-          "category": "Irrelevant",
-          "reason": "Different product (raspberries).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry organic",
-          "category": "Irrelevant",
-          "reason": "Generic fresh strawberry term, not freeze-dried product.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried blueberries",
-          "category": "Irrelevant",
-          "reason": "Different product (blueberries).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic freeze dried strawberry powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried mangos",
-          "category": "Irrelevant",
-          "reason": "Different product (mango).",
-          "relevancy_score": 7,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried peaches",
-          "category": "Irrelevant",
-          "reason": "Different product (peaches).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze-dried strawberry powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried strawberry powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried powdered fruit",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic freeze dried food",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried strawberry powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried fruit powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry quick powder",
-          "category": "Irrelevant",
-          "reason": "Different format (drink powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry powder for milk",
-          "category": "Irrelevant",
-          "reason": "Different format (drink powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried tangerines",
-          "category": "Irrelevant",
-          "reason": "Different product (tangerines).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic dried fruit powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic fruit powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "raspberries dried",
-          "category": "Irrelevant",
-          "reason": "Different product (raspberries).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried banana chips",
-          "category": "Irrelevant",
-          "reason": "Different product (bananas).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic freeze dried fruit powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dehydrated strawberry powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried fruit powders",
-          "category": "Irrelevant",
-          "reason": "Different format (powders).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried berry powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried mango chips",
-          "category": "Irrelevant",
-          "reason": "Different product (mango).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "natural sins mango chips",
-          "category": "Branded",
-          "reason": "Contains brand name 'Natural Sins'.",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dehydrated fruit powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried fruit powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "mango chips",
-          "category": "Irrelevant",
-          "reason": "Different product (mango).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "pineapple chips",
-          "category": "Irrelevant",
-          "reason": "Different product (pineapple).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry powder organic",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "mango dried fruit",
-          "category": "Irrelevant",
-          "reason": "Different product (mango).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried mango snack packs",
-          "category": "Irrelevant",
-          "reason": "Different product (mango).",
-          "relevancy_score": 4,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried mango individual packs",
-          "category": "Irrelevant",
-          "reason": "Different product (mango).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "banana chip",
-          "category": "Irrelevant",
-          "reason": "Different product (banana).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic raspberry powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "berry powder organic",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "organic strawberry powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fruit powder",
-          "category": "Irrelevant",
-          "reason": "Different format/category (powders).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried usa",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fruit powder organic",
-          "category": "Irrelevant",
-          "reason": "Different format/category (powders).",
-          "relevancy_score": 2,
-          "intent_score": 0
-        },
-        {
-          "phrase": "powdered strawberry powder",
-          "category": "Irrelevant",
-          "reason": "Different format (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry shortcake freeze dried",
-          "category": "Irrelevant",
-          "reason": "Dessert/treat context, not freeze-dried fruit slices.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried strawberry pieces",
-          "category": "Design-Specific",
-          "reason": "Specifies a distinct cut/format (pieces).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberries frozen",
-          "category": "Irrelevant",
-          "reason": "Different format (frozen, not freeze-dried).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "augason farms strawberries",
-          "category": "Branded",
-          "reason": "Contains brand name 'Augason Farms'.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "frozen strawberries",
-          "category": "Irrelevant",
-          "reason": "Different format (frozen, not freeze-dried).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried strawberry shortcake",
-          "category": "Irrelevant",
-          "reason": "Dessert/treat context, not freeze-dried fruit slices.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry baking chips",
-          "category": "Irrelevant",
-          "reason": "Different product (baking chips).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "frozen strawberry",
-          "category": "Irrelevant",
-          "reason": "Different format (frozen, not freeze-dried).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried jackfruit",
-          "category": "Irrelevant",
-          "reason": "Different product (jackfruit).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "stawberry fruit",
-          "category": "Irrelevant",
-          "reason": "Generic fresh strawberry term, not freeze-dried product.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "frozen friit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried fruit for baking",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/uses.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fruit powder for drinks",
-          "category": "Irrelevant",
-          "reason": "Different format/category (powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fraunitsh",
-          "category": "Irrelevant",
-          "reason": "Input keyword was empty, missing, or malformed.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry ma",
-          "category": "Irrelevant",
-          "reason": "Input keyword was empty, missing, or malformed.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry crunch",
-          "category": "Irrelevant",
-          "reason": "Dessert/topping context, not freeze-dried fruit slices.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried black currants",
-          "category": "Irrelevant",
-          "reason": "Different product (black currants).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "blackcurrant",
-          "category": "Irrelevant",
-          "reason": "Different product (black currants).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry shortcake crumbles",
-          "category": "Irrelevant",
-          "reason": "Dessert/topping context, not freeze-dried fruit slices.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dehydrated corn",
-          "category": "Irrelevant",
-          "reason": "Different product (corn).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "trystrawberry",
-          "category": "Irrelevant",
-          "reason": "Input keyword was empty, missing, or malformed.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "black currant dried fruit",
-          "category": "Irrelevant",
-          "reason": "Different product (black currants).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried jackfruit chips",
-          "category": "Irrelevant",
-          "reason": "Different product (jackfruit).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried corn powder",
-          "category": "Irrelevant",
-          "reason": "Different product/format (corn powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried corn kernels for salad",
-          "category": "Irrelevant",
-          "reason": "Different product (corn kernels).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry crunch crumbles",
-          "category": "Irrelevant",
-          "reason": "Dessert/topping context, not freeze-dried fruit slices.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "cantaloupe fresh",
-          "category": "Irrelevant",
-          "reason": "Different format (fresh, not freeze-dried).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried currants for baking",
-          "category": "Irrelevant",
-          "reason": "Different product (currants).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "sweet dried corn",
-          "category": "Irrelevant",
-          "reason": "Different product (corn).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "grosella negra",
-          "category": "Spanish",
-          "reason": "Non-English (Spanish) term for black currant.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried kiwi",
-          "category": "Irrelevant",
-          "reason": "Different product (kiwi).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried kiwi slices",
-          "category": "Irrelevant",
-          "reason": "Different product (kiwi).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "pineapple lumps",
-          "category": "Irrelevant",
-          "reason": "Different product (candy/other fruit).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried corn kernels",
-          "category": "Irrelevant",
-          "reason": "Different product (corn).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried corn",
-          "category": "Irrelevant",
-          "reason": "Different product (corn).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "currants dried fruit",
-          "category": "Irrelevant",
-          "reason": "Different product (currants).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberry boba powder",
-          "category": "Irrelevant",
-          "reason": "Different format (beverage powder).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "corn frozen",
-          "category": "Irrelevant",
-          "reason": "Different product (corn).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "mix vegetable frozen",
-          "category": "Irrelevant",
-          "reason": "Different product (mixed vegetables).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried jackfruit",
-          "category": "Irrelevant",
-          "reason": "Different product (jackfruit).",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fresas frescas",
-          "category": "Spanish",
-          "reason": "Non-English (Spanish) term for fresh strawberries.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "strawberrie",
-          "category": "Relevant",
-          "reason": "Misspelling of strawberry; related to the product.",
-          "relevancy_score": 3,
-          "intent_score": 0
+          "reason": "Generic term, very broad, not specific to the product context.",
+          "relevancy_score": 2,
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 642,
+          "cpr": 10,
+          "competition": {
+            "competing_products": 516,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 49.0,
+            "competitor_performance_score": 6.0
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Outlier/broad term; TD=0 but not specific to product."
         },
         {
           "phrase": "freeze dried raspberries for baking",
           "category": "Irrelevant",
-          "reason": "Different product (raspberries).",
+          "reason": "Describes a different product ('raspberries'), not matching slices.",
           "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "freeze dried mixed berries",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many berry mixes.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried fruit for drinks",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/uses.",
-          "relevancy_score": 3,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 1,
+          "search_volume": 426,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 208,
+            "ranking_competitors": 6,
+            "competitor_rank_avg": 104.0,
+            "competitor_performance_score": 2.0
+          },
+          "root": "raspberry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "Irrelevant product (raspberries), despite low title density."
         },
         {
           "phrase": "dried fruit for oatmeal",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/uses.",
+          "category": "Irrelevant",
+          "reason": "Describes a different type, 'dried fruit', which does not match slices form.",
           "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "frozen fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "fruta deshidratada",
-          "category": "Spanish",
-          "reason": "Non-English (Spanish) term for dehydrated fruit.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "frizen fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 3,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 273,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 1000,
+            "ranking_competitors": 4,
+            "competitor_rank_avg": 135.8,
+            "competitor_performance_score": 1.6
+          },
+          "root": "fruit",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but irrelevant to the specific product."
         },
         {
           "phrase": "dry berries",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many berry types.",
-          "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dragon fruit dried",
           "category": "Irrelevant",
-          "reason": "Different product (dragon fruit).",
+          "reason": "Describes 'berries', which does not specify slices.",
           "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dried dragon fruit",
-          "category": "Irrelevant",
-          "reason": "Different product (dragon fruit).",
-          "relevancy_score": 3,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 130,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 3,
+            "competitor_rank_avg": 150.3,
+            "competitor_performance_score": 1.2
+          },
+          "root": "berry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but broad/irrelevant; ignore."
         },
         {
           "phrase": "fruit berries",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
+          "category": "Irrelevant",
+          "reason": "Describes 'berries', which does not specify slices.",
           "relevancy_score": 3,
-          "intent_score": 0
-        },
-        {
-          "phrase": "dehydrated fruit",
-          "category": "Outlier",
-          "reason": "Very broad generic term covering many products/varieties.",
-          "relevancy_score": 3,
-          "intent_score": 0
+          "intent_score": 5,
+          "title_density": 0,
+          "search_volume": 298,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 20000,
+            "ranking_competitors": 2,
+            "competitor_rank_avg": 140.5,
+            "competitor_performance_score": 0.8
+          },
+          "root": "berry",
+          "opportunity_decision": "ignore",
+          "opportunity_reason": "TD=0 but broad/irrelevant; ignore."
         }
       ],
       "stats": {
         "Relevant": {
-          "count": 36,
-          "examples": []
+          "count": 27,
+          "examples": [
+            "strawberry freeze dried",
+            "strawberries freeze dried"
+          ]
         },
         "Design-Specific": {
-          "count": 11,
+          "count": 0,
           "examples": []
         },
         "Irrelevant": {
-          "count": 199,
-          "examples": []
+          "count": 31,
+          "examples": [
+            "dry strawberry fruit",
+            "dried strawberry"
+          ]
         },
         "Branded": {
-          "count": 68,
+          "count": 0,
           "examples": []
         },
         "Spanish": {
-          "count": 7,
+          "count": 0,
           "examples": []
         },
         "Outlier": {
-          "count": 48,
-          "examples": []
+          "count": 1,
+          "examples": [
+            "so natural freeze dried fruit"
+          ]
         }
       }
     },
     "source": "keyword_agent",
-    "total_keywords": 369,
+    "total_keywords": 67,
     "scraped_product": {
       "url": "https://www.amazon.com/dp/B0D5BL35MS",
       "status": 200,
-      "response_size": 1304345,
+      "response_size": 1691515,
       "elements": {
         "productTitle": {
           "present": true,
@@ -2680,7 +969,7 @@
             "Manufacturer ‏ : ‎": "Brewer Outdoor Solutions",
             "ASIN ‏ : ‎": "B0D5BL35MS",
             "Units ‏ : ‎": "4.8 Ounce",
-            "Best Sellers Rank": "#37,451 in Grocery & Gourmet Food ( See Top 100 in Grocery & Gourmet Food ) #115 in Dried Berries",
+            "Best Sellers Rank": "#31,559 in Grocery & Gourmet Food ( See Top 100 in Grocery & Gourmet Food ) #91 in Dried Berries",
             "Customer Reviews": "4.3 out of 5 stars 97 ratings"
           }
         },
@@ -2754,81 +1043,75 @@
           "content": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) Organic Freeze Dried Strawberries No Sugar Added, Dry Strawberry Gluten Free Fruit Snack for Baking, Smoothies, Cereals & Travel",
           "keywords_found": [
             "organic freeze dried strawberries",
+            "freeze dried strawberries slices",
             "bulk freeze dried strawberries",
-            "freeze dried strawberries",
-            "dried strawberries no sugar added",
-            "dried strawberries",
-            "strawberrie",
-            "freeze dried strawberries slices"
+            "freeze dried strawberries"
           ],
-          "keyword_count": 7,
+          "keyword_count": 4,
           "character_count": 199,
-          "keyword_density": 4.02,
+          "keyword_density": 5.53,
           "opportunities": [
             "strawberry freeze dried",
-            "strawberries freeze dried",
-            "dried freeze strawberries",
-            "freeze dried strawberries bulk",
-            "freeze dried strawberry"
-          ]
+            "freeze dried strawberry",
+            "freeze dry strawberry",
+            "freeze dry strawberries",
+            "freeze dried strawberries freeze-dried strawberries slices"
+          ],
+          "total_search_volume": 35402
         },
         "bullets_analysis": [
           {
             "content": "Delicious Flavor in Every Bite: Savor the naturally sweet, tangy crunch of freeze dried strawberry slices bursting with real fruit flavor. Enjoy Strawberry freeze dried as a fruity boost or add it to oatmeal, yogurt, smoothies, or desserts.",
             "keywords_found": [
+              "freeze dried strawberry slices",
               "strawberry freeze dried",
               "freeze dried strawberry",
-              "dried strawberry",
-              "freeze dried strawberry slices",
               "dried strawberry slices"
             ],
-            "keyword_count": 5,
+            "keyword_count": 4,
             "character_count": 240,
-            "keyword_density": 2.08,
+            "keyword_density": 3.75,
             "opportunities": [
-              "strawberries freeze dried",
-              "dried freeze strawberries",
               "freeze-dried strawberries",
               "freeze dried strawberries bulk",
-              "freezedried strawberry"
-            ]
+              "freeze dried strawberries organic",
+              "freeze dry strawberry",
+              "freeze dry strawberries"
+            ],
+            "total_search_volume": 2339
           },
           {
             "content": "Ideal Travel Companion: Lightweight, mess-free, and shelf-stable, our freeze dried strawberries bulk are perfect for hiking or camping, backpacking adventures. Enjoy this organic freeze dried fruit straight from the pouch or rehydrate for a fresh fruity treat.",
             "keywords_found": [
               "freeze dried strawberries bulk",
-              "freeze dried strawberries",
-              "dried strawberries bulk",
-              "dried strawberries",
-              "strawberrie"
+              "freeze dried strawberries"
             ],
-            "keyword_count": 5,
+            "keyword_count": 2,
             "character_count": 260,
-            "keyword_density": 2.31,
+            "keyword_density": 3.46,
             "opportunities": [
-              "strawberries freeze dried",
-              "dried freeze strawberries",
-              "freezedried strawberry",
               "freeze dried strawberries organic",
-              "freeze dry strawberry"
-            ]
+              "freeze dry strawberry",
+              "freeze dry strawberries",
+              "freeze dried organic strawberries",
+              "organic freeze dried strawberries"
+            ],
+            "total_search_volume": 31573
           },
           {
             "content": "From Farm to Your Table: Our organic dried strawberries, delivered sun-ripened, farm-fresh, are made from real strawberries. No added sugar, no preservatives or GMOs - all natural dry strawberries with iron to help support immune health with every bite.",
-            "keywords_found": [
-              "dry strawberries",
-              "organic dried strawberries"
-            ],
-            "keyword_count": 2,
+            "keywords_found": [],
+            "keyword_count": 0,
             "character_count": 253,
-            "keyword_density": 0.79,
+            "keyword_density": 0.0,
             "opportunities": [
+              "strawberry freeze dried",
               "strawberries freeze dried",
               "dried freeze strawberries",
               "freeze-dried strawberries",
-              "freezedried strawberry",
-              "freeze dried strawberries organic"
-            ]
+              "freeze dried strawberries bulk"
+            ],
+            "total_search_volume": 0
           },
           {
             "content": "Shelf Life: Our freeze-dried strawberries are at peak flavor for up to 24 months. For the best taste and texture in every bite, please enjoy within two year of purchase at anywhere at anytime.",
@@ -2837,47 +1120,145 @@
             ],
             "keyword_count": 1,
             "character_count": 192,
-            "keyword_density": 0.52,
+            "keyword_density": 3.65,
             "opportunities": [
-              "strawberries freeze dried",
-              "dried freeze strawberries",
-              "freezedried strawberry",
+              "freeze dried strawberries bulk",
               "freeze dried strawberries organic",
-              "freeze dry strawberry"
-            ]
+              "freeze dry strawberry",
+              "freeze dry strawberries",
+              "freeze dried organic strawberries"
+            ],
+            "total_search_volume": 470
           },
           {
             "content": "Bulk Packed for Convenience: Buy in bulk and enjoy premium quality freeze dried strawberries whenever you need them. Great for baking, snacking, or mixing with freeze dried fruit for a refreshing fruit combo.",
             "keywords_found": [],
             "keyword_count": 0,
             "character_count": 208,
+            "keyword_density": 4.33,
+            "opportunities": [
+              "freeze dried strawberries organic",
+              "freeze dry strawberry",
+              "freeze dry strawberries",
+              "freeze dried organic strawberries",
+              "organic freeze dried strawberries"
+            ],
+            "total_search_volume": 0
+          }
+        ],
+        "bullets_analysis_for_display": [
+          {
+            "content": "Delicious Flavor in Every Bite: Savor the naturally sweet, tangy crunch of freeze dried strawberry slices bursting with real fruit flavor. Enjoy Strawberry freeze dried as a fruity boost or add it to oatmeal, yogurt, smoothies, or desserts.",
+            "keywords_found": [
+              "freeze dried strawberry slices",
+              "strawberry freeze dried",
+              "freeze dried strawberry",
+              "dried strawberry slices"
+            ],
+            "keyword_count": 4,
+            "character_count": 240,
+            "keyword_density": 3.75,
+            "opportunities": [
+              "freeze-dried strawberries",
+              "freeze dried strawberries bulk",
+              "freeze dried strawberries organic",
+              "freeze dry strawberry",
+              "freeze dry strawberries"
+            ],
+            "total_search_volume": 34053
+          },
+          {
+            "content": "Ideal Travel Companion: Lightweight, mess-free, and shelf-stable, our freeze dried strawberries bulk are perfect for hiking or camping, backpacking adventures. Enjoy this organic freeze dried fruit straight from the pouch or rehydrate for a fresh fruity treat.",
+            "keywords_found": [
+              "freeze dried strawberries bulk",
+              "freeze dried strawberries"
+            ],
+            "keyword_count": 2,
+            "character_count": 260,
+            "keyword_density": 3.46,
+            "opportunities": [
+              "freeze dried strawberries organic",
+              "freeze dry strawberry",
+              "freeze dry strawberries",
+              "freeze dried organic strawberries",
+              "organic freeze dried strawberries"
+            ],
+            "total_search_volume": 34431
+          },
+          {
+            "content": "From Farm to Your Table: Our organic dried strawberries, delivered sun-ripened, farm-fresh, are made from real strawberries. No added sugar, no preservatives or GMOs - all natural dry strawberries with iron to help support immune health with every bite.",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 253,
             "keyword_density": 0.0,
             "opportunities": [
+              "strawberry freeze dried",
               "strawberries freeze dried",
               "dried freeze strawberries",
-              "freezedried strawberry",
+              "freeze-dried strawberries",
+              "freeze dried strawberries bulk"
+            ],
+            "total_search_volume": 0
+          },
+          {
+            "content": "Shelf Life: Our freeze-dried strawberries are at peak flavor for up to 24 months. For the best taste and texture in every bite, please enjoy within two year of purchase at anywhere at anytime.",
+            "keywords_found": [
+              "freeze-dried strawberries"
+            ],
+            "keyword_count": 1,
+            "character_count": 192,
+            "keyword_density": 3.65,
+            "opportunities": [
+              "freeze dried strawberries bulk",
               "freeze dried strawberries organic",
-              "freeze dry strawberry"
-            ]
+              "freeze dry strawberry",
+              "freeze dry strawberries",
+              "freeze dried organic strawberries"
+            ],
+            "total_search_volume": 33040
+          },
+          {
+            "content": "Bulk Packed for Convenience: Buy in bulk and enjoy premium quality freeze dried strawberries whenever you need them. Great for baking, snacking, or mixing with freeze dried fruit for a refreshing fruit combo.",
+            "keywords_found": [
+              "freeze dried strawberries"
+            ],
+            "keyword_count": 1,
+            "character_count": 208,
+            "keyword_density": 4.33,
+            "opportunities": [
+              "freeze dried strawberries organic",
+              "freeze dry strawberry",
+              "freeze dry strawberries",
+              "freeze dried organic strawberries",
+              "organic freeze dried strawberries"
+            ],
+            "total_search_volume": 34431
           }
         ],
         "backend_keywords": [],
         "keyword_coverage": {
-          "total_keywords": 47,
-          "covered_keywords": 17,
-          "coverage_percentage": 36.2,
-          "missing_high_intent": [],
+          "total_keywords": 18,
+          "covered_keywords": 10,
+          "coverage_percentage": 55.6,
+          "missing_high_intent": [
+            "strawberries freeze dried",
+            "dried freeze strawberries",
+            "freeze dried strawberries organic",
+            "freeze dry strawberry",
+            "freeze dry strawberries",
+            "freeze dried organic strawberries",
+            "free dried strawberries",
+            "freeze dried strawberries freeze-dried strawberries slices"
+          ],
           "missing_high_volume": []
         },
         "root_coverage": {
           "total_roots": 1,
-          "covered_roots": 0,
-          "coverage_percentage": 0.0,
-          "missing_roots": [
-            "strawberry"
-          ],
+          "covered_roots": 1,
+          "coverage_percentage": 100.0,
+          "missing_roots": [],
           "root_volumes": {
-            "strawberry": 47
+            "strawberry": 38444
           }
         },
         "total_character_usage": {
@@ -2890,151 +1271,155 @@
       },
       "optimized_seo": {
         "optimized_title": {
-          "content": "Freezer Dried Strawberries, Freeze-Dried Strawberries Slices - No Additives, Natural Ingredients, Pack of 4 (1.2 Oz Each) for Baking, Smoothies, Cereal, and Travel",
-          "keywords_included": [],
+          "content": "Organic Freeze Dried Strawberry Slices - Pack of 4 (1.2 Oz Each) | No Sugar Added, Gluten Free Natural Snack | Perfect for Baking, Smoothies, Travel",
+          "keywords_included": [
+            "organic freeze dried strawberries",
+            "freeze dried strawberries organic",
+            "freeze dried organic strawberries",
+            "freeze dried strawberries slices",
+            "freeze dried strawberry slices",
+            "freeze dried strawberries",
+            "strawberries freeze dried",
+            "dried freeze strawberries",
+            "freeze dried strawberry",
+            "strawberry freeze dried",
+            "dried strawberry slices",
+            "free dried strawberries"
+          ],
           "improvements": [
             "Amazon Guidelines Compliant",
-            "80-char optimized: Freezer Dried Strawberries, Freeze-Dried Strawberr...",
+            "80-char optimized: Organic Freeze Dried Strawberry Slices - Pack of 4...",
             "Main root included: True",
             "Design root included: True"
           ],
-          "character_count": 163
+          "character_count": 148,
+          "total_search_volume": 35880
         },
         "optimized_bullets": [
           {
-            "content": "PURE INGREDIENTS, NO ADDITIVES: Made from 100% freezer dried strawberries with nothing added for a clean, fruity crunch. Our freeze dried strawberries freeze-dried strawberries slices deliver strawberry flavor and color ideal for snacking or topping.",
+            "content": "NATURAL INGREDIENTS: Discover our freeze dried strawberries freeze-dried strawberries slices made for nature lovers",
             "keywords_included": [
-              "freezer dried strawberries",
-              "freeze dried strawberries freeze-dried strawberries slices"
-            ],
-            "improvements": [
-              "Benefit-focused: Clean ingredients",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 252
-          },
-          {
-            "content": "VERSATILE FOR MEALS AND BAKING: Use dried strawberries to elevate cereal, yogurt, and desserts, or fold dried strawberry slices into batters and trail mixes. Lightweight pouches keep the fruit crisp for smoothies, decorating, or lunchboxes.",
-            "keywords_included": [
-              "dried strawberries",
-              "dried strawberry slices"
-            ],
-            "improvements": [
-              "Benefit-focused: Versatility",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 226
-          },
-          {
-            "content": "CRISP, UNIFORM SLICES: Thin freeze dried strawberries slices add bakery-style texture without moisture. Keep freeze dried strawberry slices on hand for quick toppings, camping snacks, and smoothie bowls while maintaining bright flavor and nutrients.",
-            "keywords_included": [
+              "freeze dried strawberries freeze-dried strawberries slices",
               "freeze dried strawberries slices",
-              "freeze dried strawberry slices"
+              "freeze dried strawberry slices",
+              "freeze dried strawberries",
+              "freeze-dried strawberries",
+              "strawberries freeze dried",
+              "dried freeze strawberries",
+              "freeze dried strawberry",
+              "strawberry freeze dried",
+              "dried strawberry slices",
+              "free dried strawberries"
             ],
             "improvements": [
-              "Benefit-focused: Texture and convenience",
+              "Benefit-focused: Natural ingredients",
               "Guideline compliant: PASS"
             ],
-            "character_count": 230
+            "character_count": 115,
+            "total_search_volume": 34624
           },
           {
-            "content": "FREEZE-DRIED, NOT CHEWY: Sometimes called dehydrated strawberry slices or dehydrated strawberries sliced, ours are freeze-dried for superior crunch, long shelf life, and fast rehydration - ideal for pantry storage, emergency kits, and on-the-go snacking.",
-            "keywords_included": [
-              "dehydrated strawberry slices",
-              "dehydrated strawberries sliced"
-            ],
+            "content": "EASY TO USE: Perfect dried strawberry slices for quick snacking, baking, or adding to cereals and smoothies",
+            "keywords_included": [],
             "improvements": [
-              "Benefit-focused: Shelf life and quality",
+              "Benefit-focused: Convenience",
               "Guideline compliant: PASS"
             ],
-            "character_count": 240
+            "character_count": 107,
+            "total_search_volume": 355
           },
           {
-            "content": "CLEAR FORMAT, STRAWBERRIES ONLY: Not frozen sliced strawberries and not freeze dried apple - just premium sliced strawberries. A healthy choice made with natural ingredients for clean snacking, travel convenience, and easy portion control.",
+            "content": "HEALTHY SNACKING: Enjoy freeze dried strawberries bulk with no added sugar for guilt-free treats",
             "keywords_included": [
-              "frozen sliced strawberries",
-              "freeze dried apple"
+              "freeze dried strawberries bulk",
+              "bulk freeze dried strawberries"
             ],
             "improvements": [
-              "Benefit-focused: Clarity and health",
+              "Benefit-focused: Healthy choice",
               "Guideline compliant: PASS"
             ],
-            "character_count": 217
+            "character_count": 96,
+            "total_search_volume": 34431
+          },
+          {
+            "content": "ON-THE-GO ENERGY: Keep your energy up with organic freeze dried strawberries perfect for travel",
+            "keywords_included": [
+              "organic freeze dried strawberries",
+              "freeze dried strawberries organic",
+              "freeze dried organic strawberries"
+            ],
+            "improvements": [
+              "Benefit-focused: Energy boost",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 95,
+            "total_search_volume": 34867
+          },
+          {
+            "content": "LONG LASTING: Our freeze dried organic strawberries have a shelf life of up to 24 months, ensuring freshness",
+            "keywords_included": [],
+            "improvements": [
+              "Benefit-focused: Longevity",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 108,
+            "total_search_volume": 34397
           }
         ],
         "optimized_backend_keywords": [
+          "freeze dried strawberries slices",
           "strawberry freeze dried",
-          "freezedried strawberry",
-          "strawberry chips",
-          "strawberries freeze dried",
-          "dried freeze strawberries",
-          "freeze dried strawberries bulk",
-          "freeze dried strawberries organic",
-          "freeze dry strawberry",
           "freeze dry strawberries",
-          "freeze dried organic strawberries",
-          "free dried strawberries"
+          "freeze dried strawberries organic",
+          "strawberries freeze dried",
+          "bulk freeze dried strawberries",
+          "dried freeze strawberries"
         ],
         "keyword_strategy": {
           "amazon_compliance": "ENFORCED",
-          "first_80_optimization": "Placed main root 'freezer dried strawberries', design root 'freeze-dried strawberries slices', and the key benefit 'No Additives' within the first 80 characters for mobile impact.",
-          "keyword_integration": "Evenly distributed all bullet keywords (2 per bullet) with natural phrasing and customer-centric benefits focused on purity, versatility, texture, shelf life, and clarity.",
+          "first_80_optimization": "Included main root 'freeze dried strawberry slices', design root 'slices', and key benefit 'no sugar added' in first 80 characters",
+          "keyword_integration": "Used high-value keywords naturally with strong conversion benefits",
           "guideline_compliance": "STRICT"
         },
-        "rationale": "Task 7 Amazon Guidelines Compliance Applied: Maintained Title Case, avoided promotional/subjective language and disallowed characters, and emphasized accurate product attributes for Amazon compliance.. First 80 characters optimized for mobile viewing with main and design-specific keyword roots. All content verified for Amazon policy compliance."
+        "rationale": "Task 7 Amazon Guidelines Compliance Applied: Followed Amazon guidelines strictly while highlighting natural benefits. First 80 characters optimized for mobile viewing with main and design-specific keyword roots. All content verified for Amazon policy compliance."
       },
       "comparison": {
         "coverage_improvement": {
-          "total_keywords": 47,
-          "before_covered": 17,
-          "after_covered": 31,
-          "before_coverage_pct": 36.17,
-          "after_coverage_pct": 65.96,
-          "delta_pct_points": 29.79,
+          "total_keywords": 18,
+          "before_covered": 15,
+          "after_covered": 16,
+          "before_coverage_pct": 83.33,
+          "after_coverage_pct": 88.89,
+          "delta_pct_points": 5.56,
           "new_keywords_added": [
-            "dehydrated strawberries",
-            "dehydrated strawberries sliced",
-            "dehydrated strawberry",
-            "dehydrated strawberry slices",
-            "dried freeze strawberries",
-            "dried strawberries organic",
-            "free dried strawberries",
-            "freeze dried organic strawberries",
             "freeze dried strawberries freeze-dried strawberries slices",
-            "freeze dried strawberries organic",
-            "freeze dry strawberries",
-            "freeze dry strawberry",
-            "freezedried strawberry",
-            "freezer dried strawberries",
-            "sliced strawberries",
-            "strawberries freeze dried",
-            "strawberry chips"
+            "freeze dry strawberries"
           ]
         },
         "intent_improvement": {
-          "high_intent_total": 0,
-          "before_covered": 0,
-          "after_covered": 0,
-          "delta": 0
+          "high_intent_total": 46,
+          "before_covered": 15,
+          "after_covered": 16,
+          "delta": 1
         },
         "volume_improvement": {
-          "estimated_volume_before": 0,
-          "estimated_volume_after": 0,
-          "delta_volume": 0
+          "estimated_volume_before": 37741,
+          "estimated_volume_after": 38147,
+          "delta_volume": 406
         },
         "character_efficiency": {
           "title_limit": 200,
           "title_before": 199,
-          "title_after": 163,
+          "title_after": 148,
           "title_utilization_before_pct": 99.5,
-          "title_utilization_after_pct": 81.5,
+          "title_utilization_after_pct": 74.0,
           "backend_limit": 249,
           "backend_before": 0,
-          "backend_after": 284
+          "backend_after": 197
         },
         "summary_metrics": {
-          "overall_improvement_score": 2.98,
-          "priority_recommendations": 4
+          "overall_improvement_score": 1.06,
+          "priority_recommendations": 1
         }
       },
       "product_context": {
@@ -3043,33 +1428,33 @@
         "category": "Unknown"
       },
       "analysis_metadata": {
-        "total_keywords_analyzed": 369,
-        "relevant_keywords_count": 36,
-        "high_intent_keywords_count": 0,
+        "total_keywords_analyzed": 46,
+        "relevant_keywords_count": 18,
+        "high_intent_keywords_count": 46,
         "optimization_method": "ai"
       }
     },
     "summary": {
-      "current_coverage": "36.2%",
-      "optimization_opportunities": 0,
+      "current_coverage": "55.6%",
+      "optimization_opportunities": 8,
       "method": "ai"
     }
   },
   "keyword_root_optimization": {
     "analysis_summary": {
-      "total_keywords_processed": 506,
+      "total_keywords_processed": 81,
       "total_roots_identified": 267,
       "meaningful_roots": 267,
       "priority_roots_selected": 30
     },
     "efficiency_metrics": {
-      "original_keywords": 506,
+      "original_keywords": 81,
       "meaningful_roots": 267,
       "priority_roots": 30,
-      "reduction_percentage": 94.1,
-      "efficiency_gain": "94.1%",
-      "memory_optimization": "~94% reduction in contextual memory usage",
-      "api_optimization": "Reduced Amazon search calls from 506 to 30"
+      "reduction_percentage": 63.0,
+      "efficiency_gain": "63.0%",
+      "memory_optimization": "~63% reduction in contextual memory usage",
+      "api_optimization": "Reduced Amazon search calls from 81 to 30"
     },
     "priority_roots": [
       "strawberry",
@@ -3118,16 +1503,16 @@
         "dry"
       ],
       "optimization_notes": [
-        "Process 30 root terms instead of 506 individual keywords",
+        "Process 30 root terms instead of 81 individual keywords",
         "Focus Amazon searches on: strawberry, freeze, dried, bulk, freez",
-        "Achieved 94.1% reduction in keyword complexity"
+        "Achieved 63.0% reduction in keyword complexity"
       ]
     }
   },
   "source": "amazon_sales_intelligence_pipeline",
   "monitoring_stats": {
     "overall": {
-      "elapsed_time": 2203.9139721393585,
+      "elapsed_time": 1113.049637079239,
       "total_requests": 0,
       "successful_requests": 0,
       "failed_requests": 0,

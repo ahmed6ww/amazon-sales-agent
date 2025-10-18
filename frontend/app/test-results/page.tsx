@@ -1165,7 +1165,7 @@ const TestResultsPage = () => {
           <div className="md:col-span-2">
             <Section title="Bullet Points (Current vs Optimized)">
               {(() => {
-                const curr = toArr(current_seo?.bullets_analysis);
+                const curr = toArr(current_seo?.bullets_analysis_for_display);
                 const opt = toArr(optimized_seo?.optimized_bullets);
                 const maxLen = Math.max(curr.length, opt.length);
 

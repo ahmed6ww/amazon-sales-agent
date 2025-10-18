@@ -13,6 +13,37 @@ from dataclasses import dataclass, asdict
 
 logger = logging.getLogger(__name__)
 
+
+def strip_markdown_code_fences(text: str) -> str:
+    """
+    Remove markdown code fences from AI output.
+    GPT-4o and gpt-4o-mini often wrap JSON in ```json ... ```
+    
+    Args:
+        text: AI output text that may contain markdown fences
+        
+    Returns:
+        Clean text without markdown fences
+    """
+    if not text:
+        return text
+    
+    text = text.strip()
+    
+    # Remove opening fence: ```json or ```
+    if text.startswith('```'):
+        # Find end of first line
+        first_newline = text.find('\n')
+        if first_newline != -1:
+            text = text[first_newline + 1:]
+    
+    # Remove closing fence: ```
+    if text.endswith('```'):
+        text = text[:-3]
+    
+    return text.strip()
+
+
 @dataclass
 class KeywordRoot:
     """Enhanced keyword root with AI-powered analysis"""
@@ -173,7 +204,7 @@ Return ONLY the JSON response in the exact format specified.
 root_extraction_agent = Agent(
     name="RootExtractionAgent", 
     instructions=ROOT_EXTRACTION_INSTRUCTIONS,
-    model="gpt-5-2025-08-07",
+    model="gpt-4o",  # TASK 5: Changed from gpt-5 for 1.5-2x speed improvement
 )
 
 def extract_roots_ai(
@@ -231,12 +262,15 @@ def extract_roots_ai(
         # Parse AI response
         if isinstance(output, str):
             try:
-                parsed = json.loads(output.strip())
+                # Strip markdown code fences (GPT-4o compatibility)
+                clean_output = strip_markdown_code_fences(output)
+                parsed = json.loads(clean_output)
                 roots_count = len(parsed.get("keyword_roots", {}))
                 logger.info(f"[RootExtractionAgent] AI extracted {roots_count} meaningful roots from {len(keyword_list)} keywords")
                 return parsed
-            except json.JSONDecodeError:
+            except json.JSONDecodeError as e:
                 logger.error(f"[RootExtractionAgent] Failed to parse AI output: {output[:200]}...")
+                logger.error(f"[RootExtractionAgent] JSON decode error: {e}")
                 return _create_fallback_root_analysis(keyword_list)
         
         elif hasattr(output, 'model_dump'):

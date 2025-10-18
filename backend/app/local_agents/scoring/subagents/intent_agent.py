@@ -33,7 +33,7 @@ USER_PROMPT_TEMPLATE = (
 intent_scoring_agent = Agent(
     name="IntentScoringSubagent",
     instructions=INTENT_SCORING_INSTRUCTIONS,
-    model="gpt-5-2025-08-07",
+    model="gpt-4o-mini",  # TASK 5: Changed from gpt-5 for 3-4x speed improvement
     # Let the runner return raw text; ScoringRunner will parse JSON list leniently.
     output_type=None,
 )
