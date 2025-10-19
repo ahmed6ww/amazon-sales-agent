@@ -452,6 +452,16 @@ export const api = {
     revenue_csv?: File;
     design_csv?: File;
   }) => apiClient.amazonSalesIntelligence(request),
+  amazonSalesIntelligenceBackground: (
+    request: {
+      asin_or_url: string;
+      marketplace?: string;
+      main_keyword?: string;
+      revenue_csv?: File;
+      design_csv?: File;
+    },
+    onProgress?: (progress: number, message: string) => void
+  ) => apiClient.amazonSalesIntelligenceBackground(request, onProgress),
 };
 
 export default apiClient;

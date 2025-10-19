@@ -12,6 +12,55 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def strip_markdown_code_fences(text: str) -> str:
+    """
+    Remove markdown code fences and extract pure JSON from AI output.
+    GPT-4o-mini often wraps JSON in ```json ... ``` or adds extra text.
+    
+    Handles:
+    - Markdown code fences: ```json ... ```
+    - Extra text before JSON: "Here's the result: {...}"
+    - Extra text after JSON: "{...} Hope this helps!"
+    
+    Args:
+        text: AI output text that may contain markdown fences or extra commentary
+        
+    Returns:
+        Clean JSON text without markdown fences or extra text
+    """
+    if not text:
+        return text
+    
+    text = text.strip()
+    
+    # Step 1: Remove markdown code fences
+    if text.startswith('```'):
+        # Find end of first line (remove ```json or ``` line)
+        first_newline = text.find('\n')
+        if first_newline != -1:
+            text = text[first_newline + 1:]
+    
+    if text.endswith('```'):
+        text = text[:-3]
+    
+    text = text.strip()
+    
+    # Step 2: Extract JSON if there's extra text before/after
+    # Look for JSON array [...] or object {...}
+    import re
+    
+    # Try to find complete JSON structure
+    # This regex finds the outermost JSON array or object
+    json_match = re.search(r'(\[[\s\S]*\]|\{[\s\S]*\})', text)
+    if json_match:
+        extracted = json_match.group(1).strip()
+        # Only return extracted JSON if it's substantial (not just empty brackets)
+        if len(extracted) > 2:
+            return extracted
+    
+    # If no JSON pattern found, return cleaned text as-is
+    return text
+
 ROOT_RELEVANCE_INSTRUCTIONS = """
 You are a Root Relevance Analysis Expert specializing in determining which keyword roots should contribute to broad search volume calculations for Amazon SEO.
 
@@ -167,12 +216,14 @@ def analyze_root_relevance_ai(keywords: List[Dict[str, Any]]) -> Dict[str, Any]:
         # Parse AI response
         if isinstance(output, str):
             try:
-                parsed = json.loads(output.strip())
+                cleaned_output = strip_markdown_code_fences(output)
+                parsed = json.loads(cleaned_output)
                 filtered_roots = len(parsed.get("filtered_root_volumes", {}))
                 logger.info(f"[RootRelevanceAgent] AI analyzed {len(keywords)} keywords, filtered to {filtered_roots} relevant roots")
                 return parsed
-            except json.JSONDecodeError:
-                logger.error(f"[RootRelevanceAgent] Failed to parse AI output: {output[:200]}...")
+            except json.JSONDecodeError as e:
+                logger.error(f"[RootRelevanceAgent] Failed to parse AI output: {e}")
+                logger.debug(f"[RootRelevanceAgent] Raw output (first 500 chars): {output[:500]}")
                 # Fallback to no filtering
                 return _create_fallback_analysis(keywords)
         
