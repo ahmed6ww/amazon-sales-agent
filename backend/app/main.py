@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.v1.endpoints import upload, test_research_keywords
+from app.api.v1.endpoints import upload, test_research_keywords, background_jobs
 from app.core.config import settings
 import logging
 
@@ -34,6 +34,7 @@ app.add_middleware(
 # Include the production endpoints only
 app.include_router(upload.router, prefix="/api/v1", tags=["upload"])
 app.include_router(test_research_keywords.router, prefix="/api/v1", tags=["amazon-sales-intelligence"])
+app.include_router(background_jobs.router, prefix="/api/v1", tags=["background-jobs"])
 
 @app.get("/")
 def read_root():

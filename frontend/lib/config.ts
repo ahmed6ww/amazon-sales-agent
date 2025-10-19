@@ -13,6 +13,9 @@ export interface ApiConfig {
     test: string;
     testResearchKeywords: string;
     amazonSalesIntelligence: string;
+    startAnalysis: string;
+    jobStatus: string;
+    jobResults: string;
   };
 }
 
@@ -125,6 +128,9 @@ export const config: AppConfig = {
       test: "/api/v1/test",
       testResearchKeywords: "/api/v1/test-research-keywords",
       amazonSalesIntelligence: "/api/v1/amazon-sales-intelligence",
+      startAnalysis: "/api/v1/start-analysis",
+      jobStatus: "/api/v1/job-status",
+      jobResults: "/api/v1/job-results",
     },
   },
   environment: getEnvironment(),

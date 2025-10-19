@@ -211,7 +211,7 @@ def process_keywords_in_batches(
 def optimize_keyword_processing_for_agents(
     revenue_keywords: List[str],
     design_keywords: List[str],
-    batch_size: int = 50
+    batch_size: int = 500
 ) -> Dict[str, Any]:
     """
     Optimized keyword processing specifically for the agent workflow.
@@ -220,7 +220,7 @@ def optimize_keyword_processing_for_agents(
     Args:
         revenue_keywords: Keywords from revenue CSV
         design_keywords: Keywords from design CSV  
-        batch_size: Batch size for processing
+        batch_size: Batch size for processing (default 500 for 10x faster processing)
         
     Returns:
         Optimized analysis results for agent consumption

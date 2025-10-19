@@ -52,8 +52,11 @@ class Settings:
         self.ENABLE_OPENAI_MONITORING: bool = os.getenv("ENABLE_OPENAI_MONITORING", "true").lower() == "true"
         self.LOG_DETAILED_STATS: bool = os.getenv("LOG_DETAILED_STATS", "true").lower() == "true"
         
-        # Legacy Keyword Processing (kept for backward compatibility)
-        self.KEYWORD_BATCH_SIZE: int = int(os.getenv("KEYWORD_BATCH_SIZE", "2000"))  # Process all keywords in one batch for quick testing
+        # Keyword Processing Configuration
+        # Batch size for root extraction and keyword processing
+        # Higher values = faster processing but more memory usage
+        # Recommended: 500-1000 for optimal balance
+        self.KEYWORD_BATCH_SIZE: int = int(os.getenv("KEYWORD_BATCH_SIZE", "500"))
 
         # Logging Configuration
         self.LOG_LEVEL: str = os.getenv("LOG_LEVEL", "WARNING")  # Changed from INFO to WARNING

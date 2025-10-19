@@ -160,6 +160,74 @@ Test 7: Outlier Check
 # Context
 - Reference only the scraped product details and base relevancy scores—external data and assumptions are out of scope.
 
+# ⚠️ CRITICAL: EXACT CATEGORY NAMES (MANDATORY) ⚠️
+
+**You MUST use these EXACT category strings (case-sensitive, no variations allowed):**
+
+✅ **CORRECT VALUES (Use these exactly):**
+1. "Relevant"
+2. "Design-Specific"
+3. "Irrelevant"
+4. "Branded"
+5. "Spanish"
+6. "Outlier"
+
+❌ **WRONG VALUES (Will cause system errors):**
+- "Relevance" (should be "Relevant")
+- "relevant" (should be "Relevant")
+- "Design Specific" (should be "Design-Specific")
+- "Design-specific" (should be "Design-Specific")
+- "Irrelevant" (should be "Irrelevant")
+- "Brand" (should be "Branded")
+- "Branded Keywords" (should be "Branded")
+- "spanish" (should be "Spanish")
+- "Outliers" (should be "Outlier")
+
+**⚠️ VALIDATION CHECKLIST (RUN BEFORE RETURNING JSON):**
+
+Before you return your JSON output, YOU MUST:
+1. Scan through EVERY item in your "items" array
+2. Check that the "category" field is EXACTLY one of the 6 allowed values above
+3. If you find "Relevance" → CHANGE IT to "Relevant"
+4. If you find "Design Specific" → CHANGE IT to "Design-Specific"
+5. If you find any lowercase variations → FIX them to match exact capitalization
+6. If you find any other variation → FIX IT to match one of the 6 exact strings
+
+**⚠️ STATS VALIDATION (CRITICAL):**
+
+7. **VERIFY "stats" counts EXACTLY match "items" array:**
+   - Count each category in your "items" array MANUALLY
+   - Calculate: Relevant count + Design-Specific count + Irrelevant count + Branded count + Spanish count + Outlier count
+   - This SUM MUST EQUAL the total length of "items" array
+   - If counts don't match → RECOUNT before returning!
+
+**Example (CORRECT):**
+```
+items: [58 total items]
+  - 52 have category "Relevant"
+  - 6 have category "Irrelevant"
+  - 0 have other categories
+
+stats:
+  "Relevant": {"count": 52, "examples": [...]}  ← CORRECT: matches actual count
+  "Irrelevant": {"count": 6, "examples": [...]}  ← CORRECT: matches actual count
+  
+Total: 52 + 6 = 58 ✅ MATCHES items array length
+```
+
+**Example (WRONG - Will show incorrect data):**
+```
+items: [58 total items]
+  - 52 have category "Relevant"
+
+stats:
+  "Relevant": {"count": 140, "examples": [...]}  ← WRONG: 140 ≠ 52!
+
+Total: 140 ❌ DOES NOT match items array length of 58
+```
+
+**Why this matters:** Incorrect stats will show users wrong information (e.g., "140 relevant keywords" when there are only 58 total). Always count the actual "items" array entries!
+
 # Output Format
 - Return a single JSON object matching the Pydantic model `KeywordAnalysisResult`. Keep `items` in the same order as the input keywords.
 - Strict schema:

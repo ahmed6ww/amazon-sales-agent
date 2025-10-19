@@ -63,7 +63,7 @@ NOTE: This instruction is now enhanced with AI-powered Task 13 filtering for bet
 broad_volume_agent = Agent(
     name="BroadVolumeSubagent",
     instructions=BROAD_VOLUME_INSTRUCTIONS,
-    model="gpt-5-2025-08-07",
+    model="gpt-4o-mini",
 )
 
 # Common stopwords for root word extraction
