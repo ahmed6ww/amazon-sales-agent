@@ -517,30 +517,42 @@ When building your title, use this process:
 
 **TASK 4 - BULLET POINT RULES (MANDATORY):**
 
-### RULE 1: NO TITLE REDUNDANCY (REQUIREMENT 4 - CRITICAL)
-**Bullets must add NEW keywords, not repeat title keywords!**
+### RULE 1: NO TITLE REDUNDANCY (CRITICAL - PREVENTS EMPTY BULLETS!)
 
-**The title will contain certain keywords - DO NOT repeat them in bullets!**
+**❌ NEVER use ONLY title keywords in bullets - you MUST add unique keywords!**
 
-**Why:** Each bullet should maximize keyword coverage by introducing NEW search terms. Repeating title keywords wastes valuable bullet space and reduces overall SEO effectiveness.
+**Why this matters:**
+- Title keywords CAN appear in bullets (they'll show with yellow warning badges)
+- BUT each bullet MUST have 2-3 UNIQUE keywords that are NOT in the title
+- If you only use title keywords, the bullet will show 0 unique keywords and 0 search volume!
 
-**Strategy:**
-- Title covers: High-volume primary keywords
-- Bullets should cover: Secondary keywords, long-tail variations, use-case specific terms
+**✅ CORRECT Approach:**
+```
+Title keywords: ["freeze dried strawberries", "organic"]
+Bullet 1: ["freeze dried strawberries", "healthy snack", "natural fruit"]
+  - Has title keyword "freeze dried strawberries" (yellow badge - okay!)
+  - Has 2 unique keywords: "healthy snack", "natural fruit" (blue badges - counted!)
+  - Result: 2 unique keywords, positive search volume ✅
 
-**Example:**
-Title uses: ["freeze dried strawberry slices", "organic", "no sugar added"]
-Bullets should use: ["healthy snack", "natural fruit", "kids lunch", "travel food"] ← ALL NEW!
+Bullet 2: ["organic", "kids lunch", "travel food"]
+  - Has title keyword "organic" (yellow badge - okay!)
+  - Has 2 unique keywords: "kids lunch", "travel food" (blue badges - counted!)
+  - Result: 2 unique keywords, positive search volume ✅
+```
 
-❌ WRONG - Repeating title keywords:
-Title: "Organic Freeze Dried Strawberry Slices..."
-Bullet 1: "Made from organic freeze dried strawberries..." ← REPEATS "organic freeze dried"!
-Bullet 2: "Perfect strawberry slices for snacking..." ← REPEATS "strawberry slices"!
+**❌ WRONG Approach (Will fail!):**
+```
+Title keywords: ["freeze dried strawberries", "organic"]
+Bullet 1: ["freeze dried strawberries", "organic", "strawberries freeze dried"]
+  - ALL keywords are from title (all yellow badges!)
+  - NO unique keywords (0 blue badges!)
+  - Result: 0 unique keywords, 0 search volume ❌ EMPTY BULLET!
+```
 
-✅ CORRECT - New keywords in bullets:
-Title: "Organic Freeze Dried Strawberry Slices..."
-Bullet 1: "Made from natural fruit with healthy ingredients..." ← NEW keywords!
-Bullet 2: "Perfect for kids lunch boxes and travel..." ← NEW keywords!
+**VALIDATION RULE:**
+Before returning your JSON, check EVERY bullet:
+- Does this bullet have AT LEAST 2 keywords that are NOT in the title?
+- If NO → FIX IT by adding unique keywords from bullet_keywords list!
 
 ### RULE 2: NATURAL LANGUAGE
 Write benefit-focused sentences, NOT keyword lists:
@@ -1223,40 +1235,25 @@ def apply_amazon_compliance_ai(
     else:
         logger.warning(f"⚠️  [TASK 3] Cannot run deduplication - result missing optimized_title")
     
-    # TASK 4: Remove title keywords from bullets (Original Requirement 4: No Title Redundancy)
-    logger.info(f"🔍 [TASK 4] Checking bullets for title keyword redundancy...")
+    # SAFETY CHECK: Ensure no bullets have empty keywords_included
+    logger.info(f"🔍 [SAFETY CHECK] Validating all bullets have keywords...")
     
-    if result and "optimized_title" in result and "optimized_bullets" in result:
-        optimized_title = result.get("optimized_title", {})
-        title_keywords = optimized_title.get("keywords_included", [])
+    if result and "optimized_bullets" in result:
         optimized_bullets = result.get("optimized_bullets", [])
+        empty_bullets = []
         
-        if title_keywords and optimized_bullets:
-            logger.info(f"   Title keywords to avoid in bullets: {title_keywords}")
-            
-            # Normalize title keywords for comparison
-            title_keywords_lower = {kw.lower() for kw in title_keywords}
-            
-            bullets_modified = False
-            for i, bullet in enumerate(optimized_bullets):
-                bullet_keywords = bullet.get("keywords_included", [])
-                original_keywords = bullet_keywords.copy()
-                
-                # Remove keywords that are in title (Requirement 4: No Title Redundancy)
-                filtered_keywords = [kw for kw in bullet_keywords if kw.lower() not in title_keywords_lower]
-                
-                if len(filtered_keywords) < len(original_keywords):
-                    removed = set(original_keywords) - set(filtered_keywords)
-                    logger.info(f"   Bullet {i+1}: Removed {len(removed)} title keywords: {list(removed)[:3]}{'...' if len(removed) > 3 else ''}")
-                    bullet["keywords_included"] = filtered_keywords
-                    bullets_modified = True
-            
-            if bullets_modified:
-                logger.info(f"✅ [TASK 4] Removed title keywords from bullets to maximize unique coverage")
-            else:
-                logger.info(f"✅ [TASK 4] No title keywords found in bullets - already optimized")
-    else:
-        logger.warning(f"⚠️  [TASK 4] Cannot check bullet redundancy - missing title or bullets")
+        for i, bullet in enumerate(optimized_bullets):
+            keywords = bullet.get("keywords_included", [])
+            if not keywords or len(keywords) == 0:
+                empty_bullets.append(i + 1)
+                logger.error(f"❌ [SAFETY CHECK] Bullet {i+1} has EMPTY keywords_included array!")
+        
+        if empty_bullets:
+            logger.error(f"❌ [SAFETY CHECK] Found {len(empty_bullets)} bullets with empty keywords: {empty_bullets}")
+            logger.error(f"❌ [SAFETY CHECK] This will cause poor statistics and empty UI displays!")
+            logger.warning(f"⚠️  [SAFETY CHECK] AI did not follow OUTPUT VALIDATION rules - keywords missing!")
+        else:
+            logger.info(f"✅ [SAFETY CHECK] All {len(optimized_bullets)} bullets have keywords - validation passed")
     
     logger.info(f"[Task7-AI] Applied Amazon compliance optimization with 80-char focus and {target_bullet_count or 4} bullets")
     

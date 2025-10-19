@@ -71,8 +71,10 @@ interface SEOAnalysis {
     character_count: number;
     primary_benefit: string;
     keywords_included: string[];
+    keywords_duplicated_from_other_bullets?: string[]; // Keywords already in other bullets (yellow badge)
+    unique_keywords_count?: number; // Count of unique keywords (excludes duplicates from other bullets)
     guideline_compliance: string;
-    total_search_volume?: number; // Task 6: Total search volume for this bullet
+    total_search_volume?: number; // Total search volume for unique keywords only
   }>;
   strategy: {
     first_80_optimization: string;
@@ -438,29 +440,57 @@ export default function ResultsDisplay({
                   >
                     <div className="flex items-start justify-between mb-2">
                       <p className="text-sm flex-1">{bullet.content}</p>
-                      {/* Task 6: Display total search volume for this bullet */}
-                      {bullet.total_search_volume !== undefined &&
-                        bullet.total_search_volume > 0 && (
+                      {/* Display unique keywords count and search volume */}
+                      <div className="flex gap-2 ml-2">
+                        {bullet.unique_keywords_count !== undefined && (
                           <Badge
                             variant="secondary"
-                            className="ml-2 bg-blue-100 text-blue-700 border-blue-300"
+                            className="bg-green-100 text-green-700 border-green-300"
+                            title="Keywords unique to this bullet (not in other bullets)"
                           >
-                            <TrendingUp className="h-3 w-3 mr-1" />
-                            {bullet.total_search_volume.toLocaleString()} vol
+                            {bullet.unique_keywords_count} unique
                           </Badge>
                         )}
+                        {bullet.total_search_volume !== undefined &&
+                          bullet.total_search_volume > 0 && (
+                            <Badge
+                              variant="secondary"
+                              className="bg-blue-100 text-blue-700 border-blue-300"
+                              title="Search volume for unique keywords only"
+                            >
+                              <TrendingUp className="h-3 w-3 mr-1" />
+                              {bullet.total_search_volume.toLocaleString()} vol
+                            </Badge>
+                          )}
+                      </div>
                     </div>
                     <div className="flex items-center justify-between">
                       <div className="flex flex-wrap gap-1">
-                        {bullet.keywords_included.map((keyword, idx) => (
-                          <Badge
-                            key={idx}
-                            variant="outline"
-                            className="text-xs"
-                          >
-                            {keyword}
-                          </Badge>
-                        ))}
+                        {bullet.keywords_included.map((keyword, idx) => {
+                          const isDuplicate =
+                            bullet.keywords_duplicated_from_other_bullets?.includes(
+                              keyword
+                            );
+                          return (
+                            <Badge
+                              key={idx}
+                              variant="outline"
+                              className={
+                                isDuplicate
+                                  ? "text-xs bg-yellow-50 text-yellow-700 border-yellow-300"
+                                  : "text-xs bg-blue-50 text-blue-700 border-blue-300"
+                              }
+                              title={
+                                isDuplicate
+                                  ? "Already in another bullet (not counted here)"
+                                  : "Unique to this bullet"
+                              }
+                            >
+                              {isDuplicate && <span className="mr-1">⚠️</span>}
+                              {keyword}
+                            </Badge>
+                          );
+                        })}
                       </div>
                       <Button variant="ghost" size="sm" className="h-6 px-2">
                         <Copy className="h-3 w-3 mr-1" />
