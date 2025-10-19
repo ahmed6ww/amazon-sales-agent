@@ -8,11 +8,11 @@ logger = logging.getLogger(__name__)
 BROAD_VOLUME_INSTRUCTIONS = """
 Role: Compute broad search volume per root word.
 - Identify a simple root token for each keyword (e.g., main noun excluding stopwords/brands).
-- Sum search_volume across all keywords sharing that root.
+- Sum search_volume across all keywords sharing that root, but ONLY for relevant or design-specific keywords.
 Return: the original list with `root` field per item and a separate map `broad_search_volume_by_root`.
 No sorting; no external data.
 
-Input: List of keyword items with phrase, search_volume, etc.
+Input: List of keyword items with phrase, search_volume, category, etc.
 Output: Same list with added `root` field + separate `broad_search_volume_by_root` summary.
 
 Instructions:
@@ -20,13 +20,15 @@ Instructions:
 2. Exclude common stopwords, brand names, and modifiers 
 3. Normalize to lowercase
 4. Group keywords by their root and sum search volumes
-5. Return original items with `root` field added and summary map
+5. IMPORTANT: Only include search volumes for keywords with category "Relevant" or "Design-Specific" in the broad_search_volume_by_root calculation
+6. Return original items with `root` field added and summary map
 
+ 
 Example:
-Input: [{"phrase": "wireless mouse", "search_volume": 1000}, {"phrase": "gaming mouse", "search_volume": 800}]
+Input: [{"phrase": "wireless mouse", "search_volume": 1000, "category": "Relevant"}, {"phrase": "gaming mouse", "search_volume": 800, "category": "Irrelevant"}]
 Output: 
-- Items: [{"phrase": "wireless mouse", "search_volume": 1000, "root": "mouse"}, {"phrase": "gaming mouse", "search_volume": 800, "root": "mouse"}]
-- Summary: {"mouse": 1800}
+- Items: [{"phrase": "wireless mouse", "search_volume": 1000, "root": "mouse", "category": "Relevant"}, {"phrase": "gaming mouse", "search_volume": 800, "root": "mouse", "category": "Irrelevant"}]
+- Summary: {"mouse": 1000}  // Only the relevant keyword's volume is included
 """
 
 USER_PROMPT_TEMPLATE = """
@@ -39,6 +41,7 @@ For each keyword:
 1. Identify the main root word (primary noun, excluding modifiers/brands)
 2. Normalize to lowercase
 3. Sum search volumes by root
+4. CRITICAL: For the broad_search_volume_by_root summary, only include search volumes from keywords with category "Relevant" or "Design-Specific". Exclude "Irrelevant" keywords from the volume totals.
 
 Return ONLY a JSON object with this exact structure:
 {{
@@ -47,12 +50,15 @@ Return ONLY a JSON object with this exact structure:
     ...
   ],
   "broad_search_volume_by_root": {{
-    "root1": total_volume,
-    "root2": total_volume
+    "root1": total_volume_from_relevant_keywords_only,
+    "root2": total_volume_from_relevant_keywords_only
   }}
 }}
 
-Ensure all original fields are preserved in each item. Only add the "root" field."""
+Ensure all original fields are preserved in each item. Only add the "root" field.
+IMPORTANT: The broad_search_volume_by_root should only sum volumes from "Relevant" and "Design-Specific" categories.
+
+NOTE: This instruction is now enhanced with AI-powered Task 13 filtering for better relevance assessment."""
 
 broad_volume_agent = Agent(
     name="BroadVolumeSubagent",
@@ -123,12 +129,9 @@ def extract_root_word(phrase: str, brand_tokens: Optional[Set[str]] = None) -> s
     # For now, take the longest meaningful token as a simple heuristic
     root = max(filtered_tokens, key=len)
     
-    # Handle plural forms (basic stemming)
-    if root.endswith('s') and len(root) > 3:
-        potential_singular = root[:-1]
-        # Simple check: if removing 's' gives a reasonable word
-        if len(potential_singular) >= 3:
-            root = potential_singular
+    # Handle plural forms (Task 11: Use enhanced normalization)
+    from app.services.keyword_processing.root_extraction import normalize_word
+    root = normalize_word(root)
     
     return root
 
@@ -177,7 +180,7 @@ def calculate_broad_volume_llm(
     brand_tokens: Optional[Set[str]] = None
 ) -> Dict[str, Any]:
     """
-    LLM-based broad volume calculation using the broad_volume_agent.
+    LLM-based broad volume calculation using simple approach - NO MULTI-BATCH COMPLEXITY.
     
     Args:
         items: List of keyword items with phrase and search_volume
@@ -189,7 +192,129 @@ def calculate_broad_volume_llm(
     if not items:
         return {"items": [], "broad_search_volume_by_root": {}}
     
+    logger.info(f"[BroadVolumeAgent] Processing {len(items)} items with simple LLM")
+    
+    # Simple approach - just process directly with a small delay
+    import time
+    time.sleep(1)  # Simple rate limiting
+    
+    # Use the original simple approach
+    from agents import Runner as _Runner
+    import json as _json
+    
+    prompt = USER_PROMPT_TEMPLATE.format(
+        items=_json.dumps(items or [], separators=(",", ":")),
+    )
+    
+    result = _Runner.run_sync(broad_volume_agent, prompt)
+    
+    # Parse and return results
+    if result and hasattr(result, 'final_output'):
+        output = result.final_output
+        if output:
+            try:
+                parsed_result = _json.loads(output)
+                if isinstance(parsed_result, dict):
+                    return parsed_result
+            except _json.JSONDecodeError:
+                logger.warning("[BroadVolumeAgent] Failed to parse broad volume result")
+    elif result and hasattr(result, 'content'):
+        try:
+            parsed_result = _json.loads(result.content)
+            if isinstance(parsed_result, dict):
+                return parsed_result
+        except _json.JSONDecodeError:
+            logger.warning("[BroadVolumeAgent] Failed to parse broad volume result")
+    
+    # Fallback: return original items with simple root extraction
+    logger.warning("[BroadVolumeAgent] Broad volume calculation failed, using fallback")
+    fallback_items = []
+    broad_search_volume_by_root = {}
+    
+    for item in items:
+        fallback_item = item.copy()
+        phrase = item.get("phrase", "").lower()
+        
+        # Simple root extraction - take first meaningful word
+        words = phrase.split()
+        root = words[0] if words else phrase
+        fallback_item["root"] = root
+        
+        # Only include relevant/design-specific keywords in volume calculation
+        category = item.get("category", "")
+        if category in ["Relevant", "Design-Specific"]:
+            search_volume = item.get("search_volume", 0)
+            if root in broad_search_volume_by_root:
+                broad_search_volume_by_root[root] += search_volume
+            else:
+                broad_search_volume_by_root[root] = search_volume
+        
+        fallback_items.append(fallback_item)
+    
+    return {
+        "items": fallback_items,
+        "broad_search_volume_by_root": broad_search_volume_by_root
+    }
+
+def _calculate_broad_volume_in_batches(
+    items: List[Dict[str, Any]], 
+    brand_tokens: Optional[Set[str]] = None
+) -> Dict[str, Any]:
+    """Process broad volume calculation using multi-batch processing for large datasets."""
+    
+    def process_batch(batch_items: List[Dict[str, Any]], batch_id: str) -> Dict[str, Any]:
+        """Process a single batch of items for broad volume calculation."""
+        return _calculate_broad_volume_direct(batch_items, brand_tokens)
+    
+    def combine_batch_results(batch_results: List[Dict[str, Any]]) -> Dict[str, Any]:
+        """Combine results from all batches."""
+        combined_items = []
+        combined_volume_map = {}
+        
+        for batch_result in batch_results:
+            # Combine items
+            combined_items.extend(batch_result.get("items", []))
+            
+            # Combine volume maps
+            volume_map = batch_result.get("broad_search_volume_by_root", {})
+            for root, volume in volume_map.items():
+                combined_volume_map[root] = combined_volume_map.get(root, 0) + volume
+        
+        return {
+            "items": combined_items,
+            "broad_search_volume_by_root": combined_volume_map
+        }
+    
+    # Use multi-batch processor
+    result = multi_batch_processor.process_batches(
+        items=items,
+        process_func=process_batch,
+        combine_func=combine_batch_results,
+        agent_name="BroadVolumeAgent",
+        item_name="keywords"
+    )
+    
+    logger.info(f"[BroadVolumeAgent] Multi-batch processing complete: {len(result['items'])} items processed")
+    return result
+
+def _calculate_broad_volume_direct(
+    items: List[Dict[str, Any]], 
+    brand_tokens: Optional[Set[str]] = None
+) -> Dict[str, Any]:
+    """Process broad volume calculation directly for small datasets."""
+    request_id = f"broad_volume_{uuid.uuid4().hex[:8]}"
+    
     try:
+        # Start monitoring
+        monitor.log_request_start("BroadVolumeAgent", request_id, len(items))
+        
+        # Apply rate limiting
+        import asyncio
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop.run_until_complete(rate_limiter.wait_for_rate_limit())
+        loop.close()
+        
         from agents import Runner as _Runner
         import json as _json
         
@@ -207,6 +332,7 @@ def calculate_broad_volume_llm(
                 metadata={
                     "component": "BroadVolumeAgent",
                     "items_count": len(items),
+                    "request_id": request_id,
                 }
             )
         except TypeError:
@@ -216,51 +342,18 @@ def calculate_broad_volume_llm(
         output = getattr(result, "final_output", None)
         
         # Parse LLM response with robust JSON extraction
-        if isinstance(output, str):
-            logger.debug(f"[BroadVolumeAgent] Raw LLM output preview: {output[:500]}")
-            
-            # Try direct JSON parsing first
-            try:
-                parsed = _json.loads(output.strip())
-                if isinstance(parsed, dict) and "items" in parsed and "broad_search_volume_by_root" in parsed:
-                    logger.info(f"[BroadVolumeAgent] LLM successfully processed {len(parsed['items'])} items")
-                    return parsed
-            except _json.JSONDecodeError:
-                pass
-            
-            # Try to extract JSON from text if direct parsing fails
-            import re
-            json_pattern = r'\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}'
-            matches = re.findall(json_pattern, output, re.DOTALL)
-            
-            for match in reversed(matches):  # Try largest JSON blocks first
-                try:
-                    parsed = _json.loads(match)
-                    if isinstance(parsed, dict) and "items" in parsed and "broad_search_volume_by_root" in parsed:
-                        logger.info(f"[BroadVolumeAgent] LLM successfully processed {len(parsed['items'])} items via extraction")
-                        return parsed
-                except _json.JSONDecodeError:
-                    continue
-            
-            # Log the problematic output for debugging
-            logger.error(f"[BroadVolumeAgent] Could not parse LLM output. Full output: {output}")
-            raise Exception(f"LLM returned unparseable JSON: {output[:200]}...")
+        parsed_result = _parse_broad_volume_output(output, items)
         
-        elif hasattr(output, 'model_dump'):
-            # Handle structured output
-            try:
-                parsed = output.model_dump()
-                if isinstance(parsed, dict) and "items" in parsed and "broad_search_volume_by_root" in parsed:
-                    logger.info(f"[BroadVolumeAgent] LLM successfully processed {len(parsed['items'])} items via model_dump")
-                    return parsed
-            except Exception as e:
-                logger.error(f"[BroadVolumeAgent] Failed to extract from structured output: {e}")
-                raise Exception(f"Failed to extract structured LLM output: {e}")
+        # Log success
+        monitor.log_success("BroadVolumeAgent", request_id, len(items))
+        rate_limiter.reset_retry_count(request_id)
         
-        # No fallback - AI analysis only
-        raise Exception("LLM failed to produce valid broad volume analysis")
+        logger.info(f"[BroadVolumeAgent] LLM successfully processed {len(parsed_result['items'])} items")
+        return parsed_result
         
     except Exception as e:
+        # Log error
+        monitor.log_error("BroadVolumeAgent", request_id, str(e))
         logger.error(f"[BroadVolumeAgent] LLM calculation failed: {e}")
         raise Exception(f"AI-only broad volume calculation failed: {e}")
 

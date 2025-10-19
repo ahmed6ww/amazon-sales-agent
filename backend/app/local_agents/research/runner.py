@@ -1,9 +1,23 @@
 from agents import Runner
 from typing import Dict, Any, Optional, List
 from .agent import research_agent
-from .helper_methods import scrape_amazon_listing, select_top_rows, collect_asins, scrape_competitors
+from .helper_methods import (
+    scrape_amazon_listing, 
+    select_top_rows, 
+    collect_asins, 
+    scrape_competitors,
+    filter_keywords_by_original_content,  # NEW: Filter keywords by original content
+    deduplicate_keywords_with_scores      # NEW: Deduplicate keywords with scores
+)
 from app.core.config import settings
 from app.local_agents.scoring.subagents.intent_agent import USER_PROMPT_TEMPLATE
+from app.services.keyword_processing.root_extraction import get_priority_roots_for_search
+from app.services.keyword_processing.batch_processor import (
+    optimize_keyword_processing_for_agents
+)
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class ResearchRunner:
@@ -31,8 +45,8 @@ class ResearchRunner:
             Dict with success flag, analysis text, and raw scraped data
         """
 
-        # 1) Fetch scraped data via helper
-        scraped_result = scrape_amazon_listing(asin_or_url)
+        # 1) Fetch scraped data via helper with marketplace support
+        scraped_result = scrape_amazon_listing(asin_or_url, marketplace)
         if not scraped_result.get("success"):
             return {
                 "success": False,
@@ -43,7 +57,7 @@ class ResearchRunner:
         scraped_data = scraped_result.get("data", {})
 
         # 1.1) Select top competitors and scrape their price/ratings
-        top_n = getattr(settings, "RESEARCH_CSV_TOP_N", 10)
+        top_n = getattr(settings, "RESEARCH_CSV_TOP_N", 200)  # Increased to analyze more keywords
         # Heuristic floors (configurable via settings if present)
         literal_floor = int(getattr(settings, "RESEARCH_LITERAL_FLOOR", 8))  # when literal match is strong
         competitor_floor = int(getattr(settings, "RESEARCH_COMPETITOR_FLOOR", 7))  # when many relevant designs
@@ -100,13 +114,30 @@ class ResearchRunner:
 
         # Compute base relevancy scores from CSVs (fraction of tracked ASINs with rank <= 10)
         def _compute_relevancy_scores(rows: List[Dict[str, Any]], competitor_asins: List[str]) -> Dict[str, int]:
+            """
+            Calculate relevancy score (0-10) based on keyword ranking in top 10 for competitor ASINs.
+            
+            HOW IT WORKS:
+            1. Check each keyword's rank for each competitor ASIN
+            2. Count how many competitors rank in top 10 for this keyword
+            3. Formula: (top10_count / total_asins) * 20, capped at 10
+            
+            EXAMPLE:
+            - Keyword: "freeze dried strawberries"
+            - 5 competitor ASINs analyzed
+            - Ranks in top 10 for: 3 ASINs
+            - Score: (3/5) * 20 = 12 → capped at 10/10
+            
+            WHY *20? To scale 50% performance to ~10/10. If keyword ranks top 10 for half
+            the competitors, it gets high score since that's strong performance.
+            """
             scores: Dict[str, int] = {}
             if not rows or not competitor_asins:
                 return scores
-            asin_set = [a for a in competitor_asins if isinstance(a, str) and len(a) == 10 and a.startswith('B0')][:top_n]
+            asin_set = [a for a in competitor_asins if isinstance(a, str) and len(a) == 10 and a.startswith('B0')]
             if not asin_set:
                 return scores
-            for row in rows[:top_n]:
+            for row in rows:
                 kw = str(row.get('Keyword Phrase', '')).strip()
                 if not kw:
                     continue
@@ -121,7 +152,8 @@ class ResearchRunner:
                             ranks_in_top10 += 1
                     except Exception:
                         continue
-                score10 = int(round((ranks_in_top10 / max(1, len(asin_set))) * 10.0))
+                # Score formula: Scale to 0-10 range (doubled to reward 50%+ performance)
+                score10 = min(10, int(round((ranks_in_top10 / max(1, len(asin_set))) * 20.0)))
                 # Keep max score across revenue/design rows for same keyword
                 scores[kw] = max(scores.get(kw, 0), score10)
             return scores
@@ -172,19 +204,208 @@ class ResearchRunner:
         # Build competitor asin lists from the CSV headers
         def _extract_asins_from_rows(rows: List[Dict[str, Any]]) -> List[str]:
             seen = set()
-            for row in rows[:top_n]:
+            for row in rows:
                 for k in row.keys():
                     if isinstance(k, str) and k.startswith('B0') and len(k) == 10:
                         seen.add(k)
-            # keep stable order limited to top_n
-            out = [a for a in list(seen)][:top_n]
+            # keep stable order for all ASINs
+            out = [a for a in list(seen)]
             return out
 
         rev_asins_list = _extract_asins_from_rows(revenue_csv or [])
         des_asins_list = _extract_asins_from_rows(design_csv or [])
-        base_relevancy = _compute_relevancy_scores(revenue_csv or [], rev_asins_list)
+        
+        # Extract all keywords from both CSV files for optimized processing
+        revenue_keywords = []
+        for row in (revenue_csv or []):
+            kw = row.get('Keyword Phrase', '')
+            if kw and isinstance(kw, str):
+                revenue_keywords.append(kw.strip())
+        
+        design_keywords = []
+        for row in (design_csv or []):
+            kw = row.get('Keyword Phrase', '')
+            if kw and isinstance(kw, str):
+                design_keywords.append(kw.strip())
+        
+        # Use optimized batch processing to handle large datasets efficiently
+        batch_size = getattr(settings, "KEYWORD_BATCH_SIZE", 50)
+        keyword_root_analysis = optimize_keyword_processing_for_agents(
+            revenue_keywords=revenue_keywords,
+            design_keywords=design_keywords,
+            batch_size=batch_size
+        )
+        
+        # Extract results for compatibility
+        priority_roots = keyword_root_analysis.get('priority_roots', [])
+        unique_keywords = revenue_keywords + design_keywords
+        unique_keywords = list(dict.fromkeys([kw for kw in unique_keywords if kw.strip()]))
+        
+        # ==================================================================================
+        # STEP 1: DEDUPLICATE KEYWORDS
+        # ==================================================================================
+        # PURPOSE: Remove duplicate keywords that appear in both revenue.csv and design.csv
+        # WHY: When keywords appear in multiple CSVs, we need to:
+        #      1. Keep only one instance (avoid showing "strawberry powder" twice)
+        #      2. Preserve the HIGHEST relevancy score across all sources
+        # EXAMPLE: If "freeze dried" appears in both CSVs with scores 7 and 9, keep score 9
+        # OUTPUT: Deduplicated keyword list + unified relevancy scores
+        # ==================================================================================
+        
+        logger.info("")
+        logger.info("="*80)
+        logger.info("🔧 [STEP 1: KEYWORD DEDUPLICATION]")
+        logger.info("="*80)
+        logger.info("📋 What: Remove duplicate keywords across revenue.csv and design.csv")
+        logger.info("🎯 Why: Prevent duplicate keywords, keep highest relevancy score")
+        logger.info("💡 How: Case-insensitive matching, score aggregation")
+        logger.info("="*80)
+        
+        # First, compute traditional relevancy scores before deduplication
+        pre_dedup_relevancy = _compute_relevancy_scores(revenue_csv or [], rev_asins_list)
         for k, v in _compute_relevancy_scores(design_csv or [], des_asins_list).items():
-            base_relevancy[k] = max(base_relevancy.get(k, 0.0), v)
+            pre_dedup_relevancy[k] = max(pre_dedup_relevancy.get(k, 0.0), v)
+        
+        # Apply deduplication: Remove duplicate keywords and keep highest scores
+        unique_keywords, base_relevancy, dedup_stats = deduplicate_keywords_with_scores(
+            keywords=unique_keywords,
+            relevancy_scores=pre_dedup_relevancy
+        )
+        
+        logger.info("")
+        logger.info(f"✅ [DEDUPLICATION RESULTS]")
+        logger.info(f"   📊 Input: {dedup_stats['original_count']} total keywords")
+        logger.info(f"   🎯 Output: {dedup_stats['unique_count']} unique keywords")
+        logger.info(f"   🗑️  Removed: {dedup_stats['duplicates_removed']} duplicates")
+        logger.info(f"   📝 Note: {dedup_stats['duplicates_found_count']} keywords had multiple scores (kept highest)")
+        logger.info("="*80)
+        logger.info("")
+        
+        # ==================================================================================
+        # STEP 2: CONTENT FILTER (RESTORED)
+        # ==================================================================================
+        # PURPOSE: Only keep keywords that actually appear in the original product listing
+        # WHY: Filters out keywords from CSVs that don't match the current product
+        # EXAMPLE: If CSV has "strawberry jam" but listing only mentions "strawberry slices",
+        #          this removes "strawberry jam" from analysis
+        # IMPACT: 
+        #   - PROS: Shows only keywords present in current listing
+        #   - CONS: May remove valuable keywords for SEO optimization
+        # NOTE: Can be disabled to allow SEO agent to suggest new keywords
+        # ==================================================================================
+        
+        logger.info("")
+        logger.info("="*80)
+        logger.info("🔧 [STEP 2: CONTENT FILTER]")
+        logger.info("="*80)
+        logger.info("📋 What: Filter keywords to only those in original title/bullets")
+        logger.info("🎯 Why: Remove CSV keywords that don't match current product")
+        logger.info("💡 How: Text matching against scraped title and bullet points")
+        logger.info("⚠️  Impact: Removes keywords not in current listing")
+        logger.info("="*80)
+        
+        # Apply content filtering: Only keep keywords present in original title/bullets
+        filtered_keywords, filter_stats = filter_keywords_by_original_content(
+            keywords=unique_keywords,
+            scraped_data=scraped_data
+        )
+        
+        logger.info("")
+        logger.info(f"✅ [CONTENT FILTER RESULTS]")
+        logger.info(f"   📊 Input: {filter_stats['original_count']} keywords")
+        logger.info(f"   🎯 Output: {filter_stats['filtered_count']} keywords (found in listing)")
+        logger.info(f"   🗑️  Removed: {filter_stats['removed_count']} keywords (not in listing)")
+        logger.info(f"   📈 Retention: {filter_stats['filter_percentage']}% of keywords kept")
+        logger.info(f"   💡 These {filter_stats['filtered_count']} keywords exist in current title/bullets")
+        logger.info("="*80)
+        logger.info("")
+        
+        # Update unique_keywords to use filtered list
+        unique_keywords = filtered_keywords
+        
+        # Update base_relevancy to only include filtered keywords
+        # Use case-insensitive lookup to preserve scores
+        logger.info("🔍 [RELEVANCY MAPPING] Matching filtered keywords to relevancy scores...")
+        filtered_base_relevancy = {}
+        exact_matches = 0
+        case_insensitive_matches = 0
+        missing_keywords = 0
+        
+        for kw in filtered_keywords:
+            # Try exact match first
+            if kw in base_relevancy:
+                score = base_relevancy[kw]
+                filtered_base_relevancy[kw] = score
+                exact_matches += 1
+                logger.debug(f"[RELEVANCY] Exact match: '{kw}' → score {score}")
+            else:
+                # Try case-insensitive match
+                kw_lower = kw.lower()
+                found = False
+                for original_kw, score in base_relevancy.items():
+                    if original_kw.lower() == kw_lower:
+                        filtered_base_relevancy[kw] = score
+                        case_insensitive_matches += 1
+                        found = True
+                        logger.debug(f"[RELEVANCY] Case-insensitive match: '{kw}' ↔ '{original_kw}' → score {score}")
+                        break
+                if not found:
+                    # Keyword passed content filter but has no relevancy score
+                    # This shouldn't happen, but use reasonable default
+                    filtered_base_relevancy[kw] = 5
+                    missing_keywords += 1
+                    logger.warning(f"[RELEVANCY] No relevancy score found for '{kw}', using default 5")
+        
+        logger.info(f"✅ [RELEVANCY MAPPING] Complete:")
+        logger.info(f"   - Exact matches: {exact_matches}")
+        logger.info(f"   - Case-insensitive matches: {case_insensitive_matches}")
+        logger.info(f"   - Missing keywords (defaulted to 5): {missing_keywords}")
+        logger.info(f"   - Total keywords mapped: {len(filtered_base_relevancy)}")
+        
+        # Log sample of mapped keywords with scores
+        sample_keywords = list(filtered_base_relevancy.items())[:10]
+        logger.info(f"📊 [RELEVANCY SAMPLE] First 10 keywords with scores:")
+        for kw, score in sample_keywords:
+            logger.info(f"   - '{kw}': {score}/10")
+        
+        base_relevancy = filtered_base_relevancy
+        
+        logger.info(f"📊 [FINAL STATS] Processing {len(unique_keywords)} deduplicated and filtered keywords")
+        
+        # ==================================================================================
+        # END OF FILTERING AND DEDUPLICATION
+        # ==================================================================================
+
+        # Filter keywords by relevancy score (>= 2) before agent processing
+        min_relevancy_threshold = 2
+        high_relevancy_keywords = []
+        high_relevancy_scores = {}
+        
+        for keyword, score in base_relevancy.items():
+            if score >= min_relevancy_threshold:
+                high_relevancy_keywords.append(keyword)
+                high_relevancy_scores[keyword] = score  # ✅ PRESERVE ORIGINAL SCORES
+
+        logger.info(f"Filtered keywords by relevancy >= {min_relevancy_threshold}: {len(base_relevancy)} -> {len(high_relevancy_keywords)}")
+
+        # Use filtered keywords with PRESERVED scores for agents
+        full_base_relevancy = base_relevancy.copy()
+        base_relevancy = high_relevancy_scores  # ✅ KEEPS ORIGINAL SCORES (3, 4, etc.)
+
+        # Perform AI-powered root extraction for richer analysis context (non-blocking if fails)
+        ai_keyword_root_analysis: Dict[str, Any] = {}
+        try:
+            from app.local_agents.keyword.subagents.root_extraction_agent import extract_roots_ai
+            # Build minimal product context for the AI subagent
+            _title_text = str(((scraped_data.get("elements") or {}).get("productTitle") or {}).get("text") or "")
+            if isinstance(_title_text, list):
+                _title_text = _title_text[0] if _title_text else ""
+            _brand = (((scraped_data.get("elements") or {}).get("productOverview_feature_div") or {}).get("kv") or {}).get("Brand", "")
+            product_context = {"title": _title_text, "category": scraped_data.get("category", ""), "brand": _brand}
+            ai_keyword_root_analysis = extract_roots_ai(unique_keywords, product_context)
+        except Exception:
+            # Non-fatal: continue without AI root analysis
+            ai_keyword_root_analysis = {}
 
         # Compute adjusted relevancy per rules:
         # 1) Literal meaning first. If literal score is high (>=0.6), keep base score.
@@ -310,8 +531,19 @@ class ResearchRunner:
                     "revenue": revenue_competitors,
                     "design": design_competitors,
                 },
-                "base_relevancy_scores": base_relevancy,
+                "base_relevancy_scores": base_relevancy,  # Optimized set for agents
+                "full_base_relevancy_scores": full_base_relevancy,  # Complete analysis
                 "adjusted_relevancy_scores": adjusted_relevancy,
+                "keyword_root_analysis": keyword_root_analysis,
+                "priority_roots": priority_roots,
+                "total_unique_keywords": len(unique_keywords),
+                "ai_keyword_root_analysis": ai_keyword_root_analysis,
+                "agent_optimization": {
+                    "timeout_prevention": True,
+                    "agent_keywords_count": len(base_relevancy),
+                    "full_keywords_count": len(unique_keywords),
+                    "optimization_ratio": f"{len(base_relevancy)}/{len(unique_keywords)}"
+                },
             }
         except Exception as e:
             return {
@@ -327,8 +559,19 @@ class ResearchRunner:
                     "revenue": revenue_competitors,
                     "design": design_competitors,
                 },
-                "base_relevancy_scores": base_relevancy,
+                "base_relevancy_scores": base_relevancy,  # Optimized set for agents
+                "full_base_relevancy_scores": full_base_relevancy,  # Complete analysis  
                 "adjusted_relevancy_scores": adjusted_relevancy,
+                "keyword_root_analysis": keyword_root_analysis,
+                "priority_roots": priority_roots,
+                "total_unique_keywords": len(unique_keywords),
+                "ai_keyword_root_analysis": ai_keyword_root_analysis,
+                "agent_optimization": {
+                    "timeout_prevention": True,
+                    "agent_keywords_count": len(base_relevancy),
+                    "full_keywords_count": len(unique_keywords),
+                    "optimization_ratio": f"{len(base_relevancy)}/{len(unique_keywords)}"
+                },
             }
 
     # --- internal: helpers ---

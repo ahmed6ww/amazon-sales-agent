@@ -4,8 +4,6 @@ import logging
 
 from app.services.file_processing.csv_processor import parse_csv_bytes
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 router = APIRouter()

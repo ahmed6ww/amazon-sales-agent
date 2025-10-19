@@ -164,13 +164,13 @@
           "keywords_found": [
             "freeze dried strawberries",
             "dried strawberries",
+            "freeze dried strawberries bulk",
             "organic freeze dried strawberries"
           ],
-          "keyword_count": 3,
+          "keyword_count": 4,
           "character_count": 199,
-          "keyword_density": 1.51,
+          "keyword_density": 2.01,
           "opportunities": [
-            "freeze dried strawberries bulk",
             "strawberry chips"
           ]
         },
@@ -222,13 +222,13 @@
           {
             "content": "Shelf Life: Our freeze-dried strawberries are at peak flavor for up to 24 months.",
             "keywords_found": [
+              "freeze dried strawberries",
               "dried strawberries"
             ],
-            "keyword_count": 1,
+            "keyword_count": 2,
             "character_count": 81,
-            "keyword_density": 1.23,
+            "keyword_density": 2.47,
             "opportunities": [
-              "freeze dried strawberries",
               "freeze dried strawberries bulk",
               "organic freeze dried strawberries",
               "strawberry chips"
@@ -238,13 +238,13 @@
             "content": "Bulk Packed for Convenience: Buy in bulk and enjoy premium quality freeze dried strawberries whenever you need them.",
             "keywords_found": [
               "freeze dried strawberries",
-              "dried strawberries"
+              "dried strawberries",
+              "freeze dried strawberries bulk"
             ],
-            "keyword_count": 2,
+            "keyword_count": 3,
             "character_count": 116,
-            "keyword_density": 1.72,
+            "keyword_density": 2.59,
             "opportunities": [
-              "freeze dried strawberries bulk",
               "organic freeze dried strawberries",
               "strawberry chips"
             ]
@@ -280,111 +280,115 @@
       },
       "optimized_seo": {
         "optimized_title": {
-          "content": "Premium freeze dried strawberries freeze dried strawberries bulk organic freeze dried strawberries - Brewer Outdoor Solutions freeze dried strawberries bulk dried strawberries",
+          "content": "Dried Strawberries - Organic, No Sugar Added Strawberry Chips for Healthy Snacking, Freeze Dried Strawberries Pack of 4 (1.2 oz Each) for Baking, Smoothies, Cereal, Travel",
           "keywords_included": [
+            "dried strawberries",
             "freeze dried strawberries",
-            "freeze dried strawberries bulk",
-            "organic freeze dried strawberries",
-            "freeze dried strawberries bulk",
-            "dried strawberries"
+            "strawberry chips"
           ],
           "improvements": [
-            "Added high-intent keywords",
-            "Included high-volume terms",
-            "Optimized character usage"
+            "Amazon Guidelines Compliant",
+            "80-char optimized: Dried Strawberries - Organic, No Sugar Added Straw...",
+            "Main root included: True",
+            "Design root included: True"
           ],
-          "character_count": 175
+          "character_count": 171
         },
         "optimized_bullets": [
           {
-            "content": "\u2705 Freeze Dried Strawberries: Delicious Flavor in Every Bite: Savor the naturally sweet, tangy crunch of freeze dried strawberry slices bursting with real fruit flavor.",
+            "content": "Clean ingredients: Enjoy organic freeze dried strawberries with no sugar added; our freeze dried strawberries bulk packs deliver real fruit flavor and a light, crunchy bite for healthy snacking at home or on the go.",
             "keywords_included": [
-              "freeze dried strawberries"
-            ],
-            "improvements": [
-              "Added keyword focus",
-              "Improved formatting"
-            ],
-            "character_count": 167
-          },
-          {
-            "content": "\u2705 Freeze Dried Strawberries Bulk: Ideal Travel Companion: Lightweight, mess-free, and shelf-stable, our freeze dried strawberries bulk are perfect for hiking or camping.",
-            "keywords_included": [
+              "organic freeze dried strawberries",
               "freeze dried strawberries bulk"
             ],
             "improvements": [
-              "Added keyword focus",
-              "Improved formatting"
+              "Benefit-focused: Clean, simple ingredients for healthy snacking",
+              "Guideline compliant: PASS"
             ],
-            "character_count": 169
+            "character_count": 215
           },
           {
-            "content": "\u2705 Organic Freeze Dried Strawberries: From Farm to Your Table: Our organic dried strawberries, delivered sun-ripened, farm-fresh, are made from real strawberries.",
+            "content": "Family value pack: The freeze dried strawberries bulk set includes 4 portable pouches (1.2 oz each) of organic freeze dried strawberries, making it easy to stock the pantry, pack lunches, and share.",
             "keywords_included": [
+              "freeze dried strawberries bulk",
               "organic freeze dried strawberries"
             ],
             "improvements": [
-              "Added keyword focus",
-              "Improved formatting"
+              "Benefit-focused: Value and convenience for families",
+              "Guideline compliant: PASS"
             ],
-            "character_count": 161
+            "character_count": 198
           },
           {
-            "content": "\u2705 Dried Strawberries: Shelf Life: Our freeze-dried strawberries are at peak flavor for up to 24 months.",
+            "content": "Versatile uses: Sprinkle organic freeze dried strawberries over cereal and yogurt, blend into smoothies, or bake into cookies; our freeze dried strawberries bulk format saves prep time while adding bright strawberry flavor.",
             "keywords_included": [
-              "dried strawberries"
+              "organic freeze dried strawberries",
+              "freeze dried strawberries bulk"
             ],
             "improvements": [
-              "Added keyword focus",
-              "Improved formatting"
+              "Benefit-focused: Versatility across meals, snacks, and baking",
+              "Guideline compliant: PASS"
             ],
-            "character_count": 103
+            "character_count": 223
           },
           {
-            "content": "\u2705 Strawberry Chips: Bulk Packed for Convenience: Buy in bulk and enjoy premium quality freeze dried strawberries whenever you need them.",
+            "content": "Travel-ready, long shelf life: Lightweight, mess-free organic freeze dried strawberries stay fresh in resealable bags; choose freeze dried strawberries bulk for hiking, camping, emergency kits, and office snacks.",
             "keywords_included": [
-              "strawberry chips"
+              "organic freeze dried strawberries",
+              "freeze dried strawberries bulk"
             ],
             "improvements": [
-              "Added keyword focus",
-              "Improved formatting"
+              "Benefit-focused: Portability and extended freshness",
+              "Guideline compliant: PASS"
             ],
-            "character_count": 136
+            "character_count": 212
           }
         ],
         "optimized_backend_keywords": [],
         "keyword_strategy": {
-          "primary_focus": "high_intent_keywords",
-          "secondary_focus": "high_volume_keywords",
-          "character_optimization": true
+          "amazon_compliance": "ENFORCED",
+          "first_80_optimization": "Opened with 'dried strawberries' + 'strawberry chips' and included 'Organic, No Sugar Added' to match high-conversion benefits within mobile view.",
+          "keyword_integration": "Used highest relevancy title keywords first and integrated bullet keywords naturally in each bullet while emphasizing use cases.",
+          "guideline_compliance": "STRICT"
         },
-        "rationale": "Rule-based optimization focusing on high-intent and high-volume keywords with improved character efficiency."
+        "rationale": "Task 7 Amazon Guidelines Compliance Applied: Title Case, no promotional or subjective claims, within 200 characters, and four benefit-led bullets under 256 characters each.. First 80 characters optimized for mobile viewing with main and design-specific keyword roots. All content verified for Amazon policy compliance."
       },
       "comparison": {
         "coverage_improvement": {
-          "current_coverage": 80.0,
-          "optimized_coverage": 95.0,
-          "improvement": 15.0
+          "total_keywords": 5,
+          "before_covered": 4,
+          "after_covered": 5,
+          "before_coverage_pct": 80.0,
+          "after_coverage_pct": 100.0,
+          "delta_pct_points": 20.0,
+          "new_keywords_added": [
+            "strawberry chips"
+          ]
         },
         "intent_improvement": {
-          "current_high_intent_covered": 2,
-          "optimized_high_intent_covered": 5,
-          "improvement": 5
+          "high_intent_total": 5,
+          "before_covered": 4,
+          "after_covered": 5,
+          "delta": 1
         },
         "volume_improvement": {
-          "current_volume_covered": 9073,
-          "optimized_volume_covered": 11073,
-          "improvement": 2000
+          "estimated_volume_before": 10404,
+          "estimated_volume_after": 10775,
+          "delta_volume": 371
         },
         "character_efficiency": {
-          "current_efficiency": 65.0,
-          "optimized_efficiency": 85.0,
-          "improvement": 20.0
+          "title_limit": 200,
+          "title_before": 199,
+          "title_after": 171,
+          "title_utilization_before_pct": 99.5,
+          "title_utilization_after_pct": 85.5,
+          "backend_limit": 249,
+          "backend_before": 0,
+          "backend_after": 0
         },
         "summary_metrics": {
-          "overall_improvement_score": 7.5,
-          "priority_recommendations": 3,
-          "estimated_ranking_improvement": "15-25%"
+          "overall_improvement_score": 2.5,
+          "priority_recommendations": 1
         }
       },
       "product_context": {

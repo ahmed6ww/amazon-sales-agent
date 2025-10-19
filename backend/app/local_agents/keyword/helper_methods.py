@@ -6,69 +6,50 @@ from .schemas import KeywordCategory, KeywordData, KeywordAnalysisResult, Catego
 def categorize_keywords_from_csv(
 	scraped_product: dict, base_relevancy_scores: Dict[str, int]
 ) -> KeywordAnalysisResult:
-	"""Lightweight local categorizer as a fallback (heuristic only).
-	The primary path should use the KeywordAgent via KeywordRunner.
+	"""AI-powered categorizer as a fallback when main agent fails.
+	Uses a lightweight AI agent to categorize keywords dynamically.
 	"""
-	title = (
-		((scraped_product or {}).get("elements", {}) or {})
-		.get("productTitle", {})
-		.get("text")
+	import json
+	from .agent import keyword_agent
+	from .runner import Runner
+	from .prompts import FALLBACK_CATEGORIZATION_PROMPT
+	
+	# Use the centralized prompt template
+	prompt = FALLBACK_CATEGORIZATION_PROMPT.format(
+		scraped_product=json.dumps(scraped_product or {}, separators=(',', ':')),
+		base_relevancy_scores=json.dumps(base_relevancy_scores, separators=(',', ':'))
 	)
-	if isinstance(title, list):
-		title = title[0] if title else ""
-	title_l = (title or "").lower()
-
-	items: List[KeywordData] = []
-	for kw, score in (base_relevancy_scores or {}).items():
-		k = (kw or "").strip()
-		kl = k.lower()
-		cat = KeywordCategory.RELEVANT
-		reason = ""
-		# Branded
-		if any(x in kl for x in ["keekaroo", "skip hop", "frida", "munchkin", "hatch"]):
-			cat = KeywordCategory.BRANDED
-			reason = "Contains a brand name"
-		# Spanish/other language (naive)
-		elif any(ch for ch in kl if ord(ch) > 127) or any(w in kl for w in ["para", "cambiador", "pañal", "niño", "niña"]):
-			cat = KeywordCategory.SPANISH
-			reason = "Non-English or Spanish term"
-		# Outlier (very broad)
-		elif any(w in kl for w in ["baby products", "baby stuff", "baby items", "kids", "products"]):
-			cat = KeywordCategory.OUTLIER
-			reason = "Very broad, high-variety term"
-		# Design-specific (contains qualifiers)
-		elif any(w in kl for w in ["for dresser", "wipeable", "waterproof", "portable", "travel", "foam", "peanut", "contoured", "with straps"]):
-			cat = KeywordCategory.DESIGN_SPECIFIC
-			reason = "Specific feature/use-case/style"
-		# Irrelevant (product mismatch)
-		elif not kl or (title_l and not any(t in title_l for t in kl.split())):
-			cat = KeywordCategory.IRRELEVANT
-			reason = "Does not match core product"
-		else:
-			cat = KeywordCategory.RELEVANT
-			reason = "Describes the core product"
-
-		items.append(
-			KeywordData(
-				phrase=k,
-				category=cat,
-				reason=reason,
-				relevancy_score=int(score) if isinstance(score, (int, float)) else 0,
-			)
-		)
-
-	# Build stats
-	by_cat: Dict[KeywordCategory, List[str]] = {c: [] for c in KeywordCategory}
-	for it in items:
-		if it.category not in by_cat:
-			by_cat[it.category] = []
-		if len(by_cat[it.category]) < 5:
-			by_cat[it.category].append(it.phrase)
-
-	stats = {
-		c: CategoryStats(count=sum(1 for it in items if it.category == c), examples=by_cat.get(c, []))
-		for c in KeywordCategory
-	}
-
-	return KeywordAnalysisResult(product_context={"title": title}, items=items, stats=stats)
+	
+	try:
+		# Use AI agent for categorization
+		result = Runner.run_sync(keyword_agent, prompt)
+		raw_output = getattr(result, "final_output", None)
+		
+		# If SDK returned a Pydantic model
+		if hasattr(result, "items") and hasattr(result, "stats"):
+			return result
+		
+		# If we got raw text, try to parse it
+		if raw_output:
+			try:
+				parsed = json.loads(raw_output)
+				if "items" in parsed and "stats" in parsed:
+					return KeywordAnalysisResult(**parsed)
+			except json.JSONDecodeError:
+				pass
+		
+		# If AI fails, return empty result
+		stats = {
+			c: CategoryStats(count=0, examples=[])
+			for c in KeywordCategory
+		}
+		return KeywordAnalysisResult(product_context={}, items=[], stats=stats)
+		
+	except Exception as e:
+		# If AI agent fails completely, return empty result
+		stats = {
+			c: CategoryStats(count=0, examples=[])
+			for c in KeywordCategory
+		}
+		return KeywordAnalysisResult(product_context={}, items=[], stats=stats)
 

@@ -56,6 +56,37 @@ def _parse_dynamic_image_json(attr_value: Optional[str]) -> List[str]:
         return []
 
 
+def _parse_srcset(attr_value: Optional[str]) -> List[str]:
+    """Parse an HTML srcset attribute into a list of URLs."""
+    if not attr_value:
+        return []
+    urls: List[str] = []
+    try:
+        parts = [p.strip() for p in attr_value.split(",")]
+        for part in parts:
+            if not part:
+                continue
+            # Format examples: "https://... 1x" or "https://... 320w"
+            first = part.split()[0]
+            if first:
+                urls.append(first)
+    except Exception:
+        pass
+    return urls
+
+
+def _normalize_image_url(url: Optional[str]) -> str:
+    """Normalize image URL for comparison/deduplication: strip querystring and whitespace."""
+    if not url:
+        return ""
+    try:
+        # Drop query params/fragments which often encode sizes or cache keys
+        base = url.split("?")[0].split("#")[0]
+        return base.strip()
+    except Exception:
+        return url.strip()
+
+
 def _texts(sel: scrapy.SelectorList) -> List[str]:
     """Extract visible text only (skip script/style/noscript)."""
     raw = sel.css("*:not(script):not(style):not(noscript)::text").getall()
@@ -288,13 +319,85 @@ class AmazonScraperSpider(scrapy.Spider):
             elem["html"] = db_sel.get() or ""
         out["elements"]["detailBullets_feature_div"] = elem
 
-        # images -> from landingImage dynamic JSON or altImages thumbnails
-        dynamic_json = response.css("#landingImage::attr(data-a-dynamic-image)").get()
-        image_urls = _parse_dynamic_image_json(dynamic_json)
-        if not image_urls:
-            image_urls = [u for u in response.css("#altImages img::attr(src)").getall() if u]
-        # absolute URLs + dedupe
-        image_urls = list(dict.fromkeys([response.urljoin(u) for u in image_urls]))
+        # images -> aggregate hero + all thumbnails (dynamic JSON, hires, srcset, src/data-src)
+        def _collect_image_urls(resp: scrapy.http.Response) -> List[str]:
+            urls: List[str] = []
+            seen: set[str] = set()
+
+            def _upgrade_amazon_image(u: str) -> str:
+                """Upgrade Amazon thumbnail to hi-res by stripping sizing tokens like ._SS40_, ._AC_US40_, etc."""
+                try:
+                    if not u:
+                        return u
+                    u = _normalize_image_url(u)
+                    # Only process Amazon media hosts
+                    if not re.search(r"\b(m\.media-amazon\.com|images-na\.ssl-images-amazon\.com)\b", u):
+                        return u
+                    # Example: https://m.media-amazon.com/images/I/51GKBz7WVYL._AC_US40_.jpg -> .../I/51GKBz7WVYL.jpg
+                    m = re.match(r"^(https?://[^\s]+/images/[^/]+/[^./]+)(\._[^.]+_)?\.(jpg|jpeg|png|webp)$", u, re.I)
+                    if m:
+                        return f"{m.group(1)}.{m.group(3)}"
+                    # Fallback: remove any ._TOKEN_ just before extension
+                    return re.sub(r"\._[^./]+_(\.[a-zA-Z0-9]+)$", r"\\1", u)
+                except Exception:
+                    return u
+
+            def _is_product_image(u: str) -> bool:
+                """Filter out sprites/icons/overlays and non-product resources."""
+                if not u:
+                    return False
+                lower = u.lower()
+                # Exclude graphics folders and overlays/icons
+                noisy_markers = [
+                    "/images/g/", "/g/", "play-icon", "overlay", "sprite", "icon_", "360_icon", "placeholder",
+                ]
+                if any(marker in lower for marker in noisy_markers):
+                    return False
+                # Must be an image extension
+                if not re.search(r"\.(jpg|jpeg|png|webp)$", lower):
+                    return False
+                return True
+
+            def add(u: Optional[str]):
+                if not u:
+                    return
+                abs_u = resp.urljoin(u)
+                upgraded = _upgrade_amazon_image(abs_u)
+                if not _is_product_image(upgraded):
+                    return
+                norm = _normalize_image_url(upgraded)
+                if norm and norm not in seen:
+                    seen.add(norm)
+                    urls.append(norm)
+
+            # Hero image variations
+            for u in _parse_dynamic_image_json(resp.css("#landingImage::attr(data-a-dynamic-image)").get()):
+                add(u)
+            add(resp.css("#landingImage::attr(data-old-hires)").get())
+            for u in _parse_srcset(resp.css("#landingImage::attr(srcset)").get()):
+                add(u)
+
+            # Thumbnails: try dynamic JSON first for each thumb, then hi-res/srcset, then src/data-src
+            thumb_selectors = ["#altImages img", "#imageBlockThumbs img"]
+            for sel in thumb_selectors:
+                # data-a-dynamic-image can contain multiple size URLs for each thumb
+                for dyn in resp.css(f"{sel}::attr(data-a-dynamic-image)").getall():
+                    for u in _parse_dynamic_image_json(dyn):
+                        add(u)
+                # data-old-hires on some thumbs
+                for u in resp.css(f"{sel}::attr(data-old-hires)").getall():
+                    add(u)
+                # srcset for thumbs
+                for srcset in resp.css(f"{sel}::attr(srcset)").getall():
+                    for u in _parse_srcset(srcset):
+                        add(u)
+                # fallback to src/data-src (may be small, but better than missing)
+                for u in resp.css(f"{sel}::attr(data-src), {sel}::attr(src)").getall():
+                    add(u)
+
+            return urls
+
+        image_urls = _collect_image_urls(response)
         out["images"] = {
             "present": bool(image_urls),
             "main_image": image_urls[0] if image_urls else "",

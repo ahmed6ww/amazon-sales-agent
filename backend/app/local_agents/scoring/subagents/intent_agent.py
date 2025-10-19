@@ -24,7 +24,7 @@ USER_PROMPT_TEMPLATE = (
     "BASE_RELEVANCY_SCORES (0-10):\n{base_relevancy_scores}\n\n"
     "ITEMS (preserve order):\n{items}\n\n"
     "Return ONLY a JSON array where each element corresponds to the input ITEMS order and contains: \n"
-    "{{\"phrase\": \"string\", \"category\": \"string\", \"base_relevancy_score\": number, \"intent_score\": 0|1|2|3}}."
+    "{{\"phrase\": \"string\", \"category\": \"string\", \"relevancy_score\": number, \"intent_score\": 0|1|2|3}}."
 )
 
 
@@ -33,7 +33,7 @@ USER_PROMPT_TEMPLATE = (
 intent_scoring_agent = Agent(
     name="IntentScoringSubagent",
     instructions=INTENT_SCORING_INSTRUCTIONS,
-    model="gpt-5-2025-08-07",
+    model="gpt-4o-mini",  # TASK 5: Changed from gpt-5 for 3-4x speed improvement
     # Let the runner return raw text; ScoringRunner will parse JSON list leniently.
     output_type=None,
 )

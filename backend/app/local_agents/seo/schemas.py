@@ -34,12 +34,14 @@ class ContentAnalysis(BaseModel):
     character_count: int = Field(..., description="Character count")
     keyword_density: float = Field(..., description="Keyword density percentage")
     opportunities: List[str] = Field(default_factory=list, description="Missing keyword opportunities")
+    total_search_volume: int = Field(default=0, description="Total search volume of keywords found (Task 2)")
 
 
 class CurrentSEO(BaseModel):
     """Analysis of current SEO state."""
     title_analysis: ContentAnalysis = Field(..., description="Current title analysis")
-    bullets_analysis: List[ContentAnalysis] = Field(default_factory=list, description="Analysis of each bullet point")
+    bullets_analysis: List[ContentAnalysis] = Field(default_factory=list, description="Analysis of each bullet point (filtered for coverage)")
+    bullets_analysis_for_display: List[ContentAnalysis] = Field(default_factory=list, description="Analysis of each bullet point (all keywords for frontend display)")
     backend_keywords: List[str] = Field(default_factory=list, description="Current backend keywords")
     keyword_coverage: KeywordCoverage = Field(..., description="Overall keyword coverage analysis")
     root_coverage: RootCoverage = Field(..., description="Root keyword coverage analysis")
@@ -52,6 +54,7 @@ class OptimizedContent(BaseModel):
     keywords_included: List[str] = Field(default_factory=list, description="Keywords included in optimization")
     improvements: List[str] = Field(default_factory=list, description="List of improvements made")
     character_count: int = Field(..., description="Character count of optimized content")
+    total_search_volume: int = Field(default=0, description="Total search volume of all keywords included (Task 2)")
 
 
 class OptimizedSEO(BaseModel):

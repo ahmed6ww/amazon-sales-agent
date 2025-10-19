@@ -1,7 +1,8 @@
 """
 API v1 Endpoints Package
+Production endpoints for Amazon Sales Agent.
 """
 
-from . import upload, analyze
+from . import upload, test_research_keywords
 
-__all__ = ["upload", "analyze"] 
+__all__ = ["upload", "test_research_keywords"] 

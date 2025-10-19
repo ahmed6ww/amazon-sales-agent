@@ -1,12 +1,25 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from app.api.v1.endpoints import upload, analyze, test_research, scrape_mvp, test_research_keywords, test_seo
+from app.api.v1.endpoints import upload, test_research_keywords
 from app.core.config import settings
+import logging
+
+# Configure logging to show INFO level logs with timestamps
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(levelname)s - %(name)s - %(message)s',
+    handlers=[
+        logging.StreamHandler()  # Output to console
+    ]
+)
+
+# Set httpx to WARNING to reduce noise from API calls
+logging.getLogger("httpx").setLevel(logging.WARNING)
 
 app = FastAPI(
-    title="Amazon Sales Agent API",
-    description="API for managing and interacting with sales agents.",
-    version="0.1.0"
+    title="Amazon Sales Intelligence API",
+    description="AI-powered Amazon product analysis and optimization platform. Complete pipeline for research, keyword analysis, scoring, and SEO optimization.",
+    version="1.0"
 )
 
 # Add CORS middleware for frontend testing
@@ -18,13 +31,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Include the routers from all endpoints
+# Include the production endpoints only
 app.include_router(upload.router, prefix="/api/v1", tags=["upload"])
-app.include_router(analyze.router, prefix="/api/v1", tags=["analyze"])
-app.include_router(test_research.router, prefix="/api/v1", tags=["test-research"])
-app.include_router(test_research_keywords.router, prefix="/api/v1", tags=["test-research-keywords"])
-app.include_router(scrape_mvp.router, prefix="/api/v1", tags=["scrape-mvp"])
-app.include_router(test_seo.router, prefix="/api/v1", tags=["test-seo"])
+app.include_router(test_research_keywords.router, prefix="/api/v1", tags=["amazon-sales-intelligence"])
 
 @app.get("/")
 def read_root():
