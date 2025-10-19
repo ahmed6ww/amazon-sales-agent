@@ -125,7 +125,7 @@ export async function pollUntilComplete(
   jobId: string,
   onProgress?: (status: JobStatus) => void,
   pollInterval: number = 5000,
-  maxPolls: number = 360 // 30 minutes (360 * 5s = 1800s)
+  maxPolls: number = 720 // 60 minutes (720 * 5s = 3600s) - increased for large datasets
 ): Promise<JobStatus> {
   console.log(
     `[API CLIENT] Starting to poll job ${jobId} every ${pollInterval}ms (max ${maxPolls} polls)`

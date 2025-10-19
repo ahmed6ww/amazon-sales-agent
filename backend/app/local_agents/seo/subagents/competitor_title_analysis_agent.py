@@ -13,6 +13,55 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def strip_markdown_code_fences(text: str) -> str:
+    """
+    Remove markdown code fences and extract pure JSON from AI output.
+    GPT-4o often wraps JSON in ```json ... ``` or adds extra text.
+    
+    Handles:
+    - Markdown code fences: ```json ... ```
+    - Extra text before JSON: "Here's the result: {...}"
+    - Extra text after JSON: "{...} Hope this helps!"
+    
+    Args:
+        text: AI output text that may contain markdown fences or extra commentary
+        
+    Returns:
+        Clean JSON text without markdown fences or extra text
+    """
+    if not text:
+        return text
+    
+    text = text.strip()
+    
+    # Step 1: Remove markdown code fences
+    if text.startswith('```'):
+        # Find end of first line (remove ```json or ``` line)
+        first_newline = text.find('\n')
+        if first_newline != -1:
+            text = text[first_newline + 1:]
+    
+    if text.endswith('```'):
+        text = text[:-3]
+    
+    text = text.strip()
+    
+    # Step 2: Extract JSON if there's extra text before/after
+    # Look for JSON array [...] or object {...}
+    import re
+    
+    # Try to find complete JSON structure
+    # This regex finds the outermost JSON array or object
+    json_match = re.search(r'(\[[\s\S]*\]|\{[\s\S]*\})', text)
+    if json_match:
+        extracted = json_match.group(1).strip()
+        # Only return extracted JSON if it's substantial (not just empty brackets)
+        if len(extracted) > 2:
+            return extracted
+    
+    # If no JSON pattern found, return cleaned text as-is
+    return text
+
 COMPETITOR_TITLE_ANALYSIS_INSTRUCTIONS = """
 You are a Competitor Title Analysis Expert specializing in analyzing top competitor Amazon titles to identify key product benefits and optimize title structure for maximum conversion.
 
@@ -219,11 +268,13 @@ def analyze_competitor_titles_for_benefits(
         # Parse AI response
         if isinstance(output, str):
             try:
-                parsed = json.loads(output.strip())
+                cleaned_output = strip_markdown_code_fences(output)
+                parsed = json.loads(cleaned_output)
                 logger.info(f"[CompetitorTitleAnalysisAgent] AI analyzed {len(competitor_titles)} competitors for benefit optimization")
                 return parsed
-            except json.JSONDecodeError:
-                logger.error(f"[CompetitorTitleAnalysisAgent] Failed to parse AI output: {output[:200]}...")
+            except json.JSONDecodeError as e:
+                logger.error(f"[CompetitorTitleAnalysisAgent] Failed to parse AI output: {e}")
+                logger.debug(f"[CompetitorTitleAnalysisAgent] Raw output (first 500 chars): {output[:500]}")
                 return _create_fallback_analysis(current_content, competitor_titles, main_keyword_root, design_keyword_root)
         
         elif hasattr(output, 'model_dump'):
