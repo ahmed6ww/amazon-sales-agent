@@ -12,12 +12,12 @@
       "items": [
         {
           "phrase": "strawberry freeze dried",
-          "category": "Relevant",
-          "reason": "Describes freeze dried strawberries, matching the product form (slices) context.",
-          "relevancy_score": 9,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 424,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 9,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 689,
@@ -25,18 +25,17 @@
             "competitor_rank_avg": 14.1,
             "competitor_performance_score": 10.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but derivative/word-order variant of head term; not a distinct opportunity."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Zero title density but derivative/word-order variant of established head term; ignored per rule."
         },
         {
           "phrase": "strawberries freeze dried",
-          "category": "Relevant",
-          "reason": "Describes freeze dried strawberries, matching the product form (slices) context.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 303,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 728,
@@ -44,18 +43,17 @@
             "competitor_rank_avg": 15.2,
             "competitor_performance_score": 10.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but derivative/word-order variant of head term; not a distinct opportunity."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Zero title density but derivative/word-order variant of established head term; ignored per rule."
         },
         {
           "phrase": "dried freeze strawberries",
-          "category": "Relevant",
-          "reason": "Semantic variation of 'freeze dried strawberries', matching product form.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 204,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 643,
@@ -63,18 +61,17 @@
             "competitor_rank_avg": 15.7,
             "competitor_performance_score": 10.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but derivative phrasing of the head term; not distinct."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Zero title density but derivative/word-order variant of established head term; ignored per rule."
         },
         {
           "phrase": "freeze-dried strawberries",
-          "category": "Relevant",
-          "reason": "Describes freeze dried strawberries, matching the product form (slices) context.",
-          "relevancy_score": 9,
-          "intent_score": 5,
-          "title_density": 4,
           "search_volume": 470,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 9,
+          "intent_score": 3,
+          "title_density": 4,
           "cpr": 8,
           "competition": {
             "competing_products": 548,
@@ -82,18 +79,17 @@
             "competitor_rank_avg": 15.9,
             "competitor_performance_score": 10.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Title density above low-threshold; not a zero/low-density gap."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
         },
         {
           "phrase": "freeze dried strawberries bulk",
-          "category": "Relevant",
-          "reason": "Describes freeze dried strawberries in bulk, relevant to slices context.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 909,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 2,
+          "title_density": 0,
           "cpr": 12,
           "competition": {
             "competing_products": 640,
@@ -101,18 +97,17 @@
             "competitor_rank_avg": 15.9,
             "competitor_performance_score": 10.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "opportunity",
-          "opportunity_reason": "Zero title density with strong volume and distinct 'bulk' intent."
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density with strong volume (909) and distinct 'bulk' modifier; relevant non-derivative phrasing."
         },
         {
           "phrase": "freeze dried strawberry",
-          "category": "Relevant",
-          "reason": "Describes freeze dried strawberry, matching the product form (slices) context.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 5,
           "search_volume": 847,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 5,
           "cpr": 11,
           "competition": {
             "competing_products": 632,
@@ -120,18 +115,17 @@
             "competitor_rank_avg": 16.4,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Title density above low-threshold; not a zero/low-density gap."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
         },
         {
           "phrase": "freeze dried strawberries organic",
-          "category": "Relevant",
-          "reason": "Describes organic freeze dried strawberries, relevant to slices context.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 1,
           "search_volume": 422,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 1,
           "cpr": 8,
           "competition": {
             "competing_products": 404,
@@ -139,18 +133,17 @@
             "competitor_rank_avg": 16.9,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "opportunity",
-          "opportunity_reason": "Low title density (<=2) with solid search volume and 'organic' intent."
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (1) with decent search volume (422)."
         },
         {
           "phrase": "freeze dry strawberry",
-          "category": "Relevant",
-          "reason": "Semantic variation of 'freeze dried strawberries', matching product form.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 169,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 1000,
@@ -158,18 +151,17 @@
             "competitor_rank_avg": 17.8,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but derivative/DIY intent phrase; not a distinct product keyword."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Zero title density but derivative of head term ('freeze dried strawberries'); ignored per rule."
         },
         {
           "phrase": "freeze dry strawberries",
-          "category": "Relevant",
-          "reason": "Semantic variation of 'freeze dried strawberries', matching product form.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 433,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 618,
@@ -177,18 +169,17 @@
             "competitor_rank_avg": 19.8,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but derivative/DIY intent phrase; not a distinct product keyword."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Zero title density but derivative of head term ('freeze dried strawberries'); ignored per rule."
         },
         {
           "phrase": "dry strawberry fruit",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'dry fruit', not matching slices form.",
-          "relevancy_score": 4,
-          "intent_score": 5,
-          "title_density": 2,
           "search_volume": 297,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 4,
+          "intent_score": 1,
+          "title_density": 2,
           "cpr": 8,
           "competition": {
             "competing_products": 2000,
@@ -196,18 +187,17 @@
             "competitor_rank_avg": 21.0,
             "competitor_performance_score": 8.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Irrelevant to the product; ignore even with low title density."
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (2) with decent search volume (297)."
         },
         {
           "phrase": "freeze dried organic strawberries",
-          "category": "Relevant",
-          "reason": "Describes organic freeze dried strawberries, relevant to slices context.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 242,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 371,
@@ -215,18 +205,17 @@
             "competitor_rank_avg": 21.2,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "opportunity",
-          "opportunity_reason": "Zero title density with decent volume and distinct 'organic' intent."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Zero title density but derivative/word-order variant of 'organic freeze dried strawberries'; ignored per rule."
         },
         {
           "phrase": "free dried strawberries",
-          "category": "Relevant",
-          "reason": "Semantic variation of 'freeze dried strawberries', matching product form.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 128,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 514,
@@ -234,18 +223,17 @@
             "competitor_rank_avg": 21.6,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but misspelling variant (‘free’ vs ‘freeze’); ignore."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Zero title density but clear misspelling ('free' vs 'freeze'); ignored per rule."
         },
         {
           "phrase": "organic freeze dried strawberries",
-          "category": "Relevant",
-          "reason": "Describes organic freeze dried strawberries, relevant to slices context.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 1,
           "search_volume": 1163,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 1,
           "cpr": 26,
           "competition": {
             "competing_products": 400,
@@ -253,18 +241,17 @@
             "competitor_rank_avg": 21.9,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "opportunity",
-          "opportunity_reason": "Low title density (<=2) with high search volume and 'organic' intent."
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (1) with strong search volume (1163)."
         },
         {
           "phrase": "bulk freeze dried strawberries",
-          "category": "Relevant",
-          "reason": "Describes bulk freeze dried strawberries, relevant to slices context.",
-          "relevancy_score": 3,
-          "intent_score": 5,
-          "title_density": 1,
           "search_volume": 482,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 1,
           "cpr": 9,
           "competition": {
             "competing_products": 712,
@@ -272,18 +259,17 @@
             "competitor_rank_avg": 22.1,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "opportunity",
-          "opportunity_reason": "Low title density (<=2) with solid volume and clear 'bulk' intent."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "freeze dried strawberries",
-          "category": "Relevant",
-          "reason": "Describes freeze dried strawberries, matching the product form (slices) context.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 21,
           "search_volume": 30664,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 21,
           "cpr": 67,
           "competition": {
             "competing_products": 680,
@@ -291,18 +277,17 @@
             "competitor_rank_avg": 22.3,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Title density is high; not a zero/low-density opportunity."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Title density high; not a zero/low-density opportunity."
         },
         {
           "phrase": "dried strawberry",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'dried', which does not match slices form.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 10,
           "search_volume": 534,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 10,
           "cpr": 9,
           "competition": {
             "competing_products": 2000,
@@ -310,18 +295,17 @@
             "competitor_rank_avg": 24.9,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Irrelevant to the product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
         },
         {
           "phrase": "strawberries dried",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'dried', which does not match slices form.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 3,
           "search_volume": 279,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 3,
           "cpr": 8,
           "competition": {
             "competing_products": 3000,
@@ -329,18 +313,17 @@
             "competitor_rank_avg": 25.8,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Irrelevant to the product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
         },
         {
           "phrase": "dried strawberries bulk",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'dried', which does not match slices form.",
-          "relevancy_score": 3,
-          "intent_score": 5,
-          "title_density": 1,
           "search_volume": 268,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 1,
           "cpr": 8,
           "competition": {
             "competing_products": 2000,
@@ -348,18 +331,17 @@
             "competitor_rank_avg": 26.8,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Irrelevant to the product despite low title density."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "dry strawberries organic",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'dry strawberries', which does not match slices form.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 116,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 493,
@@ -367,18 +349,17 @@
             "competitor_rank_avg": 27.4,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but irrelevant to the product; ignore."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Zero title density but derivative/word-order variant of 'organic dried strawberries'; ignored per rule."
         },
         {
           "phrase": "freeze dried strawberries freeze-dried strawberries slices",
-          "category": "Relevant",
-          "reason": "Describes freeze dried strawberries slices, matching the product form.",
-          "relevancy_score": 10,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 101,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 312,
@@ -386,18 +367,17 @@
             "competitor_rank_avg": 27.9,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but keyword-stuffed/derivative phrasing; not a clean distinct query."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Zero title density but malformed/compound derivative phrase; ignored per rule."
         },
         {
           "phrase": "strawberry dried",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'dried', which does not match slices form.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 245,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 879,
@@ -405,18 +385,17 @@
             "competitor_rank_avg": 28.3,
             "competitor_performance_score": 8.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but irrelevant to the product; ignore."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Zero title density but derivative/word-order variant of 'dried strawberry'; ignored per rule."
         },
         {
           "phrase": "dry strawberries",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'dry strawberries', which does not match slices form.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 713,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 10,
           "competition": {
             "competing_products": 933,
@@ -424,18 +403,17 @@
             "competitor_rank_avg": 32.1,
             "competitor_performance_score": 6.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but irrelevant to the product; ignore."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Zero title density but derivative/word-order variant of 'dried strawberries'; ignored per rule."
         },
         {
           "phrase": "freeze dried fruits",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'fruits', without specifying slices.",
-          "relevancy_score": 4,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 773,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 11,
           "competition": {
             "competing_products": 6000,
@@ -443,18 +421,17 @@
             "competitor_rank_avg": 32.2,
             "competitor_performance_score": 6.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but too broad/irrelevant to specific product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "freeze dried strawberries slices",
-          "category": "Relevant",
-          "reason": "Describes freeze dried strawberries slices, matching the product form.",
-          "relevancy_score": 10,
-          "intent_score": 5,
-          "title_density": 2,
           "search_volume": 415,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 2,
           "cpr": 8,
           "competition": {
             "competing_products": 297,
@@ -462,18 +439,17 @@
             "competitor_rank_avg": 33.1,
             "competitor_performance_score": 6.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "opportunity",
-          "opportunity_reason": "Low title density (<=2) with solid volume; matches 'slices' intent."
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (2) with solid search volume (415)."
         },
         {
           "phrase": "dried freeze fruit",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'freeze fruit', which does not relate to slices.",
-          "relevancy_score": 4,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 106,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 10000,
@@ -481,18 +457,17 @@
             "competitor_rank_avg": 34.2,
             "competitor_performance_score": 6.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but irrelevant/broad; ignore."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "freeze dried strawberry slices",
-          "category": "Relevant",
-          "reason": "Describes freeze dried strawberry slices, matching the product form.",
-          "relevancy_score": 10,
-          "intent_score": 5,
-          "title_density": 4,
           "search_volume": 713,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 4,
           "cpr": 10,
           "competition": {
             "competing_products": 301,
@@ -500,18 +475,17 @@
             "competitor_rank_avg": 36.0,
             "competitor_performance_score": 6.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Title density above low-threshold; not a zero/low-density gap."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
         },
         {
           "phrase": "organic dried strawberries",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'dried strawberries', which does not match slices form.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 5,
           "search_volume": 445,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 5,
           "cpr": 8,
           "competition": {
             "competing_products": 573,
@@ -519,18 +493,17 @@
             "competitor_rank_avg": 36.0,
             "competitor_performance_score": 6.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Irrelevant to the product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
         },
         {
           "phrase": "dried strawberries organic",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'dried strawberries', which does not match slices form.",
-          "relevancy_score": 3,
-          "intent_score": 5,
-          "title_density": 1,
           "search_volume": 170,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 1,
           "cpr": 8,
           "competition": {
             "competing_products": 631,
@@ -538,18 +511,17 @@
             "competitor_rank_avg": 36.6,
             "competitor_performance_score": 6.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Irrelevant to the product despite low title density."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "freeze dried organic fruit",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'organic fruit', without specifying slices.",
-          "relevancy_score": 4,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 229,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 1000,
@@ -557,18 +529,17 @@
             "competitor_rank_avg": 37.7,
             "competitor_performance_score": 6.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but broad/irrelevant to the specific product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "freeze-dried fruit",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'fruit', which does not match slices form.",
-          "relevancy_score": 4,
-          "intent_score": 5,
-          "title_density": 11,
           "search_volume": 399,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 11,
           "cpr": 8,
           "competition": {
             "competing_products": 5000,
@@ -576,18 +547,17 @@
             "competitor_rank_avg": 39.0,
             "competitor_performance_score": 6.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Irrelevant to the product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "organic freeze dried fruit",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'freeze dried fruit', without specifying slices.",
-          "relevancy_score": 3,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 714,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 10,
           "competition": {
             "competing_products": 1000,
@@ -595,18 +565,17 @@
             "competitor_rank_avg": 40.4,
             "competitor_performance_score": 6.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but broad/irrelevant to the specific product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "dried strawberries no sugar added",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'dried strawberries', which does not match slices form.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 1,
           "search_volume": 1101,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 7,
+          "intent_score": 3,
+          "title_density": 1,
           "cpr": 26,
           "competition": {
             "competing_products": 558,
@@ -614,18 +583,17 @@
             "competitor_rank_avg": 42.6,
             "competitor_performance_score": 6.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Irrelevant to the product despite low title density."
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (1) with strong search volume (1101); distinct 'no sugar added' intent."
         },
         {
           "phrase": "crispy fruit freeze dried fruit",
-          "category": "Irrelevant",
-          "reason": "Describes 'freeze dried fruit', which does not specify slices.",
-          "relevancy_score": 2,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 442,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 2,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 627,
@@ -633,18 +601,17 @@
             "competitor_rank_avg": 43.6,
             "competitor_performance_score": 6.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but broad/brand-like term; not specific to product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "freeze dried fruit bulk",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'fruit', without specifying slices.",
-          "relevancy_score": 4,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 644,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 10,
           "competition": {
             "competing_products": 5000,
@@ -652,18 +619,17 @@
             "competitor_rank_avg": 43.7,
             "competitor_performance_score": 6.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but broad/irrelevant to the specific product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "freeze fruit",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'fruit', without specifying slices.",
-          "relevancy_score": 4,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 160,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 10000,
@@ -671,18 +637,17 @@
             "competitor_rank_avg": 44.3,
             "competitor_performance_score": 6.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but irrelevant/broad; ignore."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "dried strawberries",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'dried strawberries', which does not match slices form.",
-          "relevancy_score": 10,
-          "intent_score": 5,
-          "title_density": 21,
           "search_volume": 8603,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 21,
           "cpr": 41,
           "competition": {
             "competing_products": 819,
@@ -690,18 +655,17 @@
             "competitor_rank_avg": 44.4,
             "competitor_performance_score": 6.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Irrelevant to the product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Title density high; not a zero/low-density opportunity."
         },
         {
           "phrase": "freeze dried fruit no sugar added",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'freeze dried fruit', not specific to slices.",
-          "relevancy_score": 3,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 153,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 429,
@@ -709,18 +673,17 @@
             "competitor_rank_avg": 44.6,
             "competitor_performance_score": 6.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but broad/irrelevant to the specific product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "dry freeze fruit",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'freeze fruit', which does not match slices form.",
-          "relevancy_score": 7,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 280,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 7,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 5000,
@@ -728,18 +691,17 @@
             "competitor_rank_avg": 45.1,
             "competitor_performance_score": 6.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but irrelevant/broad; ignore."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "bulk freeze dried fruit",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'freeze dried fruit', which does not specify slices.",
-          "relevancy_score": 2,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 364,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 2,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 5000,
@@ -747,18 +709,17 @@
             "competitor_rank_avg": 45.9,
             "competitor_performance_score": 6.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but broad/irrelevant to the specific product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "freeze dried fruit variety pack",
-          "category": "Irrelevant",
-          "reason": "Describes a variety pack, not specific to slices.",
-          "relevancy_score": 4,
-          "intent_score": 5,
-          "title_density": 6,
           "search_volume": 103,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 6,
           "cpr": 8,
           "competition": {
             "competing_products": 658,
@@ -766,18 +727,17 @@
             "competitor_rank_avg": 47.6,
             "competitor_performance_score": 6.0
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Irrelevant to the product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "dried strawberry slices",
-          "category": "Relevant",
-          "reason": "Describes dried strawberry slices, relevant to the base form (slices).",
-          "relevancy_score": 10,
-          "intent_score": 5,
-          "title_density": 6,
           "search_volume": 355,
+          "root": "strawberry",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 6,
           "cpr": 8,
           "competition": {
             "competing_products": 324,
@@ -785,18 +745,17 @@
             "competitor_rank_avg": 48.9,
             "competitor_performance_score": 6.0
           },
-          "root": "strawberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Title density above low-threshold; not a zero/low-density gap."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
         },
         {
           "phrase": "so natural freeze dried fruit",
-          "category": "Outlier",
-          "reason": "Generic term, very broad, not specific to the product context.",
-          "relevancy_score": 2,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 642,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 2,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 10,
           "competition": {
             "competing_products": 516,
@@ -804,18 +763,395 @@
             "competitor_rank_avg": 49.0,
             "competitor_performance_score": 6.0
           },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "freeze dried fruit organic",
+          "search_volume": 332,
           "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Outlier/broad term; TD=0 but not specific to product."
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 1000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 49.8,
+            "competitor_performance_score": 6.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "freeze dried fruit",
+          "search_volume": 23732,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 10,
+          "cpr": 56,
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 51.2,
+            "competitor_performance_score": 6.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "freeze dry fruit",
+          "search_volume": 433,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 55.3,
+            "competitor_performance_score": 6.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "freeze dried strawberries and bananas",
+          "search_volume": 341,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 311,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 58.0,
+            "competitor_performance_score": 6.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "freeze dried smoothie",
+          "search_volume": 149,
+          "root": "smoothie",
+          "category": "Irrelevant",
+          "relevancy_score": 2,
+          "intent_score": 0,
+          "title_density": 1,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 886,
+            "ranking_competitors": 8,
+            "competitor_rank_avg": 62.6,
+            "competitor_performance_score": 6.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "organic fresh strawberries",
+          "search_volume": 106,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 353,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 63.8,
+            "competitor_performance_score": 6.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "freeze dried fruit snack packs",
+          "search_volume": 173,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 7,
+          "intent_score": 0,
+          "title_density": 2,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 1000,
+            "ranking_competitors": 7,
+            "competitor_rank_avg": 41.4,
+            "competitor_performance_score": 4.8
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "organic dried strawberries no sugar added",
+          "search_volume": 124,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 364,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 64.8,
+            "competitor_performance_score": 4.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "freeze dried berries",
+          "search_volume": 773,
+          "root": "berry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 1,
+          "cpr": 11,
+          "competition": {
+            "competing_products": 867,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 75.9,
+            "competitor_performance_score": 4.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "organic freeze dried",
+          "search_volume": 125,
+          "root": "freeze-dried",
+          "category": "Irrelevant",
+          "relevancy_score": 4,
+          "intent_score": 0,
+          "title_density": 5,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 7,
+            "competitor_rank_avg": 67.1,
+            "competitor_performance_score": 3.2
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "strawberry life",
+          "search_volume": 313,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 2,
+          "intent_score": 0,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 204,
+            "ranking_competitors": 2,
+            "competitor_rank_avg": 41.0,
+            "competitor_performance_score": 2.4
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "red ripe strawberry",
+          "search_volume": 173,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 1,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 131,
+            "ranking_competitors": 2,
+            "competitor_rank_avg": 55.0,
+            "competitor_performance_score": 2.4
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "strawberries organic fresh",
+          "search_volume": 431,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 1,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 287,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 99.8,
+            "competitor_performance_score": 2.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "freeze dried fruit for drinks",
+          "search_volume": 133,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 892,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 108.3,
+            "competitor_performance_score": 2.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "strawberry organic",
+          "search_volume": 435,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 752,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 123.9,
+            "competitor_performance_score": 2.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "organic freeze dried strawberry powder",
+          "search_volume": 148,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 2,
+          "intent_score": 0,
+          "title_density": 6,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 327,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 129.0,
+            "competitor_performance_score": 2.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "organic freeze dried fruit powder",
+          "search_volume": 171,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 2,
+          "intent_score": 0,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 848,
+            "ranking_competitors": 7,
+            "competitor_rank_avg": 142.7,
+            "competitor_performance_score": 1.6
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "dried fruit for baking",
+          "search_volume": 134,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 1,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 3,
+            "competitor_rank_avg": 71.7,
+            "competitor_performance_score": 2.4
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "strawberry ma",
+          "search_volume": 155,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 179,
+            "ranking_competitors": 1,
+            "competitor_rank_avg": 2.0,
+            "competitor_performance_score": 2.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant or unclear query; excluded."
+        },
+        {
+          "phrase": "strawberry crunch",
+          "search_volume": 328,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 2,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 468,
+            "ranking_competitors": 1,
+            "competitor_rank_avg": 2.0,
+            "competitor_performance_score": 2.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
+        },
+        {
+          "phrase": "strawberrie",
+          "search_volume": 365,
+          "root": "strawberry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 6,
+            "competitor_rank_avg": 102.3,
+            "competitor_performance_score": 2.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Misspelling/irrelevant; excluded."
         },
         {
           "phrase": "freeze dried raspberries for baking",
-          "category": "Irrelevant",
-          "reason": "Describes a different product ('raspberries'), not matching slices.",
-          "relevancy_score": 3,
-          "intent_score": 5,
-          "title_density": 1,
           "search_volume": 426,
+          "root": "raspberry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 1,
           "cpr": 8,
           "competition": {
             "competing_products": 208,
@@ -823,18 +1159,17 @@
             "competitor_rank_avg": 104.0,
             "competitor_performance_score": 2.0
           },
-          "root": "raspberry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "Irrelevant product (raspberries), despite low title density."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "dried fruit for oatmeal",
-          "category": "Irrelevant",
-          "reason": "Describes a different type, 'dried fruit', which does not match slices form.",
-          "relevancy_score": 3,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 273,
+          "root": "fruit",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 1000,
@@ -842,18 +1177,17 @@
             "competitor_rank_avg": 135.8,
             "competitor_performance_score": 1.6
           },
-          "root": "fruit",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but irrelevant to the specific product."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "dry berries",
-          "category": "Irrelevant",
-          "reason": "Describes 'berries', which does not specify slices.",
-          "relevancy_score": 3,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 130,
+          "root": "berry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 10000,
@@ -861,18 +1195,17 @@
             "competitor_rank_avg": 150.3,
             "competitor_performance_score": 1.2
           },
-          "root": "berry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but broad/irrelevant; ignore."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         },
         {
           "phrase": "fruit berries",
-          "category": "Irrelevant",
-          "reason": "Describes 'berries', which does not specify slices.",
-          "relevancy_score": 3,
-          "intent_score": 5,
-          "title_density": 0,
           "search_volume": 298,
+          "root": "berry",
+          "category": "Irrelevant",
+          "relevancy_score": 3,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 20000,
@@ -880,17 +1213,36 @@
             "competitor_rank_avg": 140.5,
             "competitor_performance_score": 0.8
           },
-          "root": "berry",
-          "opportunity_decision": "ignore",
-          "opportunity_reason": "TD=0 but broad/irrelevant; ignore."
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category; excluded."
         }
       ],
       "stats": {
         "Relevant": {
-          "count": 27,
+          "count": 39,
           "examples": [
             "strawberry freeze dried",
-            "strawberries freeze dried"
+            "strawberries freeze dried",
+            "dried freeze strawberries",
+            "freeze-dried strawberries",
+            "freeze dried strawberries bulk",
+            "freeze dried strawberry",
+            "freeze dried strawberries organic",
+            "freeze dry strawberry",
+            "freeze dry strawberries",
+            "dry strawberry fruit",
+            "freeze dried organic strawberries",
+            "free dried strawberries",
+            "organic freeze dried strawberries",
+            "freeze dried strawberries",
+            "dried strawberry",
+            "strawberries dried",
+            "dry strawberries organic",
+            "freeze dried strawberries freeze-dried strawberries slices",
+            "freeze dried strawberries slices",
+            "freeze dried strawberry slices",
+            "dried strawberry slices",
+            "dried strawberries"
           ]
         },
         "Design-Specific": {
@@ -898,10 +1250,30 @@
           "examples": []
         },
         "Irrelevant": {
-          "count": 31,
+          "count": 39,
           "examples": [
-            "dry strawberry fruit",
-            "dried strawberry"
+            "bulk freeze dried strawberries",
+            "freeze dried fruits",
+            "dried strawberries bulk",
+            "freeze dried fruits",
+            "dried strawberries organic",
+            "freeze dried organic fruit",
+            "freeze-dried fruit",
+            "organic freeze dried",
+            "strawberry life",
+            "red ripe strawberry",
+            "strawberries organic fresh",
+            "freeze dried fruit for drinks",
+            "strawberry organic",
+            "organic freeze dried strawberry powder",
+            "organic freeze dried fruit powder",
+            "strawberry ma",
+            "strawberry crunch",
+            "strawberrie",
+            "freeze dried raspberries for baking",
+            "dried fruit for oatmeal",
+            "dry berries",
+            "fruit berries"
           ]
         },
         "Branded": {
@@ -913,10 +1285,8 @@
           "examples": []
         },
         "Outlier": {
-          "count": 1,
-          "examples": [
-            "so natural freeze dried fruit"
-          ]
+          "count": 0,
+          "examples": []
         }
       }
     },
@@ -925,7 +1295,7 @@
     "scraped_product": {
       "url": "https://www.amazon.com/dp/B0D5BL35MS",
       "status": 200,
-      "response_size": 1691515,
+      "response_size": 1352919,
       "elements": {
         "productTitle": {
           "present": true,
@@ -969,7 +1339,7 @@
             "Manufacturer ‏ : ‎": "Brewer Outdoor Solutions",
             "ASIN ‏ : ‎": "B0D5BL35MS",
             "Units ‏ : ‎": "4.8 Ounce",
-            "Best Sellers Rank": "#31,559 in Grocery & Gourmet Food ( See Top 100 in Grocery & Gourmet Food ) #91 in Dried Berries",
+            "Best Sellers Rank": "#33,618 in Grocery & Gourmet Food ( See Top 100 in Grocery & Gourmet Food ) #99 in Dried Berries",
             "Customer Reviews": "4.3 out of 5 stars 97 ratings"
           }
         },
@@ -1043,21 +1413,22 @@
           "content": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) Organic Freeze Dried Strawberries No Sugar Added, Dry Strawberry Gluten Free Fruit Snack for Baking, Smoothies, Cereals & Travel",
           "keywords_found": [
             "organic freeze dried strawberries",
+            "dried strawberries no sugar added",
             "freeze dried strawberries slices",
-            "bulk freeze dried strawberries",
-            "freeze dried strawberries"
+            "freeze dried strawberries",
+            "dried strawberries"
           ],
-          "keyword_count": 4,
+          "keyword_count": 5,
           "character_count": 199,
-          "keyword_density": 5.53,
+          "keyword_density": 7.54,
           "opportunities": [
             "strawberry freeze dried",
             "freeze dried strawberry",
             "freeze dry strawberry",
             "freeze dry strawberries",
-            "freeze dried strawberries freeze-dried strawberries slices"
+            "dried strawberry"
           ],
-          "total_search_volume": 35402
+          "total_search_volume": 45645
         },
         "bullets_analysis": [
           {
@@ -1066,11 +1437,12 @@
               "freeze dried strawberry slices",
               "strawberry freeze dried",
               "freeze dried strawberry",
-              "dried strawberry slices"
+              "dried strawberry slices",
+              "dried strawberry"
             ],
-            "keyword_count": 4,
+            "keyword_count": 5,
             "character_count": 240,
-            "keyword_density": 3.75,
+            "keyword_density": 5.42,
             "opportunities": [
               "freeze-dried strawberries",
               "freeze dried strawberries bulk",
@@ -1078,32 +1450,36 @@
               "freeze dry strawberry",
               "freeze dry strawberries"
             ],
-            "total_search_volume": 2339
+            "total_search_volume": 2873
           },
           {
             "content": "Ideal Travel Companion: Lightweight, mess-free, and shelf-stable, our freeze dried strawberries bulk are perfect for hiking or camping, backpacking adventures. Enjoy this organic freeze dried fruit straight from the pouch or rehydrate for a fresh fruity treat.",
             "keywords_found": [
               "freeze dried strawberries bulk",
-              "freeze dried strawberries"
+              "freeze dried strawberries",
+              "dried strawberries"
             ],
-            "keyword_count": 2,
+            "keyword_count": 3,
             "character_count": 260,
-            "keyword_density": 3.46,
+            "keyword_density": 4.62,
             "opportunities": [
               "freeze dried strawberries organic",
               "freeze dry strawberry",
               "freeze dry strawberries",
-              "freeze dried organic strawberries",
-              "organic freeze dried strawberries"
+              "dry strawberry fruit",
+              "freeze dried organic strawberries"
             ],
-            "total_search_volume": 31573
+            "total_search_volume": 40176
           },
           {
             "content": "From Farm to Your Table: Our organic dried strawberries, delivered sun-ripened, farm-fresh, are made from real strawberries. No added sugar, no preservatives or GMOs - all natural dry strawberries with iron to help support immune health with every bite.",
-            "keywords_found": [],
-            "keyword_count": 0,
+            "keywords_found": [
+              "organic dried strawberries",
+              "dry strawberries"
+            ],
+            "keyword_count": 2,
             "character_count": 253,
-            "keyword_density": 0.0,
+            "keyword_density": 2.37,
             "opportunities": [
               "strawberry freeze dried",
               "strawberries freeze dried",
@@ -1111,7 +1487,7 @@
               "freeze-dried strawberries",
               "freeze dried strawberries bulk"
             ],
-            "total_search_volume": 0
+            "total_search_volume": 1158
           },
           {
             "content": "Shelf Life: Our freeze-dried strawberries are at peak flavor for up to 24 months. For the best taste and texture in every bite, please enjoy within two year of purchase at anywhere at anytime.",
@@ -1120,13 +1496,13 @@
             ],
             "keyword_count": 1,
             "character_count": 192,
-            "keyword_density": 3.65,
+            "keyword_density": 5.73,
             "opportunities": [
               "freeze dried strawberries bulk",
               "freeze dried strawberries organic",
               "freeze dry strawberry",
               "freeze dry strawberries",
-              "freeze dried organic strawberries"
+              "dry strawberry fruit"
             ],
             "total_search_volume": 470
           },
@@ -1135,13 +1511,13 @@
             "keywords_found": [],
             "keyword_count": 0,
             "character_count": 208,
-            "keyword_density": 4.33,
+            "keyword_density": 5.77,
             "opportunities": [
               "freeze dried strawberries organic",
               "freeze dry strawberry",
               "freeze dry strawberries",
-              "freeze dried organic strawberries",
-              "organic freeze dried strawberries"
+              "dry strawberry fruit",
+              "freeze dried organic strawberries"
             ],
             "total_search_volume": 0
           }
@@ -1153,11 +1529,12 @@
               "freeze dried strawberry slices",
               "strawberry freeze dried",
               "freeze dried strawberry",
-              "dried strawberry slices"
+              "dried strawberry slices",
+              "dried strawberry"
             ],
-            "keyword_count": 4,
+            "keyword_count": 5,
             "character_count": 240,
-            "keyword_density": 3.75,
+            "keyword_density": 5.42,
             "opportunities": [
               "freeze-dried strawberries",
               "freeze dried strawberries bulk",
@@ -1165,32 +1542,37 @@
               "freeze dry strawberry",
               "freeze dry strawberries"
             ],
-            "total_search_volume": 34053
+            "total_search_volume": 43714
           },
           {
             "content": "Ideal Travel Companion: Lightweight, mess-free, and shelf-stable, our freeze dried strawberries bulk are perfect for hiking or camping, backpacking adventures. Enjoy this organic freeze dried fruit straight from the pouch or rehydrate for a fresh fruity treat.",
             "keywords_found": [
               "freeze dried strawberries bulk",
-              "freeze dried strawberries"
+              "freeze dried strawberries",
+              "dried strawberries"
             ],
-            "keyword_count": 2,
+            "keyword_count": 3,
             "character_count": 260,
-            "keyword_density": 3.46,
+            "keyword_density": 4.62,
             "opportunities": [
               "freeze dried strawberries organic",
               "freeze dry strawberry",
               "freeze dry strawberries",
-              "freeze dried organic strawberries",
-              "organic freeze dried strawberries"
+              "dry strawberry fruit",
+              "freeze dried organic strawberries"
             ],
-            "total_search_volume": 34431
+            "total_search_volume": 43610
           },
           {
             "content": "From Farm to Your Table: Our organic dried strawberries, delivered sun-ripened, farm-fresh, are made from real strawberries. No added sugar, no preservatives or GMOs - all natural dry strawberries with iron to help support immune health with every bite.",
-            "keywords_found": [],
-            "keyword_count": 0,
+            "keywords_found": [
+              "organic dried strawberries",
+              "dried strawberries",
+              "dry strawberries"
+            ],
+            "keyword_count": 3,
             "character_count": 253,
-            "keyword_density": 0.0,
+            "keyword_density": 2.37,
             "opportunities": [
               "strawberry freeze dried",
               "strawberries freeze dried",
@@ -1198,48 +1580,50 @@
               "freeze-dried strawberries",
               "freeze dried strawberries bulk"
             ],
-            "total_search_volume": 0
+            "total_search_volume": 10819
           },
           {
             "content": "Shelf Life: Our freeze-dried strawberries are at peak flavor for up to 24 months. For the best taste and texture in every bite, please enjoy within two year of purchase at anywhere at anytime.",
             "keywords_found": [
-              "freeze-dried strawberries"
+              "freeze-dried strawberries",
+              "dried strawberries"
             ],
-            "keyword_count": 1,
+            "keyword_count": 2,
             "character_count": 192,
-            "keyword_density": 3.65,
+            "keyword_density": 5.73,
             "opportunities": [
               "freeze dried strawberries bulk",
               "freeze dried strawberries organic",
               "freeze dry strawberry",
               "freeze dry strawberries",
-              "freeze dried organic strawberries"
+              "dry strawberry fruit"
             ],
-            "total_search_volume": 33040
+            "total_search_volume": 42701
           },
           {
             "content": "Bulk Packed for Convenience: Buy in bulk and enjoy premium quality freeze dried strawberries whenever you need them. Great for baking, snacking, or mixing with freeze dried fruit for a refreshing fruit combo.",
             "keywords_found": [
-              "freeze dried strawberries"
+              "freeze dried strawberries",
+              "dried strawberries"
             ],
-            "keyword_count": 1,
+            "keyword_count": 2,
             "character_count": 208,
-            "keyword_density": 4.33,
+            "keyword_density": 5.77,
             "opportunities": [
               "freeze dried strawberries organic",
               "freeze dry strawberry",
               "freeze dry strawberries",
-              "freeze dried organic strawberries",
-              "organic freeze dried strawberries"
+              "dry strawberry fruit",
+              "freeze dried organic strawberries"
             ],
-            "total_search_volume": 34431
+            "total_search_volume": 43610
           }
         ],
         "backend_keywords": [],
         "keyword_coverage": {
-          "total_keywords": 18,
-          "covered_keywords": 10,
-          "coverage_percentage": 55.6,
+          "total_keywords": 26,
+          "covered_keywords": 14,
+          "coverage_percentage": 53.8,
           "missing_high_intent": [
             "strawberries freeze dried",
             "dried freeze strawberries",
@@ -1248,6 +1632,8 @@
             "freeze dry strawberries",
             "freeze dried organic strawberries",
             "free dried strawberries",
+            "strawberries dried",
+            "dry strawberries organic",
             "freeze dried strawberries freeze-dried strawberries slices"
           ],
           "missing_high_volume": []
@@ -1258,7 +1644,7 @@
           "coverage_percentage": 100.0,
           "missing_roots": [],
           "root_volumes": {
-            "strawberry": 38444
+            "strawberry": 50295
           }
         },
         "total_character_usage": {
@@ -1271,35 +1657,41 @@
       },
       "optimized_seo": {
         "optimized_title": {
-          "content": "Organic Freeze Dried Strawberry Slices - Pack of 4 (1.2 Oz Each) | No Sugar Added, Gluten Free Natural Snack | Perfect for Baking, Smoothies, Travel",
+          "content": "Bulk Organic Freeze Dried Strawberry Slices - No Sugar Added, 4 Pack (1.2 Oz Each) | Premium Quality, Gluten-Free Snack Perfect for Baking, Smoothies & Travel",
           "keywords_included": [
             "organic freeze dried strawberries",
+            "dried strawberries no sugar added",
             "freeze dried strawberries organic",
             "freeze dried organic strawberries",
             "freeze dried strawberries slices",
             "freeze dried strawberry slices",
+            "freeze dried strawberries bulk",
+            "organic dried strawberries",
             "freeze dried strawberries",
             "strawberries freeze dried",
             "dried freeze strawberries",
             "freeze dried strawberry",
             "strawberry freeze dried",
             "dried strawberry slices",
-            "free dried strawberries"
+            "free dried strawberries",
+            "dried strawberries",
+            "strawberries dried",
+            "dried strawberry",
+            "strawberry dried"
           ],
           "improvements": [
             "Amazon Guidelines Compliant",
-            "80-char optimized: Organic Freeze Dried Strawberry Slices - Pack of 4...",
+            "80-char optimized: Bulk Organic Freeze Dried Strawberry Slices - No S...",
             "Main root included: True",
             "Design root included: True"
           ],
-          "character_count": 148,
-          "total_search_volume": 35880
+          "character_count": 158,
+          "total_search_volume": 47996
         },
         "optimized_bullets": [
           {
-            "content": "NATURAL INGREDIENTS: Discover our freeze dried strawberries freeze-dried strawberries slices made for nature lovers",
+            "content": "ENJOY NATURAL FLAVOR: Our freeze dried strawberries slices are perfect for a healthy snack, making them ideal for any time you crave a sweet treat.",
             "keywords_included": [
-              "freeze dried strawberries freeze-dried strawberries slices",
               "freeze dried strawberries slices",
               "freeze dried strawberry slices",
               "freeze dried strawberries",
@@ -1309,116 +1701,120 @@
               "freeze dried strawberry",
               "strawberry freeze dried",
               "dried strawberry slices",
-              "free dried strawberries"
+              "free dried strawberries",
+              "dried strawberries",
+              "strawberries dried",
+              "dried strawberry",
+              "strawberry dried"
             ],
             "improvements": [
-              "Benefit-focused: Natural ingredients",
+              "Benefit-focused: Natural flavor",
               "Guideline compliant: PASS"
             ],
-            "character_count": 115,
-            "total_search_volume": 34624
+            "character_count": 147,
+            "total_search_volume": 44184
           },
           {
-            "content": "EASY TO USE: Perfect dried strawberry slices for quick snacking, baking, or adding to cereals and smoothies",
-            "keywords_included": [],
+            "content": "PERFECT FOR ON-THE-GO: This freeze dried strawberries bulk pack is easy to carry and a great choice for travel food.",
+            "keywords_included": [
+              "freeze dried strawberries bulk"
+            ],
             "improvements": [
               "Benefit-focused: Convenience",
               "Guideline compliant: PASS"
             ],
-            "character_count": 107,
-            "total_search_volume": 355
+            "character_count": 116,
+            "total_search_volume": 43610
           },
           {
-            "content": "HEALTHY SNACKING: Enjoy freeze dried strawberries bulk with no added sugar for guilt-free treats",
-            "keywords_included": [
-              "freeze dried strawberries bulk",
-              "bulk freeze dried strawberries"
-            ],
-            "improvements": [
-              "Benefit-focused: Healthy choice",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 96,
-            "total_search_volume": 34431
-          },
-          {
-            "content": "ON-THE-GO ENERGY: Keep your energy up with organic freeze dried strawberries perfect for travel",
+            "content": "NUTRIENT-RICH AND VERSATILE: Organic freeze dried strawberries provide a delicious addition to breakfasts, smoothies, or desserts.",
             "keywords_included": [
               "organic freeze dried strawberries",
               "freeze dried strawberries organic",
-              "freeze dried organic strawberries"
+              "freeze dried organic strawberries",
+              "organic dried strawberries"
             ],
             "improvements": [
-              "Benefit-focused: Energy boost",
+              "Benefit-focused: Nutritional benefits",
               "Guideline compliant: PASS"
             ],
-            "character_count": 95,
-            "total_search_volume": 34867
+            "character_count": 130,
+            "total_search_volume": 44973
           },
           {
-            "content": "LONG LASTING: Our freeze dried organic strawberries have a shelf life of up to 24 months, ensuring freshness",
-            "keywords_included": [],
+            "content": "GUILT-FREE INDULGENCE: Enjoy dried strawberry slices with no sugar added for a naturally sweet treat that fits any diet.",
+            "keywords_included": [
+              "dried strawberries no sugar added"
+            ],
             "improvements": [
-              "Benefit-focused: Longevity",
+              "Benefit-focused: Health-focused",
               "Guideline compliant: PASS"
             ],
-            "character_count": 108,
-            "total_search_volume": 34397
+            "character_count": 120,
+            "total_search_volume": 11245
+          },
+          {
+            "content": "EXCELLENT SOURCE OF FIBER: These strawberry freeze dried snacks are a delicious way to support digestive health.",
+            "keywords_included": [],
+            "improvements": [
+              "Benefit-focused: Fiber source",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 112,
+            "total_search_volume": 42231
           }
         ],
         "optimized_backend_keywords": [
-          "freeze dried strawberries slices",
-          "strawberry freeze dried",
-          "freeze dry strawberries",
-          "freeze dried strawberries organic",
-          "strawberries freeze dried",
-          "bulk freeze dried strawberries",
-          "dried freeze strawberries"
+          "dried strawberries no sugar added",
+          "dry strawberries",
+          "freeze-dried strawberries",
+          "organic dried strawberries",
+          "freeze dry strawberries"
         ],
         "keyword_strategy": {
           "amazon_compliance": "ENFORCED",
-          "first_80_optimization": "Included main root 'freeze dried strawberry slices', design root 'slices', and key benefit 'no sugar added' in first 80 characters",
-          "keyword_integration": "Used high-value keywords naturally with strong conversion benefits",
+          "first_80_optimization": "Included main root 'freeze dried strawberries', design root 'slices', and key benefit 'no sugar added' in first 80 characters",
+          "keyword_integration": "Used highest volume variants while maintaining natural flow",
           "guideline_compliance": "STRICT"
         },
-        "rationale": "Task 7 Amazon Guidelines Compliance Applied: Followed Amazon guidelines strictly while highlighting natural benefits. First 80 characters optimized for mobile viewing with main and design-specific keyword roots. All content verified for Amazon policy compliance."
+        "rationale": "Task 7 Amazon Guidelines Compliance Applied: Strictly followed Amazon guidelines while maximizing SEO value. First 80 characters optimized for mobile viewing with main and design-specific keyword roots. All content verified for Amazon policy compliance."
       },
       "comparison": {
         "coverage_improvement": {
-          "total_keywords": 18,
-          "before_covered": 15,
+          "total_keywords": 26,
+          "before_covered": 21,
           "after_covered": 16,
-          "before_coverage_pct": 83.33,
-          "after_coverage_pct": 88.89,
-          "delta_pct_points": 5.56,
+          "before_coverage_pct": 80.77,
+          "after_coverage_pct": 61.54,
+          "delta_pct_points": -19.23,
           "new_keywords_added": [
-            "freeze dried strawberries freeze-dried strawberries slices",
-            "freeze dry strawberries"
+            "freeze dry strawberries",
+            "strawberry dried"
           ]
         },
         "intent_improvement": {
-          "high_intent_total": 46,
-          "before_covered": 15,
+          "high_intent_total": 25,
+          "before_covered": 20,
           "after_covered": 16,
-          "delta": 1
+          "delta": 0
         },
         "volume_improvement": {
-          "estimated_volume_before": 37741,
-          "estimated_volume_after": 38147,
-          "delta_volume": 406
+          "estimated_volume_before": 49231,
+          "estimated_volume_after": 48034,
+          "delta_volume": 0
         },
         "character_efficiency": {
           "title_limit": 200,
           "title_before": 199,
-          "title_after": 148,
+          "title_after": 158,
           "title_utilization_before_pct": 99.5,
-          "title_utilization_after_pct": 74.0,
+          "title_utilization_after_pct": 79.0,
           "backend_limit": 249,
           "backend_before": 0,
-          "backend_after": 197
+          "backend_after": 127
         },
         "summary_metrics": {
-          "overall_improvement_score": 1.06,
+          "overall_improvement_score": -3.92,
           "priority_recommendations": 1
         }
       },
@@ -1428,15 +1824,15 @@
         "category": "Unknown"
       },
       "analysis_metadata": {
-        "total_keywords_analyzed": 46,
-        "relevant_keywords_count": 18,
-        "high_intent_keywords_count": 46,
+        "total_keywords_analyzed": 67,
+        "relevant_keywords_count": 26,
+        "high_intent_keywords_count": 25,
         "optimization_method": "ai"
       }
     },
     "summary": {
-      "current_coverage": "55.6%",
-      "optimization_opportunities": 8,
+      "current_coverage": "53.8%",
+      "optimization_opportunities": 10,
       "method": "ai"
     }
   },
@@ -1512,7 +1908,7 @@
   "source": "amazon_sales_intelligence_pipeline",
   "monitoring_stats": {
     "overall": {
-      "elapsed_time": 1113.049637079239,
+      "elapsed_time": 1346.7271864414215,
       "total_requests": 0,
       "successful_requests": 0,
       "failed_requests": 0,

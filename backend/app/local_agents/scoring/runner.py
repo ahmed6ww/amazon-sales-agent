@@ -6,6 +6,36 @@ import logging
 logger = logging.getLogger(__name__)
 
 
+def strip_markdown_code_fences(text: str) -> str:
+	"""
+	Remove markdown code fences from AI output.
+	GPT-4o and gpt-4o-mini often wrap JSON in ```json ... ```
+	
+	Args:
+		text: AI output text that may contain markdown fences
+		
+	Returns:
+		Clean text without markdown fences
+	"""
+	if not text:
+		return text
+	
+	text = text.strip()
+	
+	# Remove opening fence: ```json or ```
+	if text.startswith('```'):
+		# Find end of first line
+		first_newline = text.find('\n')
+		if first_newline != -1:
+			text = text[first_newline + 1:]
+	
+	# Remove closing fence: ```
+	if text.endswith('```'):
+		text = text[:-3]
+	
+	return text.strip()
+
+
 class ScoringRunner:
 	"""Compute buyer intent (0..3) and sorted views for keywords.
 
@@ -78,22 +108,32 @@ class ScoringRunner:
 			output = result.final_output
 			if output:
 				try:
-					parsed_result = _json.loads(output)
+					# Strip markdown code fences (GPT-4o-mini compatibility)
+					clean_output = strip_markdown_code_fences(output)
+					parsed_result = _json.loads(clean_output)
 					if isinstance(parsed_result, list):
+						logger.info(f"[ScoringRunner] ✅ Successfully parsed intent scoring for {len(parsed_result)} items")
 						return parsed_result
 					elif isinstance(parsed_result, dict) and "items" in parsed_result:
+						logger.info(f"[ScoringRunner] ✅ Successfully parsed intent scoring for {len(parsed_result['items'])} items")
 						return parsed_result["items"]
-				except _json.JSONDecodeError:
-					logger.warning("[ScoringRunner] Failed to parse intent scoring result")
+				except _json.JSONDecodeError as e:
+					logger.warning(f"[ScoringRunner] Failed to parse intent scoring result: {e}")
+					logger.debug(f"[ScoringRunner] Raw output (first 200 chars): {output[:200] if output else 'None'}...")
 		elif result and hasattr(result, 'content'):
 			try:
-				parsed_result = _json.loads(result.content)
+				# Strip markdown code fences (GPT-4o-mini compatibility)
+				clean_content = strip_markdown_code_fences(result.content)
+				parsed_result = _json.loads(clean_content)
 				if isinstance(parsed_result, list):
+					logger.info(f"[ScoringRunner] ✅ Successfully parsed intent scoring for {len(parsed_result)} items")
 					return parsed_result
 				elif isinstance(parsed_result, dict) and "items" in parsed_result:
+					logger.info(f"[ScoringRunner] ✅ Successfully parsed intent scoring for {len(parsed_result['items'])} items")
 					return parsed_result["items"]
-			except _json.JSONDecodeError:
-				logger.warning("[ScoringRunner] Failed to parse intent scoring result")
+			except _json.JSONDecodeError as e:
+				logger.warning(f"[ScoringRunner] Failed to parse intent scoring result: {e}")
+				logger.debug(f"[ScoringRunner] Raw content (first 200 chars): {result.content[:200] if result.content else 'None'}...")
 		
 		# Fallback: return original items with default intent score
 		logger.warning("[ScoringRunner] Intent scoring failed, using fallback")
