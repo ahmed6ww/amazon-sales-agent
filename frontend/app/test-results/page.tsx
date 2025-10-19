@@ -146,6 +146,8 @@ const TestResultsPage = () => {
   const [designCsv, setDesignCsv] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
+  const [progressMessage, setProgressMessage] = useState("");
 
   // Data state
   const [response, setResponse] = useState<any | null>(null);
@@ -358,27 +360,38 @@ const TestResultsPage = () => {
   const handleRun = async () => {
     setLoading(true);
     setError(null);
+    setProgress(0);
+    setProgressMessage("Starting analysis...");
     try {
       if (!asinOrUrl.trim()) {
         throw new Error("ASIN or URL is required");
       }
 
-      // Call the real API
-      const response = await api.testResearchKeywords({
-        asin_or_url: asinOrUrl,
-        marketplace: marketplace || "US",
-        main_keyword: mainKeyword || undefined,
-        revenue_csv: revenueCsv || undefined,
-        design_csv: designCsv || undefined,
-      });
+      // Call the background job API with polling
+      const response = await api.amazonSalesIntelligenceBackground(
+        {
+          asin_or_url: asinOrUrl,
+          marketplace: marketplace || "US",
+          main_keyword: mainKeyword || undefined,
+          revenue_csv: revenueCsv || undefined,
+          design_csv: designCsv || undefined,
+        },
+        (progressPercent: number, message: string) => {
+          setProgress(progressPercent);
+          setProgressMessage(message);
+          console.log(`Progress: ${progressPercent}% - ${message}`);
+        }
+      );
 
       if (!response.success) {
         throw new Error(response.error || "API request failed");
       }
 
       setResponse(response.data as any);
+      setProgressMessage("Analysis complete!");
     } catch (e: any) {
       setError(e?.message || "Unknown error");
+      setProgressMessage("");
     } finally {
       setLoading(false);
     }
@@ -562,10 +575,29 @@ const TestResultsPage = () => {
             </div>
             {error && <div className="text-sm text-red-600">{error}</div>}
             {loading && (
-              <div className="text-sm text-blue-600">
-                <div className="flex items-center gap-2">
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                  Analysis in progress... (this may take 2-5 minutes)
+              <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                      <span className="text-sm font-medium text-blue-900">
+                        {progressMessage || "Processing..."}
+                      </span>
+                    </div>
+                    <span className="text-sm font-semibold text-blue-700">
+                      {progress}%
+                    </span>
+                  </div>
+                  <div className="w-full bg-blue-200 rounded-full h-2.5">
+                    <div
+                      className="bg-blue-600 h-2.5 rounded-full transition-all duration-500"
+                      style={{ width: `${progress}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-xs text-blue-700">
+                    This may take 10-15 minutes. You can safely leave this page
+                    - the analysis will continue on the server.
+                  </p>
                 </div>
               </div>
             )}
@@ -663,6 +695,33 @@ const TestResultsPage = () => {
             </span>
           </div>
           {error && <div className="text-sm text-red-600">{error}</div>}
+          {loading && (
+            <div className="mt-4 mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                    <span className="text-sm font-medium text-blue-900">
+                      {progressMessage || "Processing..."}
+                    </span>
+                  </div>
+                  <span className="text-sm font-semibold text-blue-700">
+                    {progress}%
+                  </span>
+                </div>
+                <div className="w-full bg-blue-200 rounded-full h-2.5">
+                  <div
+                    className="bg-blue-600 h-2.5 rounded-full transition-all duration-500"
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
+                <p className="text-xs text-blue-700">
+                  This may take 10-15 minutes. You can safely leave this page -
+                  the analysis will continue on the server.
+                </p>
+              </div>
+            </div>
+          )}
           {/* Key Metrics */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
             <div className="bg-blue-50 p-4 rounded-lg">

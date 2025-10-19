@@ -5,6 +5,55 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+def strip_markdown_code_fences(text: str) -> str:
+    """
+    Remove markdown code fences and extract pure JSON from AI output.
+    GPT-4o-mini often wraps JSON in ```json ... ``` or adds extra text.
+    
+    Handles:
+    - Markdown code fences: ```json ... ```
+    - Extra text before JSON: "Here's the result: {...}"
+    - Extra text after JSON: "{...} Hope this helps!"
+    
+    Args:
+        text: AI output text that may contain markdown fences or extra commentary
+        
+    Returns:
+        Clean JSON text without markdown fences or extra text
+    """
+    if not text:
+        return text
+    
+    text = text.strip()
+    
+    # Step 1: Remove markdown code fences
+    if text.startswith('```'):
+        # Find end of first line (remove ```json or ``` line)
+        first_newline = text.find('\n')
+        if first_newline != -1:
+            text = text[first_newline + 1:]
+    
+    if text.endswith('```'):
+        text = text[:-3]
+    
+    text = text.strip()
+    
+    # Step 2: Extract JSON if there's extra text before/after
+    # Look for JSON array [...] or object {...}
+    import re
+    
+    # Try to find complete JSON structure
+    # This regex finds the outermost JSON array or object
+    json_match = re.search(r'(\[[\s\S]*\]|\{[\s\S]*\})', text)
+    if json_match:
+        extracted = json_match.group(1).strip()
+        # Only return extracted JSON if it's substantial (not just empty brackets)
+        if len(extracted) > 2:
+            return extracted
+    
+    # If no JSON pattern found, return cleaned text as-is
+    return text
+
 BROAD_VOLUME_INSTRUCTIONS = """
 Role: Compute broad search volume per root word.
 - Identify a simple root token for each keyword (e.g., main noun excluding stopwords/brands).
@@ -213,18 +262,22 @@ def calculate_broad_volume_llm(
         output = result.final_output
         if output:
             try:
-                parsed_result = _json.loads(output)
+                cleaned_output = strip_markdown_code_fences(output)
+                parsed_result = _json.loads(cleaned_output)
                 if isinstance(parsed_result, dict):
                     return parsed_result
-            except _json.JSONDecodeError:
-                logger.warning("[BroadVolumeAgent] Failed to parse broad volume result")
+            except _json.JSONDecodeError as e:
+                logger.warning(f"[BroadVolumeAgent] Failed to parse broad volume result: {e}")
+                logger.debug(f"[BroadVolumeAgent] Raw output (first 500 chars): {output[:500]}")
     elif result and hasattr(result, 'content'):
         try:
-            parsed_result = _json.loads(result.content)
+            cleaned_content = strip_markdown_code_fences(result.content)
+            parsed_result = _json.loads(cleaned_content)
             if isinstance(parsed_result, dict):
                 return parsed_result
-        except _json.JSONDecodeError:
-            logger.warning("[BroadVolumeAgent] Failed to parse broad volume result")
+        except _json.JSONDecodeError as e:
+            logger.warning(f"[BroadVolumeAgent] Failed to parse broad volume result: {e}")
+            logger.debug(f"[BroadVolumeAgent] Raw content (first 500 chars): {result.content[:500]}")
     
     # Fallback: return original items with simple root extraction
     logger.warning("[BroadVolumeAgent] Broad volume calculation failed, using fallback")
