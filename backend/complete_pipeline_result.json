@@ -1,1248 +1,1002 @@
 {
   "success": true,
-  "asin": "https://www.amazon.com/dp/B0D5BL35MS",
+  "asin": "https://www.amazon.com/dp/B0D9C28SVB",
   "marketplace": "US",
   "ai_analysis_keywords": {
     "structured_data": {
       "product_context": {
-        "title": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) Organic Freeze Dried Strawberries No Sugar Added, Dry Strawberry Gluten Free Fruit Snack for Baking, Smoothies, Cereals & Travel",
-        "brand": "Brewer Outdoor Solutions",
-        "base_product_form": "slices"
+        "title": "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women",
+        "brand": "Gold Water Trading",
+        "base_product_form": "liquid"
       },
       "items": [
         {
-          "phrase": "strawberry freeze dried",
-          "search_volume": 424,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 9,
-          "intent_score": 3,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 689,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 14.1,
-            "competitor_performance_score": 10.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/word-order variant of established head term; ignored per rule."
-        },
-        {
-          "phrase": "strawberries freeze dried",
-          "search_volume": 303,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 728,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 15.2,
-            "competitor_performance_score": 10.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/word-order variant of established head term; ignored per rule."
-        },
-        {
-          "phrase": "dried freeze strawberries",
-          "search_volume": 204,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 643,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 15.7,
-            "competitor_performance_score": 10.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/word-order variant of established head term; ignored per rule."
-        },
-        {
-          "phrase": "freeze-dried strawberries",
-          "search_volume": 470,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 9,
-          "intent_score": 3,
-          "title_density": 4,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 548,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 15.9,
-            "competitor_performance_score": 10.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
-        },
-        {
-          "phrase": "freeze dried strawberries bulk",
-          "search_volume": 909,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 2,
-          "title_density": 0,
-          "cpr": 12,
-          "competition": {
-            "competing_products": 640,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 15.9,
-            "competitor_performance_score": 10.0
-          },
-          "opportunity_decision": "Yes",
-          "opportunity_reason": "Zero title density with strong volume (909) and distinct 'bulk' modifier; relevant non-derivative phrasing."
-        },
-        {
-          "phrase": "freeze dried strawberry",
-          "search_volume": 847,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 5,
-          "cpr": 11,
-          "competition": {
-            "competing_products": 632,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 16.4,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
-        },
-        {
-          "phrase": "freeze dried strawberries organic",
-          "search_volume": 422,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 1,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 404,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 16.9,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "Yes",
-          "opportunity_reason": "Low title density (1) with decent search volume (422)."
-        },
-        {
-          "phrase": "freeze dry strawberry",
-          "search_volume": 169,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 1000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 17.8,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative of head term ('freeze dried strawberries'); ignored per rule."
-        },
-        {
-          "phrase": "freeze dry strawberries",
-          "search_volume": 433,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 618,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 19.8,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative of head term ('freeze dried strawberries'); ignored per rule."
-        },
-        {
-          "phrase": "dry strawberry fruit",
-          "search_volume": 297,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 4,
-          "intent_score": 1,
-          "title_density": 2,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 2000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 21.0,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "Yes",
-          "opportunity_reason": "Low title density (2) with decent search volume (297)."
-        },
-        {
-          "phrase": "freeze dried organic strawberries",
-          "search_volume": 242,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 371,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 21.2,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/word-order variant of 'organic freeze dried strawberries'; ignored per rule."
-        },
-        {
-          "phrase": "free dried strawberries",
-          "search_volume": 128,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 514,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 21.6,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but clear misspelling ('free' vs 'freeze'); ignored per rule."
-        },
-        {
-          "phrase": "organic freeze dried strawberries",
-          "search_volume": 1163,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 1,
-          "cpr": 26,
-          "competition": {
-            "competing_products": 400,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 21.9,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "Yes",
-          "opportunity_reason": "Low title density (1) with strong search volume (1163)."
-        },
-        {
-          "phrase": "bulk freeze dried strawberries",
-          "search_volume": 482,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 1,
-          "cpr": 9,
-          "competition": {
-            "competing_products": 712,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 22.1,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried strawberries",
-          "search_volume": 30664,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 21,
-          "cpr": 67,
-          "competition": {
-            "competing_products": 680,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 22.3,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Title density high; not a zero/low-density opportunity."
-        },
-        {
-          "phrase": "dried strawberry",
-          "search_volume": 534,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 10,
-          "cpr": 9,
-          "competition": {
-            "competing_products": 2000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 24.9,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
-        },
-        {
-          "phrase": "strawberries dried",
-          "search_volume": 279,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 3,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 3000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 25.8,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
-        },
-        {
-          "phrase": "dried strawberries bulk",
-          "search_volume": 268,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 1,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 2000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 26.8,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "dry strawberries organic",
-          "search_volume": 116,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 493,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 27.4,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/word-order variant of 'organic dried strawberries'; ignored per rule."
-        },
-        {
-          "phrase": "freeze dried strawberries freeze-dried strawberries slices",
-          "search_volume": 101,
-          "root": "strawberry",
+          "phrase": "blender beauty",
+          "search_volume": 258,
+          "root": "blender",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
-          "title_density": 0,
+          "title_density": 1,
           "cpr": 8,
           "competition": {
-            "competing_products": 312,
+            "competing_products": 100000,
             "ranking_competitors": 9,
-            "competitor_rank_avg": 27.9,
-            "competitor_performance_score": 8.0
+            "competitor_rank_avg": 2.9,
+            "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but malformed/compound derivative phrase; ignored per rule."
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Low title density (1) with decent search volume."
         },
         {
-          "phrase": "strawberry dried",
-          "search_volume": 245,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 879,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 28.3,
-            "competitor_performance_score": 8.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/word-order variant of 'dried strawberry'; ignored per rule."
-        },
-        {
-          "phrase": "dry strawberries",
-          "search_volume": 713,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 0,
-          "cpr": 10,
-          "competition": {
-            "competing_products": 933,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 32.1,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/word-order variant of 'dried strawberries'; ignored per rule."
-        },
-        {
-          "phrase": "freeze dried fruits",
-          "search_volume": 773,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 11,
-          "competition": {
-            "competing_products": 6000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 32.2,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried strawberries slices",
-          "search_volume": 415,
-          "root": "strawberry",
+          "phrase": "makeup sponges beauty blender",
+          "search_volume": 53,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
-          "title_density": 2,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 297,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 33.1,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "Yes",
-          "opportunity_reason": "Low title density (2) with solid search volume (415)."
-        },
-        {
-          "phrase": "dried freeze fruit",
-          "search_volume": 106,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 10000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 34.2,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried strawberry slices",
-          "search_volume": 713,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 10,
-          "intent_score": 3,
-          "title_density": 4,
-          "cpr": 10,
-          "competition": {
-            "competing_products": 301,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 36.0,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
-        },
-        {
-          "phrase": "organic dried strawberries",
-          "search_volume": 445,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 5,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 573,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 36.0,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
-        },
-        {
-          "phrase": "dried strawberries organic",
-          "search_volume": 170,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 1,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 631,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 36.6,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried organic fruit",
-          "search_volume": 229,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 1000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 37.7,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze-dried fruit",
-          "search_volume": 399,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 11,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 5000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 39.0,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "organic freeze dried fruit",
-          "search_volume": 714,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 10,
-          "competition": {
-            "competing_products": 1000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 40.4,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "dried strawberries no sugar added",
-          "search_volume": 1101,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 7,
-          "intent_score": 3,
-          "title_density": 1,
-          "cpr": 26,
-          "competition": {
-            "competing_products": 558,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 42.6,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "Yes",
-          "opportunity_reason": "Low title density (1) with strong search volume (1101); distinct 'no sugar added' intent."
-        },
-        {
-          "phrase": "crispy fruit freeze dried fruit",
-          "search_volume": 442,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 2,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 627,
-            "ranking_competitors": 8,
-            "competitor_rank_avg": 43.6,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried fruit bulk",
-          "search_volume": 644,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 10,
-          "competition": {
-            "competing_products": 5000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 43.7,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze fruit",
-          "search_volume": 160,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 10000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 44.3,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "dried strawberries",
-          "search_volume": 8603,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 10,
-          "intent_score": 3,
-          "title_density": 21,
-          "cpr": 41,
-          "competition": {
-            "competing_products": 819,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 44.4,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Title density high; not a zero/low-density opportunity."
-        },
-        {
-          "phrase": "freeze dried fruit no sugar added",
-          "search_volume": 153,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 429,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 44.6,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "dry freeze fruit",
-          "search_volume": 280,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 7,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 5000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 45.1,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "bulk freeze dried fruit",
-          "search_volume": 364,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 2,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 5000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 45.9,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried fruit variety pack",
-          "search_volume": 103,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 6,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 658,
-            "ranking_competitors": 8,
-            "competitor_rank_avg": 47.6,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "dried strawberry slices",
-          "search_volume": 355,
-          "root": "strawberry",
-          "category": "Relevant",
-          "relevancy_score": 10,
-          "intent_score": 3,
-          "title_density": 6,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 324,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 48.9,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Title density above low threshold; not a zero/low-density opportunity."
-        },
-        {
-          "phrase": "so natural freeze dried fruit",
-          "search_volume": 642,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 2,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 10,
-          "competition": {
-            "competing_products": 516,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 49.0,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried fruit organic",
-          "search_volume": 332,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 1000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 49.8,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried fruit",
-          "search_volume": 23732,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 10,
-          "cpr": 56,
-          "competition": {
-            "competing_products": 5000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 51.2,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dry fruit",
-          "search_volume": 433,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 5000,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 55.3,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried strawberries and bananas",
-          "search_volume": 341,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 311,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 58.0,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried smoothie",
-          "search_volume": 149,
-          "root": "smoothie",
-          "category": "Irrelevant",
-          "relevancy_score": 2,
-          "intent_score": 0,
-          "title_density": 1,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 886,
-            "ranking_competitors": 8,
-            "competitor_rank_avg": 62.6,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "organic fresh strawberries",
-          "search_volume": 106,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 353,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 63.8,
-            "competitor_performance_score": 6.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried fruit snack packs",
-          "search_volume": 173,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 7,
-          "intent_score": 0,
-          "title_density": 2,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 1000,
-            "ranking_competitors": 7,
-            "competitor_rank_avg": 41.4,
-            "competitor_performance_score": 4.8
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "organic dried strawberries no sugar added",
-          "search_volume": 124,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 364,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 64.8,
-            "competitor_performance_score": 4.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried berries",
-          "search_volume": 773,
-          "root": "berry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 1,
-          "cpr": 11,
-          "competition": {
-            "competing_products": 867,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 75.9,
-            "competitor_performance_score": 4.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "organic freeze dried",
-          "search_volume": 125,
-          "root": "freeze-dried",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 5,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 2000,
-            "ranking_competitors": 7,
-            "competitor_rank_avg": 67.1,
-            "competitor_performance_score": 3.2
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "strawberry life",
-          "search_volume": 313,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 2,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 204,
-            "ranking_competitors": 2,
-            "competitor_rank_avg": 41.0,
-            "competitor_performance_score": 2.4
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "red ripe strawberry",
-          "search_volume": 173,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 1,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 131,
-            "ranking_competitors": 2,
-            "competitor_rank_avg": 55.0,
-            "competitor_performance_score": 2.4
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "strawberries organic fresh",
-          "search_volume": 431,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 1,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 287,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 99.8,
-            "competitor_performance_score": 2.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "freeze dried fruit for drinks",
-          "search_volume": 133,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 892,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 108.3,
-            "competitor_performance_score": 2.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "strawberry organic",
-          "search_volume": 435,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 752,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 123.9,
-            "competitor_performance_score": 2.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "organic freeze dried strawberry powder",
-          "search_volume": 148,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 2,
-          "intent_score": 0,
-          "title_density": 6,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 327,
-            "ranking_competitors": 9,
-            "competitor_rank_avg": 129.0,
-            "competitor_performance_score": 2.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "organic freeze dried fruit powder",
-          "search_volume": 171,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 2,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 848,
-            "ranking_competitors": 7,
-            "competitor_rank_avg": 142.7,
-            "competitor_performance_score": 1.6
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "dried fruit for baking",
-          "search_volume": 134,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 1,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 10000,
-            "ranking_competitors": 3,
-            "competitor_rank_avg": 71.7,
-            "competitor_performance_score": 2.4
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "strawberry ma",
-          "search_volume": 155,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 0,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 179,
-            "ranking_competitors": 1,
-            "competitor_rank_avg": 2.0,
-            "competitor_performance_score": 2.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant or unclear query; excluded."
-        },
-        {
-          "phrase": "strawberry crunch",
-          "search_volume": 328,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
-          "title_density": 2,
-          "cpr": 8,
-          "competition": {
-            "competing_products": 468,
-            "ranking_competitors": 1,
-            "competitor_rank_avg": 2.0,
-            "competitor_performance_score": 2.0
-          },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
-        },
-        {
-          "phrase": "strawberrie",
-          "search_volume": 365,
-          "root": "strawberry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 4000,
-            "ranking_competitors": 6,
-            "competitor_rank_avg": 102.3,
-            "competitor_performance_score": 2.0
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 3.1,
+            "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Misspelling/irrelevant; excluded."
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but search volume is too low."
         },
         {
-          "phrase": "freeze dried raspberries for baking",
-          "search_volume": 426,
-          "root": "raspberry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
+          "phrase": "beauty blender makeup sponge",
+          "search_volume": 1202,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 5,
+          "cpr": 27,
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 3.4,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is above the low threshold."
+        },
+        {
+          "phrase": "beauty blender",
+          "search_volume": 71126,
+          "root": "blender",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 9,
+          "cpr": 112,
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 3.6,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is above the low threshold."
+        },
+        {
+          "phrase": "beauty blender sponges",
+          "search_volume": 89,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
           "title_density": 1,
           "cpr": 8,
           "competition": {
-            "competing_products": 208,
-            "ranking_competitors": 6,
-            "competitor_rank_avg": 104.0,
-            "competitor_performance_score": 2.0
+            "competing_products": 7000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 4.2,
+            "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Low title density but search volume is too low."
         },
         {
-          "phrase": "dried fruit for oatmeal",
-          "search_volume": 273,
-          "root": "fruit",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
+          "phrase": "beauty blender sponge",
+          "search_volume": 10234,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 1,
+          "cpr": 37,
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 4.2,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Low title density (1) with high search volume."
+        },
+        {
+          "phrase": "sponge blender",
+          "search_volume": 103,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 7,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 4.4,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is above the low threshold."
+        },
+        {
+          "phrase": "blending sponge makeup",
+          "search_volume": 0,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
           "title_density": 0,
           "cpr": 8,
           "competition": {
-            "competing_products": 1000,
-            "ranking_competitors": 4,
-            "competitor_rank_avg": 135.8,
-            "competitor_performance_score": 1.6
+            "competing_products": 3000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 4.4,
+            "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but no search volume."
         },
         {
-          "phrase": "dry berries",
-          "search_volume": 130,
-          "root": "berry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
+          "phrase": "og beauty blender",
+          "search_volume": 150,
+          "root": "blender",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 270,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 4.6,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with decent search volume."
+        },
+        {
+          "phrase": "blender makeup sponge",
+          "search_volume": 234,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 6,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 5.0,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is above the low threshold."
+        },
+        {
+          "phrase": "make up sponges prime beauty blender",
+          "search_volume": 92,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 5.1,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but search volume is too low."
+        },
+        {
+          "phrase": "beauty sponge blender",
+          "search_volume": 76,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 2,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 30000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 5.1,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Low title density but search volume is too low."
+        },
+        {
+          "phrase": "beauty blenders",
+          "search_volume": 4204,
+          "root": "blender",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 1,
+          "cpr": 30,
+          "competition": {
+            "competing_products": 6000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 5.2,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Low title density (1) with high search volume."
+        },
+        {
+          "phrase": "beauty blender og",
+          "search_volume": 117,
+          "root": "blender",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 236,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 5.3,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with decent search volume."
+        },
+        {
+          "phrase": "foundation beauty blender",
+          "search_volume": 15,
+          "root": "blender",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 40000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 5.6,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but search volume is too low."
+        },
+        {
+          "phrase": "makeup beauty blender",
+          "search_volume": 405,
+          "root": "blender",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
           "title_density": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 10000,
-            "ranking_competitors": 3,
-            "competitor_rank_avg": 150.3,
-            "competitor_performance_score": 1.2
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 5.6,
+            "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with decent search volume."
         },
         {
-          "phrase": "fruit berries",
-          "search_volume": 298,
-          "root": "berry",
-          "category": "Irrelevant",
-          "relevancy_score": 3,
-          "intent_score": 0,
+          "phrase": "makeup blending sponge",
+          "search_volume": 359,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 3,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 5.7,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is above the low threshold."
+        },
+        {
+          "phrase": "beauty makeup sponge",
+          "search_volume": 0,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
           "title_density": 0,
           "cpr": 8,
           "competition": {
-            "competing_products": 20000,
-            "ranking_competitors": 2,
-            "competitor_rank_avg": 140.5,
-            "competitor_performance_score": 0.8
+            "competing_products": 9000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 5.8,
+            "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant category; excluded."
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but no search volume."
+        },
+        {
+          "phrase": "foundation blender sponge",
+          "search_volume": 71,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 1,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 3000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 6.4,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Low title density but search volume is too low."
+        },
+        {
+          "phrase": "soft beauty blender",
+          "search_volume": 316,
+          "root": "blender",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 60000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 6.7,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with decent search volume."
+        },
+        {
+          "phrase": "blender makeup",
+          "search_volume": 540,
+          "root": "blender",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 3,
+          "cpr": 9,
+          "competition": {
+            "competing_products": 40000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 6.7,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is above the low threshold."
+        },
+        {
+          "phrase": "beauty blender®",
+          "search_volume": 0,
+          "root": "blender",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 0,
+          "competition": {},
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but no search volume."
+        },
+        {
+          "phrase": "beauty blender original makeup sponge",
+          "search_volume": 148,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 715,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 6.9,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with decent search volume."
+        },
+        {
+          "phrase": "make up blender",
+          "search_volume": 540,
+          "root": "blender",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 9,
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 6.9,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with decent search volume."
+        },
+        {
+          "phrase": "beauty sponge",
+          "search_volume": 3125,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 12,
+          "cpr": 32,
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 6.9,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is well above the low threshold."
+        },
+        {
+          "phrase": "pro beauty sponge",
+          "search_volume": 0,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 7.0,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but no search volume."
+        },
+        {
+          "phrase": "blending sponges",
+          "search_volume": 13,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 2,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 543,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 7.3,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Low title density but search volume is too low."
+        },
+        {
+          "phrase": "beauty sponges for makeup",
+          "search_volume": 586,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 9,
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 7.7,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with decent search volume."
+        },
+        {
+          "phrase": "sponge makeup",
+          "search_volume": 1384,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 1,
+          "cpr": 26,
+          "competition": {
+            "competing_products": 6000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 7.7,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Low title density (1) with high search volume."
+        },
+        {
+          "phrase": "spong make up",
+          "search_volume": 0,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 8.0,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Misspelling/derivative and no search volume."
+        },
+        {
+          "phrase": "professional beauty",
+          "search_volume": 0,
+          "root": "beauty",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 100000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 8.0,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Irrelevant to specific product intent and no search volume."
+        },
+        {
+          "phrase": "makeup sponges for blending foundation",
+          "search_volume": 34,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 3000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 8.2,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but search volume is too low."
+        },
+        {
+          "phrase": "blender beauty sponge",
+          "search_volume": 210,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 30000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 8.2,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with decent search volume."
+        },
+        {
+          "phrase": "makeup blender sponge",
+          "search_volume": 1335,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 26,
+          "competition": {
+            "competing_products": 6000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 8.6,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with high search volume."
+        },
+        {
+          "phrase": "make up blender sponges for face",
+          "search_volume": 367,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 8.7,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with decent search volume."
+        },
+        {
+          "phrase": "sponge makeup blender",
+          "search_volume": 15,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 1,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 6000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 8.7,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Low title density but search volume is too low."
+        },
+        {
+          "phrase": "beauty makeup sponge blender",
+          "search_volume": 138,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 30000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 9.0,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with decent search volume."
+        },
+        {
+          "phrase": "make up sponges for women",
+          "search_volume": 16,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 6000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 9.3,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but search volume is too low."
+        },
+        {
+          "phrase": "makeup blender",
+          "search_volume": 1757,
+          "root": "blender",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 8,
+          "cpr": 29,
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 9.3,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is above the low threshold."
+        },
+        {
+          "phrase": "liquid foundation sponge",
+          "search_volume": 183,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 9.7,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with decent search volume."
+        },
+        {
+          "phrase": "blending sponge",
+          "search_volume": 1581,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 10,
+          "cpr": 29,
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 9.7,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is above the low threshold."
+        },
+        {
+          "phrase": "make up sponge",
+          "search_volume": 3716,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 2,
+          "cpr": 29,
+          "competition": {
+            "competing_products": 6000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 9.8,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Low title density (2) with high search volume."
+        },
+        {
+          "phrase": "sponges for foundation",
+          "search_volume": 22,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 7,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 10.1,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is above the low threshold."
+        },
+        {
+          "phrase": "beauty blend",
+          "search_volume": 164,
+          "root": "blend",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 6,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 100000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 10.1,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is above the low threshold."
+        },
+        {
+          "phrase": "make up sponges for face foundation",
+          "search_volume": 201,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 3000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 10.2,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with decent search volume."
+        },
+        {
+          "phrase": "makeup sponges for blending",
+          "search_volume": 1388,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 26,
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 10.2,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Opportunity",
+          "opportunity_reason": "Zero title density with high search volume."
+        },
+        {
+          "phrase": "beauty sponge for women",
+          "search_volume": 32,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 8,
+            "competitor_rank_avg": 10.3,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but search volume is too low."
+        },
+        {
+          "phrase": "beauty sponges",
+          "search_volume": 688,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 7,
+          "cpr": 10,
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 10.4,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is above the low threshold."
+        },
+        {
+          "phrase": "beauty blender makeup",
+          "search_volume": 0,
+          "root": "blender",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 4,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 90000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 10.7,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "No search volume."
+        },
+        {
+          "phrase": "foundation sponge blender",
+          "search_volume": 0,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 10.8,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but no search volume."
+        },
+        {
+          "phrase": "make up sponges®",
+          "search_volume": 0,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 0,
+          "competition": {},
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but no search volume."
+        },
+        {
+          "phrase": "latex free makeup sponge",
+          "search_volume": 0,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 9,
+          "intent_score": 2,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 0,
+            "ranking_competitors": 0,
+            "competitor_rank_avg": 0.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but no search volume."
+        },
+        {
+          "phrase": "make up sponge for foundation",
+          "search_volume": 0,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.9,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but no search volume."
+        },
+        {
+          "phrase": "makeup sponge set",
+          "search_volume": 2036,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 9,
+          "intent_score": 2,
+          "title_density": 25,
+          "cpr": 35,
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.9,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Title density is high."
+        },
+        {
+          "phrase": "makeup sponges for foundation and concealer",
+          "search_volume": 0,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 30.8,
+            "competitor_performance_score": 8.0
+          },
+          "opportunity_decision": "Ignore",
+          "opportunity_reason": "Zero title density but no search volume."
         }
       ],
       "stats": {
         "Relevant": {
-          "count": 39,
+          "count": 81,
           "examples": [
-            "strawberry freeze dried",
-            "strawberries freeze dried",
-            "dried freeze strawberries",
-            "freeze-dried strawberries",
-            "freeze dried strawberries bulk",
-            "freeze dried strawberry",
-            "freeze dried strawberries organic",
-            "freeze dry strawberry",
-            "freeze dry strawberries",
-            "dry strawberry fruit",
-            "freeze dried organic strawberries",
-            "free dried strawberries",
-            "organic freeze dried strawberries",
-            "freeze dried strawberries",
-            "dried strawberry",
-            "strawberries dried",
-            "dry strawberries organic",
-            "freeze dried strawberries freeze-dried strawberries slices",
-            "freeze dried strawberries slices",
-            "freeze dried strawberry slices",
-            "dried strawberry slices",
-            "dried strawberries"
+            "blender beauty",
+            "makeup sponges beauty blender",
+            "beauty blender makeup sponge"
           ]
         },
         "Design-Specific": {
@@ -1250,31 +1004,8 @@
           "examples": []
         },
         "Irrelevant": {
-          "count": 39,
-          "examples": [
-            "bulk freeze dried strawberries",
-            "freeze dried fruits",
-            "dried strawberries bulk",
-            "freeze dried fruits",
-            "dried strawberries organic",
-            "freeze dried organic fruit",
-            "freeze-dried fruit",
-            "organic freeze dried",
-            "strawberry life",
-            "red ripe strawberry",
-            "strawberries organic fresh",
-            "freeze dried fruit for drinks",
-            "strawberry organic",
-            "organic freeze dried strawberry powder",
-            "organic freeze dried fruit powder",
-            "strawberry ma",
-            "strawberry crunch",
-            "strawberrie",
-            "freeze dried raspberries for baking",
-            "dried fruit for oatmeal",
-            "dry berries",
-            "fruit berries"
-          ]
+          "count": 0,
+          "examples": []
         },
         "Branded": {
           "count": 0,
@@ -1291,36 +1022,37 @@
       }
     },
     "source": "keyword_agent",
-    "total_keywords": 67,
+    "total_keywords": 214,
     "scraped_product": {
-      "url": "https://www.amazon.com/dp/B0D5BL35MS",
+      "url": "https://www.amazon.com/dp/B0D9C28SVB",
       "status": 200,
-      "response_size": 1352919,
+      "response_size": 1250364,
       "elements": {
         "productTitle": {
           "present": true,
           "text": [
-            "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) Organic Freeze Dried Strawberries No Sugar Added, Dry Strawberry Gluten Free Fruit Snack for Baking, Smoothies, Cereals & Travel"
+            "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women"
           ]
         },
         "productOverview_feature_div": {
           "present": true,
           "kv": {
-            "Item Weight": "4.8 Ounces",
-            "Size": "4 Pack",
-            "Brand": "Brewer Outdoor Solutions",
-            "Package Weight": "0.19 Kilograms",
-            "Number of Pieces": "4"
+            "Brand": "Gold Water Trading",
+            "Color": "Pink",
+            "Material": "Polyurethane (PU)",
+            "Recommended Uses For Product": "(function(f) {var _np=(window.P._namespace(\"DetailPageProductOverviewTemplatesJava\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A').execute(function(A){ A.on('a:truncate:po-attribute-truncate-3:updated', function(data) { var isTruncated = !data.truncateInstance.getIfTextFits(); var seeMoreElement = document.getElementById('po-attribute-see-more-id-3'); if(seeMoreElement) { seeMoreElement.style.display = isTruncated ? '' : 'none'; } }) }); })); Makeup Removal, Toner Application, Cleansing, Nail Polish Removal Applying Skincare, Exfoliation, Wound Care, Craft and DIY, Cleaning, Baby Care See more",
+            "Specific Uses For Product": "Blending, Cleansing, Shading"
           }
         },
         "feature-bullets": {
           "present": true,
           "bullets": [
-            "Delicious Flavor in Every Bite: Savor the naturally sweet, tangy crunch of freeze dried strawberry slices bursting with real fruit flavor. Enjoy Strawberry freeze dried as a fruity boost or add it to oatmeal, yogurt, smoothies, or desserts.",
-            "Ideal Travel Companion: Lightweight, mess-free, and shelf-stable, our freeze dried strawberries bulk are perfect for hiking or camping, backpacking adventures. Enjoy this organic freeze dried fruit straight from the pouch or rehydrate for a fresh fruity treat.",
-            "From Farm to Your Table: Our organic dried strawberries, delivered sun-ripened, farm-fresh, are made from real strawberries. No added sugar, no preservatives or GMOs - all natural dry strawberries with iron to help support immune health with every bite.",
-            "Shelf Life: Our freeze-dried strawberries are at peak flavor for up to 24 months. For the best taste and texture in every bite, please enjoy within two year of purchase at anywhere at anytime.",
-            "Bulk Packed for Convenience: Buy in bulk and enjoy premium quality freeze dried strawberries whenever you need them. Great for baking, snacking, or mixing with freeze dried fruit for a refreshing fruit combo."
+            "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
+            "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
+            "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
+            "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
+            "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
+            "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals."
           ]
         },
         "productDescription": {
@@ -1335,60 +1067,69 @@
         "detailBullets_feature_div": {
           "present": true,
           "kv": {
-            "Package Dimensions ‏ : ‎": "8.7 x 7.72 x 4.57 inches; 4.8 ounces",
-            "Manufacturer ‏ : ‎": "Brewer Outdoor Solutions",
-            "ASIN ‏ : ‎": "B0D5BL35MS",
-            "Units ‏ : ‎": "4.8 Ounce",
-            "Best Sellers Rank": "#33,618 in Grocery & Gourmet Food ( See Top 100 in Grocery & Gourmet Food ) #99 in Dried Berries",
-            "Customer Reviews": "4.3 out of 5 stars 97 ratings"
+            "Package Dimensions ‏ : ‎": "7.76 x 5.83 x 2.01 inches; 1.76 ounces",
+            "Manufacturer ‏ : ‎": "Gold Water Trading",
+            "ASIN ‏ : ‎": "B0D9C28SVB",
+            "Best Sellers Rank": "#29,534 in Beauty & Personal Care ( See Top 100 in Beauty & Personal Care ) #83 in Makeup Blenders & Sponges",
+            "Customer Reviews": "4.6 out of 5 stars 158 ratings"
           }
         },
         "aplus": {
           "present": true,
           "headings": [
             "From the brand",
-            "Brewer Outdoor Solutions",
-            "Taste The Crunch",
+            "Pet Supplies",
+            "Beauty /PersonalCare/Household",
             "Product description"
           ],
           "paragraphs": [
-            "We believe that a greater emphasis on outdoor activities will contribute to a healthier global population. To address the issue of over-processed and heavy snack options often associated with outdoor pursuits, we are introducing a line of all-natural, lightweight food alternatives."
+            "GWT (Gold Water Trading)",
+            "It‘s a leading provider of premium home goods and everyday consumer products.",
+            "We specialize in offering high-quality, innovative, and sustainable home essentials and personal care items.",
+            "Our products are designed to enhance comfort, functionality, and eco-friendliness.",
+            "With a commitment to excellence, GWT delivers trusted solutions that elevate your daily living experience.",
+            "Visit the Store"
           ],
           "list_items": [
-            "Brewer Outdoor Solutions",
-            "We believe that a greater emphasis on outdoor activities will contribute to a healthier global population. To address the issue of over-processed and heavy snack options often associated with outdoor pursuits, we are introducing a line of all-natural, lightweight food alternatives.",
-            "Taste The Crunch"
+            "GWT (Gold Water Trading)",
+            "It‘s a leading provider of premium home goods and everyday consumer products.",
+            "We specialize in offering high-quality, innovative, and sustainable home essentials and personal care items.",
+            "Our products are designed to enhance comfort, functionality, and eco-friendliness.",
+            "With a commitment to excellence, GWT delivers trusted solutions that elevate your daily living experience.",
+            "Pet Supplies",
+            "Visit the Store",
+            "Beauty /PersonalCare/Household"
           ]
         }
       },
       "images": {
         "present": true,
-        "main_image": "https://m.media-amazon.com/images/I/81pgr0DuDOL.jpg",
+        "main_image": "https://m.media-amazon.com/images/I/61wucVMCzYL.jpg",
         "all_images": [
-          "https://m.media-amazon.com/images/I/81pgr0DuDOL.jpg",
-          "https://m.media-amazon.com/images/I/51h0B-l59SL.jpg",
-          "https://m.media-amazon.com/images/I/51zlwMmWucL.jpg",
-          "https://m.media-amazon.com/images/I/516ximi59GL.jpg",
-          "https://m.media-amazon.com/images/I/51RbAhH-8KL.jpg",
-          "https://m.media-amazon.com/images/I/51Qn+nqqiuL.jpg",
-          "https://m.media-amazon.com/images/I/51VHVyr+qyL.jpg",
-          "https://m.media-amazon.com/images/I/51T1QE0lT2L.jpg"
+          "https://m.media-amazon.com/images/I/61wucVMCzYL.jpg",
+          "https://m.media-amazon.com/images/I/4111yEWQLrL.jpg",
+          "https://m.media-amazon.com/images/I/517rUih+TXL.jpg",
+          "https://m.media-amazon.com/images/I/41msC2lcXcL.jpg",
+          "https://m.media-amazon.com/images/I/41u3vL1NefL.jpg",
+          "https://m.media-amazon.com/images/I/41xqreSTTjL.jpg",
+          "https://m.media-amazon.com/images/I/41soAA0RxCL.jpg",
+          "https://m.media-amazon.com/images/I/418nchDwYJL.jpg"
         ],
         "image_count": 8
       },
-      "title": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) Organic Freeze Dried Strawberries No Sugar Added, Dry Strawberry Gluten Free Fruit Snack for Baking, Smoothies, Cereals & Travel",
+      "title": "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women",
       "reviews": {
         "present": true,
         "sample_reviews": [
-          "I like to have these at my desk as a low carb , healthy snack. They taste great!",
-          "I purchased the 1.2oz bag for my family of 3 to try- I admit, I was tempted to buy the size “small” bag, to ensure Mama got an adequate sample, but then second guessed myself with the fear of them being too tart and no one enjoying them, as I’ve bought dried strawberries from a big box store before and they were pretty sour to eat and ended up wasting. Well, these proved me wrong!! It has the perfect amount of tart without being too sour to enjoy, and tastes just like a fresh strawberry in a crunchy enjoyable texture. Will definitely be getting the bigger bag! All of the family have tried the strawberries and agree they are a great snack and we need more! Buy some- In the BIG bag- you WON’T regret it!",
-          "Textura y sabor super bueno, aunque el paquete un poco pequeño para el precio",
-          "Excellent quality. Large pieces of dehydrated strawberries. Very happy with purchase!",
-          "NOT ORGANIC LIKE IT IS ADVERTISED"
+          "These work GREAT! I love the flat edge that makes it easy to apply foundation or liquid blush and then the pointed end works well for around the eye makeup. The sponge is does not suck up product and waste it, but allows the product to be blended into the skin. They appear to be well made and wash up very easily. The value is worth more than the cost. They are soft to the touch and wash up very easily. I can see these lasting for a long time. Solid product and I highly recommend.",
+          "Perfect Blending Sponges – Soft, Effective, and Affordable!",
+          "I love this set of GWT makeup sponges! They’re incredibly soft and bouncy—almost like marshmallows—and blend my foundation beautifully without soaking up too much product. The different shapes make it easy to reach every part of my face, especially around the eyes and nose. I also appreciate that they’re latex-free and gentle on my sensitive skin. Whether used wet or dry, they deliver a flawless finish every time. Great quality for the price—highly recommend!",
+          "Great set of sponges - very durable and sturdy",
+          "These are exactly like the other name brand ones that cost so much more! They work great! I will buy again!"
         ],
         "review_highlights": [
-          "4.3 out of 5 stars",
-          "97 ratings"
+          "4.6 out of 5 stars",
+          "158 ratings"
         ]
       },
       "qa_section": {
@@ -1397,11 +1138,11 @@
         "questions": []
       },
       "price": {
-        "present": false,
-        "raw": "",
-        "amount": null,
+        "present": true,
+        "raw": "PKR337.12",
+        "amount": 337.12,
         "currency": null,
-        "source": ""
+        "source": "apex_offscreen"
       }
     }
   },
@@ -1410,370 +1151,514 @@
     "analysis": {
       "current_seo": {
         "title_analysis": {
-          "content": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) Organic Freeze Dried Strawberries No Sugar Added, Dry Strawberry Gluten Free Fruit Snack for Baking, Smoothies, Cereals & Travel",
+          "content": "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women",
           "keywords_found": [
-            "organic freeze dried strawberries",
-            "dried strawberries no sugar added",
-            "freeze dried strawberries slices",
-            "freeze dried strawberries",
-            "dried strawberries"
+            "beauty blender sponges",
+            "sponges for foundation",
+            "beauty blender sponge",
+            "makeup sponge set",
+            "beauty blender",
+            "beauty blend"
           ],
-          "keyword_count": 5,
-          "character_count": 199,
-          "keyword_density": 7.54,
+          "keyword_count": 6,
+          "character_count": 177,
+          "keyword_density": 20.9,
           "opportunities": [
-            "strawberry freeze dried",
-            "freeze dried strawberry",
-            "freeze dry strawberry",
-            "freeze dry strawberries",
-            "dried strawberry"
+            "blending sponge makeup",
+            "og beauty blender",
+            "make up sponges prime beauty blender",
+            "beauty blender og",
+            "makeup blending sponge"
           ],
-          "total_search_volume": 45645
+          "total_search_volume": 104838
         },
         "bullets_analysis": [
           {
-            "content": "Delicious Flavor in Every Bite: Savor the naturally sweet, tangy crunch of freeze dried strawberry slices bursting with real fruit flavor. Enjoy Strawberry freeze dried as a fruity boost or add it to oatmeal, yogurt, smoothies, or desserts.",
-            "keywords_found": [
-              "freeze dried strawberry slices",
-              "strawberry freeze dried",
-              "freeze dried strawberry",
-              "dried strawberry slices",
-              "dried strawberry"
-            ],
-            "keyword_count": 5,
-            "character_count": 240,
-            "keyword_density": 5.42,
+            "content": "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 196,
+            "keyword_density": 1.53,
             "opportunities": [
-              "freeze-dried strawberries",
-              "freeze dried strawberries bulk",
-              "freeze dried strawberries organic",
-              "freeze dry strawberry",
-              "freeze dry strawberries"
+              "blender beauty",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty blender",
+              "beauty blender sponges"
             ],
-            "total_search_volume": 2873
+            "total_search_volume": 0
           },
           {
-            "content": "Ideal Travel Companion: Lightweight, mess-free, and shelf-stable, our freeze dried strawberries bulk are perfect for hiking or camping, backpacking adventures. Enjoy this organic freeze dried fruit straight from the pouch or rehydrate for a fresh fruity treat.",
-            "keywords_found": [
-              "freeze dried strawberries bulk",
-              "freeze dried strawberries",
-              "dried strawberries"
-            ],
-            "keyword_count": 3,
-            "character_count": 260,
-            "keyword_density": 4.62,
-            "opportunities": [
-              "freeze dried strawberries organic",
-              "freeze dry strawberry",
-              "freeze dry strawberries",
-              "dry strawberry fruit",
-              "freeze dried organic strawberries"
-            ],
-            "total_search_volume": 40176
-          },
-          {
-            "content": "From Farm to Your Table: Our organic dried strawberries, delivered sun-ripened, farm-fresh, are made from real strawberries. No added sugar, no preservatives or GMOs - all natural dry strawberries with iron to help support immune health with every bite.",
-            "keywords_found": [
-              "organic dried strawberries",
-              "dry strawberries"
-            ],
-            "keyword_count": 2,
-            "character_count": 253,
-            "keyword_density": 2.37,
-            "opportunities": [
-              "strawberry freeze dried",
-              "strawberries freeze dried",
-              "dried freeze strawberries",
-              "freeze-dried strawberries",
-              "freeze dried strawberries bulk"
-            ],
-            "total_search_volume": 1158
-          },
-          {
-            "content": "Shelf Life: Our freeze-dried strawberries are at peak flavor for up to 24 months. For the best taste and texture in every bite, please enjoy within two year of purchase at anywhere at anytime.",
-            "keywords_found": [
-              "freeze-dried strawberries"
-            ],
-            "keyword_count": 1,
-            "character_count": 192,
-            "keyword_density": 5.73,
-            "opportunities": [
-              "freeze dried strawberries bulk",
-              "freeze dried strawberries organic",
-              "freeze dry strawberry",
-              "freeze dry strawberries",
-              "dry strawberry fruit"
-            ],
-            "total_search_volume": 470
-          },
-          {
-            "content": "Bulk Packed for Convenience: Buy in bulk and enjoy premium quality freeze dried strawberries whenever you need them. Great for baking, snacking, or mixing with freeze dried fruit for a refreshing fruit combo.",
+            "content": "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
             "keywords_found": [],
             "keyword_count": 0,
             "character_count": 208,
-            "keyword_density": 5.77,
+            "keyword_density": 1.44,
             "opportunities": [
-              "freeze dried strawberries organic",
-              "freeze dry strawberry",
-              "freeze dry strawberries",
-              "dry strawberry fruit",
-              "freeze dried organic strawberries"
+              "blender beauty",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty blender",
+              "beauty blender sponges"
             ],
             "total_search_volume": 0
+          },
+          {
+            "content": "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 238,
+            "keyword_density": 0.0,
+            "opportunities": [
+              "blender beauty",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty blender",
+              "beauty blender sponges"
+            ],
+            "total_search_volume": 0
+          },
+          {
+            "content": "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 201,
+            "keyword_density": 0.0,
+            "opportunities": [
+              "blender beauty",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty blender",
+              "beauty blender sponges"
+            ],
+            "total_search_volume": 0
+          },
+          {
+            "content": "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 219,
+            "keyword_density": 0.0,
+            "opportunities": [
+              "blender beauty",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty blender",
+              "beauty blender sponges"
+            ],
+            "total_search_volume": 0
+          },
+          {
+            "content": "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals.",
+            "keywords_found": [
+              "makeup sponge set"
+            ],
+            "keyword_count": 1,
+            "character_count": 181,
+            "keyword_density": 2.21,
+            "opportunities": [
+              "blender beauty",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty blender",
+              "beauty blender sponges"
+            ],
+            "total_search_volume": 2036
           }
         ],
         "bullets_analysis_for_display": [
           {
-            "content": "Delicious Flavor in Every Bite: Savor the naturally sweet, tangy crunch of freeze dried strawberry slices bursting with real fruit flavor. Enjoy Strawberry freeze dried as a fruity boost or add it to oatmeal, yogurt, smoothies, or desserts.",
-            "keywords_found": [
-              "freeze dried strawberry slices",
-              "strawberry freeze dried",
-              "freeze dried strawberry",
-              "dried strawberry slices",
-              "dried strawberry"
-            ],
-            "keyword_count": 5,
-            "character_count": 240,
-            "keyword_density": 5.42,
+            "content": "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 196,
+            "keyword_density": 1.53,
             "opportunities": [
-              "freeze-dried strawberries",
-              "freeze dried strawberries bulk",
-              "freeze dried strawberries organic",
-              "freeze dry strawberry",
-              "freeze dry strawberries"
+              "blender beauty",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty blender",
+              "beauty blender sponges"
             ],
-            "total_search_volume": 43714
+            "total_search_volume": 5100
           },
           {
-            "content": "Ideal Travel Companion: Lightweight, mess-free, and shelf-stable, our freeze dried strawberries bulk are perfect for hiking or camping, backpacking adventures. Enjoy this organic freeze dried fruit straight from the pouch or rehydrate for a fresh fruity treat.",
-            "keywords_found": [
-              "freeze dried strawberries bulk",
-              "freeze dried strawberries",
-              "dried strawberries"
-            ],
-            "keyword_count": 3,
-            "character_count": 260,
-            "keyword_density": 4.62,
-            "opportunities": [
-              "freeze dried strawberries organic",
-              "freeze dry strawberry",
-              "freeze dry strawberries",
-              "dry strawberry fruit",
-              "freeze dried organic strawberries"
-            ],
-            "total_search_volume": 43610
-          },
-          {
-            "content": "From Farm to Your Table: Our organic dried strawberries, delivered sun-ripened, farm-fresh, are made from real strawberries. No added sugar, no preservatives or GMOs - all natural dry strawberries with iron to help support immune health with every bite.",
-            "keywords_found": [
-              "organic dried strawberries",
-              "dried strawberries",
-              "dry strawberries"
-            ],
-            "keyword_count": 3,
-            "character_count": 253,
-            "keyword_density": 2.37,
-            "opportunities": [
-              "strawberry freeze dried",
-              "strawberries freeze dried",
-              "dried freeze strawberries",
-              "freeze-dried strawberries",
-              "freeze dried strawberries bulk"
-            ],
-            "total_search_volume": 10819
-          },
-          {
-            "content": "Shelf Life: Our freeze-dried strawberries are at peak flavor for up to 24 months. For the best taste and texture in every bite, please enjoy within two year of purchase at anywhere at anytime.",
-            "keywords_found": [
-              "freeze-dried strawberries",
-              "dried strawberries"
-            ],
-            "keyword_count": 2,
-            "character_count": 192,
-            "keyword_density": 5.73,
-            "opportunities": [
-              "freeze dried strawberries bulk",
-              "freeze dried strawberries organic",
-              "freeze dry strawberry",
-              "freeze dry strawberries",
-              "dry strawberry fruit"
-            ],
-            "total_search_volume": 42701
-          },
-          {
-            "content": "Bulk Packed for Convenience: Buy in bulk and enjoy premium quality freeze dried strawberries whenever you need them. Great for baking, snacking, or mixing with freeze dried fruit for a refreshing fruit combo.",
-            "keywords_found": [
-              "freeze dried strawberries",
-              "dried strawberries"
-            ],
-            "keyword_count": 2,
+            "content": "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
+            "keywords_found": [],
+            "keyword_count": 0,
             "character_count": 208,
-            "keyword_density": 5.77,
+            "keyword_density": 1.44,
             "opportunities": [
-              "freeze dried strawberries organic",
-              "freeze dry strawberry",
-              "freeze dry strawberries",
-              "dry strawberry fruit",
-              "freeze dried organic strawberries"
+              "blender beauty",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty blender",
+              "beauty blender sponges"
             ],
-            "total_search_volume": 43610
+            "total_search_volume": 5100
+          },
+          {
+            "content": "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 238,
+            "keyword_density": 0.0,
+            "opportunities": [
+              "blender beauty",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty blender",
+              "beauty blender sponges"
+            ],
+            "total_search_volume": 0
+          },
+          {
+            "content": "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 201,
+            "keyword_density": 0.0,
+            "opportunities": [
+              "blender beauty",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty blender",
+              "beauty blender sponges"
+            ],
+            "total_search_volume": 0
+          },
+          {
+            "content": "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 219,
+            "keyword_density": 0.0,
+            "opportunities": [
+              "blender beauty",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty blender",
+              "beauty blender sponges"
+            ],
+            "total_search_volume": 0
+          },
+          {
+            "content": "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals.",
+            "keywords_found": [
+              "makeup sponge set"
+            ],
+            "keyword_count": 1,
+            "character_count": 181,
+            "keyword_density": 2.21,
+            "opportunities": [
+              "blender beauty",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty blender",
+              "beauty blender sponges"
+            ],
+            "total_search_volume": 7136
           }
         ],
         "backend_keywords": [],
         "keyword_coverage": {
-          "total_keywords": 26,
-          "covered_keywords": 14,
-          "coverage_percentage": 53.8,
+          "total_keywords": 55,
+          "covered_keywords": 6,
+          "coverage_percentage": 10.9,
           "missing_high_intent": [
-            "strawberries freeze dried",
-            "dried freeze strawberries",
-            "freeze dried strawberries organic",
-            "freeze dry strawberry",
-            "freeze dry strawberries",
-            "freeze dried organic strawberries",
-            "free dried strawberries",
-            "strawberries dried",
-            "dry strawberries organic",
-            "freeze dried strawberries freeze-dried strawberries slices"
+            "blender beauty",
+            "makeup sponges beauty blender",
+            "beauty blender makeup sponge",
+            "sponge blender",
+            "blending sponge makeup",
+            "og beauty blender",
+            "blender makeup sponge",
+            "make up sponges prime beauty blender",
+            "beauty sponge blender",
+            "beauty blenders"
           ],
-          "missing_high_volume": []
+          "missing_high_volume": [
+            "beauty blender makeup sponge",
+            "beauty blenders",
+            "blender makeup",
+            "make up blender",
+            "beauty sponge",
+            "beauty sponges for makeup",
+            "sponge makeup",
+            "makeup blender sponge",
+            "makeup blender",
+            "blending sponge"
+          ]
         },
         "root_coverage": {
-          "total_roots": 1,
-          "covered_roots": 1,
+          "total_roots": 4,
+          "covered_roots": 4,
           "coverage_percentage": 100.0,
           "missing_roots": [],
           "root_volumes": {
-            "strawberry": 50295
+            "blender": 79428,
+            "sponge": 29731,
+            "beauty": 0,
+            "blend": 164
           }
         },
         "total_character_usage": {
-          "title_chars": 199,
-          "bullets_total_chars": 1153,
-          "bullets_avg_chars": 230,
+          "title_chars": 177,
+          "bullets_total_chars": 1243,
+          "bullets_avg_chars": 207,
           "backend_chars": 0,
-          "total_chars": 1352
+          "total_chars": 1420
         }
       },
       "optimized_seo": {
         "optimized_title": {
-          "content": "Bulk Organic Freeze Dried Strawberry Slices - No Sugar Added, 4 Pack (1.2 Oz Each) | Premium Quality, Gluten-Free Snack Perfect for Baking, Smoothies & Travel",
+          "content": "Sponge Set, 6 Pcs Luxury Makeup Application - Ultra Soft, Latex-Free for Foundation, Liquid, Cream | Multi-Angle Use | Ideal for Stocking Stuffers | Make Up Sponges For Face Foundation",
           "keywords_included": [
-            "organic freeze dried strawberries",
-            "dried strawberries no sugar added",
-            "freeze dried strawberries organic",
-            "freeze dried organic strawberries",
-            "freeze dried strawberries slices",
-            "freeze dried strawberry slices",
-            "freeze dried strawberries bulk",
-            "organic dried strawberries",
-            "freeze dried strawberries",
-            "strawberries freeze dried",
-            "dried freeze strawberries",
-            "freeze dried strawberry",
-            "strawberry freeze dried",
-            "dried strawberry slices",
-            "free dried strawberries",
-            "dried strawberries",
-            "strawberries dried",
-            "dried strawberry",
-            "strawberry dried"
+            "make up sponges for face foundation",
+            "make up sponge for foundation",
+            "latex free makeup sponge",
+            "makeup sponge set",
+            "make up sponge",
+            "sponge makeup",
+            "spong make up"
           ],
+          "keywords_duplicated_from_other_bullets": [],
+          "unique_keywords_count": 0,
           "improvements": [
             "Amazon Guidelines Compliant",
-            "80-char optimized: Bulk Organic Freeze Dried Strawberry Slices - No S...",
+            "80-char optimized: Sponge Set, 6 Pcs Luxury Makeup Application - Ultr...",
             "Main root included: True",
             "Design root included: True"
           ],
-          "character_count": 158,
-          "total_search_volume": 47996
+          "character_count": 184,
+          "total_search_volume": 7337
         },
         "optimized_bullets": [
           {
-            "content": "ENJOY NATURAL FLAVOR: Our freeze dried strawberries slices are perfect for a healthy snack, making them ideal for any time you crave a sweet treat.",
+            "content": "ULTRA SOFT & BOUNCY: Makeup blender sponges for seamless beauty application that enhance blending and give a smooth finish",
             "keywords_included": [
-              "freeze dried strawberries slices",
-              "freeze dried strawberry slices",
-              "freeze dried strawberries",
-              "freeze-dried strawberries",
-              "strawberries freeze dried",
-              "dried freeze strawberries",
-              "freeze dried strawberry",
-              "strawberry freeze dried",
-              "dried strawberry slices",
-              "free dried strawberries",
-              "dried strawberries",
-              "strawberries dried",
-              "dried strawberry",
-              "strawberry dried"
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty makeup sponge blender",
+              "makeup sponges for blending",
+              "beauty sponges for makeup",
+              "makeup blending sponge",
+              "beauty blender sponges",
+              "blending sponge makeup",
+              "beauty blender sponge",
+              "makeup blender sponge",
+              "makeup beauty blender",
+              "blender makeup sponge",
+              "blender beauty sponge",
+              "beauty sponge blender",
+              "sponge makeup blender",
+              "beauty blender makeup",
+              "beauty makeup sponge",
+              "soft beauty blender",
+              "blending sponges",
+              "beauty blenders",
+              "blending sponge",
+              "make up blender",
+              "beauty blender",
+              "make up sponge",
+              "makeup blender",
+              "beauty sponges",
+              "blender makeup",
+              "blender beauty",
+              "sponge blender",
+              "beauty sponge",
+              "sponge makeup",
+              "spong make up",
+              "beauty blend"
             ],
+            "keywords_duplicated_from_other_bullets": [],
+            "unique_keywords_count": 33,
             "improvements": [
-              "Benefit-focused: Natural flavor",
+              "Benefit-focused: Seamless blending",
               "Guideline compliant: PASS"
             ],
-            "character_count": 147,
-            "total_search_volume": 44184
+            "character_count": 122,
+            "total_search_volume": 105839
           },
           {
-            "content": "PERFECT FOR ON-THE-GO: This freeze dried strawberries bulk pack is easy to carry and a great choice for travel food.",
+            "content": "VERSATILE USE FOR FACE: These makeup sponges for blending are designed for precise application of liquid, cream, or powder products",
             "keywords_included": [
-              "freeze dried strawberries bulk"
+              "makeup sponges for blending",
+              "makeup blending sponge",
+              "blending sponge makeup",
+              "blending sponges",
+              "blending sponge",
+              "make up sponge",
+              "sponge makeup",
+              "spong make up"
             ],
+            "keywords_duplicated_from_other_bullets": [
+              "makeup sponges for blending",
+              "makeup blending sponge",
+              "blending sponge makeup",
+              "blending sponges",
+              "blending sponge",
+              "make up sponge",
+              "sponge makeup",
+              "spong make up"
+            ],
+            "unique_keywords_count": 0,
             "improvements": [
-              "Benefit-focused: Convenience",
+              "Benefit-focused: Precision application",
               "Guideline compliant: PASS"
             ],
-            "character_count": 116,
-            "total_search_volume": 43610
+            "character_count": 131,
+            "total_search_volume": 0
           },
           {
-            "content": "NUTRIENT-RICH AND VERSATILE: Organic freeze dried strawberries provide a delicious addition to breakfasts, smoothies, or desserts.",
+            "content": "MINIMAL MAKEUP ABSORPTION: Our blending sponges minimize product waste, ensuring more coverage with less product",
             "keywords_included": [
-              "organic freeze dried strawberries",
-              "freeze dried strawberries organic",
-              "freeze dried organic strawberries",
-              "organic dried strawberries"
+              "makeup blending sponge",
+              "blending sponge makeup",
+              "blending sponges",
+              "blending sponge",
+              "make up sponge",
+              "sponge makeup",
+              "spong make up"
             ],
+            "keywords_duplicated_from_other_bullets": [
+              "makeup blending sponge",
+              "blending sponge makeup",
+              "blending sponges",
+              "blending sponge",
+              "make up sponge",
+              "sponge makeup",
+              "spong make up"
+            ],
+            "unique_keywords_count": 0,
             "improvements": [
-              "Benefit-focused: Nutritional benefits",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 130,
-            "total_search_volume": 44973
-          },
-          {
-            "content": "GUILT-FREE INDULGENCE: Enjoy dried strawberry slices with no sugar added for a naturally sweet treat that fits any diet.",
-            "keywords_included": [
-              "dried strawberries no sugar added"
-            ],
-            "improvements": [
-              "Benefit-focused: Health-focused",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 120,
-            "total_search_volume": 11245
-          },
-          {
-            "content": "EXCELLENT SOURCE OF FIBER: These strawberry freeze dried snacks are a delicious way to support digestive health.",
-            "keywords_included": [],
-            "improvements": [
-              "Benefit-focused: Fiber source",
+              "Benefit-focused: Product efficiency",
               "Guideline compliant: PASS"
             ],
             "character_count": 112,
-            "total_search_volume": 42231
+            "total_search_volume": 0
+          },
+          {
+            "content": "SAFE & GENTLE ON SKIN: Latex-free sponges that are non-toxic and perfect for sensitive skin, offering a healthy choice for beauty lovers",
+            "keywords_included": [],
+            "keywords_duplicated_from_other_bullets": [],
+            "unique_keywords_count": 0,
+            "improvements": [
+              "Benefit-focused: Skin-friendly",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 136,
+            "total_search_volume": 0
+          },
+          {
+            "content": "FOR WET & DRY USE: These beauty sponges for makeup can be used wet or dry for adaptable coverage and finish",
+            "keywords_included": [
+              "beauty sponges for makeup",
+              "beauty makeup sponge",
+              "make up sponge",
+              "beauty sponges",
+              "beauty sponge",
+              "sponge makeup",
+              "spong make up"
+            ],
+            "keywords_duplicated_from_other_bullets": [
+              "beauty sponges for makeup",
+              "beauty makeup sponge",
+              "make up sponge",
+              "beauty sponges",
+              "beauty sponge",
+              "sponge makeup",
+              "spong make up"
+            ],
+            "unique_keywords_count": 0,
+            "improvements": [
+              "Benefit-focused: Adaptable application",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 107,
+            "total_search_volume": 0
+          },
+          {
+            "content": "AFFORDABLE LUXURY: Enjoy premium beauty blender original makeup sponge quality, making it ideal for both enthusiasts and professionals",
+            "keywords_included": [
+              "beauty blender original makeup sponge",
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty makeup sponge blender",
+              "beauty sponges for makeup",
+              "beauty blender sponges",
+              "beauty blender sponge",
+              "makeup blender sponge",
+              "makeup beauty blender",
+              "blender makeup sponge",
+              "blender beauty sponge",
+              "beauty sponge blender",
+              "sponge makeup blender",
+              "beauty blender makeup",
+              "beauty makeup sponge",
+              "beauty blenders",
+              "make up blender",
+              "beauty blender",
+              "make up sponge",
+              "makeup blender",
+              "beauty sponges",
+              "blender makeup",
+              "blender beauty",
+              "sponge blender",
+              "beauty sponge",
+              "sponge makeup",
+              "spong make up",
+              "beauty blend"
+            ],
+            "keywords_duplicated_from_other_bullets": [
+              "makeup sponges beauty blender",
+              "beauty blender makeup sponge",
+              "beauty makeup sponge blender",
+              "beauty sponges for makeup",
+              "beauty blender sponges",
+              "beauty blender sponge",
+              "makeup blender sponge",
+              "makeup beauty blender",
+              "blender makeup sponge",
+              "blender beauty sponge",
+              "beauty sponge blender",
+              "sponge makeup blender",
+              "beauty blender makeup",
+              "beauty makeup sponge",
+              "beauty blenders",
+              "make up blender",
+              "beauty blender",
+              "make up sponge",
+              "makeup blender",
+              "beauty sponges",
+              "blender makeup",
+              "blender beauty",
+              "sponge blender",
+              "beauty sponge",
+              "sponge makeup",
+              "spong make up",
+              "beauty blend"
+            ],
+            "unique_keywords_count": 1,
+            "improvements": [
+              "Benefit-focused: Value",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 134,
+            "total_search_volume": 148
           }
         ],
         "optimized_backend_keywords": [
-          "dried strawberries no sugar added",
-          "dry strawberries",
-          "freeze-dried strawberries",
-          "organic dried strawberries",
-          "freeze dry strawberries"
+          "beauty blender sponge",
+          "beauty blenders",
+          "makeup sponge set",
+          "sponge makeup",
+          "beauty blender makeup sponge",
+          "blender makeup"
         ],
         "keyword_strategy": {
           "amazon_compliance": "ENFORCED",
-          "first_80_optimization": "Included main root 'freeze dried strawberries', design root 'slices', and key benefit 'no sugar added' in first 80 characters",
+          "first_80_optimization": "Included main root 'blender beauty', design root 'beauty', and key benefit 'premium quality' in first 80 characters",
           "keyword_integration": "Used highest volume variants while maintaining natural flow",
           "guideline_compliance": "STRICT"
         },
@@ -1781,134 +1666,136 @@
       },
       "comparison": {
         "coverage_improvement": {
-          "total_keywords": 26,
-          "before_covered": 21,
-          "after_covered": 16,
-          "before_coverage_pct": 80.77,
-          "after_coverage_pct": 61.54,
-          "delta_pct_points": -19.23,
+          "total_keywords": 55,
+          "before_covered": 37,
+          "after_covered": 27,
+          "before_coverage_pct": 67.27,
+          "after_coverage_pct": 49.09,
+          "delta_pct_points": -18.18,
           "new_keywords_added": [
-            "freeze dry strawberries",
-            "strawberry dried"
+            "beauty blender original makeup sponge",
+            "blending sponge",
+            "make up sponges for face foundation",
+            "makeup sponges for blending"
           ]
         },
         "intent_improvement": {
-          "high_intent_total": 25,
-          "before_covered": 20,
-          "after_covered": 16,
+          "high_intent_total": 55,
+          "before_covered": 37,
+          "after_covered": 27,
           "delta": 0
         },
         "volume_improvement": {
-          "estimated_volume_before": 49231,
-          "estimated_volume_after": 48034,
-          "delta_volume": 0
+          "estimated_volume_before": 104838,
+          "estimated_volume_after": 106428,
+          "delta_volume": 1590
         },
         "character_efficiency": {
           "title_limit": 200,
-          "title_before": 199,
-          "title_after": 158,
-          "title_utilization_before_pct": 99.5,
-          "title_utilization_after_pct": 79.0,
+          "title_before": 177,
+          "title_after": 184,
+          "title_utilization_before_pct": 88.5,
+          "title_utilization_after_pct": 92.0,
           "backend_limit": 249,
           "backend_before": 0,
-          "backend_after": 127
+          "backend_after": 113
         },
         "summary_metrics": {
-          "overall_improvement_score": -3.92,
+          "overall_improvement_score": -6.82,
           "priority_recommendations": 1
         }
       },
       "product_context": {
-        "title": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) Organic Freeze Dried Strawberries No Sugar Added, Dry Strawberry Gluten Free Fruit Snack for Baking, Smoothies, Cereals & Travel",
-        "brand": "Brewer Outdoor Solutions",
+        "title": "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women",
+        "brand": "Gold Water Trading",
         "category": "Unknown"
       },
       "analysis_metadata": {
-        "total_keywords_analyzed": 67,
-        "relevant_keywords_count": 26,
-        "high_intent_keywords_count": 25,
+        "total_keywords_analyzed": 55,
+        "relevant_keywords_count": 55,
+        "high_intent_keywords_count": 55,
         "optimization_method": "ai"
       }
     },
     "summary": {
-      "current_coverage": "53.8%",
+      "current_coverage": "10.9%",
       "optimization_opportunities": 10,
       "method": "ai"
     }
   },
   "keyword_root_optimization": {
     "analysis_summary": {
-      "total_keywords_processed": 81,
-      "total_roots_identified": 267,
-      "meaningful_roots": 267,
+      "total_keywords_processed": 1186,
+      "total_roots_identified": 2608,
+      "meaningful_roots": 0,
       "priority_roots_selected": 30
     },
     "efficiency_metrics": {
-      "original_keywords": 81,
-      "meaningful_roots": 267,
+      "original_keywords": 1186,
+      "meaningful_roots": 0,
       "priority_roots": 30,
-      "reduction_percentage": 63.0,
-      "efficiency_gain": "63.0%",
-      "memory_optimization": "~63% reduction in contextual memory usage",
-      "api_optimization": "Reduced Amazon search calls from 81 to 30"
+      "reduction_percentage": 97.5,
+      "efficiency_gain": "97.5%",
+      "memory_optimization": "~97% reduction in contextual memory usage",
+      "api_optimization": "Reduced Amazon search calls from 1186 to 30"
     },
     "priority_roots": [
-      "strawberry",
-      "freeze",
-      "dried",
-      "bulk",
-      "freez",
-      "apple",
-      "slices",
-      "freezedri",
-      "organic",
-      "dry",
-      "chips",
-      "simply",
-      "nature",
-      "nutristore",
-      "fruit",
-      "freezer",
-      "toddler",
-      "natierra",
-      "crispy",
-      "handful",
-      "strawberrry",
-      "crunchy",
-      "dehydrat",
-      "sauce",
-      "pear",
-      "green",
-      "brother",
-      "all",
-      "natural",
-      "crisps"
+      "makeup",
+      "sponge",
+      "beauty",
+      "brush",
+      "blender",
+      "foundation",
+      "make",
+      "powder",
+      "face",
+      "stuffer",
+      "stock",
+      "puff",
+      "cosmetic",
+      "women",
+      "concealer",
+      "blush",
+      "pink",
+      "gift",
+      "lash",
+      "travel",
+      "real",
+      "blend",
+      "technique",
+      "under",
+      "girl",
+      "liquid",
+      "eye",
+      "maquillaje",
+      "cream",
+      "applicator"
     ],
     "keyword_categorization": {},
     "recommendations": {
       "amazon_search_terms": [
-        "strawberry",
-        "freeze",
-        "dried",
-        "bulk",
-        "freez",
-        "apple",
-        "slices",
-        "freezedri",
-        "organic",
-        "dry"
+        "makeup",
+        "sponge",
+        "beauty",
+        "brush",
+        "blender",
+        "foundation",
+        "make",
+        "powder",
+        "face",
+        "stuffer"
       ],
       "optimization_notes": [
-        "Process 30 root terms instead of 81 individual keywords",
-        "Focus Amazon searches on: strawberry, freeze, dried, bulk, freez",
-        "Achieved 63.0% reduction in keyword complexity"
+        "Process 30 root terms instead of 1186 individual keywords",
+        "Focus Amazon searches on: makeup, sponge, beauty, brush, blender",
+        "Achieved 97.5% reduction in keyword complexity"
       ]
     }
   },
   "source": "amazon_sales_intelligence_pipeline",
   "monitoring_stats": {
     "overall": {
-      "elapsed_time": 1346.7271864414215,
+      "elapsed_time": 931.7718629837036,
       "total_requests": 0,
       "successful_requests": 0,
       "failed_requests": 0,

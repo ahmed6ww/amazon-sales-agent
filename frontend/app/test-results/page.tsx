@@ -675,7 +675,10 @@ const TestResultsPage = () => {
                 Coverage Improvement
               </div>
               <div className="text-2xl font-bold">
-                +{comparison?.coverage_improvement?.delta_pct_points || 0}%
+                {(comparison?.coverage_improvement?.delta_pct_points || 0) >= 0
+                  ? "+"
+                  : ""}
+                {comparison?.coverage_improvement?.delta_pct_points || 0}%
               </div>
               <div className="text-sm text-green-600">
                 {comparison?.coverage_improvement?.before_coverage_pct || 0}% →{" "}
@@ -687,7 +690,10 @@ const TestResultsPage = () => {
                 Volume Increase
               </div>
               <div className="text-2xl font-bold">
-                +{fmtNumber(comparison?.volume_improvement?.delta_volume)}
+                {(comparison?.volume_improvement?.delta_volume || 0) >= 0
+                  ? "+"
+                  : ""}
+                {fmtNumber(comparison?.volume_improvement?.delta_volume)}
               </div>
               <div className="text-sm text-purple-600">Search Volume</div>
             </div>
@@ -696,6 +702,10 @@ const TestResultsPage = () => {
                 Optimization Score
               </div>
               <div className="text-2xl font-bold">
+                {(comparison?.summary_metrics?.overall_improvement_score ||
+                  0) >= 0
+                  ? "+"
+                  : ""}
                 {comparison?.summary_metrics?.overall_improvement_score || 0}/10
               </div>
               <div className="text-sm text-orange-600">Perfect Score</div>
@@ -1238,23 +1248,10 @@ const TestResultsPage = () => {
                                           j + 1
                                         }: "${kw}"`
                                       );
-                                      const isDuplicate =
-                                        currentTitleKeywords.has(
-                                          String(kw).toLowerCase()
-                                        );
                                       return (
                                         <Badge
                                           key={j}
-                                          className={`text-xs ${
-                                            isDuplicate
-                                              ? "bg-yellow-400 text-yellow-900"
-                                              : "bg-gray-200 text-gray-800"
-                                          }`}
-                                          title={
-                                            isDuplicate
-                                              ? "This keyword is also in the current title"
-                                              : ""
-                                          }
+                                          className="text-xs bg-gray-200 text-gray-800"
                                         >
                                           {labelWithVolume(kw)}
                                         </Badge>
@@ -1286,8 +1283,8 @@ const TestResultsPage = () => {
                                   {toArr(o?.keywords_included).map(
                                     (kw: string, j: number) => {
                                       const isDuplicate =
-                                        optimizedTitleKeywords.has(
-                                          String(kw).toLowerCase()
+                                        o?.keywords_duplicated_from_other_bullets?.includes(
+                                          kw
                                         );
                                       return (
                                         <Badge
@@ -1299,16 +1296,37 @@ const TestResultsPage = () => {
                                           }`}
                                           title={
                                             isDuplicate
-                                              ? "This keyword is also in the optimized title"
-                                              : ""
+                                              ? "Already in another bullet (not counted here)"
+                                              : "Unique to this bullet"
                                           }
                                         >
+                                          {isDuplicate && (
+                                            <span className="mr-1">⚠️</span>
+                                          )}
                                           {labelWithVolume(kw)}
                                         </Badge>
                                       );
                                     }
                                   )}
                                 </div>
+                                {/* Display unique count and search volume */}
+                                {(o?.unique_keywords_count !== undefined ||
+                                  o?.total_search_volume !== undefined) && (
+                                  <div className="flex gap-2 mt-2">
+                                    {o?.unique_keywords_count !== undefined && (
+                                      <Badge className="text-xs bg-blue-100 text-blue-700 border-blue-300">
+                                        {o.unique_keywords_count} unique
+                                      </Badge>
+                                    )}
+                                    {o?.total_search_volume !== undefined &&
+                                      o.total_search_volume > 0 && (
+                                        <Badge className="text-xs bg-purple-100 text-purple-700 border-purple-300">
+                                          🔥 {fmtNumber(o.total_search_volume)}{" "}
+                                          vol
+                                        </Badge>
+                                      )}
+                                  </div>
+                                )}
                               </div>
                               <div>
                                 <strong>Improvements:</strong>

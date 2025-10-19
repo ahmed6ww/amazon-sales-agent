@@ -159,7 +159,7 @@ class SEORunner:
             # Step 5.6: Validate keywords_included fields to ensure only actual keywords are reported
             logger.info("🔍 Validating keywords_included fields...")
             optimized_seo_dict = optimized_seo.model_dump()
-            validated_seo_dict, validation_stats = validate_and_correct_keywords_included(optimized_seo_dict)
+            validated_seo_dict, validation_stats = validate_and_correct_keywords_included(optimized_seo_dict, keyword_data)
             
             # Reconstruct the Pydantic model with validated data
             optimized_seo = OptimizedSEO(**validated_seo_dict)
@@ -547,15 +547,18 @@ class SEORunner:
             
             logger.info(f"   ✅ Bullet {idx}: {len(bullet_keywords_found)} keywords found (volume: {bullet_volume:,})")
             
+            # Note: bullet-to-bullet deduplication and volume adjustment happens in seo_keyword_filter.py
             optimized_bullets.append(OptimizedContent(
                 content=bullet_content,
-                keywords_included=bullet_keywords_found,  # Use enhanced detection
+                keywords_included=bullet_keywords_found,  # All keywords found
+                keywords_duplicated_from_other_bullets=[],  # Will be set by validator
+                unique_keywords_count=len(bullet_keywords_found),  # Will be adjusted by validator
                 improvements=[
                     f"Benefit-focused: {bullet.get('primary_benefit', '')}",
                     f"Guideline compliant: {bullet.get('guideline_compliance', 'PASS')}"
                 ],
                 character_count=len(bullet_content),
-                total_search_volume=bullet_volume  # Task 2: Add volume
+                total_search_volume=bullet_volume  # Will be adjusted by validator
             ))
         
         # Generate backend keywords (enhanced with compliance awareness)
