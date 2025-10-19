@@ -8,32 +8,52 @@ logger = logging.getLogger(__name__)
 
 def strip_markdown_code_fences(text: str) -> str:
 	"""
-	Remove markdown code fences from AI output.
-	GPT-4o and gpt-4o-mini often wrap JSON in ```json ... ```
+	Remove markdown code fences and extract pure JSON from AI output.
+	GPT-4o and gpt-4o-mini often wrap JSON in ```json ... ``` or add extra text.
+	
+	Handles:
+	- Markdown code fences: ```json ... ```
+	- Extra text before JSON: "Here's the result: {...}"
+	- Extra text after JSON: "{...} Hope this helps!"
 	
 	Args:
-		text: AI output text that may contain markdown fences
+		text: AI output text that may contain markdown fences or extra commentary
 		
 	Returns:
-		Clean text without markdown fences
+		Clean JSON text without markdown fences or extra text
 	"""
 	if not text:
 		return text
 	
 	text = text.strip()
 	
-	# Remove opening fence: ```json or ```
+	# Step 1: Remove markdown code fences
 	if text.startswith('```'):
-		# Find end of first line
+		# Find end of first line (remove ```json or ``` line)
 		first_newline = text.find('\n')
 		if first_newline != -1:
 			text = text[first_newline + 1:]
 	
-	# Remove closing fence: ```
 	if text.endswith('```'):
 		text = text[:-3]
 	
-	return text.strip()
+	text = text.strip()
+	
+	# Step 2: Extract JSON if there's extra text before/after
+	# Look for JSON array [...] or object {...}
+	import re
+	
+	# Try to find complete JSON structure
+	# This regex finds the outermost JSON array or object
+	json_match = re.search(r'(\[[\s\S]*\]|\{[\s\S]*\})', text)
+	if json_match:
+		extracted = json_match.group(1).strip()
+		# Only return extracted JSON if it's substantial (not just empty brackets)
+		if len(extracted) > 2:
+			return extracted
+	
+	# If no JSON pattern found, return cleaned text as-is
+	return text
 
 
 class ScoringRunner:

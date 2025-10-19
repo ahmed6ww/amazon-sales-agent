@@ -183,9 +183,7 @@ class ApiClient {
   /**
    * Start a new analysis
    */
-  async startAnalysis(
-    request: AnalysisRequest
-  ): Promise<
+  async startAnalysis(request: AnalysisRequest): Promise<
     ApiResponse<{
       analysis_id: string;
       status_url: string;
@@ -319,6 +317,55 @@ class ApiClient {
       "/api/v1/amazon-sales-intelligence",
       formData
     );
+  }
+
+  /**
+   * Amazon Sales Intelligence - Background Job Version (No timeout!)
+   * Returns job_id immediately, then polls for results
+   */
+  async amazonSalesIntelligenceBackground(
+    request: {
+      asin_or_url: string;
+      marketplace?: string;
+      main_keyword?: string;
+      revenue_csv?: File;
+      design_csv?: File;
+    },
+    onProgress?: (progress: number, message: string) => void
+  ): Promise<ApiResponse<unknown>> {
+    const { runAnalysisWithPolling } = await import("./api-client-background");
+
+    const formData = new FormData();
+    formData.append("asin_or_url", request.asin_or_url);
+    formData.append("marketplace", request.marketplace || "US");
+    if (request.main_keyword) {
+      formData.append("main_keyword", request.main_keyword);
+    }
+    if (request.revenue_csv) {
+      formData.append("revenue_csv", request.revenue_csv);
+    }
+    if (request.design_csv) {
+      formData.append("design_csv", request.design_csv);
+    }
+
+    try {
+      const results = await runAnalysisWithPolling(formData, (status) => {
+        if (onProgress) {
+          onProgress(status.progress, status.message);
+        }
+      });
+
+      return {
+        success: true,
+        data: results,
+      };
+    } catch (error) {
+      debugLog("Background job error", error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Analysis failed",
+      };
+    }
   }
 
   // Special method for long-running requests with extended timeout
