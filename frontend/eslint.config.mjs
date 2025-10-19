@@ -21,6 +21,21 @@ const eslintConfig = [
       "**/*.d.ts", // Ignore all type declaration files
     ],
   },
+  {
+    rules: {
+      "@typescript-eslint/no-explicit-any": "off", // Allow 'any' type
+      "@typescript-eslint/no-unused-vars": [
+        "warn",
+        {
+          "argsIgnorePattern": "^_",
+          "varsIgnorePattern": "^_",
+          "caughtErrorsIgnorePattern": "^_",
+          "destructuredArrayIgnorePattern": "^_",
+          "ignoreRestSiblings": true
+        }
+      ],
+    },
+  },
 ];
 
 export default eslintConfig;

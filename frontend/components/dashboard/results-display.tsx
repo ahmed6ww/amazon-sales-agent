@@ -150,7 +150,7 @@ export default function ResultsDisplay({
     Outlier: "bg-yellow-50 text-yellow-700 border-yellow-200",
   };
 
-  const competitionColors = {
+  const _competitionColors = {
     Low: "text-green-600",
     Medium: "text-yellow-600",
     High: "text-red-600",

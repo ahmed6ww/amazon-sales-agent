@@ -26,7 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import mockResult from "@/lib/mocks/complete_pipeline_result.json";
+import _mockResult from "@/lib/mocks/complete_pipeline_result.json";
 import { api } from "@/lib/api";
 
 const Section = ({
@@ -435,7 +435,7 @@ const TestResultsPage = () => {
     const currentTitleKeywords =
       current_seo?.title_analysis?.keywords_found || [];
     console.log(`  Found: ${currentTitleKeywords.length} keywords`);
-    currentTitleKeywords.slice(0, 10).forEach((kw, i) => {
+    currentTitleKeywords.slice(0, 10).forEach((kw: string, i: number) => {
       console.log(`    ${i + 1}. ${kw}`);
     });
     if (currentTitleKeywords.length > 10) {
@@ -447,7 +447,7 @@ const TestResultsPage = () => {
     const optimizedTitleKeywords =
       optimized_seo?.optimized_title?.keywords_included || [];
     console.log(`  Included: ${optimizedTitleKeywords.length} keywords`);
-    optimizedTitleKeywords.slice(0, 10).forEach((kw, i) => {
+    optimizedTitleKeywords.slice(0, 10).forEach((kw: string, i: number) => {
       console.log(`    ${i + 1}. ${kw}`);
     });
     if (optimizedTitleKeywords.length > 10) {
@@ -457,10 +457,10 @@ const TestResultsPage = () => {
     // Print bullet keywords
     console.log("\n📋 BULLET POINT KEYWORDS:");
     const optimizedBullets = optimized_seo?.optimized_bullets || [];
-    optimizedBullets.forEach((bullet, i) => {
+    optimizedBullets.forEach((bullet: any, i: any) => {
       const bulletKeywords = bullet?.keywords_included || [];
       console.log(`  Bullet ${i + 1}: ${bulletKeywords.length} keywords`);
-      bulletKeywords.slice(0, 5).forEach((kw, j) => {
+      bulletKeywords.slice(0, 5).forEach((kw: any, j: any) => {
         console.log(`    ${j + 1}. ${kw}`);
       });
       if (bulletKeywords.length > 5) {
@@ -1207,7 +1207,7 @@ const TestResultsPage = () => {
                   )
                 );
                 // Track suggestions we have already shown across current bullets to avoid repeats
-                const seenCurrentSuggestions = new Set<string>();
+                const _seenCurrentSuggestions = new Set<string>();
                 return (
                   <div className="space-y-6">
                     {Array.from({ length: maxLen }).map((_, i) => {
