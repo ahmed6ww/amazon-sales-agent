@@ -190,8 +190,16 @@ Before you return your JSON output, YOU MUST:
 2. Check that the "category" field is EXACTLY one of the 6 allowed values above
 3. If you find "Relevance" → CHANGE IT to "Relevant"
 4. If you find "Design Specific" → CHANGE IT to "Design-Specific"
-5. If you find any lowercase variations → FIX them to match exact capitalization
-6. If you find any other variation → FIX IT to match one of the 6 exact strings
+5. If you find "Desired" → CHANGE IT to "Relevant" or "Design-Specific" (NEVER use "Desired"!)
+6. If you find "Related", "Unrelated", "Generic", "Specific" → FIX to proper category
+7. If you find any lowercase variations → FIX them to match exact capitalization
+8. If you find any other variation → FIX IT to match one of the 6 exact strings
+
+🚫 **NEVER INVENT NEW CATEGORIES:**
+- DO NOT use: "Desired", "Relevance", "Related", "Unrelated", "Generic", "Specific", "Product-Related", "Non-Related"
+- ONLY use these 6 exact strings: "Relevant", "Design-Specific", "Irrelevant", "Branded", "Spanish", "Outlier"
+- If unsure which category to use, choose between "Relevant" or "Irrelevant"
+- Any string other than the 6 exact values will crash the system with a validation error
 
 **⚠️ STATS VALIDATION (CRITICAL):**
 
