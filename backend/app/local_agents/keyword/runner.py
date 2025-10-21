@@ -61,13 +61,38 @@ class KeywordRunner:
 			else:
 				title = title_text or ""
 		
-		# Extract brand
+		# Extract brand - try multiple locations for better coverage
 		brand = ""
 		elements = scraped_product.get("elements", {})
+		
+		# Try location 1: productOverview_feature_div
 		overview = elements.get("productOverview_feature_div", {})
 		if overview.get("present"):
 			kv_data = overview.get("kv", {})
 			brand = kv_data.get("Brand", "")
+		
+		# Try location 2: Direct brand field
+		if not brand:
+			brand = scraped_product.get("brand", "")
+		
+		# Try location 3: Extract from title (look for possessive or capitalized words)
+		if not brand:
+			import re
+			# Look for possessive forms (e.g., "Anthony's", "Joe's")
+			possessive_match = re.search(r"(\w+)'s", title, re.IGNORECASE)
+			if possessive_match:
+				brand = possessive_match.group(1)
+			else:
+				# Look for consecutive capitalized words at start (likely brand)
+				title_words = title.split()
+				capitalized = []
+				for word in title_words:
+					if word and len(word) > 1 and word[0].isupper():
+						capitalized.append(word)
+					else:
+						break
+				if capitalized:
+					brand = " ".join(capitalized[:3])  # Take up to 3 words
 		
 		# Extract base product form from title using pattern matching
 		base_form = "unknown"
@@ -102,6 +127,7 @@ class KeywordRunner:
 		logger.info(f"🔍 [PRODUCT CONTEXT EXTRACTION]")
 		logger.info(f"   📦 Product Title: {title[:100]}{'...' if len(title) > 100 else ''}")
 		logger.info(f"   🏷️  Brand: {brand or 'NOT FOUND'}")
+		logger.info(f"   🔍 Brand Detection: {'✅ Success' if brand else '⚠️ Not found - AI will use capitalization rules'}")
 		logger.info(f"   📐 Base Product Form: {base_form}")
 		logger.info(f"")
 		
@@ -130,6 +156,15 @@ CRITICAL INSTRUCTIONS:
 2. Keywords describing DIFFERENT forms (powder/slices/whole/liquid) must be marked IRRELEVANT
 3. Keywords describing ATTRIBUTES of "{base_form}" can be Design-Specific or Relevant
 4. Brand is "{brand or 'UNKNOWN'}" - check for this and other brand names
+
+BRAND DETECTION (HIGHEST PRIORITY):
+- Product's own brand: "{brand or 'NOT FOUND'}"
+- ALSO check for competitor brands using these patterns:
+  ✅ Possessive forms: word's (e.g., "levi's", "anthony's")
+  ✅ Multi-word capitalized: "Sunplus Trade", "Fresh Bellies"
+  ✅ Single capitalized proper noun: "Levis", "Nike" (if not first word)
+- When in doubt about whether something is a brand, mark as BRANDED
+- Better to over-detect brands than under-detect
 
 SCRAPED PRODUCT (full details):
 {json.dumps(scraped_product or {}, separators=(',', ':'))}

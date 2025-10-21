@@ -482,17 +482,81 @@ class AmazonScraperSpider(scrapy.Spider):
 
 
 def scrape_amazon_product(url: str, proxy_url: Optional[str] = None) -> Dict[str, Any]:
-    """Synchronous scraper for specific IDs; returns raw HTML and text per element."""
-    settings = {
-        "ROBOTSTXT_OBEY": False,
-        "LOG_LEVEL": "ERROR",
-    }
-    process = CrawlerProcess(settings)
-    crawler = process.create_crawler(AmazonScraperSpider)
-    process.crawl(crawler, url=url, proxy_url=proxy_url)
-    process.start()
-    # Prefer spider.scraped (set in parse)
-    return crawler.stats.get_value("scraped", crawler.spider.scraped if hasattr(crawler, "spider") else {})
+    """
+    Synchronous scraper with optional anti-blocking features
+    Falls back gracefully if anti-blocking module has issues
+    
+    Features (when enabled):
+    - User Agent Rotation
+    - Header Randomization
+    - Proxy Rotation (if configured)
+    - Random Delays (2-5s between requests)
+    - Smart Retry Logic
+    """
+    import sys
+    import traceback
+    
+    # Try to load anti-blocking settings with detailed error handling
+    settings = None
+    anti_blocking_enabled = False
+    
+    try:
+        from app.services.amazon.anti_blocking import get_anti_blocking_settings
+        settings = get_anti_blocking_settings()
+        settings["LOG_LEVEL"] = os.getenv("SCRAPER_LOG_LEVEL", "ERROR")
+        anti_blocking_enabled = True
+        print(f"✅ Anti-blocking features enabled", file=sys.stderr)
+    except ImportError as e:
+        print(f"⚠️ Anti-blocking module not found: {e}", file=sys.stderr)
+        settings = {
+            "ROBOTSTXT_OBEY": False,
+            "LOG_LEVEL": os.getenv("SCRAPER_LOG_LEVEL", "ERROR"),
+            "DOWNLOAD_DELAY": 2.0,  # Still add basic delay
+            "COOKIES_ENABLED": True,
+            "RETRY_ENABLED": True,
+            "RETRY_TIMES": 3,
+        }
+    except Exception as e:
+        print(f"❌ Error loading anti-blocking (using fallback): {e}", file=sys.stderr)
+        traceback.print_exc(file=sys.stderr)
+        settings = {
+            "ROBOTSTXT_OBEY": False,
+            "LOG_LEVEL": os.getenv("SCRAPER_LOG_LEVEL", "ERROR"),
+            "DOWNLOAD_DELAY": 2.0,
+            "COOKIES_ENABLED": True,
+        }
+    
+    # Run scraper with error handling
+    try:
+        process = CrawlerProcess(settings)
+        crawler = process.create_crawler(AmazonScraperSpider)
+        process.crawl(crawler, url=url, proxy_url=proxy_url)
+        process.start()
+        
+        # Get result
+        result = crawler.stats.get_value("scraped", 
+                                         crawler.spider.scraped if hasattr(crawler, "spider") else {})
+        
+        if not result:
+            result = {"success": False, "error": "No result returned from spider", "data": {}}
+        
+        # Add anti-blocking status to result
+        if anti_blocking_enabled and result.get("success"):
+            result["anti_blocking_used"] = True
+        
+        return result
+        
+    except Exception as e:
+        error_msg = f"Scraper crashed: {str(e)}"
+        print(f"❌ {error_msg}", file=sys.stderr)
+        traceback.print_exc(file=sys.stderr)
+        
+        return {
+            "success": False,
+            "error": error_msg,
+            "error_type": type(e).__name__,
+            "data": {}
+        }
 
 
 if __name__ == "__main__":

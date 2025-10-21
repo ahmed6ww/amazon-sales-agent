@@ -1,0 +1,10 @@
+{
+  "job_id": "b8cc6b3a-272f-4327-a979-b80fdc65423c",
+  "status": "failed",
+  "progress": 10,
+  "message": "Scraping product...",
+  "created_at": "2025-10-21T13:11:15.472259",
+  "updated_at": "2025-10-21T13:11:41.815415",
+  "completed_at": "2025-10-21T13:11:41.815432",
+  "error": "500: Scraping failed: Unknown scraping error"
+}

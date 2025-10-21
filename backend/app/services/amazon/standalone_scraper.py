@@ -25,8 +25,18 @@ def main():
         if isinstance(result, dict) and "data" in result and isinstance(result["data"], dict):
             result["data"].setdefault("url", url)
         print(json.dumps(result))
+        # Exit with error code if scraping failed
+        if not result.get("success"):
+            sys.exit(1)
+    except ImportError as e:
+        import traceback
+        error_details = f"Import error: {str(e)}\n{traceback.format_exc()}"
+        print(json.dumps({"success": False, "error": error_details, "data": {}, "url": url}), file=sys.stderr)
+        sys.exit(1)
     except Exception as e:
-        print(json.dumps({"success": False, "error": str(e), "data": {}, "url": url}))
+        import traceback
+        error_details = f"{str(e)}\n{traceback.format_exc()}"
+        print(json.dumps({"success": False, "error": error_details, "data": {}, "url": url}), file=sys.stderr)
         sys.exit(1)
 
 if __name__ == "__main__":

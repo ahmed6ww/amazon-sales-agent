@@ -1,0 +1,10 @@
+{
+  "job_id": "2735f808-1bf1-45bd-87a4-8e98444b6150",
+  "status": "failed",
+  "progress": 10,
+  "message": "Scraping product...",
+  "created_at": "2025-10-20T19:47:47.488670",
+  "updated_at": "2025-10-20T19:53:55.711146",
+  "completed_at": "2025-10-20T19:53:55.711229",
+  "error": "500: Internal server error: Invalid JSON when parsing {\"product_context\":{\"title\":\"GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women\",\"brand\":\"Gold Water Trading\",\"base_product_form\":\"liquid\",\"marketplace\":\"US\",\"url\":\"https://www.amazon.com/dp/B0D9C28SVB\"},\"items\":[],\"stats\":{\"Relevant\":{\"count\":0,\"examples\":[]},\"Design-Specific\":{\"count\":0,\"examples\":[]},\"Irrelevant\":{\"count\":0,\"examples\":[]},\"Branded\":{\"count\":0,\"examples\":[]},\"Spanish\":{\"count\":0,\"examples\":[]},\"Outlier\":{\"count\":0,\"examples\":[]}},\"reason\":\"The provided base_relevancy_scores list is very large. Please confirm you want every keyword classified in a single response (I can process them all but the output will be very large), or tell me to process them in smaller batches (suggested batch size: 50-100 keywords).\"} for TypeAdapter(KeywordAnalysisResult); 1 validation error for KeywordAnalysisResult\nreason\n  Extra inputs are not permitted [type=extra_forbidden, input_value='The provided base_releva...size: 50-100 keywords).', input_type=str]\n    For further information visit https://errors.pydantic.dev/2.11/v/extra_forbidden"
+}

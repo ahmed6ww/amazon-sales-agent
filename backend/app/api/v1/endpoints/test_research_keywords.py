@@ -218,23 +218,41 @@ async def amazon_sales_intelligence_pipeline(
         logger.info("="*80)
         
         from app.local_agents.keyword.runner import KeywordRunner
+        import openai
+        import time
 
         kw_runner = KeywordRunner()
 
-        def run_keyword_agent():
-            loop = asyncio.new_event_loop()
-            asyncio.set_event_loop(loop)
-            try:
-                return kw_runner.run_keyword_categorization(
-                    scraped_product=scraped_product,
-                    base_relevancy_scores=base_relevancy_scores,
-                    marketplace=marketplace,
-                    asin_or_url=asin_or_url,
-                )
-            finally:
-                loop.close()
+        def run_keyword_agent_with_retry(max_retries=3):
+            """Run keyword agent with retry on connection errors"""
+            for attempt in range(max_retries):
+                try:
+                    agent_loop = asyncio.new_event_loop()
+                    asyncio.set_event_loop(agent_loop)
+                    try:
+                        result = kw_runner.run_keyword_categorization(
+                            scraped_product=scraped_product,
+                            base_relevancy_scores=base_relevancy_scores,
+                            marketplace=marketplace,
+                            asin_or_url=asin_or_url,
+                        )
+                        return result
+                    finally:
+                        agent_loop.close()
+                except openai.APIConnectionError as e:
+                    if attempt < max_retries - 1:
+                        wait_time = 2 ** attempt  # Exponential backoff: 1s, 2s, 4s
+                        logger.warning(f"⚠️ OpenAI connection error (attempt {attempt + 1}/{max_retries}): {e}")
+                        logger.info(f"   Retrying in {wait_time}s...")
+                        time.sleep(wait_time)
+                    else:
+                        logger.error(f"❌ OpenAI connection failed after {max_retries} attempts")
+                        raise
+                except Exception as e:
+                    logger.error(f"❌ Keyword agent error: {type(e).__name__}: {e}")
+                    raise
 
-        keyword_ai_result = await loop.run_in_executor(None, run_keyword_agent)
+        keyword_ai_result = await loop.run_in_executor(None, run_keyword_agent_with_retry)
         
         # Extract stats
         if isinstance(keyword_ai_result, dict):
@@ -278,21 +296,36 @@ async def amazon_sales_intelligence_pipeline(
                 items = structured.get("items") or []
             if items:
                 # Run scoring/LLM enrichment in a background thread to avoid event loop conflicts
-                def run_scoring_enrichment():
-                    loop_inner = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop_inner)
-                    try:
-                        return ScoringRunner.score_and_enrich(
-                            items,
-                            scraped_product=scraped_product,
-                            revenue_csv=revenue_data,
-                            design_csv=design_data,
-                            base_relevancy_scores=base_relevancy_scores,
-                        )
-                    finally:
-                        loop_inner.close()
+                def run_scoring_enrichment_with_retry(max_retries=3):
+                    """Run scoring enrichment with retry on connection errors"""
+                    for attempt in range(max_retries):
+                        try:
+                            loop_inner = asyncio.new_event_loop()
+                            asyncio.set_event_loop(loop_inner)
+                            try:
+                                return ScoringRunner.score_and_enrich(
+                                    items,
+                                    scraped_product=scraped_product,
+                                    revenue_csv=revenue_data,
+                                    design_csv=design_data,
+                                    base_relevancy_scores=base_relevancy_scores,
+                                )
+                            finally:
+                                loop_inner.close()
+                        except openai.APIConnectionError as e:
+                            if attempt < max_retries - 1:
+                                wait_time = 2 ** attempt
+                                logger.warning(f"⚠️ OpenAI connection error in scoring (attempt {attempt + 1}/{max_retries}): {e}")
+                                logger.info(f"   Retrying in {wait_time}s...")
+                                time.sleep(wait_time)
+                            else:
+                                logger.error(f"❌ Scoring failed after {max_retries} attempts")
+                                raise
+                        except Exception as e:
+                            logger.error(f"❌ Scoring error: {type(e).__name__}: {e}")
+                            raise
 
-                enriched = await loop.run_in_executor(None, run_scoring_enrichment)
+                enriched = await loop.run_in_executor(None, run_scoring_enrichment_with_retry)
                 # Replace items inside structured_data
                 if isinstance(keyword_ai_result, dict):
                     keyword_ai_result.setdefault("structured_data", {})["items"] = enriched
@@ -369,45 +402,60 @@ async def amazon_sales_intelligence_pipeline(
             if keyword_items and scraped_product:
                 from app.local_agents.seo import SEORunner
                 
-                def run_seo_analysis():
-                    loop_inner = asyncio.new_event_loop()
-                    asyncio.set_event_loop(loop_inner)
-                    try:
-                        seo_runner = SEORunner()
-                        
-                        # Extract competitor data for Task 6 analysis
-                        competitor_data = []
-                        if research_ai_result and research_ai_result.get("success"):
-                            competitor_scrapes = research_ai_result.get("competitor_scrapes", {})
-                            revenue_competitors = competitor_scrapes.get("revenue", [])
-                            design_competitors = competitor_scrapes.get("design", [])
-                            
-                            # Combine both revenue and design competitors for comprehensive analysis
-                            all_competitors = revenue_competitors + design_competitors
-                            
-                            # Deduplicate by ASIN and keep only successful scrapes with titles
-                            seen_asins = set()
-                            for comp in all_competitors:
-                                asin = comp.get("asin", "")
-                                if (asin not in seen_asins and 
-                                    comp.get("success") and 
-                                    comp.get("title") and 
-                                    len(competitor_data) < 20):  # Limit to top 20 for analysis
-                                    competitor_data.append(comp)
-                                    seen_asins.add(asin)
-                            
-                            logger.info(f"🏆 Task 6: Prepared {len(competitor_data)} competitors for title analysis")
-                        
-                        return seo_runner.run_seo_analysis(
-                            scraped_product=scraped_product,
-                            keyword_items=keyword_items,
-                            broad_search_volume_by_root=filtered_root_volumes,  # Task 13: filtered root volumes
-                            competitor_data=competitor_data  # Task 6: Pass competitor data for benefit analysis
-                        )
-                    finally:
-                        loop_inner.close()
+                def run_seo_analysis_with_retry(max_retries=3):
+                    """Run SEO analysis with retry on connection errors"""
+                    for attempt in range(max_retries):
+                        try:
+                            loop_inner = asyncio.new_event_loop()
+                            asyncio.set_event_loop(loop_inner)
+                            try:
+                                seo_runner = SEORunner()
+                                
+                                # Extract competitor data for Task 6 analysis
+                                competitor_data = []
+                                if research_ai_result and research_ai_result.get("success"):
+                                    competitor_scrapes = research_ai_result.get("competitor_scrapes", {})
+                                    revenue_competitors = competitor_scrapes.get("revenue", [])
+                                    design_competitors = competitor_scrapes.get("design", [])
+                                    
+                                    # Combine both revenue and design competitors for comprehensive analysis
+                                    all_competitors = revenue_competitors + design_competitors
+                                    
+                                    # Deduplicate by ASIN and keep only successful scrapes with titles
+                                    seen_asins = set()
+                                    for comp in all_competitors:
+                                        asin = comp.get("asin", "")
+                                        if (asin not in seen_asins and 
+                                            comp.get("success") and 
+                                            comp.get("title") and 
+                                            len(competitor_data) < 20):  # Limit to top 20 for analysis
+                                            competitor_data.append(comp)
+                                            seen_asins.add(asin)
+                                    
+                                    logger.info(f"🏆 Task 6: Prepared {len(competitor_data)} competitors for title analysis")
+                                
+                                return seo_runner.run_seo_analysis(
+                                    scraped_product=scraped_product,
+                                    keyword_items=keyword_items,
+                                    broad_search_volume_by_root=filtered_root_volumes,  # Task 13: filtered root volumes
+                                    competitor_data=competitor_data  # Task 6: Pass competitor data for benefit analysis
+                                )
+                            finally:
+                                loop_inner.close()
+                        except openai.APIConnectionError as e:
+                            if attempt < max_retries - 1:
+                                wait_time = 2 ** attempt
+                                logger.warning(f"⚠️ OpenAI connection error in SEO (attempt {attempt + 1}/{max_retries}): {e}")
+                                logger.info(f"   Retrying in {wait_time}s...")
+                                time.sleep(wait_time)
+                            else:
+                                logger.error(f"❌ SEO analysis failed after {max_retries} attempts")
+                                raise
+                        except Exception as e:
+                            logger.error(f"❌ SEO error: {type(e).__name__}: {e}")
+                            raise
 
-                seo_result = await loop.run_in_executor(None, run_seo_analysis)
+                seo_result = await loop.run_in_executor(None, run_seo_analysis_with_retry)
                 
                 if seo_result and seo_result.get("success"):
                     seo_analysis_result = seo_result
@@ -535,10 +583,12 @@ async def amazon_sales_intelligence_pipeline(
             for phrase, rel, intent in sample_with_scores:
                 logger.info(f"     • {phrase}: relevancy={rel}/10, intent={intent}")
         if seo_analysis_result.get('success'):
-            seo_data = seo_analysis_result.get('data', {})
+            seo_data = seo_analysis_result.get('analysis', {})
             optimized = seo_data.get('optimized_seo', {})
-            logger.info(f"   - SEO title: {optimized.get('optimized_title', {}).get('content', 'N/A')[:80]}...")
-            logger.info(f"   - SEO bullets: {len(optimized.get('optimized_bullets', []))} generated")
+            title_content = optimized.get('optimized_title', {}).get('content', 'N/A')
+            bullets_list = optimized.get('optimized_bullets', [])
+            logger.info(f"   - SEO title: {title_content[:80]}...")
+            logger.info(f"   - SEO bullets: {len(bullets_list)} generated")
         logger.info("="*80)
         
         # Print OpenAI API monitoring summary
