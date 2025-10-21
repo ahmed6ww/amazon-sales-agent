@@ -243,14 +243,14 @@ Step 7: Design-Specific or Relevant
   - Describes ATTRIBUTES of same form (material, size, color, packaging) → DESIGN-SPECIFIC
   - Core product description without specific attributes → RELEVANT
 
-Result: Assign appropriate category and provide clear reason
+Result: Assign appropriate category
 ```
 
 # Instructions
 - Use only the given `scraped_product` context and `base_relevancy_scores` map.
 - For each keyword, assign exactly one category from the guide above.
-- Justify each category choice referencing which test was applied.
 - Do not generate new data, infer unknowns, or recalculate relevancy scores. Be concise.
+- OMIT the "reason" field to save tokens (it's optional and adds 4,000-8,000 chars for large sets)
 
 **IMPORTANT - Process ALL Keywords:**
 - You MUST process every keyword provided in base_relevancy_scores
@@ -350,7 +350,6 @@ Total: 140 (does NOT match items array length of 58)
     {
       "phrase": "string",             
       "category": "Relevant"|"Design-Specific"|"Irrelevant"|"Branded"|"Spanish"|"Outlier",
-      "reason": "string",            
       "relevancy_score": 0       
     }
   ],
@@ -367,9 +366,10 @@ Total: 140 (does NOT match items array length of 58)
 
 **CRITICAL - Schema Requirements**:
 - ONLY include these 3 top-level fields: "product_context", "items", "stats"
-- Do NOT add extra fields like "reason", "note", "message", "warning" at the top level
+- Do NOT add extra fields like "note", "message", "warning" at the top level
 - The "items" array MUST contain all keywords (never return empty items array)
-- Each item in "items" has its own "reason" field (that's the only place for explanations)
+- **OMIT the "reason" field** - It's optional and wastes tokens. Just provide phrase, category, and relevancy_score
+- For large keyword sets (80+), omitting "reason" saves ~4,000-8,000 tokens and prevents truncation
 
 **CRITICAL - Stats Structure**:
 - The `stats` field MUST be a dictionary where keys are category names ("Relevant", "Design-Specific", etc.)
@@ -380,10 +380,10 @@ Total: 140 (does NOT match items array length of 58)
 If the input keyword list is empty, return a `KeywordAnalysisResult` with `items: []` and all category counts set to 0.
 
 # Validation and Error Handling
-- Validate input keywords: if any are missing, blank, or malformed, assign 'Irrelevant' with reason: "Input keyword was empty, missing, or malformed."
+- Validate input keywords: if any are missing, blank, or malformed, assign 'Irrelevant'
 - Populate `relevancy_score` from `base_relevancy_scores` (use 0 if not found) and ensure it's an integer between 0 and 10.
 - **CRITICAL**: The relevancy_score MUST be between 0-10. If the base_relevancy_scores contains values >10, you MUST convert them to the 0-10 scale (e.g., 95->9, 90->9, 85->8, 80->8, 75->7, 70->7, 65->6, 60->6).
-- After all keywords are categorized, perform a brief validation to ensure each output entry uses a valid guide category, includes a reason, and that `stats` counts match the tallies in `items`.
+- After all keywords are categorized, perform a brief validation to ensure each output entry uses a valid guide category and that `stats` counts match the tallies in `items`.
 
 # Verbosity
 - Responses must be concise and strictly match the output format.
@@ -427,10 +427,9 @@ FALLBACK_CATEGORIZATION_PROMPT = """
     {{
       "phrase": "string",             
       "category": "Relevant"|"Design-Specific"|"Irrelevant"|"Branded"|"Spanish"|"Outlier",
-      "reason": "string",            
       "relevancy_score": 0       
     }},
-    // ... one entry per input keyword, preserving order
+    // ... one entry per input keyword, preserving order (OMIT "reason" field to save tokens)
   ]
 }}
 ```

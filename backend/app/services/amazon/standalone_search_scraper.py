@@ -183,13 +183,25 @@ def scrape_amazon_search_page(url: str, max_results: int = 15) -> Dict[str, Any]
                 except Exception as e:
                     return None
         
-        # Run the scraper with anti-blocking features
+        # Run the scraper with anti-blocking features (graceful fallback)
+        import os
+        import sys
+        settings = None
         try:
-            import os
             from app.services.amazon.anti_blocking import get_anti_blocking_settings
             settings = get_anti_blocking_settings()
             settings["LOG_LEVEL"] = os.getenv("SCRAPER_LOG_LEVEL", "ERROR")
-        except ImportError:
+            print("✅ Anti-blocking enabled for search scraper", file=sys.stderr)
+        except ImportError as e:
+            print(f"⚠️ Anti-blocking not available: {e}", file=sys.stderr)
+            settings = {
+                "ROBOTSTXT_OBEY": False,
+                "LOG_LEVEL": os.getenv("SCRAPER_LOG_LEVEL", "ERROR"),
+                "DOWNLOAD_DELAY": 2.0,
+                "COOKIES_ENABLED": True,
+            }
+        except Exception as e:
+            print(f"❌ Error loading anti-blocking (using fallback): {e}", file=sys.stderr)
             settings = {
                 "ROBOTSTXT_OBEY": False,
                 "LOG_LEVEL": "ERROR",

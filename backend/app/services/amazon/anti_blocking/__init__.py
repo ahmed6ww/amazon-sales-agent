@@ -40,12 +40,14 @@ def get_anti_blocking_settings() -> dict:
     Returns:
         dict: Scrapy settings with middlewares and configuration
     """
+    import os
+    
     return {
         # Disable robots.txt (Amazon blocks scrapers)
         "ROBOTSTXT_OBEY": False,
         
         # Logging
-        "LOG_LEVEL": "INFO",
+        "LOG_LEVEL": os.getenv("SCRAPER_LOG_LEVEL", "INFO"),
         
         # Enable cookies (maintain session)
         "COOKIES_ENABLED": True,
@@ -58,15 +60,19 @@ def get_anti_blocking_settings() -> dict:
         "CONCURRENT_REQUESTS_PER_DOMAIN": 1,
         
         # Random delays (CRITICAL for avoiding detection)
-        "RANDOM_DELAY_MIN": 2.0,
-        "RANDOM_DELAY_MAX": 5.0,
+        "RANDOM_DELAY_MIN": float(os.getenv("RANDOM_DELAY_MIN", "2.0")),
+        "RANDOM_DELAY_MAX": float(os.getenv("RANDOM_DELAY_MAX", "5.0")),
+        
+        # Use Scrapy's native download delay (non-blocking)
+        "DOWNLOAD_DELAY": 2.0,  # Base delay
+        "RANDOMIZE_DOWNLOAD_DELAY": True,  # Scrapy randomizes it
         
         # Retry settings
         "RETRY_ENABLED": True,
-        "RETRY_TIMES": 3,
+        "RETRY_TIMES": int(os.getenv("SCRAPER_RETRY_TIMES", "3")),
         "RETRY_HTTP_CODES": [429, 500, 502, 503, 504, 522, 524, 408, 403],
         
-        # Disable AutoThrottle (we use custom delay middleware)
+        # Disable AutoThrottle (conflicts with delay middleware)
         "AUTOTHROTTLE_ENABLED": False,
         
         # Downloader Middlewares (order matters!)
@@ -74,7 +80,7 @@ def get_anti_blocking_settings() -> dict:
             # Disable default retry (we use custom)
             "scrapy.downloadermiddlewares.retry.RetryMiddleware": None,
             
-            # Our custom middlewares
+            # Our custom middlewares with safe error handling
             "app.services.amazon.anti_blocking.middlewares.RotateUserAgentMiddleware": 400,
             "app.services.amazon.anti_blocking.middlewares.RotateHeadersMiddleware": 410,
             "app.services.amazon.anti_blocking.middlewares.BrowserFingerprintMiddleware": 420,

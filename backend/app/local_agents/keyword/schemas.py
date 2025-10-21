@@ -17,7 +17,7 @@ class KeywordData(BaseModel):
 	model_config = ConfigDict(extra="allow")  # Changed from "forbid" to "allow" to accept base_relevancy_score
 	phrase: str = Field(..., description="The keyword phrase")
 	category: KeywordCategory = Field(..., description="Full category name (e.g., 'Relevant', 'Design-Specific')")
-	reason: str = Field(..., description="Short rationale for the category")
+	reason: str = Field(default="", description="Optional rationale (omit to save tokens)")
 	relevancy_score: int = Field(
 		None, ge=0, le=10, description="Relevancy score (0-10) from research CSVs"
 	)

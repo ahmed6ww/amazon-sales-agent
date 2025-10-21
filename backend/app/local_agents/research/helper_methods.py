@@ -51,9 +51,13 @@ def scrape_amazon_listing(asin_or_url: str, marketplace: str = "US") -> Dict[str
         )
 
         if result.returncode != 0:
+            # Capture both stderr and stdout for better error diagnosis
+            error_msg = result.stderr.strip() if result.stderr.strip() else result.stdout.strip()
+            if not error_msg:
+                error_msg = f"Process exited with code {result.returncode} (no output)"
             return {
                 "success": False,
-                "error": f"Scraper process failed: {result.stderr.strip()}",
+                "error": f"Scraper process failed: {error_msg}",
                 "data": {},
                 "url": url,
             }
