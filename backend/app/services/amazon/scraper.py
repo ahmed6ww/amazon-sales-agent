@@ -482,11 +482,29 @@ class AmazonScraperSpider(scrapy.Spider):
 
 
 def scrape_amazon_product(url: str, proxy_url: Optional[str] = None) -> Dict[str, Any]:
-    """Synchronous scraper for specific IDs; returns raw HTML and text per element."""
-    settings = {
-        "ROBOTSTXT_OBEY": False,
-        "LOG_LEVEL": "ERROR",
-    }
+    """
+    Synchronous scraper with anti-blocking features
+    
+    Features enabled:
+    - User Agent Rotation
+    - Header Randomization
+    - Proxy Rotation (if configured)
+    - Random Delays (2-5s between requests)
+    - Smart Retry Logic
+    """
+    # Import anti-blocking settings
+    try:
+        from app.services.amazon.anti_blocking import get_anti_blocking_settings
+        settings = get_anti_blocking_settings()
+        # Override log level for production
+        settings["LOG_LEVEL"] = os.getenv("SCRAPER_LOG_LEVEL", "ERROR")
+    except ImportError:
+        # Fallback to basic settings if anti-blocking module not available
+        settings = {
+            "ROBOTSTXT_OBEY": False,
+            "LOG_LEVEL": "ERROR",
+        }
+    
     process = CrawlerProcess(settings)
     crawler = process.create_crawler(AmazonScraperSpider)
     process.crawl(crawler, url=url, proxy_url=proxy_url)

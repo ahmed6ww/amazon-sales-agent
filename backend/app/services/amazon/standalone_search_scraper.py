@@ -183,11 +183,18 @@ def scrape_amazon_search_page(url: str, max_results: int = 15) -> Dict[str, Any]
                 except Exception as e:
                     return None
         
-        # Run the scraper
-        settings = {
-            "ROBOTSTXT_OBEY": False,
-            "LOG_LEVEL": "ERROR",
-        }
+        # Run the scraper with anti-blocking features
+        try:
+            import os
+            from app.services.amazon.anti_blocking import get_anti_blocking_settings
+            settings = get_anti_blocking_settings()
+            settings["LOG_LEVEL"] = os.getenv("SCRAPER_LOG_LEVEL", "ERROR")
+        except ImportError:
+            settings = {
+                "ROBOTSTXT_OBEY": False,
+                "LOG_LEVEL": "ERROR",
+            }
+        
         process = CrawlerProcess(settings)
         crawler = process.create_crawler(AmazonSearchSpider)
         process.crawl(crawler, url=url, max_results=max_results)

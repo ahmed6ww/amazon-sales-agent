@@ -9,7 +9,7 @@ from .prompts import KEYWORD_AGENT_INSTRUCTIONS
 keyword_agent = Agent(
 	name="KeywordAgent",
 	instructions=KEYWORD_AGENT_INSTRUCTIONS,
-	model="gpt-4o-mini",  # TASK 5: Changed from gpt-5 for 3-4x speed improvement
+	model="gpt-5-mini",  # GPT-5 Mini: Smarter categorization + fast performance + cost-effective
 	# model_settings=ModelSettings(max_tokens=3000),
 	output_type=AgentOutputSchema(KeywordAnalysisResult, strict_json_schema=False),
 )
