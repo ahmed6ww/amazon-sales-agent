@@ -290,9 +290,17 @@ class SEORunner:
     ) -> CurrentSEO:
         """Perform deterministic analysis of current SEO state."""
         
-        # Get relevant keywords for analysis
-        all_relevant = keyword_data["relevant_keywords"] + keyword_data["design_keywords"]
+        # Get relevant keywords for analysis (include branded for detection in current content)
+        all_relevant = (keyword_data["relevant_keywords"] + 
+                       keyword_data["design_keywords"] + 
+                       keyword_data.get("branded_keywords", []))
         keyword_phrases = [kw.get("phrase", "") for kw in all_relevant]
+        
+        logger.info(f"🔍 [CURRENT SEO] Searching for keywords in current content:")
+        logger.info(f"   - Relevant: {len(keyword_data['relevant_keywords'])} keywords")
+        logger.info(f"   - Design-Specific: {len(keyword_data['design_keywords'])} keywords")
+        logger.info(f"   - Branded: {len(keyword_data.get('branded_keywords', []))} keywords (for detection only)")
+        logger.info(f"   - Total: {len(all_relevant)} keywords to search")
         
         # Build keyword volumes map for Task 2 enhancement
         keyword_volumes = {}

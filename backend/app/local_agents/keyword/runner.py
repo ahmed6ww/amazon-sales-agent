@@ -142,8 +142,34 @@ class KeywordRunner:
 		logger.info(f"   🎯 Output: {len(filtered_relevancy_scores)} keywords (score 1-10)")
 		logger.info(f"   🗑️  Filtered: {len(base_relevancy_scores) - len(filtered_relevancy_scores)} keywords (score 0)")
 
-		# Build enhanced prompt with explicit product context
-		prompt = f"""
+		# ========================================================================
+		# BATCH PROCESSING: Split keywords into chunks to prevent truncation
+		# ========================================================================
+		BATCH_SIZE = 75  # Max keywords per AI request (prevents JSON truncation)
+		keyword_list = list(filtered_relevancy_scores.items())
+		total_keywords = len(keyword_list)
+		
+		if total_keywords > BATCH_SIZE:
+			logger.info(f"")
+			logger.info(f"📦 [BATCHING] Large keyword set detected - using batch processing")
+			logger.info(f"   📊 Total keywords: {total_keywords}")
+			logger.info(f"   📦 Batch size: {BATCH_SIZE}")
+			logger.info(f"   🔢 Number of batches: {(total_keywords + BATCH_SIZE - 1) // BATCH_SIZE}")
+		
+		all_items = []
+		combined_stats = {}
+		
+		for batch_idx in range(0, total_keywords, BATCH_SIZE):
+			batch_keywords = dict(keyword_list[batch_idx:batch_idx + BATCH_SIZE])
+			batch_num = (batch_idx // BATCH_SIZE) + 1
+			total_batches = (total_keywords + BATCH_SIZE - 1) // BATCH_SIZE
+			
+			if total_keywords > BATCH_SIZE:
+				logger.info(f"")
+				logger.info(f"🔄 [BATCH {batch_num}/{total_batches}] Processing {len(batch_keywords)} keywords...")
+			
+			# Build enhanced prompt with explicit product context
+			prompt = f"""
 PRODUCT CONTEXT (for categorization):
 - Title: {title}
 - Brand: {brand or "NOT FOUND"}
@@ -170,24 +196,50 @@ SCRAPED PRODUCT (full details):
 {json.dumps(scraped_product or {}, separators=(',', ':'))}
 
 BASE RELEVANCY (1-10) — keyword->score (filtered to exclude score 0):
-{json.dumps(filtered_relevancy_scores, separators=(',', ':'))}
+{json.dumps(batch_keywords, separators=(',', ':'))}
 
 Return a KeywordAnalysisResult with strict categorization following the algorithm in your instructions.
 """
 
-		result = Runner.run_sync(keyword_agent, prompt)
-		raw_output = getattr(result, "final_output", None)
+			result = Runner.run_sync(keyword_agent, prompt)
+			raw_output = getattr(result, "final_output", None)
 
-		# If SDK returned a Pydantic model
-		structured: Dict[str, Any] = {}
-		if raw_output is not None and hasattr(raw_output, "model_dump"):
-			try:
-				structured = raw_output.model_dump()
-			except Exception:
-				structured = {}
+			# If SDK returned a Pydantic model
+			batch_structured: Dict[str, Any] = {}
+			if raw_output is not None and hasattr(raw_output, "model_dump"):
+				try:
+					batch_structured = raw_output.model_dump()
+				except Exception:
+					batch_structured = {}
 
-		if not structured and isinstance(raw_output, dict):
-			structured = raw_output
+			if not batch_structured and isinstance(raw_output, dict):
+				batch_structured = raw_output
+			
+			# Collect items from this batch
+			if batch_structured and "items" in batch_structured:
+				all_items.extend(batch_structured["items"])
+				
+				# Merge stats
+				if "stats" in batch_structured:
+					for category, data in batch_structured["stats"].items():
+						if category not in combined_stats:
+							combined_stats[category] = {"count": 0, "examples": []}
+						combined_stats[category]["count"] += data.get("count", 0)
+						combined_stats[category]["examples"].extend(data.get("examples", [])[:2])
+			
+			if total_keywords > BATCH_SIZE:
+				logger.info(f"   ✅ Batch {batch_num}/{total_batches} complete ({len(batch_structured.get('items', []))} keywords categorized)")
+		
+		# Combine all batch results
+		structured = {
+			"product_context": scraped_product,
+			"items": all_items,
+			"stats": combined_stats
+		}
+		
+		if total_keywords > BATCH_SIZE:
+			logger.info(f"")
+			logger.info(f"✅ [BATCHING COMPLETE] All {total_keywords} keywords processed across {total_batches} batches")
 
 		# Post-process: Normalize field names (base_relevancy_score -> relevancy_score)
 		if structured and "items" in structured:

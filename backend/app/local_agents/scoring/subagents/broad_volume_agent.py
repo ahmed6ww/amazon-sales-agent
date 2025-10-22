@@ -1,4 +1,4 @@
-from agents import Agent
+from agents import Agent, ModelSettings
 from typing import Any, Dict, List, Set, Optional
 import re
 import logging
@@ -113,6 +113,10 @@ broad_volume_agent = Agent(
     name="BroadVolumeSubagent",
     instructions=BROAD_VOLUME_INSTRUCTIONS,
     model="gpt-4o-mini",
+    model_settings=ModelSettings(
+        max_tokens=16000,  # Handle 200+ items without truncation
+        timeout=240.0,
+    ),
 )
 
 # Common stopwords for root word extraction
@@ -224,12 +228,125 @@ def calculate_broad_volume_deterministic(
         "broad_search_volume_by_root": root_volume_map
     }
 
+def _process_broad_volume_batched(
+    items: List[Dict[str, Any]], 
+    brand_tokens: Optional[Set[str]],
+    batch_size: int
+) -> Dict[str, Any]:
+    """
+    Process broad volume calculation in batches to prevent JSON truncation.
+    
+    Args:
+        items: List of keyword items
+        brand_tokens: Brand tokens to exclude
+        batch_size: Number of items per batch
+        
+    Returns:
+        Combined results from all batches
+    """
+    import json as _json
+    from agents import Runner as _Runner
+    import time
+    
+    total_items = len(items)
+    num_batches = (total_items + batch_size - 1) // batch_size
+    
+    all_processed_items = []
+    combined_root_volumes = {}
+    
+    for batch_idx in range(num_batches):
+        start_idx = batch_idx * batch_size
+        end_idx = min(start_idx + batch_size, total_items)
+        batch_items = items[start_idx:end_idx]
+        
+        logger.info(f"[BroadVolumeAgent] 🔄 Processing batch {batch_idx + 1}/{num_batches} ({len(batch_items)} items)")
+        
+        # Rate limiting between batches
+        if batch_idx > 0:
+            time.sleep(1)
+        
+        # Process this batch
+        prompt = USER_PROMPT_TEMPLATE.format(
+            items=_json.dumps(batch_items, separators=(",", ":")),
+        )
+        
+        try:
+            result = _Runner.run_sync(broad_volume_agent, prompt)
+            
+            # Parse result
+            parsed_result = None
+            if result and hasattr(result, 'final_output'):
+                output = result.final_output
+                if output:
+                    try:
+                        cleaned_output = strip_markdown_code_fences(output)
+                        parsed_result = _json.loads(cleaned_output)
+                    except _json.JSONDecodeError as e:
+                        logger.warning(f"[BroadVolumeAgent] Batch {batch_idx + 1} parse error: {e}")
+            elif result and hasattr(result, 'content'):
+                try:
+                    cleaned_content = strip_markdown_code_fences(result.content)
+                    parsed_result = _json.loads(cleaned_content)
+                except _json.JSONDecodeError as e:
+                    logger.warning(f"[BroadVolumeAgent] Batch {batch_idx + 1} parse error: {e}")
+            
+            if parsed_result and isinstance(parsed_result, dict):
+                batch_processed_items = parsed_result.get("items", [])
+                batch_root_volumes = parsed_result.get("broad_search_volume_by_root", {})
+                
+                items_returned = len(batch_processed_items)
+                items_expected = len(batch_items)
+                
+                if items_returned != items_expected:
+                    logger.error(f"[BroadVolumeAgent] ❌ Batch {batch_idx + 1} dropped {items_expected - items_returned} items!")
+                else:
+                    logger.info(f"[BroadVolumeAgent] ✅ Batch {batch_idx + 1} complete ({items_returned} items)")
+                
+                # Accumulate results
+                all_processed_items.extend(batch_processed_items)
+                
+                # Merge root volumes
+                for root, volume in batch_root_volumes.items():
+                    combined_root_volumes[root] = combined_root_volumes.get(root, 0) + volume
+            else:
+                # Fallback for failed batch
+                logger.warning(f"[BroadVolumeAgent] Batch {batch_idx + 1} failed, using fallback")
+                for item in batch_items:
+                    fallback_item = item.copy()
+                    words = item.get("phrase", "").lower().split()
+                    root = words[0] if words else item.get("phrase", "")
+                    fallback_item["root"] = root
+                    all_processed_items.append(fallback_item)
+                    
+                    # Add to volume map
+                    category = item.get("category", "")
+                    if category in ["Relevant", "Design-Specific"]:
+                        search_volume = item.get("search_volume", 0) or 0
+                        combined_root_volumes[root] = combined_root_volumes.get(root, 0) + search_volume
+        
+        except Exception as e:
+            logger.error(f"[BroadVolumeAgent] Batch {batch_idx + 1} error: {e}")
+            # Use fallback for failed batch
+            for item in batch_items:
+                fallback_item = item.copy()
+                words = item.get("phrase", "").lower().split()
+                root = words[0] if words else item.get("phrase", "")
+                fallback_item["root"] = root
+                all_processed_items.append(fallback_item)
+    
+    logger.info(f"[BroadVolumeAgent] ✅ Batching complete: {len(all_processed_items)}/{total_items} items processed")
+    
+    return {
+        "items": all_processed_items,
+        "broad_search_volume_by_root": combined_root_volumes
+    }
+
 def calculate_broad_volume_llm(
     items: List[Dict[str, Any]], 
     brand_tokens: Optional[Set[str]] = None
 ) -> Dict[str, Any]:
     """
-    LLM-based broad volume calculation using simple approach - NO MULTI-BATCH COMPLEXITY.
+    LLM-based broad volume calculation with automatic batching for large datasets.
     
     Args:
         items: List of keyword items with phrase and search_volume
@@ -241,7 +358,13 @@ def calculate_broad_volume_llm(
     if not items:
         return {"items": [], "broad_search_volume_by_root": {}}
     
-    logger.info(f"[BroadVolumeAgent] Processing {len(items)} items with simple LLM")
+    # Use batching for large datasets to prevent JSON truncation/corruption
+    BATCH_SIZE = 50
+    if len(items) > BATCH_SIZE:
+        logger.info(f"[BroadVolumeAgent] Processing {len(items)} items in batches of {BATCH_SIZE}")
+        return _process_broad_volume_batched(items, brand_tokens, BATCH_SIZE)
+    
+    logger.info(f"[BroadVolumeAgent] Processing {len(items)} items with single LLM call")
     
     # Simple approach - just process directly with a small delay
     import time
@@ -265,6 +388,11 @@ def calculate_broad_volume_llm(
                 cleaned_output = strip_markdown_code_fences(output)
                 parsed_result = _json.loads(cleaned_output)
                 if isinstance(parsed_result, dict):
+                    items_returned = len(parsed_result.get("items", []))
+                    items_expected = len(items)
+                    logger.info(f"[BroadVolumeAgent] LLM returned {items_returned}/{items_expected} items")
+                    if items_returned != items_expected:
+                        logger.error(f"[BroadVolumeAgent] ❌ LLM dropped {items_expected - items_returned} items - possible truncation!")
                     return parsed_result
             except _json.JSONDecodeError as e:
                 logger.warning(f"[BroadVolumeAgent] Failed to parse broad volume result: {e}")
@@ -274,6 +402,11 @@ def calculate_broad_volume_llm(
             cleaned_content = strip_markdown_code_fences(result.content)
             parsed_result = _json.loads(cleaned_content)
             if isinstance(parsed_result, dict):
+                items_returned = len(parsed_result.get("items", []))
+                items_expected = len(items)
+                logger.info(f"[BroadVolumeAgent] LLM returned {items_returned}/{items_expected} items")
+                if items_returned != items_expected:
+                    logger.error(f"[BroadVolumeAgent] ❌ LLM dropped {items_expected - items_returned} items - possible truncation!")
                 return parsed_result
         except _json.JSONDecodeError as e:
             logger.warning(f"[BroadVolumeAgent] Failed to parse broad volume result: {e}")

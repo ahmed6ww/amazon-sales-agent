@@ -9,9 +9,9 @@ from .prompts import KEYWORD_AGENT_INSTRUCTIONS
 keyword_agent = Agent(
 	name="KeywordAgent",
 	instructions=KEYWORD_AGENT_INSTRUCTIONS,
-	model="gpt-4o",  # GPT-4o: More capable, handles 150+ keywords without corruption
+	model="gpt-4o-mini",  # With batching (75 kw/batch), mini works great and is 3x cheaper
 	model_settings=ModelSettings(
-		max_tokens=12000,  # Increased for very large keyword sets (100-200 keywords)
+		max_tokens=12000,  # Sufficient for 75 keywords per batch
 		timeout=240.0,      # 4 minute timeout for large requests
 	),
 	output_type=AgentOutputSchema(KeywordAnalysisResult, strict_json_schema=False),

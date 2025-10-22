@@ -1,0 +1,63 @@
+{
+  "arch": {
+    "stack": ["FastAPI", "Next.js", "OpenAI Agents", "Scrapy"],
+    "decisions": [
+      {
+        "what": "Batch processing for keyword categorization (75 keywords/batch)",
+        "why": "ALL models (gpt-4o, gpt-4o-mini, gpt-5-mini) fail with JSON truncation at 200+ keywords in a single request. Batching splits large sets into manageable chunks.",
+        "when": "2025-10-21"
+      },
+      {
+        "what": "Include branded keywords in current SEO analysis",
+        "why": "Frontend needs to show ALL keywords found in original content (including branded). Branded keywords are still excluded from optimization to avoid competing with brands.",
+        "when": "2025-10-21"
+      },
+      {
+        "what": "Batching for broad_volume_agent (100 items/batch)",
+        "why": "Even with max_tokens=16000, LLM generates malformed JSON for 214 items (missing commas, truncation). Batching prevents JSON corruption like keyword_agent.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Removed strict validation in SEO content analysis",
+        "why": "Simple substring validation was rejecting keywords found by advanced matching (sub-phrase, plural/singular, hyphen variations). extract_keywords_from_content already validates.",
+        "when": "2025-10-22"
+      }
+    ]
+  },
+  "features": {
+    "keyword_categorization": {
+      "files": [
+        "app/local_agents/keyword/runner.py",
+        "app/local_agents/keyword/agent.py"
+      ],
+      "model": "gpt-4o-mini",
+      "batch_size": 75,
+      "max_tokens": 12000,
+      "timeout": 240,
+      "state": "active",
+      "notes": "Batching enabled gpt-4o-mini (3x cheaper). 75 kw/batch prevents truncation. 214 keywords = 3 batches"
+    },
+    "broad_volume_agent": {
+      "files": ["app/local_agents/scoring/subagents/broad_volume_agent.py"],
+      "model": "gpt-4o-mini",
+      "batch_size": 100,
+      "max_tokens": 16000,
+      "timeout": 240,
+      "state": "active",
+      "notes": "Adds root field to keywords. Batching enabled (100 items/batch) to prevent JSON corruption. 214 keywords = 3 batches. Fallback per batch on parse error."
+    },
+    "seo_analysis": {
+      "files": [
+        "app/local_agents/seo/runner.py",
+        "app/local_agents/seo/helper_methods.py"
+      ],
+      "state": "active",
+      "notes": "Advanced keyword matching (sub-phrase, plural, hyphen). Validation removed to preserve matched keywords. Null-safe search_volume check added."
+    }
+  },
+  "debt": [],
+  "env": {
+    "OPENAI_API_KEY": "Required for all AI agents",
+    "KEYWORD_BATCH_SIZE": "500 (for root extraction, separate from categorization batching)"
+  }
+}
