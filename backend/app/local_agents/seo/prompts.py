@@ -32,18 +32,26 @@ You are an expert Amazon SEO specialist with deep knowledge of keyword optimizat
 ## Content Guidelines:
 
 ### Title Optimization:
+- **MANDATORY: Title MUST start with brand name "{brand}"**
+- **CRITICAL: Keywords are PRE-SORTED by volume. Use in EXACT ORDER: #1, #2, #3**
+- After brand name, place keywords in descending order by volume
+- First 3-5 keywords from ranked lists MUST appear in title
+- **MANDATORY: MUST include 2-3 Design-Specific keywords from highest volume root**
 - Stay under 200 characters (Amazon's typical limit)
-- Lead with primary/highest-volume keywords
-- Include brand name if beneficial
 - Maintain readability and appeal
-- Incorporate 3-5 major keyword roots minimum
+- **Example:** If list shows "makeup sponge (60K), beauty blender (10K), latex free (144)"
+  → Correct: "Brand Makeup Sponge Beauty Blender Latex Free..." ✅
+  → Wrong: "Brand Latex Free Makeup Sponge..." ❌ (low volume keyword first)
 
 ### Bullet Point Optimization:
+- **Bullets #1-2: MUST use keywords ranked #1-5 (highest volume only)**
+- **Bullets #3-5: Can use keywords ranked #6-15 (medium-high volume)**
+- **DO NOT place low-volume keywords (#10+) in early bullets**
 - Each bullet should focus on a specific benefit/feature
 - Naturally incorporate 2-4 relevant keywords per bullet
 - Use emotional triggers and benefit language
 - Maintain scannable format with clear value propositions
-- Address different customer segments/use cases
+- Example: If #1="makeup sponge (60K)", it goes in Bullet #1 or #2, NOT Bullet #5
 
 ### Backend Keywords:
 - Include relevant terms NOT in title/bullets
@@ -72,21 +80,35 @@ SEO_ANALYSIS_PROMPT_TEMPLATE = """
 Analyze the current Amazon listing SEO and generate optimized suggestions based on the keyword research data provided.
 
 ## CURRENT LISTING DATA:
-**Title:** {current_title}
+**Brand Name:** {brand} 
+⚠️ **CRITICAL: Brand name MUST be included at the beginning of optimized title - This is NON-NEGOTIABLE**
+
+**Current Title:** {current_title}
 
 **Bullet Points:**
 {current_bullets}
 
 **Backend Keywords:** {backend_keywords}
 
-## KEYWORD RESEARCH DATA:
+## KEYWORD RESEARCH DATA (SORTED BY VOLUME DESCENDING):
 **Total Keywords Analyzed:** {total_keywords}
 
-**Relevant Keywords (High Priority):**
-{relevant_keywords}
+⚠️ **IMPORTANT: All keywords below are PRE-SORTED by search volume (highest first)**
+⚠️ **YOU MUST use them in the EXACT ORDER provided - #1, then #2, then #3, etc.**
 
-**Design-Specific Keywords:**
+**Relevant Keywords (RANKED BY VOLUME - Use in this order):**
+{relevant_keywords}
+→ Keyword #1 = HIGHEST volume (use FIRST in title)
+→ Keyword #2 = Second highest (use SECOND in title)
+→ Keyword #3 = Third highest (use THIRD in title)
+
+**Design-Specific Keywords (RANKED BY VOLUME):**
 {design_keywords}
+⚠️ **MANDATORY TITLE REQUIREMENT:**
+→ Step 1: Identify the design root with HIGHEST combined volume
+→ Step 2: Select 2-3 keywords from that specific root
+→ Step 3: MUST include these 2-3 keywords in the optimized title
+→ Example: If "latex-free" root has 10K volume (highest), include "latex free", "latex-free sponge" in title
 
 **Root Volume Analysis:**
 {root_volumes}
@@ -109,6 +131,17 @@ Provide a comprehensive SEO analysis and optimization strategy that:
 4. **Provides Metrics**: Show before/after improvements in coverage, intent, and volume capture
 
 **Focus on maximizing keyword coverage while maintaining readability and conversion appeal.**
+
+## CRITICAL REQUIREMENTS (ALL MANDATORY):
+1. ⚠️ **BRAND NAME**: Optimized title MUST start with brand name: "{brand}"
+2. **KEYWORD ORDER**: After brand, use keywords in descending order by volume (#1, #2, #3 from ranked lists)
+3. ⚠️ **DESIGN KEYWORDS (MANDATORY)**: Title MUST include 2-3 Design-Specific keywords from the HIGHEST volume root
+   - Find the design root with highest combined volume
+   - Select 2-3 keywords from that specific root only
+   - All 2-3 MUST appear in the optimized title
+4. **TOP KEYWORDS**: First 2-3 bullet points MUST include highest volume keywords (#1-5 from ranked lists)
+5. **NO DUPLICATES**: NO duplicate keywords across title, bullets, and backend keywords
+6. **NO ZERO VOLUME**: Only use keywords with search volume > 0
 
 Return your analysis in a structured format covering current state, optimized suggestions, and improvement metrics.
 """ 

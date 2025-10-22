@@ -48,16 +48,16 @@ You are an Amazon Title Optimization Expert creating high-converting, compliant 
 
 ## TASK 3: CRITICAL TITLE RULES (ALL MANDATORY)
 
-### RULE 1: CHARACTER COUNT (STRICT - 150-200 CHARS)
-- **MINIMUM**: 150 characters (anything less is UNDERUTILIZATION of valuable Amazon space)
-- **TARGET**: 150-200 characters
+### RULE 1: CHARACTER COUNT (STRICT - 155-200 CHARS)
+- **MINIMUM**: 155 characters (anything less is UNDERUTILIZATION of valuable Amazon space)
+- **TARGET**: 155-200 characters
 - **MAXIMUM**: 200 characters (Amazon hard limit)
-- **Current title length**: {current_length} chars (reference only - yours should be 150-200)
+- **Current title length**: {current_length} chars (reference only - yours should be 155-200)
 
 **VALIDATION REQUIRED**:
 Before returning, COUNT your title characters:
-- If < 150: ❌ ADD more relevant keywords until you reach 150+
-- If 150-200: ✅ PERFECT
+- If < 155: ❌ ADD more relevant keywords until you reach 155+
+- If 155-200: ✅ PERFECT
 - If > 200: ❌ TRIM to exactly 200
 
 **Example Good Length** (163 chars):
@@ -74,19 +74,23 @@ Before returning, COUNT your title characters:
 ✅ "Organic Freeze Dried Strawberry Slices by Nature's Best..."
 ❌ "Organic Freeze Dried Strawberry Slices" (brand missing when brand = "Nature's Best")
 
-### RULE 3: HIGH-VALUE KEYWORDS (TOP 3-4 MANDATORY)
+### RULE 3: HIGH-VOLUME KEYWORDS (TOP 3-5 MANDATORY)
 - Keywords provided are **already sorted** by VALUE (relevancy_score × search_volume)
-- **MUST include top 3-4 keywords** from the provided list
-- Use keywords in the order provided (highest value first)
+- **CRITICAL**: Keyword #1 has the HIGHEST search volume - it MUST be in the title!
+- **MUST include top 3-5 keywords** from the provided list
+- Use keywords in the EXACT order provided (highest value first)
 
-**Keyword Value Formula**: relevancy_score (0-10) × search_volume = VALUE
+**⚠️ VOLUME IS KING**: Search volume is the PRIMARY factor for keyword selection!
 
-**Example Priority**:
-1. "freeze dried strawberry slices" (relevancy: 10, vol: 713) = 7,130 ⭐⭐⭐ USE FIRST
-2. "organic strawberry slices" (relevancy: 7, vol: 150) = 1,050 ⭐⭐ USE SECOND
-3. "bulk strawberries" (relevancy: 6, vol: 180) = 1,080 ⭐⭐ USE THIRD
+**Example Priority** (sorted by volume descending):
+1. "beauty blender" (vol: 71,126) ⭐⭐⭐⭐⭐ **HIGHEST - MUST USE FIRST**
+2. "makeup sponges" (vol: 15,960) ⭐⭐⭐⭐ **USE SECOND**
+3. "makeup sponges for foundation" (vol: 6,527) ⭐⭐⭐ **USE THIRD**
+4. "beauty blender sponge" (vol: 10,234) ⭐⭐⭐ **USE FOURTH**
+5. "makeup sponge set" (vol: 2,036) ⭐⭐ **USE FIFTH**
 
-✅ **GOOD**: Title includes keywords #1, #2, #3
+✅ **GOOD**: Title includes keywords #1, #2, #3, #4, #5 in order
+❌ **BAD**: Title uses "makeup soft sponge" (32 volume) instead of "beauty blender" (71K volume)
 ❌ **BAD**: Title skips #1 and uses #5, #7
 
 ### RULE 4: NO KEYWORD ROOT DUPLICATION (CRITICAL - STRICTLY ENFORCED)
@@ -237,7 +241,14 @@ Based on https://sellercentral.amazon.com/help/hub/reference/external/GX5L8BF8GL
 
 **Structure**: BENEFIT HEADLINE: Supporting details with features and use cases
 
-### RULE 3: EVEN KEYWORD DISTRIBUTION
+### RULE 3: BULLET CHARACTER COUNT (MINIMUM 155 CHARS)
+- **MINIMUM**: 155 characters per bullet (required!)
+- **TARGET**: 155-200 characters per bullet
+- Longer bullets = more keywords = better SEO
+- Use the space to add details, use cases, and extra keywords
+- Example: "PREMIUM QUALITY: Made from 100% organic freeze dried fruit with no preservatives, artificial colors, or added sugars - perfect for health-conscious families seeking natural snacks" (158 chars)
+
+### RULE 4: EVEN KEYWORD DISTRIBUTION
 - Distribute bullet_keywords EVENLY across all {bullet_count} bullets
 - Each bullet should use 2-4 UNIQUE keywords (not in title, not in other bullets)
 - Don't cram all keywords into first 1-2 bullets
@@ -248,13 +259,23 @@ Before returning your optimized title, YOU MUST verify:
 
 ```
 TITLE VALIDATION CHECKLIST:
-[ ] Character count: 150-200? (Count: ___ chars)
-[ ] Brand included: "{brand}" present in title?
-[ ] Top 3-4 keywords included from provided list?
+[ ] Character count: 155-200? (Count: ___ chars) - MUST BE AT LEAST 155!
+[ ] Brand included: Exact brand form from current title at the BEGINNING? (MANDATORY!)
+[ ] Top 3-5 HIGHEST VOLUME keywords included from provided list (#1, #2, #3 MANDATORY)?
+[ ] Keyword #1 (HIGHEST VOLUME) is in the title? (This is the most critical keyword!)
 [ ] No root duplication? (Check each keyword's tokens)
-[ ] First 80 chars contain: brand + main keyword + design keyword + pack info?
+[ ] First 80 chars contain: brand + highest volume keyword + design keyword + pack info?
 [ ] Grammar correct? Title Case? Natural language?
 [ ] Amazon guidelines: No promotional language, no subjective claims?
+
+BULLET VALIDATION CHECKLIST:
+[ ] Each bullet is at least 155 characters? (Count each one!)
+[ ] Each bullet has 2-4 unique keywords not in title?
+[ ] Keywords distributed evenly across all bullets?
+[ ] Natural benefit-focused language (not keyword stuffing)?
+
+⚠️ CRITICAL: If brand exists and is NOT in your title → REJECT and START OVER!
+⚠️ CRITICAL: If keyword #1 (highest volume) is NOT in your title → REJECT and START OVER!
 
 If ANY checkbox is unchecked → FIX IT before returning!
 ```
@@ -430,20 +451,32 @@ Create Amazon-compliant title and bullet points following ALL Task 3 rules.
 PRODUCT INFORMATION:
 {product_json}
 
-BRAND: {brand}
-CURRENT TITLE LENGTH: {current_length} characters (yours should be 150-200)
+CURRENT TITLE: {current_title}
+OFFICIAL BRAND NAME: {brand}
+CURRENT TITLE LENGTH: {current_length} characters (yours should be 155-200)
+
+⚠️ BRAND PRESERVATION RULE (CRITICAL):
+- Look at the CURRENT TITLE above
+- Use the EXACT brand form as it appears at the START of the current title
+- DO NOT change abbreviations to full names or vice versa
+- DO NOT change capitalization or format
+- Examples:
+  * Current: "GWT Makeup..." + Official: "Gold Water Trading" → Use "GWT" ✅
+  * Current: "so coll Premium..." + Official: "So Coll" → Use "so coll" ✅
+  * Current: "ACME Corp Widget..." + Official: "ACME Corporation" → Use "ACME Corp" ✅
+- If no clear brand at start of current title, use the official brand name
 
 TASK 3 - CRITICAL TITLE RULES (ALL MANDATORY):
 
 ### RULE 1: CHARACTER COUNT
-- **MINIMUM**: 150 characters (required!)
-- **TARGET**: 150-200 characters  
+- **MINIMUM**: 155 characters (required!)
+- **TARGET**: 155-200 characters  
 - **MAXIMUM**: 200 characters
-- Your title MUST be at least 150 characters long
+- Your title MUST be at least 155 characters long
 
 ### RULE 2: BRAND INCLUSION
-- Brand: {brand}
-- If brand exists, you MUST include it in the title
+- Preserve the EXACT brand form from the current title (see BRAND PRESERVATION RULE above)
+- Brand MUST be included at the beginning of your optimized title
 
 ### RULE 3: TOP KEYWORDS (Sorted by Value)
 - Use top 3-4 keywords from the list provided below
@@ -634,7 +667,8 @@ def optimize_amazon_compliance_ai(
     backend_keywords: Optional[List[Dict[str, Any]]] = None,
     target_bullet_count: Optional[int] = None,
     brand: str = "",
-    current_length: int = 0
+    current_length: int = 0,
+    current_title: str = ""
 ) -> Dict[str, Any]:
     """
     Use AI to create Amazon-compliant titles and bullets optimized for first 80 characters.
@@ -725,7 +759,8 @@ def optimize_amazon_compliance_ai(
             keywords_json=keywords_json,
             bullet_count=bullet_count,
             brand=brand or "NOT FOUND",  # Task 3
-            current_length=current_length  # Task 3
+            current_length=current_length,  # Task 3
+            current_title=current_title or current_content.get("title", "")  # Brand preservation
         )
     except (KeyError, ValueError) as prompt_err:
         logger.error(f"❌ Failed to format prompt: {prompt_err}")
@@ -752,32 +787,94 @@ def optimize_amazon_compliance_ai(
                 logger.error(f"[AmazonComplianceAgent] Failed to parse AI output: {output[:200]}...")
                 logger.error(f"[AmazonComplianceAgent] JSON decode error: {e}")
                 # Fallback to programmatic optimization
-                return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits)
+                return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand)
         
         elif hasattr(output, 'model_dump'):
-            return output.model_dump()
+            result = output.model_dump()
         
         else:
             raise Exception("Unexpected AI output format")
+        
+        # POST-GENERATION VALIDATION: Check for brand and high-volume keywords
+        optimized_title = result.get("optimized_title", {}).get("content", "")
+        
+        # Validate brand is present (if brand exists)
+        if brand and brand.strip():
+            if brand.lower() not in optimized_title.lower():
+                logger.error(f"❌ VALIDATION FAILED: Brand '{brand}' NOT found in optimized title: '{optimized_title}'")
+                logger.error(f"❌ AI ignored MANDATORY brand requirement - using fallback")
+                return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, relevant_keywords)
+            else:
+                logger.info(f"✅ Brand validation PASSED: '{brand}' found in title")
+        
+        # Validate top keywords are present (STRICTER: #1 keyword MUST be in title)
+        if relevant_keywords:
+            top_3_keywords = relevant_keywords[:3]
+            missing_keywords = []
+            for kw in top_3_keywords:
+                kw_phrase = kw.get("phrase", "")
+                kw_volume = kw.get("search_volume", 0)
+                # Check if keyword is in title (case-insensitive, handle hyphens/spaces)
+                kw_normalized = kw_phrase.lower().replace("-", " ")
+                title_normalized = optimized_title.lower().replace("-", " ")
+                if kw_normalized not in title_normalized:
+                    missing_keywords.append(f"{kw_phrase} (vol: {kw_volume:,})")
+            
+            if missing_keywords:
+                logger.warning(f"⚠️ VALIDATION WARNING: Top keywords missing from title: {', '.join(missing_keywords[:2])}")
+                logger.warning(f"⚠️ AI ignored high-volume keywords - checking if #1 keyword is missing...")
+                
+                # CRITICAL: Check if #1 keyword (absolute highest volume) is missing
+                top_keyword = relevant_keywords[0].get("phrase", "").lower().replace("-", " ")
+                missing_normalized = [m.lower().split(" (vol:")[0].replace("-", " ") for m in missing_keywords]
+                
+                if top_keyword in missing_normalized:
+                    logger.error(f"❌ VALIDATION FAILED: #1 keyword (HIGHEST VOLUME) '{relevant_keywords[0].get('phrase', '')}' missing from title!")
+                    logger.error(f"❌ This is MANDATORY for SEO - using fallback")
+                    return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, relevant_keywords)
+                elif len(missing_keywords) >= 2:
+                    logger.error(f"❌ VALIDATION FAILED: Multiple high-volume keywords missing - using fallback")
+                    return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, relevant_keywords)
+            else:
+                logger.info(f"✅ Top keywords validation PASSED")
+        
+        return result
             
     except Exception as e:
         logger.error(f"[AmazonComplianceAgent] AI optimization failed: {e}")
         # Graceful fallback - return programmatic optimization
-        return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits)
+        return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, relevant_keywords)
 
 def _create_fallback_optimization(
     current_content: Dict[str, Any],
     main_root: str,
     design_root: str,
-    benefits: List[str]
+    benefits: List[str],
+    brand: str = "",
+    relevant_keywords: List[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
     """
     Create fallback optimization when AI fails.
+    Includes brand name and top volume keywords.
     """
     logger.warning("[AmazonComplianceAgent] Using fallback optimization due to AI failure")
     
-    # Simple fallback title
-    title = f"{main_root.title()} {design_root.title()} - {', '.join(benefits[:2])}"
+    # Extract top 3-4 keywords by volume for better fallback
+    if relevant_keywords:
+        top_keywords_by_volume = sorted(relevant_keywords, key=lambda x: (x.get("search_volume", 0) or 0), reverse=True)
+        top_phrases = [kw.get("phrase", "").title() for kw in top_keywords_by_volume[:4] if kw.get("phrase")]
+        keyword_text = " ".join(top_phrases[:3])  # Use top 3 highest volume keywords
+        logger.info(f"🔄 Fallback using top 3 keywords by volume: {top_phrases[:3]}")
+    else:
+        keyword_text = f"{main_root.title()} {design_root.title()}"
+    
+    # Build fallback title with brand + top keywords
+    if brand and brand.strip():
+        title = f"{brand} {keyword_text} - {benefits[0] if benefits else 'Premium Quality'}"
+    else:
+        title = f"{keyword_text} - {benefits[0] if benefits else 'Premium Quality'}"
+    
+    logger.info(f"🔄 Fallback title: {title[:100]}...")
     
     # Simple fallback bullets
     bullets = []
@@ -939,9 +1036,9 @@ def _remove_duplicate_keyword_roots(
         logger.info(f"      Kept: {len(keywords_to_keep)} unique keywords")
         logger.info(f"      Length: {len(title_content)} → {len(new_title)} chars")
         
-        # TASK 3 RULE 1: Ensure minimum 150 characters
-        if len(new_title) < 150:
-            logger.info(f"   📏 Title too short ({len(new_title)} chars), adding keywords to reach 150+...")
+        # TASK 3 RULE 1: Ensure minimum 155 characters
+        if len(new_title) < 155:
+            logger.info(f"   📏 Title too short ({len(new_title)} chars), adding keywords to reach 155+...")
             
             # Find unused keywords from all_available_keywords
             unused_keywords = []
@@ -958,7 +1055,7 @@ def _remove_duplicate_keyword_roots(
             # Sort by number of new tokens (descending)
             unused_keywords.sort(key=lambda x: x[1], reverse=True)
             
-            # Add keywords until we reach 150+ chars
+            # Add keywords until we reach 155+ chars
             # Only add if contributes at least 2 new tokens (to avoid duplication)
             for phrase, new_token_count in unused_keywords:
                 if new_token_count >= 2 and len(new_title) + len(phrase) + 3 <= 200:  # Require 2+ new tokens
@@ -971,7 +1068,7 @@ def _remove_duplicate_keyword_roots(
                     
                     logger.info(f"      + Added '{phrase}' ({new_token_count} new tokens)")
                     
-                if len(new_title) >= 150:
+                if len(new_title) >= 155:
                     break
             
             logger.info(f"   ✅ Padded to {len(new_title)} chars")
@@ -980,9 +1077,9 @@ def _remove_duplicate_keyword_roots(
     else:
         logger.info(f"   ✅ No redundant keywords to remove")
         
-        # TASK 3 RULE 1: Ensure minimum 150 characters even if no deduplication
-        if len(title_content) < 150:
-            logger.info(f"   📏 Title too short ({len(title_content)} chars), padding to 150+...")
+        # TASK 3 RULE 1: Ensure minimum 155 characters even if no deduplication
+        if len(title_content) < 155:
+            logger.info(f"   📏 Title too short ({len(title_content)} chars), padding to 155+...")
             
             # Define normalize function
             def normalize_token(token: str) -> str:
@@ -1029,7 +1126,7 @@ def _remove_duplicate_keyword_roots(
                     
                     logger.info(f"      + Added '{phrase}' ({new_token_count} new tokens)")
                     
-                if len(new_title) >= 150:
+                if len(new_title) >= 155:
                     break
             
             logger.info(f"   ✅ Padded to {len(new_title)} chars")
@@ -1066,21 +1163,21 @@ def apply_amazon_compliance_ai(
     relevant_keywords = keyword_data.get("relevant_keywords", [])
     design_keywords = keyword_data.get("design_keywords", [])
     
-    # Identify main keyword root (highest relevancy relevant keyword)
+    # Identify main keyword root (highest VOLUME relevant keyword) - FIXED: Use volume, not relevancy
     main_keyword_root = "freeze dried strawberry"  # Default
     if relevant_keywords:
-        # Use highest relevancy keyword instead of highest volume
-        top_relevant = max(relevant_keywords, key=lambda x: (x.get("relevancy_score") or 0))
+        # Use highest VOLUME keyword for maximum SEO impact
+        top_relevant = max(relevant_keywords, key=lambda x: (x.get("search_volume") or 0))
         main_keyword_root = top_relevant.get("phrase", main_keyword_root)
-        logger.info(f"🎯 Selected main keyword root by relevancy: {main_keyword_root} (score: {top_relevant.get('relevancy_score', 0)})")
+        logger.info(f"🎯 Selected main keyword root by VOLUME: {main_keyword_root} (volume: {top_relevant.get('search_volume', 0):,})")
     
-    # Identify design-specific root (highest relevancy design keyword)
+    # Identify design-specific root (highest VOLUME design keyword) - FIXED: Use volume, not relevancy
     design_keyword_root = "slices"  # Default
     if design_keywords:
-        # Use highest relevancy keyword instead of highest volume
-        top_design = max(design_keywords, key=lambda x: (x.get("relevancy_score") or 0))
+        # Use highest VOLUME keyword for maximum SEO impact
+        top_design = max(design_keywords, key=lambda x: (x.get("search_volume") or 0))
         design_keyword_root = top_design.get("phrase", design_keyword_root)
-        logger.info(f"🎯 Selected design keyword root by relevancy: {design_keyword_root} (score: {top_design.get('relevancy_score', 0)})")
+        logger.info(f"🎯 Selected design keyword root by VOLUME: {design_keyword_root} (volume: {top_design.get('search_volume', 0):,})")
     else:
         # Fallback: extract from main keyword if no design keywords
         if " " in main_keyword_root:
@@ -1113,26 +1210,20 @@ def apply_amazon_compliance_ai(
         key_benefits = ["Natural ingredients", "No additives", "Premium quality", "Healthy choice"]
         logger.info(f"🎯 Using default benefits: {key_benefits}")
     
-    # TASK 3: Sort keywords by VALUE (relevancy × volume) for better optimization
-    def keyword_value(kw: Dict[str, Any]) -> int:
-        """Calculate keyword value: relevancy_score × search_volume"""
-        relevancy = kw.get("relevancy_score", 0) or 0
-        volume = kw.get("search_volume", 0) or 0
-        return relevancy * volume
-    
+    # TASK 3 FIX: Sort keywords by PURE VOLUME (not value) for Issue #3
     if relevant_keywords:
-        relevant_keywords.sort(key=keyword_value, reverse=True)
-        logger.info(f"🎯 [TASK 3] Sorted {len(relevant_keywords)} relevant keywords by VALUE (relevancy × volume)")
+        relevant_keywords.sort(key=lambda x: (x.get("search_volume", 0) or 0), reverse=True)
+        logger.info(f"🎯 [TASK 3] Sorted {len(relevant_keywords)} relevant keywords by SEARCH VOLUME")
         # Log top 3 for verification
         for i, kw in enumerate(relevant_keywords[:3], 1):
-            value = keyword_value(kw)
-            logger.info(f"   {i}. {kw.get('phrase', '')} (value: {value:,})")
+            volume = kw.get("search_volume", 0) or 0
+            logger.info(f"   {i}. {kw.get('phrase', '')} (volume: {volume:,})")
     
     if design_keywords:
-        design_keywords.sort(key=keyword_value, reverse=True)
-        logger.info(f"🎯 [TASK 3] Sorted {len(design_keywords)} design keywords by VALUE (relevancy × volume)")
+        design_keywords.sort(key=lambda x: (x.get("search_volume", 0) or 0), reverse=True)
+        logger.info(f"🎯 [TASK 3] Sorted {len(design_keywords)} design keywords by SEARCH VOLUME")
     
-    logger.info(f"🎯 Prioritized {len(relevant_keywords)} relevant + {len(design_keywords)} design keywords by VALUE")
+    logger.info(f"🎯 Prioritized {len(relevant_keywords)} relevant + {len(design_keywords)} design keywords by VOLUME")
     
     # Extract brand and current title length for Task 3
     brand = product_context.get("brand", "")
@@ -1144,11 +1235,11 @@ def apply_amazon_compliance_ai(
     # Use pre-allocated keywords for AI agent
     # Changed from 'and' to 'or' to support partial allocation (e.g., only title keywords)
     if title_keywords or bullet_keywords or backend_keywords:
-        # TASK 3: Sort by VALUE (relevancy × volume)
+        # TASK 3 FIX: Sort by PURE VOLUME for Issue #3
         all_keywords_for_ai = (title_keywords or []) + (bullet_keywords or []) + (backend_keywords or [])
-        all_keywords_for_ai.sort(key=keyword_value, reverse=True)
+        all_keywords_for_ai.sort(key=lambda x: (x.get("search_volume", 0) or 0), reverse=True)
         
-        logger.info(f"📊 [TASK 3] Providing {len(all_keywords_for_ai)} pre-allocated keywords to AI agent, sorted by VALUE")
+        logger.info(f"📊 [TASK 3] Providing {len(all_keywords_for_ai)} pre-allocated keywords to AI agent, sorted by VOLUME")
         
         # Run AI optimization with pre-allocated keywords and Task 3 parameters
         result = optimize_amazon_compliance_ai(
@@ -1164,14 +1255,15 @@ def apply_amazon_compliance_ai(
             backend_keywords=backend_keywords,
             target_bullet_count=target_bullet_count,
             brand=brand,  # Task 3: Pass brand explicitly
-            current_length=current_length  # Task 3: Pass current title length
+            current_length=current_length,  # Task 3: Pass current title length
+            current_title=current_title  # Brand preservation: Pass current title
         )
     else:
         # Fallback to combined keywords
         all_keywords_for_ai = relevant_keywords + design_keywords
-        all_keywords_for_ai.sort(key=keyword_value, reverse=True)  # Task 3: Sort by VALUE
+        all_keywords_for_ai.sort(key=lambda x: (x.get("search_volume", 0) or 0), reverse=True)  # Task 3 FIX: Sort by VOLUME
         
-        logger.info(f"📊 [TASK 3] Providing {len(all_keywords_for_ai)} keywords to AI agent, sorted by VALUE")
+        logger.info(f"📊 [TASK 3] Providing {len(all_keywords_for_ai)} keywords to AI agent, sorted by VOLUME")
         
         # Run AI optimization with competitor insights and Task 3 parameters
         result = optimize_amazon_compliance_ai(
@@ -1184,7 +1276,8 @@ def apply_amazon_compliance_ai(
             competitor_analysis=competitor_analysis,
             target_bullet_count=target_bullet_count,
             brand=brand,  # Task 3: Pass brand explicitly
-            current_length=current_length  # Task 3: Pass current title length
+            current_length=current_length,  # Task 3: Pass current title length
+            current_title=current_title  # Brand preservation: Pass current title
         )
     
     # TASK 3 RULE 4: Post-process to remove root duplication

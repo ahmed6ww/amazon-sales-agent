@@ -1,0 +1,10 @@
+{
+  "job_id": "d5aeb44a-ef5b-4d90-8c54-c7fdf9def0d8",
+  "status": "processing",
+  "progress": 10,
+  "message": "Scraping product...",
+  "created_at": "2025-10-23T01:01:38.025869",
+  "updated_at": "2025-10-23T01:01:38.528887",
+  "completed_at": null,
+  "error": null
+}

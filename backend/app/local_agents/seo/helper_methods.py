@@ -55,9 +55,13 @@ def extract_keywords_from_content(content: str, keywords_list: List[str], keywor
             continue
         
         # ================================================================
-        # METHOD 1: Direct Substring Match
+        # METHOD 1: Word-Boundary Match (Fixed - Issue #1)
+        # Use regex word boundaries to prevent false substring matches
+        # Example: "make up sponges foundation" will NOT match "make up blending sponges for foundation"
         # ================================================================
-        if keyword_lower in content_lower:
+        # Use word-boundary regex to match whole phrases only
+        pattern = r'\b' + re.escape(keyword_lower) + r'\b'
+        if re.search(pattern, content_lower):
             found_keywords.append(keyword)
             found_keywords_set.add(keyword_lower)
             
@@ -65,85 +69,85 @@ def extract_keywords_from_content(content: str, keywords_list: List[str], keywor
             if keyword_volumes and keyword in keyword_volumes:
                 volume = keyword_volumes[keyword]
                 total_volume += volume
-                logger.debug(f"[KEYWORD_EXTRACTION] ✅ Direct match: '{keyword}' (volume: {volume})")
+                logger.debug(f"[KEYWORD_EXTRACTION] ✅ Word-boundary match: '{keyword}' (volume: {volume})")
             else:
-                logger.debug(f"[KEYWORD_EXTRACTION] ✅ Direct match: '{keyword}'")
+                logger.debug(f"[KEYWORD_EXTRACTION] ✅ Word-boundary match: '{keyword}'")
             continue
         
         # ================================================================
-        # METHOD 2: Sub-phrase Detection (TASK 2 NEW!)
+        # METHOD 2: Sequential Proximity Match (for plural/singular variations)
         # ================================================================
-        # Check if ALL tokens of the keyword appear in content (with plural handling)
+        # Only match if tokens appear in EXACT ORDER with tight proximity
+        # Example: "makeup sponge set" MATCHES "makeup sponges set" (adjacent plural)
+        # Example: "makeup sponges foundation" DOES NOT MATCH "makeup sponge...sponges for foundation"
+        # ================================================================
         keyword_tokens = keyword_lower.split()
         
         if len(keyword_tokens) > 1:
-            # For each token, check if it OR its singular/plural variant appears
-            def token_matches(token: str, text: str) -> Tuple[bool, int]:
-                """Check if token or its variants appear in text. Returns (found, position)."""
-                # Direct match
-                if token in text:
-                    return True, text.find(token)
-                
-                # Plural to singular (strawberries -> strawberry)
-                if token.endswith('ies') and len(token) > 4:
-                    singular = token[:-3] + 'y'
-                    if singular in text:
-                        return True, text.find(singular)
-                elif token.endswith('es') and len(token) > 3:
-                    singular = token[:-2]
-                    if singular in text:
-                        return True, text.find(singular)
-                elif token.endswith('s') and len(token) > 2:
-                    singular = token[:-1]
-                    if singular in text:
-                        return True, text.find(singular)
-                
-                # Singular to plural (strawberry -> strawberries)
-                plural_ies = token[:-1] + 'ies' if token.endswith('y') and len(token) > 2 else None
-                plural_es = token + 'es'
-                plural_s = token + 's'
-                
-                if plural_ies and plural_ies in text:
-                    return True, text.find(plural_ies)
-                if plural_es in text:
-                    return True, text.find(plural_es)
-                if plural_s in text:
-                    return True, text.find(plural_s)
-                
-                return False, -1
-            
-            # Check if all tokens (or their variants) appear
-            token_positions = []
-            all_tokens_match = True
+            # Find each token (or its plural/singular variant) in sequence
+            last_position = -1
+            all_sequential = True
             
             for token in keyword_tokens:
-                matches, pos = token_matches(token, content_lower)
-                if matches:
-                    token_positions.append(pos)
-                else:
-                    all_tokens_match = False
-                    break
-            
-            # If all tokens found (with variants), check if they're close enough
-            if all_tokens_match and token_positions:
-                # For sub-phrases, we don't require strict keyword order
-                # Just check that all tokens appear within reasonable distance
-                min_pos = min(token_positions)
-                max_pos = max(token_positions)
-                distance = max_pos - min_pos
+                # Look for this token AFTER the last found position
+                search_start = last_position + 1
+                remaining_content = content_lower[search_start:]
                 
-                # Allow up to 80 characters between first and last token
-                # This catches distributed keywords like "bulk strawberry slices" in "strawberry slices bulk"
-                if distance <= 80:
-                    found_keywords.append(keyword)
-                    found_keywords_set.add(keyword_lower)
+                # Try to find token or its variants
+                found_position = -1
+                
+                # Direct match
+                if token in remaining_content:
+                    found_position = search_start + remaining_content.find(token)
+                else:
+                    # Try plural/singular variants
+                    variants = []
                     
-                    if keyword_volumes and keyword in keyword_volumes:
-                        volume = keyword_volumes[keyword]
-                        total_volume += volume
-                        logger.debug(f"[KEYWORD_EXTRACTION] ✅ Sub-phrase: '{keyword}' (volume: {volume}, distance: {distance})")
-                    else:
-                        logger.debug(f"[KEYWORD_EXTRACTION] ✅ Sub-phrase: '{keyword}' (distance: {distance})")
+                    # Singular variants (sponges -> sponge)
+                    if token.endswith('ies') and len(token) > 4:
+                        variants.append(token[:-3] + 'y')
+                    elif token.endswith('es') and len(token) > 3:
+                        variants.append(token[:-2])
+                    elif token.endswith('s') and len(token) > 2:
+                        variants.append(token[:-1])
+                    
+                    # Plural variants (sponge -> sponges)
+                    if token.endswith('y') and len(token) > 2:
+                        variants.append(token[:-1] + 'ies')
+                    variants.append(token + 'es')
+                    variants.append(token + 's')
+                    
+                    # Check variants
+                    for variant in variants:
+                        if variant in remaining_content:
+                            found_position = search_start + remaining_content.find(variant)
+                            break
+                
+                # If token not found in sequence, fail
+                if found_position == -1:
+                    all_sequential = False
+                    break
+                
+                # Check proximity: next token must be within 20 characters (about 3-4 words)
+                if last_position != -1:
+                    distance = found_position - last_position
+                    if distance > 20:  # Too far apart
+                        all_sequential = False
+                        break
+                
+                last_position = found_position
+            
+            # If all tokens found in sequence with tight proximity
+            if all_sequential:
+                found_keywords.append(keyword)
+                found_keywords_set.add(keyword_lower)
+                
+                if keyword_volumes and keyword in keyword_volumes:
+                    volume = keyword_volumes[keyword]
+                    total_volume += volume
+                    logger.debug(f"[KEYWORD_EXTRACTION] ✅ Sequential match: '{keyword}' (volume: {volume})")
+                else:
+                    logger.debug(f"[KEYWORD_EXTRACTION] ✅ Sequential match: '{keyword}'")
                 continue
                 
         # ================================================================
@@ -418,25 +422,27 @@ def prepare_keyword_data_for_analysis(keyword_items: List[Dict[str, Any]]) -> Di
         if intent_score is None:
             intent_score = 0
         
-        # Categorize keywords
-        if category == "Relevant":
-            relevant_keywords.append(item)
-        elif category == "Design-Specific":
-            design_keywords.append(item)
-        elif category == "Branded":
-            branded_keywords.append(item)
-            
-        # High intent keywords (score 2-3)
-        if intent_score >= 2:
-            high_intent_keywords.append(item)
-            
-        # High volume keywords (>500 searches)
-        if search_volume > 500:
-            high_volume_keywords.append(item)
-            
-        # Task 13: Use AI agent for root relevance filtering (with programmatic fallback)
-        if root:
-            root_volumes[root] += search_volume  # Collect all volumes first
+        # FILTER: Only process keywords with actual search volume
+        if search_volume > 0:
+            # Categorize keywords
+            if category == "Relevant":
+                relevant_keywords.append(item)
+            elif category == "Design-Specific":
+                design_keywords.append(item)
+            elif category == "Branded":
+                branded_keywords.append(item)
+                
+            # High intent keywords (score 2-3)
+            if intent_score >= 2:
+                high_intent_keywords.append(item)
+                
+            # High volume keywords (>500 searches)
+            if search_volume > 500:
+                high_volume_keywords.append(item)
+                
+            # Task 13: Use AI agent for root relevance filtering (with programmatic fallback)
+            if root:
+                root_volumes[root] += search_volume  # Collect all volumes first
     
     # Apply AI-powered Task 13 filtering after collecting all data
     try:
@@ -455,7 +461,8 @@ def prepare_keyword_data_for_analysis(keyword_items: List[Dict[str, Any]]) -> Di
             # Handle None values safely
             if search_volume is None:
                 search_volume = 0
-            if root and category in ["Relevant", "Design-Specific"]:
+            # FILTER: Only process keywords with actual search volume
+            if search_volume > 0 and root and category in ["Relevant", "Design-Specific"]:
                 filtered_root_volumes[root] = filtered_root_volumes.get(root, 0) + search_volume
     
     return {
@@ -471,20 +478,27 @@ def prepare_keyword_data_for_analysis(keyword_items: List[Dict[str, Any]]) -> Di
 
 def format_keywords_for_prompt(keywords: List[Dict[str, Any]], limit: int = 20) -> str:
     """
-    Format keywords for inclusion in prompt template.
+    Format keywords for prompt, sorted by search volume descending.
     
     Args:
         keywords: List of keyword dicts
         limit: Maximum number of keywords to include
         
     Returns:
-        Formatted string for prompt
+        Formatted string for prompt with keywords ranked by volume (#1 = highest)
     """
     if not keywords:
         return "None"
+    
+    # Sort by search volume descending, then intent score descending (Issue #3 fix)
+    sorted_keywords = sorted(
+        keywords, 
+        key=lambda x: (x.get("search_volume", 0) or 0, x.get("intent_score", 0) or 0), 
+        reverse=True
+    )
         
     lines = []
-    for i, kw in enumerate(keywords[:limit]):
+    for i, kw in enumerate(sorted_keywords[:limit], 1):
         phrase = kw.get("phrase", "")
         intent = kw.get("intent_score", 0)
         volume = kw.get("search_volume", 0)
@@ -495,7 +509,8 @@ def format_keywords_for_prompt(keywords: List[Dict[str, Any]], limit: int = 20) 
         if volume is None:
             volume = 0
             
-        lines.append(f"- {phrase} (Intent: {intent}, Volume: {volume})")
+        # Format with rank number and prominent volume display
+        lines.append(f"{i}. {phrase} (Volume: {volume:,}, Intent: {intent})")
         
     if len(keywords) > limit:
         lines.append(f"... and {len(keywords) - limit} more")

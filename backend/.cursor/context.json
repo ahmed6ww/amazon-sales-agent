@@ -21,6 +21,69 @@
         "what": "Removed strict validation in SEO content analysis",
         "why": "Simple substring validation was rejecting keywords found by advanced matching (sub-phrase, plural/singular, hyphen variations). extract_keywords_from_content already validates.",
         "when": "2025-10-22"
+      },
+      {
+        "what": "Filter 0-volume keywords in SEO analysis",
+        "why": "Keywords with search_volume = 0 or None waste space in titles/bullets. Added if search_volume > 0 filter before categorization in prepare_keyword_data_for_analysis().",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Mandatory design-specific keywords in title (2-3 from highest volume root)",
+        "why": "AI was ignoring design keywords. Strengthened prompts with MANDATORY markers, 3-step instructions, and 4 enforcement points across Title Optimization, Design Keywords section, and CRITICAL REQUIREMENTS.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Deduplicate keywords across title, bullets, and backend (post-AI generation)",
+        "why": "Keywords were appearing multiple times (e.g., in title + bullets + backend), wasting space. Added _deduplicate_keywords_across_content() with priority: Title > Bullets > Backend. Case-insensitive matching.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Handle None values in search_volume for sorting and calculations",
+        "why": "broad_volume_agent drops items when JSON parsing fails, leaving search_volume=None. This caused TypeError in keyword_validator sorting and root_relevance_agent calculations. Added 'or 0' to treat None as 0.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Fix METHOD 2 keyword matching to require sequential order + tight proximity",
+        "why": "METHOD 2 was matching scattered words (e.g., 'makeup sponges foundation' matched 'makeup sponge...sponges for foundation'). Changed to require: 1) exact sequential order, 2) max 20 chars between adjacent tokens, 3) no reverse/scattered matching.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Fix brand extraction path in Task 7 AI agent (runner.py line 448)",
+        "why": "Brand was extracted at line 279 (productOverview_feature_div > kv > Brand) but re-extracted incorrectly at line 448 (elements > brand > text - wrong path!). Changed to use already-extracted current_content['brand'].",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Fix keyword sorting to use VOLUME instead of RELEVANCY in amazon_compliance_agent.py",
+        "why": "main_keyword_root and design_keyword_root were selected by max(relevancy_score), not max(search_volume). All 'Relevant' keywords have relevancy=10, so this was meaningless. Changed to sort by search_volume for maximum SEO impact.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Add post-generation validation for brand and top keywords in amazon_compliance_agent.py",
+        "why": "AI was ignoring brand and high-volume keyword requirements despite prompt instructions. Added validation after AI generation: 1) Reject if brand missing (when brand exists), 2) Reject if top 2 keywords missing, 3) Use fallback with brand if validation fails.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Strengthen RULE 3 prompt to emphasize VOLUME IS KING in amazon_compliance_agent.py",
+        "why": "AI was using low-volume keywords (e.g., 'makeup soft sponge' 32 vol) instead of high-volume ones ('beauty blender' 71K vol). Added explicit examples showing volume hierarchy and made keyword #1 (HIGHEST VOLUME) MANDATORY in title.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "ROOT FIX: Sort keywords by VOLUME (not relevancy) across ALL 7 allocation/sorting points",
+        "why": "High-volume keywords were missing from titles because sorting used relevancy_score or keyword_value (relevancy×volume) instead of pure search_volume. User said 'i don't think you caught the root solution'. Fixed: 1) keyword_validator allocation, 2-3) relevant/design keyword sorting, 4-5) all_keywords_for_ai sorting (both paths), 6) stricter validation for #1 keyword, 7) improved fallback to use top volume keywords.",
+        "when": "2025-10-22",
+        "impact": "Guarantees highest-volume keywords appear first in allocation, AI input, validation, and fallback - solving Issue #3 at its root"
+      },
+      {
+        "what": "Brand preservation via prompt (not Python regex) in amazon_compliance_agent.py",
+        "why": "User wants EXACT brand form from current title (e.g., 'GWT' not 'Gold Water Trading', 'so coll' not 'So Coll'). Complex regex patterns would break on edge cases. Solution: Show AI the current_title in prompt with explicit instructions to preserve exact brand form at start of title.",
+        "when": "2025-10-22",
+        "impact": "AI naturally extracts brand form from context, handles all cases (abbreviations, lowercase, mixed case) without brittle parsing logic"
+      },
+      {
+        "what": "Increased minimum character requirements: 155 chars for titles AND bullets",
+        "why": "User requested minimum 155 characters (was 150 for titles, no minimum for bullets) to maximize Amazon listing space and keyword density. Updated: 1) All prompt instructions, 2) Validation checklists, 3) Python padding logic (break conditions), 4) Examples and guidelines.",
+        "when": "2025-10-22",
+        "impact": "Ensures every title and bullet uses full space for maximum SEO value and keyword coverage"
       }
     ]
   },

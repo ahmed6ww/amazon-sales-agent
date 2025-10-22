@@ -1,0 +1,10 @@
+{
+  "job_id": "df69804a-df6f-4272-a243-63e864b33715",
+  "status": "failed",
+  "progress": 10,
+  "message": "Scraping product...",
+  "created_at": "2025-10-23T03:02:39.404181",
+  "updated_at": "2025-10-23T03:02:44.944232",
+  "completed_at": "2025-10-23T03:02:44.944415",
+  "error": "500: Scraping failed: Scraper process failed: Traceback (most recent call last):\n  File \"D:\\AptivMind\\Work\\amazon-sales-agent\\backend\\app\\services\\amazon\\standalone_scraper.py\", line 43, in <module>\n    main()\n    ~~~~^^\n  File \"D:\\AptivMind\\Work\\amazon-sales-agent\\backend\\app\\services\\amazon\\standalone_scraper.py\", line 22, in main\n    from app.services.amazon.scraper import scrape_amazon_product\n  File \"D:\\AptivMind\\Work\\amazon-sales-agent\\backend\\app\\services\\amazon\\scraper.py\", line 26, in <module>\n    import scrapy\n  File \"<frozen importlib._bootstrap>\", line 1360, in _find_and_load\n  File \"<frozen importlib._bootstrap>\", line 1322, in _find_and_load_unlocked\n  File \"<frozen importlib._bootstrap>\", line 1262, in _find_spec\n  File \"<frozen importlib._bootstrap_external>\", line 1559, in find_spec\n  File \"<frozen importlib._bootstrap_external>\", line 1533, in _get_spec\n  File \"<frozen importlib._bootstrap_external>\", line 1651, in find_spec\nKeyboardInterrupt"
+}

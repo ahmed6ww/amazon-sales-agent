@@ -121,14 +121,19 @@ class SEOKeywordValidator:
                 kw_data = self.keyword_data[keyword_lower]
                 keyword_with_scores.append({
                     'phrase': keyword,
-                    'relevancy_score': kw_data.get('relevancy_score', 0),
-                    'search_volume': kw_data.get('search_volume', 0),
-                    'intent_score': kw_data.get('intent_score', 0)
+                    'relevancy_score': kw_data.get('relevancy_score', 0) or 0,
+                    'search_volume': kw_data.get('search_volume', 0) or 0,
+                    'intent_score': kw_data.get('intent_score', 0) or 0
                 })
         
-        # Sort by relevancy score (descending), then by search volume, then by intent score
+        # Sort by SEARCH VOLUME first (descending), then by relevancy, then by intent score
+        # Handle None values by treating them as 0
         sorted_keywords = sorted(keyword_with_scores, 
-                               key=lambda x: (x['relevancy_score'], x['search_volume'], x['intent_score']), 
+                               key=lambda x: (
+                                   x['search_volume'] or 0,      # VOLUME FIRST for Issue #3
+                                   x['relevancy_score'] or 0, 
+                                   x['intent_score'] or 0
+                               ), 
                                reverse=True)
         
         top_keywords = [kw['phrase'] for kw in sorted_keywords[:limit]]
