@@ -144,8 +144,8 @@ def extract_keywords_from_content(content: str, keywords_list: List[str], keywor
                         logger.debug(f"[KEYWORD_EXTRACTION] ✅ Sub-phrase: '{keyword}' (volume: {volume}, distance: {distance})")
                     else:
                         logger.debug(f"[KEYWORD_EXTRACTION] ✅ Sub-phrase: '{keyword}' (distance: {distance})")
-                    continue
-        
+                continue
+                
         # ================================================================
         # METHOD 3: Hyphen Variations
         # ================================================================
@@ -229,7 +229,7 @@ def calculate_keyword_coverage_from_analysis(
         if phrase not in unique_found_keywords:
             if intent_score >= 2:
                 missing_high_intent.append(phrase)
-            if search_volume > 500:
+            if search_volume and search_volume > 500:  # Null-safe check
                 missing_high_volume.append(phrase)
     
     coverage_percentage = (len(unique_found_keywords) / len(keyword_phrases) * 100) if keyword_phrases else 0
@@ -369,17 +369,9 @@ def analyze_content_piece(content: str, keywords_list: List[str], keyword_volume
     # Find opportunities (keywords not included)
     opportunities = [kw for kw in keywords_list if kw not in found_keywords][:5]
     
-    # Validate that found keywords actually exist in content
-    validated_keywords = []
-    for kw in found_keywords:
-        if kw.lower() in content.lower():
-            validated_keywords.append(kw)
-        else:
-            logger.warning(f"[CONTENT_ANALYSIS] ⚠️  Keyword '{kw}' marked as found but not in content!")
-    
-    if len(validated_keywords) != len(found_keywords):
-        logger.warning(f"[CONTENT_ANALYSIS] ⚠️  Validation failed: {len(found_keywords)} -> {len(validated_keywords)} keywords")
-        found_keywords = validated_keywords
+    # Note: Validation removed - extract_keywords_from_content() already validates matches
+    # using advanced matching (sub-phrase, plural/singular, hyphen variations).
+    # Re-validating with simple substring check was rejecting valid advanced matches.
     
     logger.info(f"[CONTENT_ANALYSIS] ✅ Final result: {len(found_keywords)} keywords (volume: {total_volume:,})")
     
@@ -406,6 +398,7 @@ def prepare_keyword_data_for_analysis(keyword_items: List[Dict[str, Any]]) -> Di
     """
     relevant_keywords = []
     design_keywords = []
+    branded_keywords = []
     high_intent_keywords = []
     high_volume_keywords = []
     
@@ -430,6 +423,8 @@ def prepare_keyword_data_for_analysis(keyword_items: List[Dict[str, Any]]) -> Di
             relevant_keywords.append(item)
         elif category == "Design-Specific":
             design_keywords.append(item)
+        elif category == "Branded":
+            branded_keywords.append(item)
             
         # High intent keywords (score 2-3)
         if intent_score >= 2:
@@ -466,6 +461,7 @@ def prepare_keyword_data_for_analysis(keyword_items: List[Dict[str, Any]]) -> Di
     return {
         "relevant_keywords": relevant_keywords,
         "design_keywords": design_keywords,
+        "branded_keywords": branded_keywords,
         "high_intent_keywords": high_intent_keywords,
         "high_volume_keywords": high_volume_keywords,
         "root_volumes": filtered_root_volumes,  # Use AI-filtered volumes
