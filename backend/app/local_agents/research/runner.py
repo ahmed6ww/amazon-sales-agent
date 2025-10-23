@@ -325,12 +325,12 @@ class ResearchRunner:
         # ==================================================================================
         # END OF FILTERING AND DEDUPLICATION
         # ==================================================================================
-
+        
         # Filter keywords by relevancy score (dynamic threshold based on dataset size)
         # More keywords = stricter threshold to focus on highest quality
         total_keywords = len(base_relevancy)
         if total_keywords > 200:
-            min_relevancy_threshold = 4  # Very strict for large datasets (200+)
+            min_relevancy_threshold = 5  # Very strict for large datasets (200+)
         elif total_keywords > 100:
             min_relevancy_threshold = 3  # Moderate for medium datasets (100-200)
         else:
