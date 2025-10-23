@@ -14,13 +14,12 @@ logger = logging.getLogger(__name__)
 
 def extract_keywords_from_content(content: str, keywords_list: List[str], keyword_volumes: Dict[str, int] = None) -> Tuple[List[str], int]:
     """
-    Enhanced keyword extraction that finds all keywords present in content,
-    including partial matches and sub-phrases.
+    Enhanced keyword extraction that finds all keywords present in content.
     
-    TASK 2 ENHANCEMENT: If content is "freeze dried strawberry slices", this will also find:
-    - "freeze dried strawberries" (sub-phrase match)
-    - "dried strawberries" (sub-phrase match)  
-    - "strawberry slices" (sub-phrase match)
+    STRICT MATCHING: Keywords must be exact phrases or adjacent plural/singular variants.
+    - "makeup sponge" WILL match "makeup sponges" (directly adjacent plural) ✅
+    - "beauty sponges" WILL NOT match "beauty blender sponges" (word in between) ❌
+    - "make up sponges foundation" WILL NOT match "make up blending sponges for foundation" ❌
     
     Args:
         content: Text content to analyze
@@ -75,79 +74,54 @@ def extract_keywords_from_content(content: str, keywords_list: List[str], keywor
             continue
         
         # ================================================================
-        # METHOD 2: Sequential Proximity Match (for plural/singular variations)
+        # METHOD 2: Adjacent Plural/Singular Variations (STRICT)
         # ================================================================
-        # Only match if tokens appear in EXACT ORDER with tight proximity
-        # Example: "makeup sponge set" MATCHES "makeup sponges set" (adjacent plural)
-        # Example: "makeup sponges foundation" DOES NOT MATCH "makeup sponge...sponges for foundation"
+        # ONLY match if tokens are DIRECTLY ADJACENT (no words in between)
+        # Example: "makeup sponge" MATCHES "makeup sponges" (adjacent plural) ✅
+        # Example: "beauty sponges" DOES NOT MATCH "beauty blender sponges" (word in between) ❌
         # ================================================================
         keyword_tokens = keyword_lower.split()
         
         if len(keyword_tokens) > 1:
-            # Find each token (or its plural/singular variant) in sequence
-            last_position = -1
-            all_sequential = True
+            # Build a regex pattern that requires direct adjacency
+            pattern_parts = []
             
             for token in keyword_tokens:
-                # Look for this token AFTER the last found position
-                search_start = last_position + 1
-                remaining_content = content_lower[search_start:]
+                # Create pattern for this token with plural/singular variants
+                variants = [re.escape(token)]
                 
-                # Try to find token or its variants
-                found_position = -1
+                # Add singular variants
+                if token.endswith('ies') and len(token) > 4:
+                    variants.append(re.escape(token[:-3] + 'y'))
+                elif token.endswith('es') and len(token) > 3:
+                    variants.append(re.escape(token[:-2]))
+                elif token.endswith('s') and len(token) > 2:
+                    variants.append(re.escape(token[:-1]))
                 
-                # Direct match
-                if token in remaining_content:
-                    found_position = search_start + remaining_content.find(token)
-                else:
-                    # Try plural/singular variants
-                    variants = []
-                    
-                    # Singular variants (sponges -> sponge)
-                    if token.endswith('ies') and len(token) > 4:
-                        variants.append(token[:-3] + 'y')
-                    elif token.endswith('es') and len(token) > 3:
-                        variants.append(token[:-2])
-                    elif token.endswith('s') and len(token) > 2:
-                        variants.append(token[:-1])
-                    
-                    # Plural variants (sponge -> sponges)
-                    if token.endswith('y') and len(token) > 2:
-                        variants.append(token[:-1] + 'ies')
-                    variants.append(token + 'es')
-                    variants.append(token + 's')
-                    
-                    # Check variants
-                    for variant in variants:
-                        if variant in remaining_content:
-                            found_position = search_start + remaining_content.find(variant)
-                            break
+                # Add plural variants
+                if token.endswith('y') and len(token) > 2:
+                    variants.append(re.escape(token[:-1] + 'ies'))
+                if not token.endswith('s'):
+                    variants.append(re.escape(token + 's'))
+                    variants.append(re.escape(token + 'es'))
                 
-                # If token not found in sequence, fail
-                if found_position == -1:
-                    all_sequential = False
-                    break
-                
-                # Check proximity: next token must be within 20 characters (about 3-4 words)
-                if last_position != -1:
-                    distance = found_position - last_position
-                    if distance > 20:  # Too far apart
-                        all_sequential = False
-                        break
-                
-                last_position = found_position
+                # Join variants with OR
+                pattern_parts.append(f"(?:{'|'.join(variants)})")
             
-            # If all tokens found in sequence with tight proximity
-            if all_sequential:
+            # Pattern requires tokens to be directly adjacent (only whitespace/punctuation between)
+            # \s+ = one or more whitespace characters
+            adjacent_pattern = r'\b' + r'\s+'.join(pattern_parts) + r'\b'
+            
+            if re.search(adjacent_pattern, content_lower):
                 found_keywords.append(keyword)
                 found_keywords_set.add(keyword_lower)
                 
                 if keyword_volumes and keyword in keyword_volumes:
                     volume = keyword_volumes[keyword]
                     total_volume += volume
-                    logger.debug(f"[KEYWORD_EXTRACTION] ✅ Sequential match: '{keyword}' (volume: {volume})")
+                    logger.debug(f"[KEYWORD_EXTRACTION] ✅ Adjacent variant match: '{keyword}' (volume: {volume})")
                 else:
-                    logger.debug(f"[KEYWORD_EXTRACTION] ✅ Sequential match: '{keyword}'")
+                    logger.debug(f"[KEYWORD_EXTRACTION] ✅ Adjacent variant match: '{keyword}'")
                 continue
                 
         # ================================================================

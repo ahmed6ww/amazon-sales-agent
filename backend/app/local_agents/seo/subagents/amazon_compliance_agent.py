@@ -149,14 +149,14 @@ Action: Remove "Bulk Strawberries" and add different keyword like "Organic" or "
 **MUST INCLUDE in characters 1-80**:
 1. ✅ Brand name (if exists): "{brand}"
 2. ✅ Main keyword root: "{main_root}"
-3. ✅ Design-specific root: "{design_root}"
+3. ✅ **2-3 Design-specific keywords** (MANDATORY - see below)
 4. ✅ **Transactional info**: Pack size, quantity, weight
    - Examples: "1.2oz", "Pack of 4", "Bulk Pack", "6 Count", "2 Pound"
 
 **Recommended Structure for First 80**:
 ```
-"[Brand] [Main Keyword] [Design Keyword] [Pack/Size] - [Key Benefit]..."
-Position: 1-15   16-40           41-50          51-60      61-80
+"[Brand] [Main Keyword] [Design Keyword 1] [Design Keyword 2] [Pack/Size] - [Key Benefit]..."
+Position: 1-15   16-40           41-55              56-70         71-80
 ```
 
 **Example** (78 chars - PERFECT):
@@ -169,6 +169,50 @@ Contains: Brand ✅ Main keyword ✅ Design keyword ✅ Pack size ✅ Benefits �
 ```
 
 **Validation**: Extract characters 1-80 of your title. Check they contain ALL required elements.
+
+### RULE 5B: DESIGN-SPECIFIC KEYWORDS IN TITLE (MANDATORY - CRITICAL)
+**The FULL title (not just first 80 chars) MUST include 2-3 design-specific keywords.**
+
+⚠️ **THIS IS MANDATORY** - If title has <2 design keywords, your ENTIRE output will be REJECTED.
+
+**Design keywords describe features/attributes:**
+- Size variations: "mini", "large", "xl", "6 pcs"
+- Material features: "latex free", "soft", "cruelty free", "vegan"
+- Design types: "blender set", "foundation application", "multi-angle"
+
+**Requirements:**
+- Include 2-3 design-specific keywords from the provided design keywords list
+- Prioritize HIGHEST VOLUME design keywords
+- Use EXACT phrases (e.g., "mini beauty blender" not just "mini" or "blender")
+
+**Example - CORRECT:**
+```
+Design keywords sorted by volume:
+  #1. mini beauty blender (1,337 vol)
+  #2. beauty blender set (359 vol)  
+  #3. latex free makeup sponges (277 vol)
+
+✅ CORRECT Title:
+"GWT Mini Beauty Blender Beauty Blender Set, 6 Pcs Latex-Free Soft Makeup Sponges..."
+   ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^ ^^^^^^^^^^^^^^^^^^^^^^^^^
+   Design Keyword #1   Design Keyword #2   Design Keyword #3
+```
+
+**Example - WRONG:**
+```
+❌ WRONG Title:
+"GWT Mini Beauty Blenders for Foundation and Cream..."
+   ^^^^^^^^^^^^^^^^^^
+   Only 1 design keyword - REJECTED!
+```
+
+**Validation Before Returning:**
+Count design-specific keywords in your title:
+- Design keyword #1: ___ (from provided list)
+- Design keyword #2: ___ (from provided list)
+- Design keyword #3 (optional): ___ (from provided list)
+
+❌ If title has <2 design keywords → REWRITE title to include more design keywords
 
 ### RULE 6: GRAMMAR & READABILITY (HUMAN-FIRST)
 **Requirements**:
@@ -252,6 +296,37 @@ Based on https://sellercentral.amazon.com/help/hub/reference/external/GX5L8BF8GL
 - Distribute bullet_keywords EVENLY across all {bullet_count} bullets
 - Each bullet should use 2-4 UNIQUE keywords (not in title, not in other bullets)
 - Don't cram all keywords into first 1-2 bullets
+
+### RULE 5: MANDATORY KEYWORD INCLUSION IN BULLETS (CRITICAL - REJECTION IF VIOLATED)
+**EVERY bullet point MUST contain at least 2-3 target keywords from the provided list.**
+
+⚠️ **THIS IS MANDATORY** - If ANY bullet has <2 keywords, your ENTIRE output will be REJECTED and a fallback will be used.
+
+**Requirements:**
+- Use EXACT keyword phrases (e.g., "makeup sponges" NOT "makeup" + "sponges" separately)
+- Keywords must be ADJACENT in the content (no intervening words)
+- Prioritize highest-volume keywords for each bullet
+
+**Examples:**
+
+❌ BAD (0-1 keywords):
+"MULTI-ANGLE DESIGN: The unique cut design provides precision for areas like eyes and nose"
+→ Only has word "design" but no complete keyword phrases (e.g., no "makeup sponges", no "beauty blender")
+
+✅ GOOD (3+ keywords):
+"MULTI-ANGLE DESIGN: Perfect for makeup sponges blending with beauty blender precision around eyes, works with foundation sponge applications"
+→ Contains: "makeup sponges" (15,960 vol), "beauty blender" (71,126 vol), "foundation sponge" (3,912 vol) ✅
+
+**Validation Before Returning:**
+Count keywords in each bullet:
+- Bullet 1: ___ keywords (minimum 2)
+- Bullet 2: ___ keywords (minimum 2)
+- Bullet 3: ___ keywords (minimum 2)
+- Bullet 4: ___ keywords (minimum 2)
+- Bullet 5: ___ keywords (minimum 2)
+- Bullet 6: ___ keywords (minimum 2)
+
+❌ If ANY bullet has <2 keywords → REWRITE that bullet to include more keywords
 
 ## VALIDATION CHECKLIST (Complete Before Returning):
 
@@ -807,36 +882,77 @@ def optimize_amazon_compliance_ai(
             else:
                 logger.info(f"✅ Brand validation PASSED: '{brand}' found in title")
         
-        # Validate top keywords are present (STRICTER: #1 keyword MUST be in title)
-        if relevant_keywords:
-            top_3_keywords = relevant_keywords[:3]
+        # Validate top keywords are present (STRICTER: Top allocated keywords MUST be in title)
+        # Use title_keywords if provided (pre-allocated by volume), otherwise use relevant_keywords
+        keywords_to_validate = title_keywords if title_keywords else relevant_keywords
+        
+        if keywords_to_validate:
+            # Sort by volume to ensure we're checking the absolute top keywords
+            sorted_keywords = sorted(keywords_to_validate, key=lambda x: (x.get("search_volume", 0) or 0), reverse=True)
+            top_5_keywords = sorted_keywords[:5]  # Check top 5 by volume
             missing_keywords = []
-            for kw in top_3_keywords:
+            
+            for i, kw in enumerate(top_5_keywords, 1):
                 kw_phrase = kw.get("phrase", "")
-                kw_volume = kw.get("search_volume", 0)
+                kw_volume = kw.get("search_volume", 0) or 0
                 # Check if keyword is in title (case-insensitive, handle hyphens/spaces)
                 kw_normalized = kw_phrase.lower().replace("-", " ")
                 title_normalized = optimized_title.lower().replace("-", " ")
                 if kw_normalized not in title_normalized:
-                    missing_keywords.append(f"{kw_phrase} (vol: {kw_volume:,})")
+                    missing_keywords.append(f"#{i} {kw_phrase} (vol: {kw_volume:,})")
+                    logger.warning(f"⚠️  Missing: #{i} '{kw_phrase}' (vol: {kw_volume:,})")
+                else:
+                    logger.info(f"✅  Found: #{i} '{kw_phrase}' (vol: {kw_volume:,})")
             
             if missing_keywords:
-                logger.warning(f"⚠️ VALIDATION WARNING: Top keywords missing from title: {', '.join(missing_keywords[:2])}")
-                logger.warning(f"⚠️ AI ignored high-volume keywords - checking if #1 keyword is missing...")
+                logger.warning(f"⚠️ VALIDATION WARNING: {len(missing_keywords)} top keywords missing from title")
                 
-                # CRITICAL: Check if #1 keyword (absolute highest volume) is missing
-                top_keyword = relevant_keywords[0].get("phrase", "").lower().replace("-", " ")
-                missing_normalized = [m.lower().split(" (vol:")[0].replace("-", " ") for m in missing_keywords]
+                # CRITICAL: Check if top 2 keywords (highest volumes) are missing
+                top_2_missing = sum(1 for m in missing_keywords if m.startswith("#1") or m.startswith("#2"))
                 
-                if top_keyword in missing_normalized:
-                    logger.error(f"❌ VALIDATION FAILED: #1 keyword (HIGHEST VOLUME) '{relevant_keywords[0].get('phrase', '')}' missing from title!")
+                if top_2_missing >= 2:
+                    logger.error(f"❌ VALIDATION FAILED: TOP 2 KEYWORDS (HIGHEST VOLUMES) missing from title!")
+                    logger.error(f"   Missing: {', '.join([m for m in missing_keywords if m.startswith('#1') or m.startswith('#2')])}")
+                    logger.error(f"❌ This is CRITICAL for SEO - using fallback")
+                    return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, sorted_keywords)
+                elif "#1" in missing_keywords[0]:
+                    logger.error(f"❌ VALIDATION FAILED: #1 keyword (ABSOLUTE HIGHEST VOLUME) missing from title!")
                     logger.error(f"❌ This is MANDATORY for SEO - using fallback")
-                    return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, relevant_keywords)
-                elif len(missing_keywords) >= 2:
-                    logger.error(f"❌ VALIDATION FAILED: Multiple high-volume keywords missing - using fallback")
-                    return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, relevant_keywords)
+                    return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, sorted_keywords)
+                elif len(missing_keywords) >= 3:
+                    logger.error(f"❌ VALIDATION FAILED: 3+ high-volume keywords missing - using fallback")
+                    return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, sorted_keywords)
+                else:
+                    logger.warning(f"⚠️  Acceptable: Only {len(missing_keywords)} keyword(s) missing from top 5")
             else:
-                logger.info(f"✅ Top keywords validation PASSED")
+                logger.info(f"✅ Top keywords validation PASSED - All top 5 keywords found in title!")
+        
+        # NEW VALIDATION: Check each bullet has at least 2 keywords
+        optimized_bullets = result.get("optimized_bullets", [])
+        if optimized_bullets:
+            all_keywords = (relevant_keywords or []) + (design_keywords or [])
+            is_valid, insufficient_bullets = _validate_bullet_keyword_count(optimized_bullets, all_keywords, min_keywords=2)
+            
+            if not is_valid:
+                logger.error(f"❌ VALIDATION FAILED: {len(insufficient_bullets)} bullets have <2 keywords: {insufficient_bullets}")
+                logger.error(f"❌ AI ignored MANDATORY keyword inclusion requirement - using fallback")
+                return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, relevant_keywords)
+            else:
+                logger.info(f"✅ Bullet keyword count validation PASSED: All {len(optimized_bullets)} bullets have ≥2 keywords")
+        
+        # NEW VALIDATION: Check title has 2-3 design-specific keywords
+        if design_keywords:
+            design_count, found_design_kws = _count_design_keywords_in_title(optimized_title, design_keywords)
+            
+            if design_count < 2:
+                logger.error(f"❌ VALIDATION FAILED: Title has only {design_count} design-specific keywords (minimum: 2)")
+                logger.error(f"   Title: {optimized_title}")
+                logger.error(f"   Found design keywords: {found_design_kws}")
+                logger.error(f"   Available design keywords: {[kw.get('phrase', '') for kw in design_keywords[:5]]}")
+                logger.error(f"❌ AI ignored MANDATORY design keyword requirement - using fallback")
+                return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, relevant_keywords)
+            else:
+                logger.info(f"✅ Design keyword validation PASSED: Title has {design_count} design keywords: {found_design_kws}")
         
         return result
             
@@ -844,6 +960,47 @@ def optimize_amazon_compliance_ai(
         logger.error(f"[AmazonComplianceAgent] AI optimization failed: {e}")
         # Graceful fallback - return programmatic optimization
         return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, relevant_keywords)
+
+def _validate_bullet_keyword_count(
+    bullets: List[Dict[str, Any]], 
+    all_keywords: List[Dict[str, Any]],
+    min_keywords: int = 2
+) -> tuple:
+    """
+    Validate that each bullet has at least min_keywords.
+    Returns (is_valid, list_of_bullet_numbers_with_insufficient_keywords).
+    """
+    from ..helper_methods import extract_keywords_from_content
+    
+    all_keyword_phrases = [kw.get("phrase", "") for kw in all_keywords if kw.get("phrase")]
+    insufficient_bullets = []
+    
+    for i, bullet in enumerate(bullets, 1):
+        content = bullet.get("content", "")
+        found_keywords, _ = extract_keywords_from_content(content, all_keyword_phrases)
+        
+        if len(found_keywords) < min_keywords:
+            insufficient_bullets.append(i)
+            logger.error(f"❌ VALIDATION FAILED: Bullet {i} has only {len(found_keywords)} keywords (minimum: {min_keywords})")
+            logger.error(f"   Content: {content[:100]}...")
+            logger.error(f"   Keywords found: {found_keywords}")
+    
+    return len(insufficient_bullets) == 0, insufficient_bullets
+
+def _count_design_keywords_in_title(
+    title: str, 
+    design_keywords: List[Dict[str, Any]]
+) -> tuple:
+    """
+    Count how many design-specific keywords are present in the title.
+    Returns (count, list_of_found_design_keywords).
+    """
+    from ..helper_methods import extract_keywords_from_content
+    
+    design_phrases = [kw.get("phrase", "") for kw in design_keywords if kw.get("phrase")]
+    found_keywords, _ = extract_keywords_from_content(title, design_phrases)
+    
+    return len(found_keywords), found_keywords
 
 def _create_fallback_optimization(
     current_content: Dict[str, Any],

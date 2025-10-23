@@ -39,7 +39,7 @@ class SEOKeywordValidator:
         
         # Keyword allocation limits per content type (dynamic based on bullet count)
         self.keyword_allocation = {
-            'title': 3,      # Max keywords for title (keep it concise)
+            'title': 8,      # Max keywords for title (increased to ensure top-volume keywords are included)
             'bullets': 10,   # Max keywords for bullets (will be adjusted based on bullet count)
             'backend': 15    # Max keywords for backend
         }
@@ -139,6 +139,48 @@ class SEOKeywordValidator:
         top_keywords = [kw['phrase'] for kw in sorted_keywords[:limit]]
         
         logger.info(f"📈 Selected top {len(top_keywords)} keywords by relevancy score")
+        
+        return top_keywords
+    
+    def get_top_keywords_by_volume_strict(self, keywords: List[str], limit: int = 10) -> List[str]:
+        """
+        Get top keywords by VOLUME ONLY (strict sorting, ignore relevancy/intent).
+        This ensures highest-volume keywords are ALWAYS prioritized for title allocation.
+        
+        Args:
+            keywords: List of keyword phrases
+            limit: Number of top keywords to return
+            
+        Returns:
+            Top keywords sorted by search volume only
+        """
+        keyword_with_volumes = []
+        for kw in keywords:
+            kw_data = self.get_keyword_data(kw)
+            if kw_data:
+                volume = kw_data.get('search_volume', 0) or 0
+                keyword_with_volumes.append({
+                    'phrase': kw,
+                    'search_volume': volume
+                })
+        
+        # Sort by VOLUME ONLY (no relevancy, no intent)
+        sorted_keywords = sorted(
+            keyword_with_volumes, 
+            key=lambda x: x['search_volume'], 
+            reverse=True
+        )
+        
+        top_keywords = [kw['phrase'] for kw in sorted_keywords[:limit]]
+        
+        # Log top 3 for debugging
+        if top_keywords:
+            top_3_info = []
+            for i, kw in enumerate(top_keywords[:3], 1):
+                kw_data = self.get_keyword_data(kw)
+                volume = kw_data.get('search_volume', 0) if kw_data else 0
+                top_3_info.append(f"#{i} '{kw}' ({volume:,} vol)")
+            logger.info(f"🔥 TOP KEYWORDS BY VOLUME: {', '.join(top_3_info)}")
         
         return top_keywords
     
@@ -253,8 +295,14 @@ class SEOKeywordValidator:
         # Get available keywords (not yet used)
         available_keywords = self.get_available_keywords()
         
-        # Sort by relevancy
-        top_keywords = self.get_top_keywords_by_relevancy(available_keywords, 20)
+        # For TITLE: sort by VOLUME ONLY to ensure highest-volume keywords go to title
+        # For other content types: use relevancy + volume + intent
+        if content_type == 'title':
+            top_keywords = self.get_top_keywords_by_volume_strict(available_keywords, 20)
+            logger.info(f"🔥 Title allocation using STRICT VOLUME sorting (ensures top keywords in title)")
+        else:
+            # For bullets/backend: use relevancy + volume + intent
+            top_keywords = self.get_top_keywords_by_relevancy(available_keywords, 20)
         
         # Dynamic allocation for bullets based on bullet count
         if content_type == 'bullets' and bullet_count:

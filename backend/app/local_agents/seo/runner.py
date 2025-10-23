@@ -166,7 +166,7 @@ class SEORunner:
             logger.info("✅ Keywords_included fields validated")
             
             # Step 5.7: Deduplicate keywords across title, bullets, backend
-            optimized_seo = self._deduplicate_keywords_across_content(optimized_seo)
+            optimized_seo = self._deduplicate_keywords_across_content(optimized_seo, keyword_data)
             
             # Step 5: Calculate comparison metrics
             comparison = self._calculate_comparison_metrics(current_seo, optimized_seo, keyword_data)
@@ -1060,20 +1060,31 @@ class SEORunner:
         
         return content
     
-    def _deduplicate_keywords_across_content(self, optimized_seo: OptimizedSEO) -> OptimizedSEO:
+    def _deduplicate_keywords_across_content(self, optimized_seo: OptimizedSEO, keyword_data: Dict[str, Any] = None) -> OptimizedSEO:
         """
         Remove duplicate keywords across title, bullets, and backend keywords.
         Priority: Title > Bullets > Backend (higher priority keeps the keyword)
         
         Args:
             optimized_seo: The optimized SEO content with potential duplicates
+            keyword_data: Keyword data containing search volumes for recalculation
             
         Returns:
-            OptimizedSEO with deduplicated keywords
+            OptimizedSEO with deduplicated keywords and recalculated stats
         """
         from .schemas import OptimizedContent
         
         logger.info("🔄 [DEDUPLICATION] Removing duplicate keywords across all content")
+        
+        # Build keyword volume map for recalculating stats
+        keyword_volumes = {}
+        if keyword_data:
+            for item in keyword_data.get("relevant_keywords", []) + keyword_data.get("design_keywords", []):
+                phrase = item.get("phrase", "")
+                volume = item.get("search_volume", 0)
+                if phrase:
+                    keyword_volumes[phrase.lower()] = volume
+            logger.info(f"   📊 Built keyword volume map with {len(keyword_volumes)} entries for stat recalculation")
         
         # Track used keywords (case-insensitive)
         used_keywords = set()
@@ -1102,12 +1113,19 @@ class SEORunner:
             if removed_count > 0:
                 logger.info(f"   🔹 Bullet {i}: Removed {removed_count} duplicates ({original_count} → {len(unique_keywords)})")
             
+            # Recalculate volume for the NEW deduplicated list
+            unique_volume = sum(keyword_volumes.get(kw.lower(), 0) for kw in unique_keywords)
+            
             # Create updated bullet with unique keywords only
+            # Recalculate stats based on NEW deduplicated keywords
             updated_bullets.append(OptimizedContent(
                 content=bullet.content,
                 keywords_included=unique_keywords,
+                keywords_duplicated_from_other_bullets=[],  # Clear after cross-content dedup
+                unique_keywords_count=len(unique_keywords),  # Recalculated count
                 improvements=bullet.improvements,
-                character_count=bullet.character_count
+                character_count=bullet.character_count,
+                total_search_volume=unique_volume  # Recalculated volume
             ))
             
             # Add unique keywords to used set
@@ -1721,20 +1739,31 @@ class SEORunner:
         
         return content
     
-    def _deduplicate_keywords_across_content(self, optimized_seo: OptimizedSEO) -> OptimizedSEO:
+    def _deduplicate_keywords_across_content(self, optimized_seo: OptimizedSEO, keyword_data: Dict[str, Any] = None) -> OptimizedSEO:
         """
         Remove duplicate keywords across title, bullets, and backend keywords.
         Priority: Title > Bullets > Backend (higher priority keeps the keyword)
         
         Args:
             optimized_seo: The optimized SEO content with potential duplicates
+            keyword_data: Keyword data containing search volumes for recalculation
             
         Returns:
-            OptimizedSEO with deduplicated keywords
+            OptimizedSEO with deduplicated keywords and recalculated stats
         """
         from .schemas import OptimizedContent
         
         logger.info("🔄 [DEDUPLICATION] Removing duplicate keywords across all content")
+        
+        # Build keyword volume map for recalculating stats
+        keyword_volumes = {}
+        if keyword_data:
+            for item in keyword_data.get("relevant_keywords", []) + keyword_data.get("design_keywords", []):
+                phrase = item.get("phrase", "")
+                volume = item.get("search_volume", 0)
+                if phrase:
+                    keyword_volumes[phrase.lower()] = volume
+            logger.info(f"   📊 Built keyword volume map with {len(keyword_volumes)} entries for stat recalculation")
         
         # Track used keywords (case-insensitive)
         used_keywords = set()
@@ -1763,12 +1792,19 @@ class SEORunner:
             if removed_count > 0:
                 logger.info(f"   🔹 Bullet {i}: Removed {removed_count} duplicates ({original_count} → {len(unique_keywords)})")
             
+            # Recalculate volume for the NEW deduplicated list
+            unique_volume = sum(keyword_volumes.get(kw.lower(), 0) for kw in unique_keywords)
+            
             # Create updated bullet with unique keywords only
+            # Recalculate stats based on NEW deduplicated keywords
             updated_bullets.append(OptimizedContent(
                 content=bullet.content,
                 keywords_included=unique_keywords,
+                keywords_duplicated_from_other_bullets=[],  # Clear after cross-content dedup
+                unique_keywords_count=len(unique_keywords),  # Recalculated count
                 improvements=bullet.improvements,
-                character_count=bullet.character_count
+                character_count=bullet.character_count,
+                total_search_volume=unique_volume  # Recalculated volume
             ))
             
             # Add unique keywords to used set
