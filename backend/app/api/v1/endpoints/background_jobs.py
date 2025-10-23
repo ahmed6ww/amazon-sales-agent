@@ -74,8 +74,18 @@ async def run_pipeline_in_background(
         )
         
         # Save results
-        JobManager.save_results(job_id, result)
-        JobManager.update_status(job_id, "complete", progress=100, message="Pipeline completed successfully")
+        try:
+            logger.info(f"💾 [BACKGROUND JOB] Saving results for {job_id}...")
+            JobManager.save_results(job_id, result)
+            logger.info(f"✅ [BACKGROUND JOB] Results saved successfully for {job_id}")
+            
+            logger.info(f"📊 [BACKGROUND JOB] Updating status to complete for {job_id}...")
+            JobManager.update_status(job_id, "complete", progress=100, message="Pipeline completed successfully")
+            logger.info(f"✅ [BACKGROUND JOB] Status updated to complete for {job_id}")
+        except Exception as save_error:
+            logger.error(f"❌ [BACKGROUND JOB] Failed to save results/status for {job_id}: {save_error}", exc_info=True)
+            JobManager.mark_failed(job_id, f"Failed to save results: {str(save_error)}")
+            raise
         
         logger.info(f"✅ [BACKGROUND JOB] Job completed: {job_id}")
         

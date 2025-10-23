@@ -67,6 +67,12 @@ class Settings:
         # Used by research agent prompt context and internal computations
         # Increased default to handle larger keyword lists with root-based optimization
         self.RESEARCH_CSV_TOP_N = int(os.getenv("RESEARCH_CSV_TOP_N", "50"))
+        
+        # Redis Configuration (Upstash)
+        self.UPSTASH_REDIS_URL: Optional[str] = os.getenv("UPSTASH_REDIS_URL")
+        self.UPSTASH_REDIS_TOKEN: Optional[str] = os.getenv("UPSTASH_REDIS_TOKEN")
+        self.USE_REDIS_FOR_JOBS: bool = os.getenv("USE_REDIS_FOR_JOBS", "true").lower() == "true"
+        self.JOB_TTL_HOURS: int = int(os.getenv("JOB_TTL_HOURS", "24"))  # Job data expires after 24 hours
 
     def reload(self) -> None:
         """Reload settings from environment (and .env if changed)."""
