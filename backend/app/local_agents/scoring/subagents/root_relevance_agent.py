@@ -161,7 +161,7 @@ Return ONLY the JSON response in the exact format specified.
 root_relevance_agent = Agent(
     name="RootRelevanceAgent", 
     instructions=ROOT_RELEVANCE_INSTRUCTIONS,
-    model="gpt-4o-mini",
+    model="gpt-5-2025-08-07",  # gpt-5-mini
 )
 
 def analyze_root_relevance_ai(keywords: List[Dict[str, Any]]) -> Dict[str, Any]:

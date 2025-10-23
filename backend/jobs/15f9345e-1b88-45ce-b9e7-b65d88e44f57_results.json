@@ -3356,9 +3356,9 @@
           }
         },
         {
-          "phrase": "마늘 다지기",
+          "phrase": "\ub9c8\ub298 \ub2e4\uc9c0\uae30",
           "search_volume": 161,
-          "root": "다지기",
+          "root": "\ub2e4\uc9c0\uae30",
           "category": "Spanish",
           "relevancy_score": 4,
           "intent_score": 3,
@@ -3404,9 +3404,9 @@
           }
         },
         {
-          "phrase": "压蒜器",
+          "phrase": "\u538b\u849c\u5668",
           "search_volume": 83,
-          "root": "压蒜器",
+          "root": "\u538b\u849c\u5668",
           "category": "Spanish",
           "relevancy_score": 7,
           "intent_score": 3,
@@ -5754,7 +5754,7 @@
           }
         },
         {
-          "phrase": "garlic peeler",
+          "phrase": "garlic peeler\u007f",
           "category": "Irrelevant",
           "relevancy_score": 4,
           "intent_score": 0,
@@ -6497,9 +6497,9 @@
           }
         },
         {
-          "phrase": "ادوات مطبخ",
+          "phrase": "\u0627\u062f\u0648\u0627\u062a \u0645\u0637\u0628\u062e",
           "search_volume": 296,
-          "root": "ادوات",
+          "root": "\u0627\u062f\u0648\u0627\u062a",
           "category": "Spanish",
           "relevancy_score": 2,
           "intent_score": 0,
@@ -6753,14 +6753,14 @@
           "root": "gadgets"
         },
         {
-          "phrase": "채순이 다짜고짜",
+          "phrase": "\ucc44\uc21c\uc774 \ub2e4\uc9dc\uace0\uc9dc",
           "category": "Spanish",
           "relevancy_score": 2,
           "intent_score": 0,
-          "root": "채순이"
+          "root": "\ucc44\uc21c\uc774"
         },
         {
-          "phrase": "مطبخ",
+          "phrase": "\u0645\u0637\u0628\u062e",
           "category": "Spanish",
           "relevancy_score": 2,
           "intent_score": 0,
@@ -6773,10 +6773,10 @@
             "competitor_rank_avg": 1.0,
             "competitor_performance_score": 2.0
           },
-          "root": "مطبخ"
+          "root": "\u0645\u0637\u0628\u062e"
         },
         {
-          "phrase": "厨房",
+          "phrase": "\u53a8\u623f",
           "category": "Spanish",
           "relevancy_score": 2,
           "intent_score": 0,
@@ -6789,7 +6789,7 @@
             "competitor_rank_avg": 1.0,
             "competitor_performance_score": 2.0
           },
-          "root": "厨房"
+          "root": "\u53a8\u623f"
         },
         {
           "phrase": "cooking assesories",
@@ -7304,7 +7304,7 @@
           "root": "store"
         },
         {
-          "phrase": "כלי עבודה",
+          "phrase": "\u05db\u05dc\u05d9 \u05e2\u05d1\u05d5\u05d3\u05d4",
           "category": "Spanish",
           "relevancy_score": 2,
           "intent_score": 0,
@@ -7317,7 +7317,7 @@
             "competitor_rank_avg": 6.0,
             "competitor_performance_score": 2.0
           },
-          "root": "כלי"
+          "root": "\u05db\u05dc\u05d9"
         },
         {
           "phrase": "gift tegistry wedding",
