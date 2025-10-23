@@ -8,6 +8,7 @@ dependencies = [
     "fastapi[standard]>=0.116.1",
     "openai-agents>=0.2.9",
     "scrapy>=2.13.3",
+    "upstash-redis>=0.15.0",
 ]
 
 [dependency-groups]

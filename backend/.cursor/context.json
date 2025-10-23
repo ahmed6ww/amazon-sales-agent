@@ -150,10 +150,33 @@
         "why": "Static threshold=2 was too lenient for large datasets (500+ keywords) and too strict for small ones. Large datasets need stricter filtering to focus on highest-quality keywords and reduce AI processing time.",
         "when": "2025-10-23",
         "impact": "Threshold auto-adjusts: ≤100 keywords → threshold=2, 101-200 keywords → threshold=3, 201+ keywords → threshold=4. For 549 keywords, now uses threshold=4 instead of 2, filtering out low-traction keywords to improve quality and performance."
+      },
+      {
+        "what": "Enhanced logging for background job result persistence",
+        "why": "User reported issue: jobs complete but results not visible in frontend. Added detailed logging to diagnose file storage issues (ephemeral file systems, permission errors, race conditions).",
+        "when": "2025-10-23",
+        "impact": "JobManager now logs: directory initialization, write permissions, file creation, file size, file retrieval. background_jobs.py now wraps save/update in try-catch with detailed error logging. Makes it easy to diagnose if file storage is ephemeral (Vercel/Railway) or has permission issues."
+      },
+      {
+        "what": "Redis (Upstash) integration for background job storage",
+        "why": "File-based storage doesn't persist on serverless platforms (Vercel/Railway/Render) causing completed jobs to lose results. Redis provides persistent, fast storage that works across deployments and multiple server instances.",
+        "when": "2025-10-23",
+        "impact": "JobManager now supports Redis (primary) with file storage fallback (dev only). Added upstash-redis dependency. Jobs stored with 24h TTL. Auto-detects Redis config and falls back gracefully. See backend/REDIS_SETUP.md for setup instructions."
       }
     ]
   },
   "features": {
+    "background_jobs": {
+      "files": [
+        "app/api/v1/endpoints/background_jobs.py",
+        "app/services/job_manager.py",
+        "app/core/config.py"
+      ],
+      "storage": "redis (upstash) with file fallback",
+      "ttl": "24 hours",
+      "state": "active",
+      "notes": "Redis-based job tracking prevents result loss on serverless platforms. Auto-detects config, falls back to files for dev. See REDIS_SETUP.md"
+    },
     "keyword_categorization": {
       "files": [
         "app/local_agents/keyword/runner.py",
