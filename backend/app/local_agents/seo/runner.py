@@ -165,6 +165,9 @@ class SEORunner:
             optimized_seo = OptimizedSEO(**validated_seo_dict)
             logger.info("✅ Keywords_included fields validated")
             
+            # Step 5.7: Deduplicate keywords across title, bullets, backend
+            optimized_seo = self._deduplicate_keywords_across_content(optimized_seo, keyword_data)
+            
             # Step 5: Calculate comparison metrics
             comparison = self._calculate_comparison_metrics(current_seo, optimized_seo, keyword_data)
             logger.info("📈 Comparison metrics calculated")
@@ -442,7 +445,7 @@ class SEORunner:
             
             # Extract product context for AI agent
             product_context = {
-                "brand": scraped_product.get("elements", {}).get("brand", {}).get("text", ""),
+                "brand": current_content.get("brand", ""),  # Use already-extracted brand from current_content
                 "category": scraped_product.get("category", ""),
                 "title": current_content.get("title", "")
             }
@@ -469,7 +472,17 @@ class SEORunner:
             logger.warning(f"[Task7-AI] Amazon compliance agent failed, falling back to standard AI: {compliance_error}")
             
             # Fallback to original AI optimization if Task 7 agent fails
+            # Extract brand name for prompt
+            brand = current_content.get("brand", "")
+            if not brand:
+                # Try to extract brand from title (first word or before first delimiter)
+                title = current_content.get("title", "")
+                if title:
+                    # Common brand extraction: first word before space, comma, or dash
+                    brand = title.split()[0] if title.split() else ""
+            
             prompt_data = {
+                "brand": brand or "Brand Name Unknown",
                 "current_title": current_content["title"],
                 "current_bullets": "\n".join([f"• {bullet}" for bullet in current_content["bullets"]]),
                 "backend_keywords": " ".join(current_content["backend_keywords"]) if current_content["backend_keywords"] else "None",
@@ -1047,6 +1060,102 @@ class SEORunner:
         
         return content
     
+    def _deduplicate_keywords_across_content(self, optimized_seo: OptimizedSEO, keyword_data: Dict[str, Any] = None) -> OptimizedSEO:
+        """
+        Remove duplicate keywords across title, bullets, and backend keywords.
+        Priority: Title > Bullets > Backend (higher priority keeps the keyword)
+        
+        Args:
+            optimized_seo: The optimized SEO content with potential duplicates
+            keyword_data: Keyword data containing search volumes for recalculation
+            
+        Returns:
+            OptimizedSEO with deduplicated keywords and recalculated stats
+        """
+        from .schemas import OptimizedContent
+        
+        logger.info("🔄 [DEDUPLICATION] Removing duplicate keywords across all content")
+        
+        # Build keyword volume map for recalculating stats
+        keyword_volumes = {}
+        if keyword_data:
+            for item in keyword_data.get("relevant_keywords", []) + keyword_data.get("design_keywords", []):
+                phrase = item.get("phrase", "")
+                volume = item.get("search_volume", 0)
+                if phrase:
+                    keyword_volumes[phrase.lower()] = volume
+            logger.info(f"   📊 Built keyword volume map with {len(keyword_volumes)} entries for stat recalculation")
+        
+        # Track used keywords (case-insensitive)
+        used_keywords = set()
+        
+        # Step 1: Track title keywords (highest priority - keep all)
+        title_keywords = optimized_seo.optimized_title.keywords_included
+        used_keywords.update([kw.lower() for kw in title_keywords])
+        logger.info(f"   📌 Title: {len(title_keywords)} keywords (all kept)")
+        
+        # Step 2: Deduplicate bullets (remove keywords already in title or previous bullets)
+        total_removed_from_bullets = 0
+        updated_bullets = []
+        
+        for i, bullet in enumerate(optimized_seo.optimized_bullets, 1):
+            original_count = len(bullet.keywords_included)
+            
+            # Keep only keywords not already used
+            unique_keywords = [
+                kw for kw in bullet.keywords_included 
+                if kw.lower() not in used_keywords
+            ]
+            
+            removed_count = original_count - len(unique_keywords)
+            total_removed_from_bullets += removed_count
+            
+            if removed_count > 0:
+                logger.info(f"   🔹 Bullet {i}: Removed {removed_count} duplicates ({original_count} → {len(unique_keywords)})")
+            
+            # Recalculate volume for the NEW deduplicated list
+            unique_volume = sum(keyword_volumes.get(kw.lower(), 0) for kw in unique_keywords)
+            
+            # Create updated bullet with unique keywords only
+            # Recalculate stats based on NEW deduplicated keywords
+            updated_bullets.append(OptimizedContent(
+                content=bullet.content,
+                keywords_included=unique_keywords,
+                keywords_duplicated_from_other_bullets=[],  # Clear after cross-content dedup
+                unique_keywords_count=len(unique_keywords),  # Recalculated count
+                improvements=bullet.improvements,
+                character_count=bullet.character_count,
+                total_search_volume=unique_volume  # Recalculated volume
+            ))
+            
+            # Add unique keywords to used set
+            used_keywords.update([kw.lower() for kw in unique_keywords])
+        
+        optimized_seo.optimized_bullets = updated_bullets
+        logger.info(f"   ✅ Bullets: Removed {total_removed_from_bullets} total duplicates")
+        
+        # Step 3: Deduplicate backend keywords (lowest priority)
+        original_backend_count = len(optimized_seo.optimized_backend_keywords)
+        
+        unique_backend = [
+            kw for kw in optimized_seo.optimized_backend_keywords
+            if kw.lower() not in used_keywords
+        ]
+        
+        removed_from_backend = original_backend_count - len(unique_backend)
+        optimized_seo.optimized_backend_keywords = unique_backend
+        
+        logger.info(f"   🔹 Backend: Removed {removed_from_backend} duplicates ({original_backend_count} → {len(unique_backend)})")
+        
+        # Summary
+        total_removed = total_removed_from_bullets + removed_from_backend
+        logger.info(f"")
+        logger.info(f"✅ [DEDUPLICATION COMPLETE]")
+        logger.info(f"   Total Duplicates Removed: {total_removed}")
+        logger.info(f"   Final Unique Keywords: {len(used_keywords)}")
+        
+        return optimized_seo
+    
     def _generate_rule_based_optimizations(
         self,
         current_content: Dict[str, Any],
@@ -1629,3 +1738,99 @@ class SEORunner:
             return content + " " + " ".join(missing_keywords)
         
         return content
+    
+    def _deduplicate_keywords_across_content(self, optimized_seo: OptimizedSEO, keyword_data: Dict[str, Any] = None) -> OptimizedSEO:
+        """
+        Remove duplicate keywords across title, bullets, and backend keywords.
+        Priority: Title > Bullets > Backend (higher priority keeps the keyword)
+        
+        Args:
+            optimized_seo: The optimized SEO content with potential duplicates
+            keyword_data: Keyword data containing search volumes for recalculation
+            
+        Returns:
+            OptimizedSEO with deduplicated keywords and recalculated stats
+        """
+        from .schemas import OptimizedContent
+        
+        logger.info("🔄 [DEDUPLICATION] Removing duplicate keywords across all content")
+        
+        # Build keyword volume map for recalculating stats
+        keyword_volumes = {}
+        if keyword_data:
+            for item in keyword_data.get("relevant_keywords", []) + keyword_data.get("design_keywords", []):
+                phrase = item.get("phrase", "")
+                volume = item.get("search_volume", 0)
+                if phrase:
+                    keyword_volumes[phrase.lower()] = volume
+            logger.info(f"   📊 Built keyword volume map with {len(keyword_volumes)} entries for stat recalculation")
+        
+        # Track used keywords (case-insensitive)
+        used_keywords = set()
+        
+        # Step 1: Track title keywords (highest priority - keep all)
+        title_keywords = optimized_seo.optimized_title.keywords_included
+        used_keywords.update([kw.lower() for kw in title_keywords])
+        logger.info(f"   📌 Title: {len(title_keywords)} keywords (all kept)")
+        
+        # Step 2: Deduplicate bullets (remove keywords already in title or previous bullets)
+        total_removed_from_bullets = 0
+        updated_bullets = []
+        
+        for i, bullet in enumerate(optimized_seo.optimized_bullets, 1):
+            original_count = len(bullet.keywords_included)
+            
+            # Keep only keywords not already used
+            unique_keywords = [
+                kw for kw in bullet.keywords_included 
+                if kw.lower() not in used_keywords
+            ]
+            
+            removed_count = original_count - len(unique_keywords)
+            total_removed_from_bullets += removed_count
+            
+            if removed_count > 0:
+                logger.info(f"   🔹 Bullet {i}: Removed {removed_count} duplicates ({original_count} → {len(unique_keywords)})")
+            
+            # Recalculate volume for the NEW deduplicated list
+            unique_volume = sum(keyword_volumes.get(kw.lower(), 0) for kw in unique_keywords)
+            
+            # Create updated bullet with unique keywords only
+            # Recalculate stats based on NEW deduplicated keywords
+            updated_bullets.append(OptimizedContent(
+                content=bullet.content,
+                keywords_included=unique_keywords,
+                keywords_duplicated_from_other_bullets=[],  # Clear after cross-content dedup
+                unique_keywords_count=len(unique_keywords),  # Recalculated count
+                improvements=bullet.improvements,
+                character_count=bullet.character_count,
+                total_search_volume=unique_volume  # Recalculated volume
+            ))
+            
+            # Add unique keywords to used set
+            used_keywords.update([kw.lower() for kw in unique_keywords])
+        
+        optimized_seo.optimized_bullets = updated_bullets
+        logger.info(f"   ✅ Bullets: Removed {total_removed_from_bullets} total duplicates")
+        
+        # Step 3: Deduplicate backend keywords (lowest priority)
+        original_backend_count = len(optimized_seo.optimized_backend_keywords)
+        
+        unique_backend = [
+            kw for kw in optimized_seo.optimized_backend_keywords
+            if kw.lower() not in used_keywords
+        ]
+        
+        removed_from_backend = original_backend_count - len(unique_backend)
+        optimized_seo.optimized_backend_keywords = unique_backend
+        
+        logger.info(f"   🔹 Backend: Removed {removed_from_backend} duplicates ({original_backend_count} → {len(unique_backend)})")
+        
+        # Summary
+        total_removed = total_removed_from_bullets + removed_from_backend
+        logger.info(f"")
+        logger.info(f"✅ [DEDUPLICATION COMPLETE]")
+        logger.info(f"   Total Duplicates Removed: {total_removed}")
+        logger.info(f"   Final Unique Keywords: {len(used_keywords)}")
+        
+        return optimized_seo

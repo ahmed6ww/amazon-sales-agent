@@ -7,7 +7,7 @@
       "product_context": {
         "url": "https://www.amazon.com/dp/B0D9C28SVB",
         "status": 200,
-        "response_size": 1891990,
+        "response_size": 1788844,
         "elements": {
           "productTitle": {
             "present": true,
@@ -31,7 +31,7 @@
               "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
               "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
               "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
-              "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
+              "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that\u2019s cruelty-free and safe for sensitive skin",
               "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
               "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals."
             ]
@@ -48,10 +48,10 @@
           "detailBullets_feature_div": {
             "present": true,
             "kv": {
-              "Package Dimensions ‏ : ‎": "7.76 x 5.83 x 2.01 inches; 1.76 ounces",
-              "Manufacturer ‏ : ‎": "Gold Water Trading",
-              "ASIN ‏ : ‎": "B0D9C28SVB",
-              "Best Sellers Rank": "#26,640 in Beauty & Personal Care ( See Top 100 in Beauty & Personal Care ) #77 in Makeup Blenders & Sponges",
+              "Package Dimensions \u200f : \u200e": "7.76 x 5.83 x 2.01 inches; 1.76 ounces",
+              "Manufacturer \u200f : \u200e": "Gold Water Trading",
+              "ASIN \u200f : \u200e": "B0D9C28SVB",
+              "Best Sellers Rank": "#26,951 in Beauty & Personal Care ( See Top 100 in Beauty & Personal Care ) #77 in Makeup Blenders & Sponges",
               "Customer Reviews": "4.6 out of 5 stars 158 ratings"
             }
           },
@@ -65,7 +65,7 @@
             ],
             "paragraphs": [
               "GWT (Gold Water Trading)",
-              "It‘s a leading provider of premium home goods and everyday consumer products.",
+              "It\u2018s a leading provider of premium home goods and everyday consumer products.",
               "We specialize in offering high-quality, innovative, and sustainable home essentials and personal care items.",
               "Our products are designed to enhance comfort, functionality, and eco-friendliness.",
               "With a commitment to excellence, GWT delivers trusted solutions that elevate your daily living experience.",
@@ -73,7 +73,7 @@
             ],
             "list_items": [
               "GWT (Gold Water Trading)",
-              "It‘s a leading provider of premium home goods and everyday consumer products.",
+              "It\u2018s a leading provider of premium home goods and everyday consumer products.",
               "We specialize in offering high-quality, innovative, and sustainable home essentials and personal care items.",
               "Our products are designed to enhance comfort, functionality, and eco-friendliness.",
               "With a commitment to excellence, GWT delivers trusted solutions that elevate your daily living experience.",
@@ -103,8 +103,8 @@
           "present": true,
           "sample_reviews": [
             "These work GREAT! I love the flat edge that makes it easy to apply foundation or liquid blush and then the pointed end works well for around the eye makeup. The sponge is does not suck up product and waste it, but allows the product to be blended into the skin. They appear to be well made and wash up very easily. The value is worth more than the cost. They are soft to the touch and wash up very easily. I can see these lasting for a long time. Solid product and I highly recommend.",
-            "Perfect Blending Sponges – Soft, Effective, and Affordable!",
-            "I love this set of GWT makeup sponges! They’re incredibly soft and bouncy—almost like marshmallows—and blend my foundation beautifully without soaking up too much product. The different shapes make it easy to reach every part of my face, especially around the eyes and nose. I also appreciate that they’re latex-free and gentle on my sensitive skin. Whether used wet or dry, they deliver a flawless finish every time. Great quality for the price—highly recommend!",
+            "Perfect Blending Sponges \u2013 Soft, Effective, and Affordable!",
+            "I love this set of GWT makeup sponges! They\u2019re incredibly soft and bouncy\u2014almost like marshmallows\u2014and blend my foundation beautifully without soaking up too much product. The different shapes make it easy to reach every part of my face, especially around the eyes and nose. I also appreciate that they\u2019re latex-free and gentle on my sensitive skin. Whether used wet or dry, they deliver a flawless finish every time. Great quality for the price\u2014highly recommend!",
             "Great set of sponges - very durable and sturdy",
             "These are exactly like the other name brand ones that cost so much more! They work great! I will buy again!"
           ],
@@ -142,8 +142,8 @@
             "competitor_rank_avg": 2.9,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); eligible category; root: blender"
         },
         {
           "phrase": "makeup sponges beauty blender",
@@ -161,7 +161,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "beauty blender makeup sponge",
@@ -179,7 +179,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "beauty blender",
@@ -197,7 +197,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "beauty blender sponges",
@@ -215,7 +215,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Low search volume (<100)"
+          "opportunity_reason": "Low title density but low search volume (<100)"
         },
         {
           "phrase": "beauty blender sponge",
@@ -232,8 +232,8 @@
             "competitor_rank_avg": 4.2,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "sponge blender",
@@ -251,7 +251,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "blending sponge makeup",
@@ -269,7 +269,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "og beauty blender",
@@ -286,8 +286,8 @@
             "competitor_rank_avg": 4.6,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: blender"
         },
         {
           "phrase": "blender makeup sponge",
@@ -305,7 +305,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "make up sponges prime beauty blender",
@@ -323,7 +323,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "beauty sponge blender",
@@ -341,7 +341,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Low search volume (<100)"
+          "opportunity_reason": "Low title density but low search volume (<100)"
         },
         {
           "phrase": "beauty blenders",
@@ -358,8 +358,8 @@
             "competitor_rank_avg": 5.2,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); eligible category; root: blender"
         },
         {
           "phrase": "beauty blender og",
@@ -376,8 +376,8 @@
             "competitor_rank_avg": 5.3,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: blender"
         },
         {
           "phrase": "foundation beauty blender",
@@ -395,7 +395,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "makeup beauty blender",
@@ -412,8 +412,8 @@
             "competitor_rank_avg": 5.6,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: blender"
         },
         {
           "phrase": "makeup blending sponge",
@@ -431,7 +431,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "beauty makeup sponge",
@@ -449,7 +449,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "foundation blender sponge",
@@ -467,7 +467,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Low search volume (<100)"
+          "opportunity_reason": "Low title density but low search volume (<100)"
         },
         {
           "phrase": "soft beauty blender",
@@ -484,8 +484,8 @@
             "competitor_rank_avg": 6.7,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: blender"
         },
         {
           "phrase": "blender makeup",
@@ -503,17 +503,17 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
-          "phrase": "beauty blender®",
-          "search_volume": null,
+          "phrase": "beauty blender\u2122",
+          "search_volume": 0,
           "root": "blender",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "opportunity_decision": "No",
-          "opportunity_reason": "Insufficient data (missing search volume/title density)"
+          "opportunity_reason": "No search volume / insufficient data"
         },
         {
           "phrase": "beauty blender original makeup sponge",
@@ -530,8 +530,8 @@
             "competitor_rank_avg": 6.9,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "make up blender",
@@ -548,8 +548,8 @@
             "competitor_rank_avg": 6.9,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: blender"
         },
         {
           "phrase": "beauty sponge",
@@ -567,7 +567,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "pro beauty sponge",
@@ -585,7 +585,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "blending sponges",
@@ -603,7 +603,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Low search volume (<100)"
+          "opportunity_reason": "Low title density but low search volume (<100)"
         },
         {
           "phrase": "beauty sponges for makeup",
@@ -620,8 +620,8 @@
             "competitor_rank_avg": 7.7,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "sponge makeup",
@@ -638,8 +638,8 @@
             "competitor_rank_avg": 7.7,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "spong make up",
@@ -657,7 +657,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Misspelling/derivative and no search volume"
+          "opportunity_reason": "Misspelling/derivative term and no search volume"
         },
         {
           "phrase": "professional beauty",
@@ -675,7 +675,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "makeup sponges for blending foundation",
@@ -693,12 +693,12 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "blender beauty sponge",
           "search_volume": 210,
-          "root": "sponge",
+          "root": "blender",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
@@ -710,8 +710,8 @@
             "competitor_rank_avg": 8.2,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: blender"
         },
         {
           "phrase": "makeup blender sponge",
@@ -728,8 +728,8 @@
             "competitor_rank_avg": 8.6,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "make up blender sponges for face",
@@ -746,8 +746,8 @@
             "competitor_rank_avg": 8.7,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "sponge makeup blender",
@@ -765,7 +765,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Low search volume (<100)"
+          "opportunity_reason": "Low title density but low search volume (<100)"
         },
         {
           "phrase": "beauty makeup sponge blender",
@@ -782,8 +782,8 @@
             "competitor_rank_avg": 9.0,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "make up sponges for women",
@@ -801,7 +801,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "makeup blender",
@@ -819,7 +819,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "liquid foundation sponge",
@@ -836,8 +836,8 @@
             "competitor_rank_avg": 9.7,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "blending sponge",
@@ -855,7 +855,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "make up sponge",
@@ -872,8 +872,8 @@
             "competitor_rank_avg": 9.8,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "sponges for foundation",
@@ -891,12 +891,12 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Low search volume (<100)"
+          "opportunity_reason": "Low search volume (<100) and title density too high (>2)"
         },
         {
           "phrase": "beauty blend",
           "search_volume": 164,
-          "root": "blend",
+          "root": "beauty",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
@@ -909,7 +909,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "make up sponges for face foundation",
@@ -926,8 +926,8 @@
             "competitor_rank_avg": 10.2,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "makeup sponges for blending",
@@ -944,8 +944,8 @@
             "competitor_rank_avg": 10.2,
             "competitor_performance_score": 10.0
           },
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "beauty sponge for women",
@@ -963,7 +963,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "beauty sponges",
@@ -981,7 +981,7 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "beauty blender makeup",
@@ -991,7 +991,7 @@
           "relevancy_score": 10,
           "intent_score": 3,
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "No search volume / insufficient data"
         },
         {
           "phrase": "foundation sponge blender",
@@ -1009,662 +1009,910 @@
             "competitor_performance_score": 10.0
           },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
-          "phrase": "make up sponges®",
+          "phrase": "make up sponges\u2122",
+          "search_volume": null,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
-          "root": "sponge",
+          "title_density": null,
+          "cpr": null,
+          "competition": {},
           "opportunity_decision": "No",
           "opportunity_reason": "Insufficient data (missing search volume/title density)"
         },
         {
           "phrase": "beauty blender foundation",
+          "search_volume": 327,
+          "root": "foundation",
           "category": "Relevant",
           "relevancy_score": 9,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 327,
           "cpr": 8,
-          "competition": {},
-          "root": "foundation",
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 10.9,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: foundation"
         },
         {
           "phrase": "blending",
+          "search_volume": 0,
+          "root": "blending",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 18,
-          "search_volume": 0,
           "cpr": 8,
-          "competition": {},
-          "root": "blending",
+          "competition": {
+            "competing_products": 8000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.0,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
           "opportunity_reason": "No search volume"
         },
         {
           "phrase": "make up sponge blender",
-          "category": "Design-Specific",
-          "relevancy_score": 9,
-          "intent_score": 2,
-          "title_density": 0,
           "search_volume": 0,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 9,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 8,
-          "competition": {},
-          "root": "blender",
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.0,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "foundation sponge",
+          "search_volume": 3912,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 3,
-          "search_volume": 3912,
           "cpr": 30,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 3000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.3,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "makeup sponge blender set",
+          "search_volume": 0,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 2,
-          "search_volume": 0,
           "cpr": 8,
-          "competition": {},
-          "root": "set",
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.4,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Low title density but no search volume"
         },
         {
           "phrase": "foundation sponge for liquid makeup",
+          "search_volume": 405,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 405,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.6,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "eye beauty blender",
+          "search_volume": 189,
+          "root": "blender",
           "category": "Relevant",
           "relevancy_score": 7,
-          "intent_score": 1,
+          "intent_score": 2,
           "title_density": 0,
-          "search_volume": 189,
           "cpr": 8,
-          "competition": {},
-          "root": "blender",
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
+          "competition": {
+            "competing_products": 30000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.6,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: blender"
         },
         {
           "phrase": "sponge make up",
+          "search_volume": 133,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 133,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.7,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "makeup sponges blender",
+          "search_volume": 68,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 1,
-          "search_volume": 68,
           "cpr": 8,
-          "competition": {},
-          "root": "blender",
+          "competition": {
+            "competing_products": 6000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.8,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "Low search volume (<100)"
+          "opportunity_reason": "Low title density but low search volume (<100)"
         },
         {
           "phrase": "make up sponge for foundation",
+          "search_volume": 0,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 0,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.9,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "makeup sponge set",
-          "category": "Design-Specific",
+          "search_volume": 2036,
+          "root": "sponge",
+          "category": "Relevant",
           "relevancy_score": 9,
           "intent_score": 2,
           "title_density": 25,
-          "search_volume": 2036,
           "cpr": 35,
-          "competition": {},
-          "root": "set",
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.9,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "makeup sponge blender",
+          "search_volume": 66,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 4,
-          "search_volume": 66,
           "cpr": 8,
-          "competition": {},
-          "root": "blender",
+          "competition": {
+            "competing_products": 3000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 11.9,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Low search volume (<100) and title density too high (>2)"
         },
         {
           "phrase": "blending makeup",
+          "search_volume": 192,
+          "root": "blending",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 1,
-          "search_volume": 192,
           "cpr": 8,
-          "competition": {},
-          "root": "blending",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 20000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 12.0,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); eligible category; root: blending"
         },
         {
           "phrase": "make sponge blender",
+          "search_volume": 42,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 42,
           "cpr": 8,
-          "competition": {},
-          "root": "blender",
+          "competition": {
+            "competing_products": 8000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 12.0,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "soft makeup sponge",
-          "category": "Design-Specific",
+          "search_volume": 211,
+          "root": "sponge",
+          "category": "Relevant",
           "relevancy_score": 9,
           "intent_score": 2,
           "title_density": 1,
-          "search_volume": 211,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 8000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 12.4,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "makeup sponge",
+          "search_volume": 60124,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 31,
-          "search_volume": 60124,
           "cpr": 106,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 12.7,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "blending sponge for makeup",
+          "search_volume": 688,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 688,
           "cpr": 10,
-          "competition": {},
-          "root": "sponge",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 6000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 12.8,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "makeup soft sponge",
+          "search_volume": 32,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 32,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 3000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 12.9,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
-          "phrase": "make up sponge®",
+          "phrase": "make up sponge\u2122",
+          "search_volume": null,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
-          "root": "sponge",
+          "title_density": null,
+          "cpr": null,
+          "competition": {},
           "opportunity_decision": "No",
           "opportunity_reason": "Insufficient data (missing search volume/title density)"
         },
         {
           "phrase": "professional makeup sponges",
+          "search_volume": 0,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 0,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 7000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 13.1,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "sponges make up",
+          "search_volume": 254,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 254,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 13.4,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "make sponges for foundation",
+          "search_volume": 300,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 300,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 13.6,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Misspelling/derivative term (\u201cmake sponges\u201d appears to be a misspelling of \u201cmakeup sponges\u201d)"
         },
         {
           "phrase": "makeup sponges for foundation",
+          "search_volume": 6527,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 2,
-          "search_volume": 6527,
           "cpr": 33,
-          "competition": {},
-          "root": "sponge",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 13.9,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "blender sponge",
+          "search_volume": 834,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 5,
-          "search_volume": 834,
           "cpr": 11,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 13.9,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "make up beauty blender sponge",
+          "search_volume": 40,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 40,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 14.0,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "sponges makeup blender",
+          "search_volume": 1036,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 1036,
           "cpr": 25,
-          "competition": {},
-          "root": "blender",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 6000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 14.0,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "mini beauty blender",
+          "search_volume": 1337,
+          "root": "blender",
           "category": "Design-Specific",
           "relevancy_score": 4,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 3,
-          "search_volume": 1337,
           "cpr": 27,
-          "competition": {},
-          "root": "blender",
+          "competition": {
+            "competing_products": 2000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 14.0,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "blending makeup sponge",
+          "search_volume": 0,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 0,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 14.2,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "make sponge",
+          "search_volume": 272,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 272,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 4000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 14.2,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Misspelling/derivative term (likely intended \u201cmakeup sponge\u201d)"
         },
         {
           "phrase": "sponges foundation",
+          "search_volume": 0,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 0,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 3000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 14.3,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "make up spong",
+          "search_volume": 97,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 97,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 14.3,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "Misspelling/derivative and low search volume"
+          "opportunity_reason": "Misspelling/derivative term and low search volume (<100)"
         },
         {
           "phrase": "makeup blender sponges",
+          "search_volume": 0,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 1,
-          "search_volume": 0,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 14.4,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Low title density but no search volume"
         },
         {
           "phrase": "soft beauty blender sponge",
-          "category": "Design-Specific",
-          "relevancy_score": 10,
-          "intent_score": 2,
-          "title_density": 0,
           "search_volume": 64,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
           "cpr": 8,
-          "competition": {},
-          "root": "blender",
+          "competition": {
+            "competing_products": 3000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 14.6,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "sponge for make up",
+          "search_volume": 214,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 214,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 6000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 14.6,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "make sponges",
+          "search_volume": 60,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 60,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 695,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 14.8,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Misspelling/derivative term and low search volume (<100)"
         },
         {
           "phrase": "pow pow beauty blender",
-          "category": "Design-Specific",
-          "relevancy_score": 9,
-          "intent_score": 2,
-          "title_density": 0,
           "search_volume": 291,
+          "root": null,
+          "category": "Irrelevant",
+          "relevancy_score": 9,
+          "intent_score": 0,
+          "title_density": 0,
           "cpr": 8,
-          "competition": {},
-          "root": "blender",
+          "competition": {
+            "competing_products": 297,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 15.0,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "make up sponges for foundation",
+          "search_volume": 2619,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 2619,
           "cpr": 27,
-          "competition": {},
-          "root": "sponge",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 3000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 15.0,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "latex free beauty blender",
+          "search_volume": 144,
+          "root": "blender",
           "category": "Design-Specific",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 1,
           "title_density": 0,
-          "search_volume": 144,
           "cpr": 8,
-          "competition": {},
-          "root": "blender",
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
+          "competition": {
+            "competing_products": 986,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 15.2,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible (design-specific); root: blender"
         },
         {
           "phrase": "make up blending sponges for face",
+          "search_volume": 218,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 218,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 3000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 15.4,
+            "competitor_performance_score": 10.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "sponges for makeup application",
+          "search_volume": 17,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 1,
           "title_density": 1,
-          "search_volume": 17,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 8000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 15.7,
+            "competitor_performance_score": 10.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "Low search volume (<100)"
+          "opportunity_reason": "Low title density but low search volume (<100)"
         },
         {
           "phrase": "boun boun multi color blender sponge set",
-          "category": "Design-Specific",
-          "relevancy_score": 10,
-          "intent_score": 3,
-          "title_density": 0,
           "search_volume": 102,
-          "cpr": 8,
-          "competition": {},
-          "root": "set",
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
-        },
-        {
-          "phrase": "beauty professional",
-          "category": "Outlier",
-          "relevancy_score": 10,
-          "intent_score": 3,
-          "title_density": 0,
-          "search_volume": 54,
-          "cpr": 8,
-          "competition": {},
-          "root": "professional",
-          "opportunity_decision": "No",
-          "opportunity_reason": "Outlier/irrelevant to target"
-        },
-        {
-          "phrase": "sponge latex free",
-          "category": "Design-Specific",
-          "relevancy_score": 9,
-          "intent_score": 2,
-          "title_density": 0,
-          "search_volume": 114,
-          "cpr": 8,
-          "competition": {},
           "root": "sponge",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
-        },
-        {
-          "phrase": "makeup spong",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 266,
           "cpr": 8,
-          "competition": {},
-          "root": "sponge",
+          "competition": {
+            "competing_products": 11,
+            "ranking_competitors": 7,
+            "competitor_rank_avg": 6.6,
+            "competitor_performance_score": 8.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
+        },
+        {
+          "phrase": "beauty professional",
+          "search_volume": 54,
+          "root": null,
+          "category": "Outlier",
+          "relevancy_score": 10,
+          "intent_score": 0,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 100000,
+            "ranking_competitors": 7,
+            "competitor_rank_avg": 6.6,
+            "competitor_performance_score": 8.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "Misspelling/derivative despite zero title density"
+          "opportunity_reason": "Outlier/irrelevant category"
+        },
+        {
+          "phrase": "sponge latex free",
+          "search_volume": 114,
+          "root": "sponge",
+          "category": "Design-Specific",
+          "relevancy_score": 9,
+          "intent_score": 1,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 741,
+            "ranking_competitors": 6,
+            "competitor_rank_avg": 13.0,
+            "competitor_performance_score": 8.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); design-specific; root: sponge"
+        },
+        {
+          "phrase": "makeup spong",
+          "search_volume": 266,
+          "root": "sponge",
+          "category": "Relevant",
+          "relevancy_score": 10,
+          "intent_score": 3,
+          "title_density": 0,
+          "cpr": 8,
+          "competition": {
+            "competing_products": 5000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 16.4,
+            "competitor_performance_score": 8.0
+          },
+          "opportunity_decision": "No",
+          "opportunity_reason": "Misspelling/derivative term (\u201cspong\u201d)"
         },
         {
           "phrase": "makeup blender set",
+          "search_volume": 0,
+          "root": "blender",
           "category": "Design-Specific",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 1,
           "title_density": 0,
-          "search_volume": 0,
           "cpr": 8,
-          "competition": {},
-          "root": "set",
+          "competition": {
+            "competing_products": 10000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 16.6,
+            "competitor_performance_score": 8.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "foundation blender",
+          "search_volume": 291,
+          "root": "blender",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 1,
-          "search_volume": 291,
           "cpr": 8,
-          "competition": {},
-          "root": "blender",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 20000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 16.6,
+            "competitor_performance_score": 8.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); eligible category; root: blender"
         },
         {
           "phrase": "mini beauty blender sponge",
+          "search_volume": 153,
+          "root": "sponge",
           "category": "Design-Specific",
           "relevancy_score": 7,
           "intent_score": 1,
           "title_density": 0,
-          "search_volume": 153,
           "cpr": 8,
-          "competition": {},
-          "root": "blender",
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
+          "competition": {
+            "competing_products": 1000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 17.3,
+            "competitor_performance_score": 8.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); design-specific; root: sponge"
         },
         {
           "phrase": "make up sponges set",
+          "search_volume": 147,
+          "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 0,
-          "search_volume": 147,
           "cpr": 8,
-          "competition": {},
-          "root": "set",
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "competition": {
+            "competing_products": 6000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 17.4,
+            "competitor_performance_score": 8.0
+          },
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "foundation blending",
+          "search_volume": 82,
+          "root": "foundation",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
           "title_density": 4,
-          "search_volume": 82,
           "cpr": 8,
-          "competition": {},
-          "root": "blending",
+          "competition": {
+            "competing_products": 80000,
+            "ranking_competitors": 9,
+            "competitor_rank_avg": 17.6,
+            "competitor_performance_score": 8.0
+          },
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2) and low search volume"
+          "opportunity_reason": "Low search volume (<100) and title density too high (>2)"
         },
         {
           "phrase": "large makeup sponges for foundation",
           "search_volume": 190,
           "root": "sponge",
-          "category": "Irrelevant",
+          "category": "Design-Specific",
           "relevancy_score": 7,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); design-specific; root: sponge"
         },
         {
           "phrase": "beauty blender makeup sponges",
@@ -1676,8 +1924,8 @@
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "blending sponges for makeup",
@@ -1690,7 +1938,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "xl beauty blender",
@@ -1698,25 +1946,25 @@
           "root": "blender",
           "category": "Design-Specific",
           "relevancy_score": 7,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but derivative/brand-specific"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); design-specific; root: blender"
         },
         {
           "phrase": "beauty blender latex free",
           "search_volume": 0,
           "root": "blender",
-          "category": "Design-Specific",
+          "category": "Relevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 3,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "make up sponge set",
@@ -1728,8 +1976,8 @@
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "makeup sponge for foundation",
@@ -1741,8 +1989,8 @@
           "title_density": 1,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "beauty blender set",
@@ -1750,12 +1998,12 @@
           "root": "blender",
           "category": "Design-Specific",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 1,
           "title_density": 1,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "No",
-          "opportunity_reason": "Derivative/brand-specific term"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); design-specific; root: blender"
         },
         {
           "phrase": "sponge for makeup",
@@ -1767,21 +2015,8 @@
           "title_density": 1,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
-        },
-        {
-          "phrase": "makeup sponges set",
-          "search_volume": 71,
-          "root": "sponge",
-          "category": "Irrelevant",
-          "relevancy_score": 4,
-          "intent_score": 0,
-          "title_density": 3,
-          "cpr": 8,
-          "competition": {},
-          "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "free beauty",
@@ -1794,7 +2029,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Outlier/irrelevant to target"
+          "opportunity_reason": "Outlier/irrelevant category"
         },
         {
           "phrase": "make-up sponges",
@@ -1806,8 +2041,8 @@
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "sponges for makeup",
@@ -1815,12 +2050,12 @@
           "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "beauty sponge set",
@@ -1833,7 +2068,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "makeup sponge foundation",
@@ -1846,7 +2081,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "makeup blending",
@@ -1872,20 +2107,20 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Outlier/irrelevant to target"
+          "opportunity_reason": "Outlier/irrelevant category"
         },
         {
           "phrase": "foundation application",
           "search_volume": 152,
-          "root": "application",
+          "root": "foundation",
           "category": "Design-Specific",
           "relevancy_score": 7,
           "intent_score": 1,
           "title_density": 1,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); design-specific; root: foundation"
         },
         {
           "phrase": "beauty blender 10",
@@ -1898,7 +2133,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "latex free makeup sponges",
@@ -1906,25 +2141,25 @@
           "root": "sponge",
           "category": "Design-Specific",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 1,
           "title_density": 1,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Low title density (<=2) and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); design-specific; root: sponge"
         },
         {
           "phrase": "blender sponges",
           "search_volume": 98,
-          "root": "sponge",
-          "category": "Relevant",
+          "root": "blender",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 9,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Low search volume and high title density"
+          "opportunity_reason": "Outlier/irrelevant category and low search volume/high title density"
         },
         {
           "phrase": "sponges makeup",
@@ -1936,8 +2171,8 @@
           "title_density": 0,
           "cpr": 12,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "make up application sponges",
@@ -1945,12 +2180,12 @@
           "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "xl beauty blender sponge",
@@ -1958,12 +2193,12 @@
           "root": "sponge",
           "category": "Design-Specific",
           "relevancy_score": 9,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "beauty blender sponge set",
@@ -1976,12 +2211,12 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "makeup sponges for foundation and concealer",
           "search_volume": 0,
-          "root": "sponge",
+          "root": "foundation",
           "category": "Relevant",
           "relevancy_score": 10,
           "intent_score": 3,
@@ -1989,7 +2224,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "No search volume"
+          "opportunity_reason": "Zero title density but no search volume"
         },
         {
           "phrase": "powder puff and beauty blender",
@@ -2002,7 +2237,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "sponge foundation",
@@ -2015,7 +2250,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "up beauty",
@@ -2028,7 +2263,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "makeup sp",
@@ -2041,7 +2276,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "facemade 6 pcs makeup sponges set",
@@ -2049,12 +2284,12 @@
           "root": "sponge",
           "category": "Design-Specific",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Brand/model-specific and low search volume"
+          "opportunity_reason": "Design-specific but low search volume (<100)"
         },
         {
           "phrase": "beakey makeup sponge 5 pcs set",
@@ -2066,8 +2301,8 @@
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "No",
-          "opportunity_reason": "Derivative/brand-specific term"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); design-specific; root: sponge"
         },
         {
           "phrase": "vegan blender",
@@ -2075,12 +2310,12 @@
           "root": "blender",
           "category": "Outlier",
           "relevancy_score": 7,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Outlier/irrelevant to target"
+          "opportunity_reason": "Outlier/irrelevant category and low search volume (<100)"
         },
         {
           "phrase": "quick beauty",
@@ -2093,7 +2328,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Outlier/irrelevant to target"
+          "opportunity_reason": "Outlier/irrelevant category"
         },
         {
           "phrase": "s beauty",
@@ -2106,7 +2341,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Outlier/irrelevant to target"
+          "opportunity_reason": "Outlier/irrelevant category"
         },
         {
           "phrase": "stocking stuffers beauty",
@@ -2119,7 +2354,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Outlier/irrelevant to target"
+          "opportunity_reason": "Outlier/irrelevant category and low search volume (<100)"
         },
         {
           "phrase": "beaky 5 pcs makeup sponge set",
@@ -2127,17 +2362,17 @@
           "root": "sponge",
           "category": "Design-Specific",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "No",
-          "opportunity_reason": "Derivative/brand-specific term"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); design-specific; root: sponge"
         },
         {
           "phrase": "makeup stocking stuffer",
           "search_volume": 41,
-          "root": "stuff",
+          "root": "stuffer",
           "category": "Outlier",
           "relevancy_score": 8,
           "intent_score": 0,
@@ -2145,7 +2380,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Outlier/irrelevant to target"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "makeup blender sponge set",
@@ -2158,7 +2393,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "multi pack beauty blender set",
@@ -2171,7 +2406,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "makeup sponge beauty sponge",
@@ -2183,8 +2418,8 @@
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "foundation sponges",
@@ -2192,12 +2427,12 @@
           "root": "sponge",
           "category": "Relevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "beakey 5 pcs makeup blender beauty sponge set",
@@ -2210,7 +2445,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Derivative/brand-specific and low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "blender for makeup",
@@ -2223,7 +2458,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "make up sponges",
@@ -2236,7 +2471,7 @@
           "cpr": 34,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "makeup sponges for",
@@ -2249,7 +2484,7 @@
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "makeup sponges",
@@ -2262,20 +2497,20 @@
           "cpr": 47,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "High title density (>2)"
+          "opportunity_reason": "Title density too high (>2)"
         },
         {
           "phrase": "beakey makeup sponge 5 pcs set, latex-free boun boun beauty sponge for blending, makeup sponges for",
           "search_volume": 21,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Relevant",
           "relevancy_score": 8,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Derivative/brand-specific and low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "makeup foundation sponge",
@@ -2283,12 +2518,12 @@
           "root": "sponge",
           "category": "Design-Specific",
           "relevancy_score": 9,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); design-specific; root: sponge"
         },
         {
           "phrase": "flat beauty blender",
@@ -2296,12 +2531,12 @@
           "root": "blender",
           "category": "Design-Specific",
           "relevancy_score": 7,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "rt makeup sponge",
@@ -2313,8 +2548,8 @@
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "No",
-          "opportunity_reason": "Derivative/brand-specific term"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: sponge"
         },
         {
           "phrase": "foundation applicator for liquid makeup",
@@ -2326,8 +2561,8 @@
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: applicator"
         },
         {
           "phrase": "beauty stocking stuffers",
@@ -2335,12 +2570,12 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: stocking"
         },
         {
           "phrase": "stocking stuffers makeup",
@@ -2348,12 +2583,12 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "make up stocking stuffers",
@@ -2361,12 +2596,12 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "makeup deal",
@@ -2374,12 +2609,12 @@
           "root": "deal",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: deal"
         },
         {
           "phrase": "luxury makeup",
@@ -2391,8 +2626,8 @@
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: makeup"
         },
         {
           "phrase": "health and beauty stocking stuffers",
@@ -2400,12 +2635,12 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: stocking"
         },
         {
           "phrase": "adult stocking stuffers for women",
@@ -2413,7 +2648,7 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
@@ -2426,12 +2661,12 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Low search volume (<100)"
         },
         {
           "phrase": "amazon stocking stuffers for women",
@@ -2439,12 +2674,12 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Low search volume (<100)"
         },
         {
           "phrase": "stocking stuffers for the wife",
@@ -2452,12 +2687,12 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Low search volume (<100)"
         },
         {
           "phrase": "ultra beauty",
@@ -2465,12 +2700,12 @@
           "root": "beauty",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 1,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "No",
-          "opportunity_reason": "Brand/misspelling term (avoid derivative brand queries)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Low title density (<=2) and decent volume (>=100); eligible category; root: beauty"
         },
         {
           "phrase": "women beauty stocking stuffers",
@@ -2478,12 +2713,12 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: stocking"
         },
         {
           "phrase": "stocking stuffers for adults women",
@@ -2491,12 +2726,12 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 2,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Low search volume (<100)"
+          "opportunity_reason": "Low title density but low search volume (<100)"
         },
         {
           "phrase": "cruelty free vegan makeup",
@@ -2508,8 +2743,8 @@
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: makeup"
         },
         {
           "phrase": "top stocking stuffers for women",
@@ -2517,25 +2752,25 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: stocking"
         },
         {
           "phrase": "stocking stuffer for women 2024",
           "search_volume": 111,
-          "root": "stocking",
+          "root": "stuffer",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: stuffer"
         },
         {
           "phrase": "stocking stuffers for young women",
@@ -2543,12 +2778,12 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: stocking"
         },
         {
           "phrase": "full beauty",
@@ -2566,15 +2801,15 @@
         {
           "phrase": "stocking stuffer set",
           "search_volume": 105,
-          "root": "stocking",
+          "root": "set",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: set"
         },
         {
           "phrase": "beauty stocking stuffers for teens",
@@ -2582,25 +2817,25 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: stocking"
         },
         {
           "phrase": "stocking stuffers set",
           "search_volume": 90,
-          "root": "stocking",
+          "root": "set",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "beauty products stocking stuffers",
@@ -2608,12 +2843,12 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "stocking stuffers for women 2023",
@@ -2621,38 +2856,38 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: stocking"
         },
         {
           "phrase": "stocking stuffer beauty",
           "search_volume": 19,
-          "root": "stuffer",
+          "root": "beauty",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "beauty stocking stuffer",
           "search_volume": 35,
-          "root": "stuffer",
+          "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "2024 stocking stuffers for women",
@@ -2660,12 +2895,12 @@
           "root": "stocking",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
-          "opportunity_decision": "Opportunity",
-          "opportunity_reason": "Zero title density and decent search volume (>=100)"
+          "opportunity_decision": "Yes",
+          "opportunity_reason": "Zero title density and decent volume (>=100); eligible category; root: stocking"
         },
         {
           "phrase": "stocking stuffer makeup",
@@ -2673,21 +2908,20 @@
           "root": "makeup",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
           "cpr": 8,
           "competition": {},
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "makeup pro",
-          "search_volume": 0,
-          "root": "makeup",
           "category": "Irrelevant",
           "relevancy_score": 2,
           "intent_score": 0,
           "title_density": 2,
+          "search_volume": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 10000,
@@ -2695,17 +2929,17 @@
             "competitor_rank_avg": 79.2,
             "competitor_performance_score": 2.4
           },
+          "root": "makeup",
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "mini makeup stocking stuffers",
-          "search_volume": 23,
-          "root": "makeup",
           "category": "Relevant",
           "relevancy_score": 2,
           "intent_score": 0,
           "title_density": 0,
+          "search_volume": 23,
           "cpr": 8,
           "competition": {
             "competing_products": 101,
@@ -2713,17 +2947,17 @@
             "competitor_rank_avg": 4.0,
             "competitor_performance_score": 2.0
           },
+          "root": "mini",
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "dr makeup",
-          "search_volume": 164,
-          "root": "makeup",
           "category": "Irrelevant",
           "relevancy_score": 2,
           "intent_score": 0,
           "title_density": 0,
+          "search_volume": 164,
           "cpr": 8,
           "competition": {
             "competing_products": 1000,
@@ -2731,17 +2965,17 @@
             "competitor_rank_avg": 5.0,
             "competitor_performance_score": 2.0
           },
+          "root": "dr",
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "m co beauty",
-          "search_volume": 433,
-          "root": "beauty",
           "category": "Irrelevant",
           "relevancy_score": 2,
           "intent_score": 0,
           "title_density": 0,
+          "search_volume": 433,
           "cpr": 8,
           "competition": {
             "competing_products": 379,
@@ -2749,17 +2983,17 @@
             "competitor_rank_avg": 7.0,
             "competitor_performance_score": 2.0
           },
+          "root": "m",
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "make uo",
-          "search_volume": 347,
-          "root": "makeup",
           "category": "Irrelevant",
           "relevancy_score": 2,
           "intent_score": 0,
           "title_density": 0,
+          "search_volume": 347,
           "cpr": 8,
           "competition": {
             "competing_products": 314,
@@ -2767,49 +3001,53 @@
             "competitor_rank_avg": 9.0,
             "competitor_performance_score": 2.0
           },
+          "root": "make",
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant/misspelling"
+          "opportunity_reason": "Irrelevant category (misspelling)"
         },
         {
           "phrase": "stocking stuffers for women beauty",
-          "search_volume": 44,
-          "root": "stuffers",
           "category": "Relevant",
           "relevancy_score": 2,
           "intent_score": 0,
           "title_density": 0,
+          "search_volume": 44,
           "cpr": 8,
           "competition": {
             "competing_products": 1000,
             "ranking_competitors": 1,
             "competitor_rank_avg": 10.0,
             "competitor_performance_score": 2.0
-          }
+          },
+          "root": "stocking",
+          "opportunity_decision": "No",
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "makeup sponge set foonbe blender sponges",
-          "search_volume": 89,
-          "root": "makeup",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 5,
           "intent_score": 0,
           "title_density": 1,
+          "search_volume": 89,
           "cpr": 8,
           "competition": {
             "competing_products": 380,
             "ranking_competitors": 9,
             "competitor_rank_avg": 102.8,
             "competitor_performance_score": 2.0
-          }
+          },
+          "root": "makeup",
+          "opportunity_decision": "No",
+          "opportunity_reason": "Irrelevant category and low search volume (<100)"
         },
         {
           "phrase": "beauty",
-          "search_volume": 144691,
-          "root": "beauty",
           "category": "Outlier",
           "relevancy_score": 2,
           "intent_score": 0,
           "title_density": 14,
+          "search_volume": 144691,
           "cpr": 201,
           "competition": {
             "competing_products": 200000,
@@ -2817,17 +3055,17 @@
             "competitor_rank_avg": 137.9,
             "competitor_performance_score": 2.0
           },
+          "root": "beauty",
           "opportunity_decision": "No",
-          "opportunity_reason": "Outlier/irrelevant to target"
+          "opportunity_reason": "Outlier/irrelevant category"
         },
         {
           "phrase": "stocking stuffers for women 2024",
-          "search_volume": 23,
-          "root": "stuffers",
           "category": "Relevant",
           "relevancy_score": 5,
-          "intent_score": 0,
+          "intent_score": 1,
           "title_density": 0,
+          "search_volume": 23,
           "cpr": 8,
           "competition": {
             "competing_products": 917,
@@ -2835,17 +3073,17 @@
             "competitor_rank_avg": 85.0,
             "competitor_performance_score": 1.6
           },
+          "root": "stocking",
           "opportunity_decision": "No",
-          "opportunity_reason": "Zero title density but low search volume"
+          "opportunity_reason": "Zero title density but low search volume (<100)"
         },
         {
           "phrase": "makeup stuff for women",
-          "search_volume": 228,
-          "root": "makeup",
           "category": "Irrelevant",
           "relevancy_score": 2,
           "intent_score": 0,
           "title_density": 0,
+          "search_volume": 228,
           "cpr": 8,
           "competition": {
             "competing_products": 9000,
@@ -2853,17 +3091,17 @@
             "competitor_rank_avg": 103.5,
             "competitor_performance_score": 1.6
           },
+          "root": "makeup",
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "must have beauty products",
-          "search_volume": 213,
-          "root": "beauty",
           "category": "Irrelevant",
           "relevancy_score": 2,
           "intent_score": 0,
           "title_density": 0,
+          "search_volume": 213,
           "cpr": 8,
           "competition": {
             "competing_products": 9000,
@@ -2871,17 +3109,17 @@
             "competitor_rank_avg": 113.0,
             "competitor_performance_score": 1.6
           },
+          "root": "must",
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category"
         },
         {
           "phrase": "wonder makeup",
-          "search_volume": 53,
-          "root": "makeup",
           "category": "Irrelevant",
           "relevancy_score": 2,
           "intent_score": 0,
           "title_density": 0,
+          "search_volume": 53,
           "cpr": 8,
           "competition": {
             "competing_products": 6000,
@@ -2889,17 +3127,17 @@
             "competitor_rank_avg": 144.0,
             "competitor_performance_score": 1.6
           },
+          "root": "wonder",
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category and low search volume (<100)"
         },
         {
           "phrase": "makeup to",
-          "search_volume": 0,
-          "root": "makeup",
           "category": "Irrelevant",
           "relevancy_score": 2,
           "intent_score": 0,
           "title_density": 0,
+          "search_volume": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 100000,
@@ -2907,17 +3145,17 @@
             "competitor_rank_avg": 110.8,
             "competitor_performance_score": 1.2
           },
+          "root": "makeup",
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category and no search volume"
         },
         {
           "phrase": "non toxic beauty products",
-          "search_volume": 99,
-          "root": "beauty",
           "category": "Irrelevant",
           "relevancy_score": 2,
           "intent_score": 0,
           "title_density": 0,
+          "search_volume": 99,
           "cpr": 8,
           "competition": {
             "competing_products": 3000,
@@ -2925,45 +3163,44 @@
             "competitor_rank_avg": 180.3,
             "competitor_performance_score": 0.8
           },
+          "root": "non",
           "opportunity_decision": "No",
-          "opportunity_reason": "Irrelevant"
+          "opportunity_reason": "Irrelevant category and low search volume (<100)"
         }
       ],
       "stats": {
         "Relevant": {
-          "count": 181,
+          "count": 191,
           "examples": [
             "blender beauty",
             "makeup sponges beauty blender",
             "make up beauty blender sponge",
             "sponges makeup blender",
-            "foundation applicator for liquid makeup",
-            "beauty stocking stuffers"
+            "rt makeup sponge",
+            "foundation applicator for liquid makeup"
           ]
         },
         "Design-Specific": {
-          "count": 18,
+          "count": 15,
           "examples": [
-            "make up sponge blender",
-            "makeup sponge set",
             "mini beauty blender",
-            "soft beauty blender sponge"
+            "latex free beauty blender"
           ]
         },
         "Irrelevant": {
-          "count": 39,
+          "count": 52,
           "examples": [
-            "large makeup sponges for foundation",
+            "pow pow beauty blender",
             "makeup sponges set",
             "powder puff and beauty blender set",
             "powder sponges for face powder"
           ]
         },
         "Branded": {
-          "count": 2,
+          "count": 8,
           "examples": [
-            "rt makeup sponge",
-            "gwt makeup sponge"
+            "make up beauty blender sponge",
+            "sponges makeup blender"
           ]
         },
         "Spanish": {
@@ -2971,11 +3208,10 @@
           "examples": []
         },
         "Outlier": {
-          "count": 14,
+          "count": 9,
           "examples": [
             "beauty professional",
             "free beauty",
-            "sponge",
             "beauty"
           ]
         }
@@ -2986,7 +3222,7 @@
     "scraped_product": {
       "url": "https://www.amazon.com/dp/B0D9C28SVB",
       "status": 200,
-      "response_size": 1891990,
+      "response_size": 1788844,
       "elements": {
         "productTitle": {
           "present": true,
@@ -3010,7 +3246,7 @@
             "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
             "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
             "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
-            "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
+            "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that\u2019s cruelty-free and safe for sensitive skin",
             "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
             "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals."
           ]
@@ -3027,10 +3263,10 @@
         "detailBullets_feature_div": {
           "present": true,
           "kv": {
-            "Package Dimensions ‏ : ‎": "7.76 x 5.83 x 2.01 inches; 1.76 ounces",
-            "Manufacturer ‏ : ‎": "Gold Water Trading",
-            "ASIN ‏ : ‎": "B0D9C28SVB",
-            "Best Sellers Rank": "#26,640 in Beauty & Personal Care ( See Top 100 in Beauty & Personal Care ) #77 in Makeup Blenders & Sponges",
+            "Package Dimensions \u200f : \u200e": "7.76 x 5.83 x 2.01 inches; 1.76 ounces",
+            "Manufacturer \u200f : \u200e": "Gold Water Trading",
+            "ASIN \u200f : \u200e": "B0D9C28SVB",
+            "Best Sellers Rank": "#26,951 in Beauty & Personal Care ( See Top 100 in Beauty & Personal Care ) #77 in Makeup Blenders & Sponges",
             "Customer Reviews": "4.6 out of 5 stars 158 ratings"
           }
         },
@@ -3044,7 +3280,7 @@
           ],
           "paragraphs": [
             "GWT (Gold Water Trading)",
-            "It‘s a leading provider of premium home goods and everyday consumer products.",
+            "It\u2018s a leading provider of premium home goods and everyday consumer products.",
             "We specialize in offering high-quality, innovative, and sustainable home essentials and personal care items.",
             "Our products are designed to enhance comfort, functionality, and eco-friendliness.",
             "With a commitment to excellence, GWT delivers trusted solutions that elevate your daily living experience.",
@@ -3052,7 +3288,7 @@
           ],
           "list_items": [
             "GWT (Gold Water Trading)",
-            "It‘s a leading provider of premium home goods and everyday consumer products.",
+            "It\u2018s a leading provider of premium home goods and everyday consumer products.",
             "We specialize in offering high-quality, innovative, and sustainable home essentials and personal care items.",
             "Our products are designed to enhance comfort, functionality, and eco-friendliness.",
             "With a commitment to excellence, GWT delivers trusted solutions that elevate your daily living experience.",
@@ -3082,8 +3318,8 @@
         "present": true,
         "sample_reviews": [
           "These work GREAT! I love the flat edge that makes it easy to apply foundation or liquid blush and then the pointed end works well for around the eye makeup. The sponge is does not suck up product and waste it, but allows the product to be blended into the skin. They appear to be well made and wash up very easily. The value is worth more than the cost. They are soft to the touch and wash up very easily. I can see these lasting for a long time. Solid product and I highly recommend.",
-          "Perfect Blending Sponges – Soft, Effective, and Affordable!",
-          "I love this set of GWT makeup sponges! They’re incredibly soft and bouncy—almost like marshmallows—and blend my foundation beautifully without soaking up too much product. The different shapes make it easy to reach every part of my face, especially around the eyes and nose. I also appreciate that they’re latex-free and gentle on my sensitive skin. Whether used wet or dry, they deliver a flawless finish every time. Great quality for the price—highly recommend!",
+          "Perfect Blending Sponges \u2013 Soft, Effective, and Affordable!",
+          "I love this set of GWT makeup sponges! They\u2019re incredibly soft and bouncy\u2014almost like marshmallows\u2014and blend my foundation beautifully without soaking up too much product. The different shapes make it easy to reach every part of my face, especially around the eyes and nose. I also appreciate that they\u2019re latex-free and gentle on my sensitive skin. Whether used wet or dry, they deliver a flawless finish every time. Great quality for the price\u2014highly recommend!",
           "Great set of sponges - very durable and sturdy",
           "These are exactly like the other name brand ones that cost so much more! They work great! I will buy again!"
         ],
@@ -3107,500 +3343,12 @@
     }
   },
   "seo_analysis": {
-    "success": true,
-    "analysis": {
-      "current_seo": {
-        "title_analysis": {
-          "content": "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women",
-          "keywords_found": [
-            "beauty blender sponges",
-            "sponges for foundation",
-            "beauty blender sponge",
-            "makeup sponge set",
-            "beauty blenders",
-            "blender sponges",
-            "beauty blender",
-            "blender sponge",
-            "makeup sponge"
-          ],
-          "keyword_count": 9,
-          "character_count": 177,
-          "keyword_density": 5.08,
-          "opportunities": [
-            "blender beauty",
-            "makeup sponges beauty blender",
-            "beauty blender makeup sponge",
-            "sponge blender",
-            "og beauty blender"
-          ],
-          "total_search_volume": 148767
-        },
-        "bullets_analysis": [
-          {
-            "content": "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
-            "keywords_found": [
-              "makeup sponges",
-              "makeup sponge",
-              "makeup spong"
-            ],
-            "keyword_count": 3,
-            "character_count": 196,
-            "keyword_density": 1.53,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blender",
-              "beauty blender sponges"
-            ],
-            "total_search_volume": 76350
-          },
-          {
-            "content": "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
-            "keywords_found": [],
-            "keyword_count": 0,
-            "character_count": 208,
-            "keyword_density": 1.44,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blender",
-              "beauty blender sponges"
-            ],
-            "total_search_volume": 0
-          },
-          {
-            "content": "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
-            "keywords_found": [],
-            "keyword_count": 0,
-            "character_count": 238,
-            "keyword_density": 0.0,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blender",
-              "beauty blender sponges"
-            ],
-            "total_search_volume": 0
-          },
-          {
-            "content": "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
-            "keywords_found": [],
-            "keyword_count": 0,
-            "character_count": 201,
-            "keyword_density": 0.0,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blender",
-              "beauty blender sponges"
-            ],
-            "total_search_volume": 0
-          },
-          {
-            "content": "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
-            "keywords_found": [],
-            "keyword_count": 0,
-            "character_count": 219,
-            "keyword_density": 0.0,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blender",
-              "beauty blender sponges"
-            ],
-            "total_search_volume": 0
-          },
-          {
-            "content": "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals.",
-            "keywords_found": [
-              "makeup sponge set"
-            ],
-            "keyword_count": 1,
-            "character_count": 181,
-            "keyword_density": 1.1,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blender",
-              "beauty blender sponges"
-            ],
-            "total_search_volume": 2036
-          }
-        ],
-        "bullets_analysis_for_display": [
-          {
-            "content": "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
-            "keywords_found": [
-              "makeup sponges",
-              "makeup sponge",
-              "makeup spong"
-            ],
-            "keyword_count": 3,
-            "character_count": 196,
-            "keyword_density": 1.53,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blender",
-              "beauty blender sponges"
-            ],
-            "total_search_volume": 76350
-          },
-          {
-            "content": "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
-            "keywords_found": [
-              "makeup sponges",
-              "makeup sponge",
-              "makeup spong"
-            ],
-            "keyword_count": 3,
-            "character_count": 208,
-            "keyword_density": 1.44,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blender",
-              "beauty blender sponges"
-            ],
-            "total_search_volume": 76350
-          },
-          {
-            "content": "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
-            "keywords_found": [],
-            "keyword_count": 0,
-            "character_count": 238,
-            "keyword_density": 0.0,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blender",
-              "beauty blender sponges"
-            ],
-            "total_search_volume": 0
-          },
-          {
-            "content": "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
-            "keywords_found": [],
-            "keyword_count": 0,
-            "character_count": 201,
-            "keyword_density": 0.0,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blender",
-              "beauty blender sponges"
-            ],
-            "total_search_volume": 0
-          },
-          {
-            "content": "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
-            "keywords_found": [],
-            "keyword_count": 0,
-            "character_count": 219,
-            "keyword_density": 0.0,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blender",
-              "beauty blender sponges"
-            ],
-            "total_search_volume": 0
-          },
-          {
-            "content": "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals.",
-            "keywords_found": [
-              "makeup sponge set",
-              "makeup sponge"
-            ],
-            "keyword_count": 2,
-            "character_count": 181,
-            "keyword_density": 1.1,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blender",
-              "beauty blender sponges"
-            ],
-            "total_search_volume": 62160
-          }
-        ],
-        "backend_keywords": [],
-        "keyword_coverage": {
-          "total_keywords": 140,
-          "covered_keywords": 11,
-          "coverage_percentage": 7.9,
-          "missing_high_intent": [
-            "blender beauty",
-            "makeup sponges beauty blender",
-            "beauty blender makeup sponge",
-            "sponge blender",
-            "og beauty blender",
-            "blender makeup sponge",
-            "make up sponges prime beauty blender",
-            "beauty sponge blender",
-            "beauty blender og",
-            "foundation beauty blender"
-          ],
-          "missing_high_volume": [
-            "beauty blender makeup sponge",
-            "blender makeup",
-            "make up blender",
-            "beauty sponge",
-            "beauty sponges for makeup",
-            "sponge makeup",
-            "makeup blender sponge",
-            "makeup blender",
-            "blending sponge",
-            "make up sponge"
-          ]
-        },
-        "root_coverage": {
-          "total_roots": 14,
-          "covered_roots": 13,
-          "coverage_percentage": 92.9,
-          "missing_roots": [
-            "applicator"
-          ],
-          "root_volumes": {
-            "blender": 83676,
-            "sponge": 133539,
-            "beauty": 112,
-            "blend": 164,
-            "foundation": 327,
-            "blending": 274,
-            "set": 2285,
-            "application": 152,
-            "makeup": 694,
-            "applicator": 185,
-            "stocking": 2149,
-            "deal": 196,
-            "stuffer": 54,
-            "stuffers": 67
-          }
-        },
-        "total_character_usage": {
-          "title_chars": 177,
-          "bullets_total_chars": 1243,
-          "bullets_avg_chars": 207,
-          "backend_chars": 0,
-          "total_chars": 1420
-        }
-      },
-      "optimized_seo": {
-        "optimized_title": {
-          "content": "GWT Makeup Sponge Set, 6 Pcs Latex-Free Sponges for Foundation - Ultra-Soft Multi-Angle Applicators, Ideal for Liquid & Cream Makeup | Make Up Blending Sponges For Face",
-          "keywords_included": [
-            "make up blending sponges for face",
-            "sponges for foundation",
-            "makeup sponge set",
-            "blending sponges",
-            "blending sponge",
-            "makeup sponge"
-          ],
-          "keywords_duplicated_from_other_bullets": [],
-          "unique_keywords_count": 0,
-          "improvements": [
-            "Amazon Guidelines Compliant",
-            "80-char optimized: GWT Makeup Sponge Set, 6 Pcs Latex-Free Sponges fo...",
-            "Main root included: True",
-            "Design root included: True"
-          ],
-          "character_count": 168,
-          "total_search_volume": 63994
-        },
-        "optimized_bullets": [
-          {
-            "content": "ULTRA-SOFT TEXTURE: Experience the marshmallow-like bounce with our makeup sponges, ensuring flawless foundation application every time. Ideal for liquid and cream products.",
-            "keywords_included": [
-              "foundation application",
-              "makeup sponges",
-              "makeup spong"
-            ],
-            "keywords_duplicated_from_other_bullets": [],
-            "unique_keywords_count": 3,
-            "improvements": [
-              "Benefit-focused: Softness and application",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 173,
-            "total_search_volume": 16378
-          },
-          {
-            "content": "PRECISE BLENDING: Unique multi-angle design offers precision blending with beauty blender sponge capabilities for detailed areas like eyes and nose.",
-            "keywords_included": [
-              "beauty blender sponge",
-              "beauty blenders",
-              "beauty blender",
-              "blender sponge"
-            ],
-            "keywords_duplicated_from_other_bullets": [],
-            "unique_keywords_count": 4,
-            "improvements": [
-              "Benefit-focused: Precision and versatility",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 148,
-            "total_search_volume": 86398
-          },
-          {
-            "content": "LATEX-FREE & HYPOALLERGENIC: Made with non-toxic, latex-free materials, these make up sponges are skin-friendly for all skin types, including sensitive skin.",
-            "keywords_included": [
-              "make up sponges",
-              "make-up sponges",
-              "make up sponge",
-              "make up spong"
-            ],
-            "keywords_duplicated_from_other_bullets": [],
-            "unique_keywords_count": 4,
-            "improvements": [
-              "Benefit-focused: Skin safety",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 157,
-            "total_search_volume": 11722
-          },
-          {
-            "content": "DUAL USE: Use wet for dewy finish and dry for full coverage. These foundation sponges enhance your makeup applications, offering flexibility in use depending on needs.",
-            "keywords_included": [
-              "foundation sponges",
-              "foundation sponge"
-            ],
-            "keywords_duplicated_from_other_bullets": [],
-            "unique_keywords_count": 2,
-            "improvements": [
-              "Benefit-focused: Versatile application",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 167,
-            "total_search_volume": 4262
-          },
-          {
-            "content": "PERFECT FOR TRAVEL: Compact design makes these make up sponges for foundation ideal for on-the-go use. Conveniently fits in makeup bags for touch-ups anytime.",
-            "keywords_included": [
-              "make up sponges for foundation"
-            ],
-            "keywords_duplicated_from_other_bullets": [],
-            "unique_keywords_count": 1,
-            "improvements": [
-              "Benefit-focused: Travel-friendly",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 158,
-            "total_search_volume": 2619
-          },
-          {
-            "content": "VALUE PACK: This 6-piece set offers affordable luxury, perfect for makeup enthusiasts and professionals seeking quality beauty blenders at a great price.",
-            "keywords_included": [],
-            "keywords_duplicated_from_other_bullets": [],
-            "unique_keywords_count": 0,
-            "improvements": [
-              "Benefit-focused: Value and quality",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 153,
-            "total_search_volume": 0
-          }
-        ],
-        "optimized_backend_keywords": [
-          "makeup sponges for foundation",
-          "beauty sponge",
-          "makeup blender",
-          "makeup sponges for blending",
-          "sponge makeup"
-        ],
-        "keyword_strategy": {
-          "amazon_compliance": "ENFORCED",
-          "first_80_optimization": "Included main root 'beauty blender', design root 'makeup sponge set', and key benefit 'latex-free' in first 80 characters",
-          "keyword_integration": "Used highest volume variants while maintaining natural flow",
-          "guideline_compliance": "STRICT"
-        },
-        "rationale": "Task 7 Amazon Guidelines Compliance Applied: Strictly followed Amazon guidelines while maximizing SEO value. First 80 characters optimized for mobile viewing with main and design-specific keyword roots. All content verified for Amazon policy compliance."
-      },
-      "comparison": {
-        "coverage_improvement": {
-          "total_keywords": 140,
-          "before_covered": 11,
-          "after_covered": 30,
-          "before_coverage_pct": 7.86,
-          "after_coverage_pct": 21.43,
-          "delta_pct_points": 13.57,
-          "new_keywords_added": [
-            "beauty sponge",
-            "blender makeup",
-            "blender makeup sponge",
-            "blending sponge",
-            "blending sponges",
-            "foundation application",
-            "foundation sponge",
-            "foundation sponges",
-            "make up blending sponges for face",
-            "make up spong",
-            "make up sponge",
-            "make up sponges",
-            "make up sponges for foundation",
-            "make-up sponges",
-            "makeup blender",
-            "makeup sponge for foundation",
-            "makeup sponges for",
-            "makeup sponges for blending",
-            "makeup sponges for foundation",
-            "sponge makeup"
-          ]
-        },
-        "intent_improvement": {
-          "high_intent_total": 100,
-          "before_covered": 11,
-          "after_covered": 29,
-          "delta": 18
-        },
-        "volume_improvement": {
-          "estimated_volume_before": 164993,
-          "estimated_volume_after": 200741,
-          "delta_volume": 35748
-        },
-        "character_efficiency": {
-          "title_limit": 200,
-          "title_before": 177,
-          "title_after": 168,
-          "title_utilization_before_pct": 88.5,
-          "title_utilization_after_pct": 84.0,
-          "backend_limit": 249,
-          "backend_before": 0,
-          "backend_after": 100
-        },
-        "summary_metrics": {
-          "overall_improvement_score": 10.0,
-          "priority_recommendations": 5
-        }
-      },
-      "product_context": {
-        "title": "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women",
-        "brand": "Gold Water Trading",
-        "category": "Unknown"
-      },
-      "analysis_metadata": {
-        "total_keywords_analyzed": 193,
-        "relevant_keywords_count": 120,
-        "high_intent_keywords_count": 100,
-        "optimization_method": "ai"
-      }
-    },
+    "success": false,
+    "error": "SEO analysis failed: '<' not supported between instances of 'NoneType' and 'int'",
     "summary": {
-      "current_coverage": "7.9%",
-      "optimization_opportunities": 10,
-      "method": "ai"
+      "current_coverage": "N/A",
+      "optimization_opportunities": 0,
+      "method": "failed"
     }
   },
   "keyword_root_optimization": {
@@ -3675,7 +3423,7 @@
   "source": "amazon_sales_intelligence_pipeline",
   "monitoring_stats": {
     "overall": {
-      "elapsed_time": 1290.0289902687073,
+      "elapsed_time": 2039.7561402320862,
       "total_requests": 0,
       "successful_requests": 0,
       "failed_requests": 0,

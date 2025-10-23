@@ -21,6 +21,105 @@
         "what": "Removed strict validation in SEO content analysis",
         "why": "Simple substring validation was rejecting keywords found by advanced matching (sub-phrase, plural/singular, hyphen variations). extract_keywords_from_content already validates.",
         "when": "2025-10-22"
+      },
+      {
+        "what": "Filter 0-volume keywords in SEO analysis",
+        "why": "Keywords with search_volume = 0 or None waste space in titles/bullets. Added if search_volume > 0 filter before categorization in prepare_keyword_data_for_analysis().",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Mandatory design-specific keywords in title (2-3 from highest volume root)",
+        "why": "AI was ignoring design keywords. Strengthened prompts with MANDATORY markers, 3-step instructions, and 4 enforcement points across Title Optimization, Design Keywords section, and CRITICAL REQUIREMENTS.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Deduplicate keywords across title, bullets, and backend (post-AI generation)",
+        "why": "Keywords were appearing multiple times (e.g., in title + bullets + backend), wasting space. Added _deduplicate_keywords_across_content() with priority: Title > Bullets > Backend. Case-insensitive matching.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Handle None values in search_volume for sorting and calculations",
+        "why": "broad_volume_agent drops items when JSON parsing fails, leaving search_volume=None. This caused TypeError in keyword_validator sorting and root_relevance_agent calculations. Added 'or 0' to treat None as 0.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Fix METHOD 2 keyword matching to require sequential order + tight proximity",
+        "why": "METHOD 2 was matching scattered words (e.g., 'makeup sponges foundation' matched 'makeup sponge...sponges for foundation'). Changed to require: 1) exact sequential order, 2) max 20 chars between adjacent tokens, 3) no reverse/scattered matching.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Fix brand extraction path in Task 7 AI agent (runner.py line 448)",
+        "why": "Brand was extracted at line 279 (productOverview_feature_div > kv > Brand) but re-extracted incorrectly at line 448 (elements > brand > text - wrong path!). Changed to use already-extracted current_content['brand'].",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Fix keyword sorting to use VOLUME instead of RELEVANCY in amazon_compliance_agent.py",
+        "why": "main_keyword_root and design_keyword_root were selected by max(relevancy_score), not max(search_volume). All 'Relevant' keywords have relevancy=10, so this was meaningless. Changed to sort by search_volume for maximum SEO impact.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Add post-generation validation for brand and top keywords in amazon_compliance_agent.py",
+        "why": "AI was ignoring brand and high-volume keyword requirements despite prompt instructions. Added validation after AI generation: 1) Reject if brand missing (when brand exists), 2) Reject if top 2 keywords missing, 3) Use fallback with brand if validation fails.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "Strengthen RULE 3 prompt to emphasize VOLUME IS KING in amazon_compliance_agent.py",
+        "why": "AI was using low-volume keywords (e.g., 'makeup soft sponge' 32 vol) instead of high-volume ones ('beauty blender' 71K vol). Added explicit examples showing volume hierarchy and made keyword #1 (HIGHEST VOLUME) MANDATORY in title.",
+        "when": "2025-10-22"
+      },
+      {
+        "what": "ROOT FIX: Sort keywords by VOLUME (not relevancy) across ALL 7 allocation/sorting points",
+        "why": "High-volume keywords were missing from titles because sorting used relevancy_score or keyword_value (relevancy×volume) instead of pure search_volume. User said 'i don't think you caught the root solution'. Fixed: 1) keyword_validator allocation, 2-3) relevant/design keyword sorting, 4-5) all_keywords_for_ai sorting (both paths), 6) stricter validation for #1 keyword, 7) improved fallback to use top volume keywords.",
+        "when": "2025-10-22",
+        "impact": "Guarantees highest-volume keywords appear first in allocation, AI input, validation, and fallback - solving Issue #3 at its root"
+      },
+      {
+        "what": "Brand preservation via prompt (not Python regex) in amazon_compliance_agent.py",
+        "why": "User wants EXACT brand form from current title (e.g., 'GWT' not 'Gold Water Trading', 'so coll' not 'So Coll'). Complex regex patterns would break on edge cases. Solution: Show AI the current_title in prompt with explicit instructions to preserve exact brand form at start of title.",
+        "when": "2025-10-22",
+        "impact": "AI naturally extracts brand form from context, handles all cases (abbreviations, lowercase, mixed case) without brittle parsing logic"
+      },
+      {
+        "what": "Increased minimum character requirements: 155 chars for titles AND bullets",
+        "why": "User requested minimum 155 characters (was 150 for titles, no minimum for bullets) to maximize Amazon listing space and keyword density. Updated: 1) All prompt instructions, 2) Validation checklists, 3) Python padding logic (break conditions), 4) Examples and guidelines.",
+        "when": "2025-10-22",
+        "impact": "Ensures every title and bullet uses full space for maximum SEO value and keyword coverage"
+      },
+      {
+        "what": "STRICT keyword matching: Adjacent-only multi-word phrases (no intervening words)",
+        "why": "False positives: 'beauty sponges' matched 'beauty blender sponges'. Replaced 20-char proximity matching with strict regex adjacency (\\s+ between tokens). Only plural/singular variants allowed (e.g., 'makeup sponge' matches 'makeup sponges').",
+        "when": "2025-10-22",
+        "impact": "Eliminates false keyword matches in content analysis - only exact phrases or adjacent variants counted"
+      },
+      {
+        "what": "Preserve duplicate keyword fields (keywords_duplicated_from_other_bullets) in deduplication",
+        "why": "Deduplication was creating new OptimizedContent objects without copying keywords_duplicated_from_other_bullets, unique_keywords_count, total_search_volume. Frontend needs these for yellow badge display (⚠️).",
+        "when": "2025-10-22",
+        "impact": "Frontend can now show which keywords are duplicates with yellow badges"
+      },
+      {
+        "what": "FIX #1: Recalculate stats after cross-content deduplication in runner.py",
+        "why": "After _deduplicate_keywords_across_content removed duplicates from bullets, it was copying OLD stats from before deduplication (unique_keywords_count, total_search_volume). This caused UI to show '0 unique' when keywords were present. Now builds keyword volume map and recalculates stats for each bullet's final keyword list.",
+        "when": "2025-10-23",
+        "impact": "Stats accurately reflect actual keywords shown. Frontend displays correct '4 unique' and volume badges matching visible keywords."
+      },
+      {
+        "what": "FIX #2: Mandatory 2+ keywords per bullet with post-generation validation",
+        "why": "Bullets 4 & 5 had 0 keywords - AI prioritized 'natural language' over keyword inclusion. Added RULE 5 in prompt requiring EVERY bullet to have 2-3 keywords. Added _validate_bullet_keyword_count() function to check after AI generation. Triggers fallback if any bullet has <2 keywords.",
+        "when": "2025-10-23",
+        "impact": "All bullets will now have at least 2 keywords. AI output rejected if validation fails. Better keyword coverage across all bullets."
+      },
+      {
+        "what": "FIX #3: Mandatory 2-3 design-specific keywords in title with validation",
+        "why": "Optimized title had only 1 design keyword ('mini beauty blender') when 2-3 were required. Added RULE 5B in prompt with examples showing correct (3 design keywords) vs wrong (1 keyword). Added _count_design_keywords_in_title() validation. Triggers fallback if title has <2 design keywords.",
+        "when": "2025-10-23",
+        "impact": "Titles will include 2-3 design keywords like 'mini beauty blender', 'beauty blender set', 'soft makeup sponges' for better SEO targeting."
+      },
+      {
+        "what": "FIX #4: STRICT VOLUME-BASED allocation for title keywords (keyword_validator.py)",
+        "why": "High-volume keywords ('beauty blender' 71K, 'makeup sponges' 16K) were going to bullets instead of title. Root cause: title allocation was using get_top_keywords_by_relevancy() which sorts by volume BUT had limit of only 3 keywords, and AI might ignore allocated keywords. Solution: 1) Increase title limit from 3 to 8, 2) Add get_top_keywords_by_volume_strict() that ONLY sorts by volume (ignores relevancy/intent), 3) Use strict volume sorting specifically for title allocation, 4) Enhanced post-generation validation to check top 5 keywords by volume and reject if top 2 are missing.",
+        "when": "2025-10-23",
+        "impact": "GUARANTEES highest-volume keywords appear in titles. 'beauty blender' (71K) and 'makeup sponges' (16K) will ALWAYS be allocated to title and validated. Fallback triggers if AI ignores them."
       }
     ]
   },
@@ -49,10 +148,11 @@
     "seo_analysis": {
       "files": [
         "app/local_agents/seo/runner.py",
-        "app/local_agents/seo/helper_methods.py"
+        "app/local_agents/seo/helper_methods.py",
+        "app/local_agents/seo/keyword_validator.py"
       ],
       "state": "active",
-      "notes": "Advanced keyword matching (sub-phrase, plural, hyphen). Validation removed to preserve matched keywords. Null-safe search_volume check added."
+      "notes": "Advanced keyword matching (sub-phrase, plural, hyphen). Validation removed to preserve matched keywords. Null-safe search_volume check added. FIX #4: Title allocation uses STRICT volume sorting (8 keyword limit, ignores relevancy) to guarantee highest-volume keywords in titles."
     }
   },
   "debt": [],

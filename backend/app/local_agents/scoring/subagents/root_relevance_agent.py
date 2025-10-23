@@ -247,7 +247,7 @@ def _create_fallback_analysis(keywords: List[Dict[str, Any]]) -> Dict[str, Any]:
     
     for kw in keywords:
         root = kw.get("root", "")
-        volume = kw.get("search_volume", 0)
+        volume = kw.get("search_volume", 0) or 0  # Handle None values
         category = kw.get("category", "")
         
         total_before += volume
