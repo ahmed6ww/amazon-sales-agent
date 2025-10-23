@@ -204,7 +204,7 @@ Return ONLY the JSON response in the exact format specified.
 root_extraction_agent = Agent(
     name="RootExtractionAgent", 
     instructions=ROOT_EXTRACTION_INSTRUCTIONS,
-    model="gpt-4o",  # TASK 5: Changed from gpt-5 for 1.5-2x speed improvement
+    model="gpt-5-2025-08-07",  # gpt-5-mini for root extraction
 )
 
 def extract_roots_ai(

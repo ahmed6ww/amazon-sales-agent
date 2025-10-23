@@ -120,6 +120,12 @@
         "why": "High-volume keywords ('beauty blender' 71K, 'makeup sponges' 16K) were going to bullets instead of title. Root cause: title allocation was using get_top_keywords_by_relevancy() which sorts by volume BUT had limit of only 3 keywords, and AI might ignore allocated keywords. Solution: 1) Increase title limit from 3 to 8, 2) Add get_top_keywords_by_volume_strict() that ONLY sorts by volume (ignores relevancy/intent), 3) Use strict volume sorting specifically for title allocation, 4) Enhanced post-generation validation to check top 5 keywords by volume and reject if top 2 are missing.",
         "when": "2025-10-23",
         "impact": "GUARANTEES highest-volume keywords appear in titles. 'beauty blender' (71K) and 'makeup sponges' (16K) will ALWAYS be allocated to title and validated. Fallback triggers if AI ignores them."
+      },
+      {
+        "what": "Standardized all AI agents to use gpt-5-2025-08-07 (gpt-5-mini)",
+        "why": "Unified model across all agents for consistency. Changed from mixed gpt-4o/gpt-4o-mini to gpt-5-mini everywhere: keyword_agent, intent_agent, broad_volume_agent, root_relevance_agent, seo_agent, amazon_compliance_agent, competitor_title_analysis_agent, root_extraction_agent. Already using gpt-5-mini: opportunity_agent, metrics_agent, research_agent, keyword_variant_agent, intent_classification_agent.",
+        "when": "2025-10-23",
+        "impact": "Consistent AI model across entire pipeline. Better quality and reasoning with latest gpt-5-mini model."
       }
     ]
   },
@@ -129,16 +135,16 @@
         "app/local_agents/keyword/runner.py",
         "app/local_agents/keyword/agent.py"
       ],
-      "model": "gpt-4o-mini",
+      "model": "gpt-5-2025-08-07",
       "batch_size": 75,
       "max_tokens": 12000,
       "timeout": 240,
       "state": "active",
-      "notes": "Batching enabled gpt-4o-mini (3x cheaper). 75 kw/batch prevents truncation. 214 keywords = 3 batches"
+      "notes": "Batching enabled with gpt-5-mini. 75 kw/batch prevents truncation. 214 keywords = 3 batches"
     },
     "broad_volume_agent": {
       "files": ["app/local_agents/scoring/subagents/broad_volume_agent.py"],
-      "model": "gpt-4o-mini",
+      "model": "gpt-5-2025-08-07",
       "batch_size": 100,
       "max_tokens": 16000,
       "timeout": 240,

@@ -112,7 +112,7 @@ NOTE: This instruction is now enhanced with AI-powered Task 13 filtering for bet
 broad_volume_agent = Agent(
     name="BroadVolumeSubagent",
     instructions=BROAD_VOLUME_INSTRUCTIONS,
-    model="gpt-4o-mini",
+    model="gpt-5-2025-08-07",  # gpt-5-mini
     model_settings=ModelSettings(
         max_tokens=16000,  # Handle 200+ items without truncation
         timeout=240.0,

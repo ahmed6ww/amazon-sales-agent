@@ -726,7 +726,7 @@ Return ONLY the JSON response in the exact format specified.
 amazon_compliance_agent = Agent(
     name="AmazonComplianceAgent",
     instructions=AMAZON_COMPLIANCE_INSTRUCTIONS,
-    model="gpt-4o",  # TASK 5: Changed from gpt-5 for 3x faster title/bullet generation
+    model="gpt-5-2025-08-07",  # gpt-5-mini for title/bullet generation
 )
 
 def optimize_amazon_compliance_ai(

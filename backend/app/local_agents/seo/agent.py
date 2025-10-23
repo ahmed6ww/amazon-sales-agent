@@ -14,7 +14,7 @@ from .prompts import SEO_OPTIMIZATION_INSTRUCTIONS
 seo_optimization_agent = Agent(
     name="SEOOptimizationAgent",
     instructions=SEO_OPTIMIZATION_INSTRUCTIONS,
-    model="gpt-4o",  # TASK 5: Changed from gpt-5 for 3x faster SEO optimization (3-5 min vs 10-15 min)
+    model="gpt-5-2025-08-07",  # gpt-5-mini for SEO optimization
 
     # Enforce structured output for consistent SEO analysis results
     output_type=AgentOutputSchema(SEOAnalysisResult, strict_json_schema=False),

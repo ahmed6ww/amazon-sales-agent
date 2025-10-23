@@ -177,7 +177,7 @@
           },
           "root": "press",
           "opportunity_decision": "Yes",
-          "opportunity_reason": "Zero title density with decent volume (206 ≥ 100); distinct modifier ('hand')."
+          "opportunity_reason": "Zero title density with decent volume (206 \u2265 100); distinct modifier ('hand')."
         },
         {
           "phrase": "orblue garlic press stainless steel",
@@ -213,7 +213,7 @@
           },
           "root": "press",
           "opportunity_decision": "Yes",
-          "opportunity_reason": "Zero title density with decent volume (346 ≥ 100)."
+          "opportunity_reason": "Zero title density with decent volume (346 \u2265 100)."
         },
         {
           "phrase": "garlic press professional",
@@ -402,7 +402,7 @@
           },
           "root": "press",
           "opportunity_decision": "Yes",
-          "opportunity_reason": "Zero title density with decent volume (108 ≥ 100); branded term."
+          "opportunity_reason": "Zero title density with decent volume (108 \u2265 100); branded term."
         },
         {
           "phrase": "stainless steel garlic press\f",
@@ -519,7 +519,7 @@
           },
           "root": "press",
           "opportunity_decision": "Yes",
-          "opportunity_reason": "Zero title density with decent volume (232 ≥ 100); branded term."
+          "opportunity_reason": "Zero title density with decent volume (232 \u2265 100); branded term."
         },
         {
           "phrase": "zulay stainless steel garlic press",
@@ -555,7 +555,7 @@
           },
           "root": "press",
           "opportunity_decision": "Yes",
-          "opportunity_reason": "Zero title density with decent volume (315 ≥ 100)."
+          "opportunity_reason": "Zero title density with decent volume (315 \u2265 100)."
         },
         {
           "phrase": "ikea garlic press stainless steel",
@@ -591,7 +591,7 @@
           },
           "root": "press",
           "opportunity_decision": "Yes",
-          "opportunity_reason": "Zero title density with decent volume (141 ≥ 100); branded term."
+          "opportunity_reason": "Zero title density with decent volume (141 \u2265 100); branded term."
         },
         {
           "phrase": "garlic is",
@@ -681,7 +681,7 @@
           },
           "root": "press",
           "opportunity_decision": "Yes",
-          "opportunity_reason": "Low title density (≤ 3) with decent volume (1384 ≥ 100)."
+          "opportunity_reason": "Low title density (\u2264 3) with decent volume (1384 \u2265 100)."
         },
         {
           "phrase": "stainless steel garlic press rocker",
@@ -735,7 +735,7 @@
           },
           "root": "press",
           "opportunity_decision": "Yes",
-          "opportunity_reason": "Low title density (≤ 3) with decent volume (166 ≥ 100)."
+          "opportunity_reason": "Low title density (\u2264 3) with decent volume (166 \u2265 100)."
         }
       ],
       "stats": {
@@ -1169,7 +1169,7 @@
             "total_search_volume": 2784
           },
           {
-            "content": "EASY CLEANUP: Garlic is less messy with a hinged basket and open design that rinses fast; unlike narrow chambers, our parts release pulp easily, so even after tough bulbs your sink workflow stays simple—no stuck bits in a garlic press'.",
+            "content": "EASY CLEANUP: Garlic is less messy with a hinged basket and open design that rinses fast; unlike narrow chambers, our parts release pulp easily, so even after tough bulbs your sink workflow stays simple\u2014no stuck bits in a garlic press'.",
             "keywords_included": [],
             "keywords_duplicated_from_other_bullets": [],
             "unique_keywords_count": 0,
@@ -1195,7 +1195,7 @@
             "total_search_volume": 122
           },
           {
-            "content": "PREMIUM BUILD: Crafted for long-term use with brushed metal that resists corrosion; shoppers comparing a franke stainless steel garlic press seek durability—this stainless steel professional garlic construction delivers reliable performance.",
+            "content": "PREMIUM BUILD: Crafted for long-term use with brushed metal that resists corrosion; shoppers comparing a franke stainless steel garlic press seek durability\u2014this stainless steel professional garlic construction delivers reliable performance.",
             "keywords_included": [],
             "keywords_duplicated_from_other_bullets": [],
             "unique_keywords_count": 0,
@@ -1220,7 +1220,7 @@
           "keyword_integration": "Used top title keywords in list order without redundant variants: #1 'stainless steel garlic press', #3 'stainless steel garlic press rocker', #6 'dishwasher safe garlic press'.",
           "guideline_compliance": "STRICT"
         },
-        "rationale": "Task 7 Amazon Guidelines Compliance Applied: Maintained Title Case, avoided promotional claims, included practical benefits competitors emphasize (easy clean, ergonomic, durability), and kept within 155–200 characters.. First 80 characters optimized for mobile viewing with main and design-specific keyword roots. All content verified for Amazon policy compliance."
+        "rationale": "Task 7 Amazon Guidelines Compliance Applied: Maintained Title Case, avoided promotional claims, included practical benefits competitors emphasize (easy clean, ergonomic, durability), and kept within 155\u2013200 characters.. First 80 characters optimized for mobile viewing with main and design-specific keyword roots. All content verified for Amazon policy compliance."
       },
       "comparison": {
         "coverage_improvement": {
