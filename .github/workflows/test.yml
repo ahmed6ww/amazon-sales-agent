@@ -1,0 +1,44 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, master, develop, copilot/** ]
+  pull_request:
+    branches: [ main, master, develop ]
+
+jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
+        
+    - name: Install dependencies
+      working-directory: ./backend
+      run: |
+        python -m pip install --upgrade pip
+        pip install pytest
+        # Install project dependencies if pyproject.toml exists
+        if [ -f pyproject.toml ]; then
+          pip install -e . || echo "Warning: Some dependencies could not be installed"
+        fi
+        
+    - name: Run tests with pytest
+      working-directory: ./backend
+      run: |
+        # Run pytest with verbose output and detailed error information
+        python -m pytest -v --tb=short --continue-on-collection-errors
+      continue-on-error: false
+        
+    - name: Display test summary
+      if: always()
+      working-directory: ./backend
+      run: |
+        echo "Test execution completed. Check the logs above for results."
