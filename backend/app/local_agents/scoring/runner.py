@@ -97,101 +97,113 @@ class ScoringRunner:
 		scraped_product: Dict[str, Any],
 		base_relevancy_scores: Dict[str, int] | None = None,
 	) -> List[Dict[str, Any]]:
-		"""Append intent_score using simple approach - NO MULTI-BATCH COMPLEXITY."""
+		"""
+		Add intent scores (0-3) to keywords using AI agent with BATCHING.
+		Prevents timeout for large keyword sets (200+).
+		"""
 		if not items:
 			return items
 		
-		logger.info("[ScoringRunner] Processing %d items with simple intent scoring", len(items))
+		# ========================================================================
+		# BATCHING: Process in chunks to prevent timeout/token limits
+		# ========================================================================
+		BATCH_SIZE = 75  # Same as keyword categorization
+		total_items = len(items)
+		all_results = []
 		
-		# Simple approach - just process directly with a small delay
-		import time
-		time.sleep(1)  # Simple rate limiting
+		logger.info(f"[ScoringRunner] Processing {total_items} items in batches of {BATCH_SIZE}")
 		
-		# Use the original simple approach
+		num_batches = (total_items + BATCH_SIZE - 1) // BATCH_SIZE
+		
 		from agents import Runner as _Runner
 		from app.local_agents.scoring.subagents.intent_agent import (
 			intent_scoring_agent,
 			USER_PROMPT_TEMPLATE,
 		)
 		import json as _json
+		import time
 		
-		prompt = USER_PROMPT_TEMPLATE.format(
-			scraped_product=_json.dumps(scraped_product or {}, separators=(",", ":")),
-			base_relevancy_scores=_json.dumps(base_relevancy_scores or {}, separators=(",", ":")),
-			items=_json.dumps(items or [], separators=(",", ":")),
-		)
-		
-		result = _Runner.run_sync(intent_scoring_agent, prompt)
-		
-		# Parse and return results
-		if result and hasattr(result, 'final_output'):
-			output = result.final_output
-			if output:
-				try:
-					# Strip markdown code fences (GPT-4o-mini compatibility)
-					clean_output = strip_markdown_code_fences(output)
-					parsed_result = _json.loads(clean_output)
-					if isinstance(parsed_result, list):
-						logger.info(f"[ScoringRunner] ✅ Successfully parsed intent scoring for {len(parsed_result)} items")
-						return parsed_result
-					elif isinstance(parsed_result, dict) and "items" in parsed_result:
-						logger.info(f"[ScoringRunner] ✅ Successfully parsed intent scoring for {len(parsed_result['items'])} items")
-						return parsed_result["items"]
-				except _json.JSONDecodeError as e:
-					logger.warning(f"[ScoringRunner] Failed to parse intent scoring result: {e}")
-					logger.debug(f"[ScoringRunner] Raw output (first 200 chars): {output[:200] if output else 'None'}...")
-		elif result and hasattr(result, 'content'):
-			try:
-				# Strip markdown code fences (GPT-4o-mini compatibility)
-				clean_content = strip_markdown_code_fences(result.content)
-				parsed_result = _json.loads(clean_content)
-				if isinstance(parsed_result, list):
-					logger.info(f"[ScoringRunner] ✅ Successfully parsed intent scoring for {len(parsed_result)} items")
-					return parsed_result
-				elif isinstance(parsed_result, dict) and "items" in parsed_result:
-					logger.info(f"[ScoringRunner] ✅ Successfully parsed intent scoring for {len(parsed_result['items'])} items")
-					return parsed_result["items"]
-			except _json.JSONDecodeError as e:
-				logger.warning(f"[ScoringRunner] Failed to parse intent scoring result: {e}")
-				logger.debug(f"[ScoringRunner] Raw content (first 200 chars): {result.content[:200] if result.content else 'None'}...")
-		
-		# Fallback: return original items with default intent score
-		logger.warning("[ScoringRunner] Intent scoring failed, using fallback")
-		logger.info(f"[ScoringRunner] Applying fallback logic to {len(items)} items...")
-		
-		fallback_stats = {"intent_added": 0, "relevancy_from_base": 0, "relevancy_defaulted": 0, "relevancy_preserved": 0}
-		
-		for item in items:
-			if "intent_score" not in item:
-				item["intent_score"] = 5  # Default moderate intent
-				fallback_stats["intent_added"] += 1
+		for batch_idx in range(num_batches):
+			start_idx = batch_idx * BATCH_SIZE
+			end_idx = min(start_idx + BATCH_SIZE, total_items)
+			batch_items = items[start_idx:end_idx]
+			batch_label = f"Batch {batch_idx + 1}/{num_batches}"
 			
-			# Ensure relevancy_score is present from base_relevancy_scores
-			if "relevancy_score" not in item:
-				if base_relevancy_scores:
-					phrase = item.get("phrase", "")
-					if phrase in base_relevancy_scores:
-						item["relevancy_score"] = base_relevancy_scores[phrase]
-						fallback_stats["relevancy_from_base"] += 1
-						logger.debug(f"[ScoringRunner] Set relevancy_score for '{phrase}': {base_relevancy_scores[phrase]}")
-					else:
-						item["relevancy_score"] = 5  # Default moderate relevancy
-						fallback_stats["relevancy_defaulted"] += 1
-						logger.debug(f"[ScoringRunner] No base score for '{phrase}', defaulted to 5")
+			logger.info(f"[ScoringRunner] 🔄 {batch_label}: Processing {len(batch_items)} items")
+			
+			try:
+				# Simple rate limiting
+				time.sleep(1)
+				
+				# Run AI intent scoring for this batch
+				prompt = USER_PROMPT_TEMPLATE.format(
+					scraped_product=_json.dumps(scraped_product or {}, separators=(",", ":")),
+					base_relevancy_scores=_json.dumps(base_relevancy_scores or {}, separators=(",", ":")),
+					items=_json.dumps(batch_items or [], separators=(",", ":")),
+				)
+				
+				result = _Runner.run_sync(intent_scoring_agent, prompt)
+				scored = []
+				
+				# Parse result
+				if result and hasattr(result, 'final_output'):
+					output = result.final_output
+					if output:
+						try:
+							clean_output = strip_markdown_code_fences(output)
+							parsed_result = _json.loads(clean_output)
+							if isinstance(parsed_result, list):
+								scored = parsed_result
+							elif isinstance(parsed_result, dict) and "items" in parsed_result:
+								scored = parsed_result["items"]
+						except _json.JSONDecodeError as e:
+							logger.warning(f"[ScoringRunner] {batch_label} JSON parse failed: {e}")
+				elif result and hasattr(result, 'content'):
+					try:
+						clean_content = strip_markdown_code_fences(result.content)
+						parsed_result = _json.loads(clean_content)
+						if isinstance(parsed_result, list):
+							scored = parsed_result
+						elif isinstance(parsed_result, dict) and "items" in parsed_result:
+							scored = parsed_result["items"]
+					except _json.JSONDecodeError as e:
+						logger.warning(f"[ScoringRunner] {batch_label} JSON parse failed: {e}")
+				
+				# If parsing succeeded, use scored items
+				if scored:
+					# Ensure all items have required fields
+					for item in scored:
+						if "intent_score" not in item or item.get("intent_score") is None:
+							item["intent_score"] = 1
+						if "relevancy_score" not in item or item.get("relevancy_score") is None:
+							if base_relevancy_scores:
+								phrase = item.get("phrase", "").lower().strip()
+								item["relevancy_score"] = base_relevancy_scores.get(phrase, 5)
+							else:
+								item["relevancy_score"] = 5
+					
+					all_results.extend(scored)
+					logger.info(f"[ScoringRunner] ✅ {batch_label} complete ({len(scored)} items)")
 				else:
-					item["relevancy_score"] = 5
-					fallback_stats["relevancy_defaulted"] += 1
-			else:
-				fallback_stats["relevancy_preserved"] += 1
-				logger.debug(f"[ScoringRunner] Preserved existing relevancy_score for '{item.get('phrase', '')}': {item['relevancy_score']}")
+					# Fallback: Use original items with default scores
+					raise ValueError("Parsing failed")
+					
+			except Exception as e:
+				logger.error(f"[ScoringRunner] ❌ {batch_label} failed: {e}")
+				# Fallback: Add default scores to failed batch items
+				for item in batch_items:
+					item["intent_score"] = 1  # Default moderate intent
+					if base_relevancy_scores:
+						phrase = item.get("phrase", "").lower().strip()
+						item["relevancy_score"] = base_relevancy_scores.get(phrase, 5)
+					else:
+						item["relevancy_score"] = 5
+				all_results.extend(batch_items)
+				logger.warning(f"[ScoringRunner] ⚠️  {batch_label} used fallback scores")
 		
-		logger.info(f"[ScoringRunner] Fallback stats:")
-		logger.info(f"   - Intent scores added: {fallback_stats['intent_added']}")
-		logger.info(f"   - Relevancy from base_relevancy_scores: {fallback_stats['relevancy_from_base']}")
-		logger.info(f"   - Relevancy defaulted to 5: {fallback_stats['relevancy_defaulted']}")
-		logger.info(f"   - Relevancy preserved from items: {fallback_stats['relevancy_preserved']}")
+		logger.info(f"[ScoringRunner] ✅ All batches complete: {len(all_results)}/{total_items} items processed")
 		
-		return items
+		return all_results
 	
 	
 	@staticmethod

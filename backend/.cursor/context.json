@@ -126,6 +126,30 @@
         "why": "Unified model across all agents for consistency. Changed from mixed gpt-4o/gpt-4o-mini to gpt-5-mini everywhere: keyword_agent, intent_agent, broad_volume_agent, root_relevance_agent, seo_agent, amazon_compliance_agent, competitor_title_analysis_agent, root_extraction_agent. Already using gpt-5-mini: opportunity_agent, metrics_agent, research_agent, keyword_variant_agent, intent_classification_agent.",
         "when": "2025-10-23",
         "impact": "Consistent AI model across entire pipeline. Better quality and reasoning with latest gpt-5-mini model."
+      },
+      {
+        "what": "CRITICAL: Disabled content filter in Research agent (runner.py:284-313)",
+        "why": "Content filter was removing ALL keywords not in current listing (6944 → 142), preventing SEO optimization from adding NEW high-volume keywords. SEO's entire purpose is to ADD keywords like 'beauty blender' (71K vol) that aren't in current title. Filter defeated this by only keeping existing keywords.",
+        "when": "2025-10-23",
+        "impact": "Now passing ALL deduplicated keywords to categorization & SEO. Can optimize with new high-volume keywords. Expected: 6944 keywords → categorization → SEO optimization (vs previous 142)."
+      },
+      {
+        "what": "Batching for intent_scoring_agent (75 items/batch)",
+        "why": "Intent scoring was processing all 549 keywords in one AI request, causing timeouts (Request timed out) and connection errors. Large datasets (500+) overwhelm the model and cause failures.",
+        "when": "2025-10-23",
+        "impact": "Intent scoring now processes in batches of 75. Prevents timeouts, improves reliability. 549 keywords = 8 batches. Each batch has fallback if AI fails."
+      },
+      {
+        "what": "Extended uvicorn timeout to 5 hours (18000 seconds)",
+        "why": "Background jobs processing 549 keywords take ~2 hours (keyword cat: 8 batches, intent: 8 batches, broad_volume: 11 batches, SEO). Default 30-second timeout was cutting jobs short. Created uvicorn_config.py and added scripts to pyproject.toml for easy startup with proper timeout.",
+        "when": "2025-10-23",
+        "impact": "Background jobs can now run up to 5 hours without timeout. Use 'python uvicorn_config.py' or 'uv run dev' to start server with extended timeout."
+      },
+      {
+        "what": "Dynamic relevancy threshold based on dataset size",
+        "why": "Static threshold=2 was too lenient for large datasets (500+ keywords) and too strict for small ones. Large datasets need stricter filtering to focus on highest-quality keywords and reduce AI processing time.",
+        "when": "2025-10-23",
+        "impact": "Threshold auto-adjusts: ≤100 keywords → threshold=2, 101-200 keywords → threshold=3, 201+ keywords → threshold=4. For 549 keywords, now uses threshold=4 instead of 2, filtering out low-traction keywords to improve quality and performance."
       }
     ]
   },

@@ -282,85 +282,35 @@ class ResearchRunner:
         logger.info("")
         
         # ==================================================================================
-        # STEP 2: CONTENT FILTER (RESTORED)
+        # STEP 2: CONTENT FILTER **DISABLED FOR SEO OPTIMIZATION**
         # ==================================================================================
-        # PURPOSE: Only keep keywords that actually appear in the original product listing
-        # WHY: Filters out keywords from CSVs that don't match the current product
-        # EXAMPLE: If CSV has "strawberry jam" but listing only mentions "strawberry slices",
-        #          this removes "strawberry jam" from analysis
-        # IMPACT: 
-        #   - PROS: Shows only keywords present in current listing
-        #   - CONS: May remove valuable keywords for SEO optimization
-        # NOTE: Can be disabled to allow SEO agent to suggest new keywords
+        # PURPOSE: Was filtering to only keywords in current listing
+        # WHY DISABLED: SEO optimization NEEDS new high-volume keywords not in current listing
+        # IMPACT: Now passing ALL deduplicated keywords (6944) to categorization & SEO
+        # BENEFIT: Can now add "beauty blender" (71K vol) even if not in current title
         # ==================================================================================
         
         logger.info("")
         logger.info("="*80)
-        logger.info("🔧 [STEP 2: CONTENT FILTER]")
+        logger.info("🔧 [STEP 2: CONTENT FILTER - DISABLED]")
         logger.info("="*80)
-        logger.info("📋 What: Filter keywords to only those in original title/bullets")
-        logger.info("🎯 Why: Remove CSV keywords that don't match current product")
-        logger.info("💡 How: Text matching against scraped title and bullet points")
-        logger.info("⚠️  Impact: Removes keywords not in current listing")
-        logger.info("="*80)
-        
-        # Apply content filtering: Only keep keywords present in original title/bullets
-        filtered_keywords, filter_stats = filter_keywords_by_original_content(
-            keywords=unique_keywords,
-            scraped_data=scraped_data
-        )
-        
-        logger.info("")
-        logger.info(f"✅ [CONTENT FILTER RESULTS]")
-        logger.info(f"   📊 Input: {filter_stats['original_count']} keywords")
-        logger.info(f"   🎯 Output: {filter_stats['filtered_count']} keywords (found in listing)")
-        logger.info(f"   🗑️  Removed: {filter_stats['removed_count']} keywords (not in listing)")
-        logger.info(f"   📈 Retention: {filter_stats['filter_percentage']}% of keywords kept")
-        logger.info(f"   💡 These {filter_stats['filtered_count']} keywords exist in current title/bullets")
+        logger.info("📋 What: Content filter DISABLED for SEO optimization")
+        logger.info("🎯 Why: Allow NEW high-volume keywords not in current listing")
+        logger.info(f"💡 Impact: All {len(unique_keywords)} deduplicated keywords will be analyzed")
+        logger.info("🚀 Benefit: Can now optimize with keywords like 'beauty blender' (71K vol)")
         logger.info("="*80)
         logger.info("")
         
-        # Update unique_keywords to use filtered list
-        unique_keywords = filtered_keywords
+        # SKIP content filtering - use ALL deduplicated keywords
+        # This allows SEO agent to suggest new high-volume keywords
+        filtered_base_relevancy = base_relevancy
         
-        # Update base_relevancy to only include filtered keywords
-        # Use case-insensitive lookup to preserve scores
-        logger.info("🔍 [RELEVANCY MAPPING] Matching filtered keywords to relevancy scores...")
-        filtered_base_relevancy = {}
-        exact_matches = 0
-        case_insensitive_matches = 0
-        missing_keywords = 0
-        
-        for kw in filtered_keywords:
-            # Try exact match first
-            if kw in base_relevancy:
-                score = base_relevancy[kw]
-                filtered_base_relevancy[kw] = score
-                exact_matches += 1
-                logger.debug(f"[RELEVANCY] Exact match: '{kw}' → score {score}")
-            else:
-                # Try case-insensitive match
-                kw_lower = kw.lower()
-                found = False
-                for original_kw, score in base_relevancy.items():
-                    if original_kw.lower() == kw_lower:
-                        filtered_base_relevancy[kw] = score
-                        case_insensitive_matches += 1
-                        found = True
-                        logger.debug(f"[RELEVANCY] Case-insensitive match: '{kw}' ↔ '{original_kw}' → score {score}")
-                        break
-                if not found:
-                    # Keyword passed content filter but has no relevancy score
-                    # This shouldn't happen, but use reasonable default
-                    filtered_base_relevancy[kw] = 5
-                    missing_keywords += 1
-                    logger.warning(f"[RELEVANCY] No relevancy score found for '{kw}', using default 5")
-        
-        logger.info(f"✅ [RELEVANCY MAPPING] Complete:")
-        logger.info(f"   - Exact matches: {exact_matches}")
-        logger.info(f"   - Case-insensitive matches: {case_insensitive_matches}")
-        logger.info(f"   - Missing keywords (defaulted to 5): {missing_keywords}")
-        logger.info(f"   - Total keywords mapped: {len(filtered_base_relevancy)}")
+        logger.info(f"✅ [KEYWORD PASSTHROUGH]")
+        logger.info(f"   📊 Total keywords: {len(unique_keywords)}")
+        logger.info(f"   🎯 All keywords will be categorized and scored")
+        logger.info(f"   💡 SEO agent can now suggest NEW high-volume keywords")
+        logger.info("="*80)
+        logger.info("")
         
         # Log sample of mapped keywords with scores
         sample_keywords = list(filtered_base_relevancy.items())[:10]
@@ -376,8 +326,18 @@ class ResearchRunner:
         # END OF FILTERING AND DEDUPLICATION
         # ==================================================================================
 
-        # Filter keywords by relevancy score (>= 2) before agent processing
-        min_relevancy_threshold = 2
+        # Filter keywords by relevancy score (dynamic threshold based on dataset size)
+        # More keywords = stricter threshold to focus on highest quality
+        total_keywords = len(base_relevancy)
+        if total_keywords > 200:
+            min_relevancy_threshold = 4  # Very strict for large datasets (200+)
+        elif total_keywords > 100:
+            min_relevancy_threshold = 3  # Moderate for medium datasets (100-200)
+        else:
+            min_relevancy_threshold = 2  # Default for small datasets (≤100)
+
+        logger.info(f"📊 Dynamic relevancy threshold: {min_relevancy_threshold} (based on {total_keywords} total keywords)")
+        
         high_relevancy_keywords = []
         high_relevancy_scores = {}
         
