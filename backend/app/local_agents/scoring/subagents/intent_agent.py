@@ -1,4 +1,4 @@
-from agents import Agent
+from agents import Agent, ModelSettings
 
 
 INTENT_SCORING_INSTRUCTIONS = """
@@ -34,6 +34,7 @@ intent_scoring_agent = Agent(
     name="IntentScoringSubagent",
     instructions=INTENT_SCORING_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",  # gpt-5-mini for better accuracy
+    model_settings=ModelSettings(),
     # Let the runner return raw text; ScoringRunner will parse JSON list leniently.
     output_type=None,
 )

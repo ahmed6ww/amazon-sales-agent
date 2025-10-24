@@ -13,9 +13,9 @@ research_agent = Agent(
     name="ResearchAgent",
     instructions=RESEARCH_AGENT_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",
-    # model_settings=ModelSettings(
-    #     max_tokens=4000,
-    # ),
+    model_settings=ModelSettings(
+        max_tokens=4000,
+    ),
     # Enforce structured output; keep schema non-strict to allow additive fields
     output_type=AgentOutputSchema(ResearchOutput, strict_json_schema=False),
 )

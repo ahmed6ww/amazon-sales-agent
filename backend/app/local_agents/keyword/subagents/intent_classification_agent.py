@@ -5,7 +5,7 @@ Intelligent replacement for the programmatic intent classification service.
 Uses AI to understand purchase intent with superior accuracy vs hardcoded rules.
 """
 
-from agents import Agent
+from agents import Agent, ModelSettings
 from typing import Dict, List, Any, Optional
 import json
 import logging
@@ -138,6 +138,7 @@ intent_classification_agent = Agent(
     name="IntentClassificationAgent",
     instructions=INTENT_CLASSIFICATION_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",
+    model_settings=ModelSettings(),
     output_type=None,
 )
 

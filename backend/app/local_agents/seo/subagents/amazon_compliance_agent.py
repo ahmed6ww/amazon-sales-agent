@@ -5,7 +5,7 @@ AI-powered agent that ensures titles and bullet points comply with Amazon guidel
 while optimizing for the first 80 characters with main keyword roots and benefits.
 """
 
-from agents import Agent
+from agents import Agent, ModelSettings
 from typing import Dict, List, Any, Optional, Tuple
 import json
 import logging
@@ -727,6 +727,7 @@ amazon_compliance_agent = Agent(
     name="AmazonComplianceAgent",
     instructions=AMAZON_COMPLIANCE_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",  # gpt-5-mini for title/bullet generation
+    model_settings=ModelSettings(),
     output_type=None,
 )
 

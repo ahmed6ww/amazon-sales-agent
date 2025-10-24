@@ -6,7 +6,7 @@ product benefits and optimize the first 80 characters with benefit-focused appro
 rather than just keyword stuffing for search volume.
 """
 
-from agents import Agent
+from agents import Agent, ModelSettings
 from typing import Dict, List, Any, Optional
 import json
 import logging
@@ -200,6 +200,7 @@ competitor_title_analysis_agent = Agent(
     name="CompetitorTitleAnalysisAgent",
     instructions=COMPETITOR_TITLE_ANALYSIS_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",  # gpt-5-mini for competitor analysis
+    model_settings=ModelSettings(),
     output_type=None,
 )
 

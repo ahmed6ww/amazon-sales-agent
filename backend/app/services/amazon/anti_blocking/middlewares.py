@@ -158,7 +158,16 @@ class SmartRetryMiddleware(RetryMiddleware):
                 reason = f"amazon_block_{response.status}"
                 return self._retry(request, reason, spider) or response
             
-            # Check for captcha in response body
+            # Check if response is text-based before accessing response.text
+            content_type = response.headers.get('Content-Type', b'').decode('utf-8').lower()
+            is_text = any(t in content_type for t in ['text/html', 'text/plain', 'application/json', 'application/xml'])
+            
+            if not is_text:
+                safe_log(spider, 'error', f"🚫 Non-text response detected (Content-Type: {content_type}) - Amazon likely blocking with image/captcha")
+                reason = "non_text_response"
+                return self._retry(request, reason, spider) or response
+            
+            # Check for captcha in response body (only if text-based)
             if "captcha" in response.text.lower():
                 safe_log(spider, 'error', "🚫 CAPTCHA detected - consider using better proxies or slower rate")
                 reason = "captcha_detected"

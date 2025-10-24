@@ -5,7 +5,7 @@ Intelligent replacement for the programmatic root extraction service.
 Uses AI to understand semantic roots and keyword relationships with superior accuracy.
 """
 
-from agents import Agent
+from agents import Agent, ModelSettings
 from typing import Dict, List, Any, Optional
 import json
 import logging
@@ -205,6 +205,7 @@ root_extraction_agent = Agent(
     name="RootExtractionAgent", 
     instructions=ROOT_EXTRACTION_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",  # gpt-5-mini for root extraction
+    model_settings=ModelSettings(),
     output_type=None,
 )
 
