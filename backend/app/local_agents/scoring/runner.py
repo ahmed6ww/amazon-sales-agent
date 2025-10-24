@@ -329,83 +329,92 @@ class ScoringRunner:
 			except Exception as e:
 				logger.warning(f"[ScoringRunner] Broad volume calculation failed in score_and_enrich: {e}")
 		
-		# Step 4: Opportunity detection (AI rules) after metrics and (optionally) root assignment
-		try:
-			from agents import Runner as _Runner
-			from app.local_agents.scoring.subagents.opportunity_agent import opportunity_agent
-			import json as _json
-			import time
-			
-			# BATCHING: Process in chunks to prevent token limits
-			BATCH_SIZE = 100  # Opportunity detection is lightweight
-			total_items = len(enriched_items)
-			num_batches = (total_items + BATCH_SIZE - 1) // BATCH_SIZE
-			
-			if total_items > BATCH_SIZE:
-				logger.info(f"[OpportunityAgent] 📦 Processing {total_items} items in {num_batches} batch(es) (size: {BATCH_SIZE})")
-			
-			all_updates = []
-			
-			for batch_idx in range(num_batches):
-				start_idx = batch_idx * BATCH_SIZE
-				end_idx = min(start_idx + BATCH_SIZE, total_items)
-				batch_items = enriched_items[start_idx:end_idx]
-				batch_label = f"Batch {batch_idx + 1}/{num_batches}"
-				
-				if total_items > BATCH_SIZE:
-					logger.info(f"[OpportunityAgent] 🔄 {batch_label}: Processing {len(batch_items)} items")
-				
-				try:
-					# Rate limiting between batches
-					if batch_idx > 0:
-						time.sleep(1)
-					
-					opp_prompt = _json.dumps({"items": batch_items}, separators=(",", ":"))
-					opp_res = _Runner.run_sync(opportunity_agent, opp_prompt)
-					opp_out = getattr(opp_res, "final_output", None)
-					
-					batch_updates = None
-					if isinstance(opp_out, str):
-						try:
-							parsed = _json.loads(opp_out.strip())
-							batch_updates = parsed.get("items", parsed if isinstance(parsed, list) else None)
-						except Exception:
-							batch_updates = None
-					elif hasattr(opp_out, "model_dump"):
-						try:
-							parsed = opp_out.model_dump()
-							batch_updates = parsed.get("items", parsed if isinstance(parsed, list) else None)
-						except Exception:
-							batch_updates = None
-					
-					if isinstance(batch_updates, list):
-						all_updates.extend(batch_updates)
-						if total_items > BATCH_SIZE:
-							logger.info(f"[OpportunityAgent] ✅ {batch_label} complete ({len(batch_updates)} items)")
-					else:
-						# No updates for this batch - items will use defaults
-						if total_items > BATCH_SIZE:
-							logger.warning(f"[OpportunityAgent] ⚠️  {batch_label} returned no updates")
-				
-				except Exception as e:
-					logger.error(f"[OpportunityAgent] ❌ {batch_label} failed: {e}")
-					# Continue with other batches
-			
-			# Apply updates by phrase match if available
-			if all_updates:
-				by_phrase = {str((u or {}).get("phrase", "")).strip().lower(): u for u in all_updates}
-				for it in enriched_items:
-					p = str(it.get("phrase", "")).strip().lower()
-					upd = by_phrase.get(p)
-					if isinstance(upd, dict):
-						for k in ("opportunity_decision", "opportunity_reason"):
-							if k in upd:
-								it[k] = upd[k]
-				logger.info(f"[OpportunityAgent] ✅ All batches complete: Annotations applied to {len(by_phrase)} items")
-			else:
-				logger.warning("[OpportunityAgent] No updates received from any batch")
-		except Exception as e:
-			logger.debug(f"[ScoringRunner] Opportunity subagent skipped: {e}")
+		# Step 4: Opportunity detection (AI rules) - DISABLED
+		# REASON: Redundant with existing metrics (title_density already in data)
+		# - Spanish keywords already filtered by category
+		# - Title density metric already shows competitor usage
+		# - Relevancy scoring already ranks quality
+		# - SEO agent makes final inclusion decisions
+		# BENEFIT: Saves 5+ API calls per run, faster processing
+		# To re-enable: Uncomment this block and fix output format ("Yes" -> "Opportunity")
+		logger.info("[OpportunityAgent] ⏭️  Skipped (disabled - title_density metric used instead)")
+		
+		# try:
+		# 	from agents import Runner as _Runner
+		# 	from app.local_agents.scoring.subagents.opportunity_agent import opportunity_agent
+		# 	import json as _json
+		# 	import time
+		# 	
+		# 	# BATCHING: Process in chunks to prevent token limits
+		# 	BATCH_SIZE = 100  # Opportunity detection is lightweight
+		# 	total_items = len(enriched_items)
+		# 	num_batches = (total_items + BATCH_SIZE - 1) // BATCH_SIZE
+		# 	
+		# 	if total_items > BATCH_SIZE:
+		# 		logger.info(f"[OpportunityAgent] 📦 Processing {total_items} items in {num_batches} batch(es) (size: {BATCH_SIZE})")
+		# 	
+		# 	all_updates = []
+		# 	
+		# 	for batch_idx in range(num_batches):
+		# 		start_idx = batch_idx * BATCH_SIZE
+		# 		end_idx = min(start_idx + BATCH_SIZE, total_items)
+		# 		batch_items = enriched_items[start_idx:end_idx]
+		# 		batch_label = f"Batch {batch_idx + 1}/{num_batches}"
+		# 		
+		# 		if total_items > BATCH_SIZE:
+		# 			logger.info(f"[OpportunityAgent] 🔄 {batch_label}: Processing {len(batch_items)} items")
+		# 		
+		# 		try:
+		# 			# Rate limiting between batches
+		# 			if batch_idx > 0:
+		# 				time.sleep(1)
+		# 			
+		# 			opp_prompt = _json.dumps({"items": batch_items}, separators=(",", ":"))
+		# 			opp_res = _Runner.run_sync(opportunity_agent, opp_prompt)
+		# 			opp_out = getattr(opp_res, "final_output", None)
+		# 			
+		# 			batch_updates = None
+		# 			if isinstance(opp_out, str):
+		# 				try:
+		# 					parsed = _json.loads(opp_out.strip())
+		# 					batch_updates = parsed.get("items", parsed if isinstance(parsed, list) else None)
+		# 				except Exception:
+		# 					batch_updates = None
+		# 			elif hasattr(opp_out, "model_dump"):
+		# 				try:
+		# 					parsed = opp_out.model_dump()
+		# 					batch_updates = parsed.get("items", parsed if isinstance(parsed, list) else None)
+		# 				except Exception:
+		# 					batch_updates = None
+		# 			
+		# 			if isinstance(batch_updates, list):
+		# 				all_updates.extend(batch_updates)
+		# 				if total_items > BATCH_SIZE:
+		# 					logger.info(f"[OpportunityAgent] ✅ {batch_label} complete ({len(batch_updates)} items)")
+		# 			else:
+		# 				# No updates for this batch - items will use defaults
+		# 				if total_items > BATCH_SIZE:
+		# 					logger.warning(f"[OpportunityAgent] ⚠️  {batch_label} returned no updates")
+		# 		
+		# 		except Exception as e:
+		# 			logger.error(f"[OpportunityAgent] ❌ {batch_label} failed: {e}")
+		# 			# Continue with other batches
+		# 	
+		# 	# Apply updates by phrase match if available
+		# 	if all_updates:
+		# 		by_phrase = {str((u or {}).get("phrase", "")).strip().lower(): u for u in all_updates}
+		# 		for it in enriched_items:
+		# 			p = str(it.get("phrase", "")).strip().lower()
+		# 			upd = by_phrase.get(p)
+		# 			if isinstance(upd, dict):
+		# 				for k in ("opportunity_decision", "opportunity_reason"):
+		# 					if k in upd:
+		# 						it[k] = upd[k]
+		# 		logger.info(f"[OpportunityAgent] ✅ All batches complete: Annotations applied to {len(by_phrase)} items")
+		# 	else:
+		# 		logger.warning("[OpportunityAgent] No updates received from any batch")
+		# except Exception as e:
+		# 	logger.debug(f"[ScoringRunner] Opportunity subagent skipped: {e}")
 		
 		return enriched_items
 
