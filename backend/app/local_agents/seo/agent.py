@@ -15,6 +15,7 @@ seo_optimization_agent = Agent(
     name="SEOOptimizationAgent",
     instructions=SEO_OPTIMIZATION_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",  # gpt-5-mini for SEO optimization
+    model_settings=ModelSettings(),
     # Enforce structured output for consistent SEO analysis results
     output_type=AgentOutputSchema(SEOAnalysisResult, strict_json_schema=False),
 ) 

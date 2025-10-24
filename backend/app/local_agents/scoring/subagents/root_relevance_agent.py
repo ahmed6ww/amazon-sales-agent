@@ -5,7 +5,7 @@ AI-powered agent that determines which keyword roots should be included in broad
 based on relevance assessment, replacing programmatic filtering with AI intelligence.
 """
 
-from agents import Agent
+from agents import Agent, ModelSettings
 from typing import Dict, List, Any, Optional
 import json
 import logging
@@ -162,6 +162,10 @@ root_relevance_agent = Agent(
     name="RootRelevanceAgent", 
     instructions=ROOT_RELEVANCE_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",  # gpt-5-mini
+    model_settings=ModelSettings(
+        max_tokens=8000,  # Handle large keyword lists
+        timeout=240.0,     # 4 minutes for complex analysis
+    ),
     output_type=None,
 )
 

@@ -1,6 +1,6 @@
 from typing import Any, Dict, List, Optional, Tuple
 
-from agents import Agent
+from agents import Agent, ModelSettings
 
 # Minimal placeholder Agent so this module exports `metrics_agent` for package imports.
 # Actual metrics logic is deterministic via the helper functions below.
@@ -13,6 +13,7 @@ metrics_agent = Agent(
     name="MetricsSubagent",
     instructions=METRICS_AGENT_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",
+    model_settings=ModelSettings(),
     output_type=None,
 )
 

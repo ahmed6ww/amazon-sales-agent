@@ -5,7 +5,7 @@ AI-powered agent that handles singular/plural keyword variants and selects the b
 based on search volume and sentence structure, replacing programmatic logic with AI intelligence.
 """
 
-from agents import Agent
+from agents import Agent, ModelSettings
 from typing import Dict, List, Any, Optional
 import json
 import logging
@@ -95,6 +95,7 @@ keyword_variant_agent = Agent(
     name="KeywordVariantAgent",
     instructions=KEYWORD_VARIANT_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",
+    model_settings=ModelSettings(),
     output_type=None,
 )
 
