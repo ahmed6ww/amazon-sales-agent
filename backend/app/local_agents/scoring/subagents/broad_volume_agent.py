@@ -1,5 +1,6 @@
 from agents import Agent, ModelSettings
 from typing import Any, Dict, List, Set, Optional
+from openai.types.shared.reasoning import Reasoning
 import re
 import logging
 
@@ -112,10 +113,11 @@ NOTE: This instruction is now enhanced with AI-powered Task 13 filtering for bet
 broad_volume_agent = Agent(
     name="BroadVolumeSubagent",
     instructions=BROAD_VOLUME_INSTRUCTIONS,
-    model="gpt-5-nano-2025-08-07",  # gpt-5-mini
+    model="gpt-5-mini-2025-08-07",  # gpt-5-mini
     model_settings=ModelSettings(
         max_tokens=16000,  # Handle 200+ items without truncation
         timeout=240.0,
+        reasoning=Reasoning(effort="medium"),
     ),
     output_type=None,
 )

@@ -7,6 +7,7 @@ based on search volume and sentence structure, replacing programmatic logic with
 
 from agents import Agent, ModelSettings
 from typing import Dict, List, Any, Optional
+from openai.types.shared.reasoning import Reasoning
 import json
 import logging
 
@@ -94,8 +95,10 @@ Return ONLY the JSON response in the exact format specified.
 keyword_variant_agent = Agent(
     name="KeywordVariantAgent",
     instructions=KEYWORD_VARIANT_INSTRUCTIONS,
-    model="gpt-5-nano-2025-08-07",
-    model_settings=ModelSettings(),
+    model="gpt-5-mini-2025-08-07",
+    model_settings=ModelSettings(
+        reasoning=Reasoning(effort="medium"),
+    ),
     output_type=None,
 )
 
