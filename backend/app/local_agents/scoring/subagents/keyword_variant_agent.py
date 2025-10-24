@@ -95,7 +95,6 @@ keyword_variant_agent = Agent(
     name="KeywordVariantAgent",
     instructions=KEYWORD_VARIANT_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",
-    reasoning_effort="medium",
     output_type=None,
 )
 

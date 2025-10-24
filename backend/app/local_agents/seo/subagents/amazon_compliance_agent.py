@@ -727,7 +727,6 @@ amazon_compliance_agent = Agent(
     name="AmazonComplianceAgent",
     instructions=AMAZON_COMPLIANCE_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",  # gpt-5-mini for title/bullet generation
-    reasoning_effort="medium",
     output_type=None,
 )
 

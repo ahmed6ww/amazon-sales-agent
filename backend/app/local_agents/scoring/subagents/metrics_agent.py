@@ -13,7 +13,6 @@ metrics_agent = Agent(
     name="MetricsSubagent",
     instructions=METRICS_AGENT_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",
-    reasoning_effort="medium",
     output_type=None,
 )
 

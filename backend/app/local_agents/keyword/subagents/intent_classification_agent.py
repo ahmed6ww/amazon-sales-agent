@@ -138,7 +138,6 @@ intent_classification_agent = Agent(
     name="IntentClassificationAgent",
     instructions=INTENT_CLASSIFICATION_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",
-    reasoning_effort="medium",
     output_type=None,
 )
 
