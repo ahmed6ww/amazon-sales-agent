@@ -168,6 +168,7 @@ def analyze_root_relevance_ai(keywords: List[Dict[str, Any]]) -> Dict[str, Any]:
     """
     Use AI to analyze which keyword roots should be included in broad volume calculations.
     This replaces the programmatic filtering logic from Task 13 with AI intelligence.
+    Implements batching to prevent token limits and timeouts with large keyword sets.
     
     Args:
         keywords: List of keyword dicts with phrase, root, search_volume, category, etc.
@@ -188,55 +189,132 @@ def analyze_root_relevance_ai(keywords: List[Dict[str, Any]]) -> Dict[str, Any]:
             }
         }
     
-    # Prepare input for AI agent
-    keywords_json = json.dumps(keywords, indent=2)
-    prompt = USER_PROMPT_TEMPLATE.format(keywords_json=keywords_json)
+    # Import dependencies
+    from agents import Runner as _Runner
+    import asyncio
+    import time
+    from collections import defaultdict
     
+    # Check if event loop exists
     try:
-        # Import the Runner dynamically to avoid circular imports
-        from agents import Runner as _Runner
-        import asyncio
-        
-        # Run AI agent with proper async handling
-        try:
-            # Check if event loop exists
-            loop = asyncio.get_running_loop()
-            # Event loop already running - use fallback instead
-            logger.warning(f"[RootRelevanceAgent] Event loop running, using fallback analysis")
-            return _create_fallback_analysis(keywords)
-        except RuntimeError:
-            # No event loop - safe to use run_sync
-            result = _Runner.run_sync(
-                root_relevance_agent,
-                prompt
-            )
-        
-        output = getattr(result, "final_output", None)
-        
-        # Parse AI response
-        if isinstance(output, str):
-            try:
-                cleaned_output = strip_markdown_code_fences(output)
-                parsed = json.loads(cleaned_output)
-                filtered_roots = len(parsed.get("filtered_root_volumes", {}))
-                logger.info(f"[RootRelevanceAgent] AI analyzed {len(keywords)} keywords, filtered to {filtered_roots} relevant roots")
-                return parsed
-            except json.JSONDecodeError as e:
-                logger.error(f"[RootRelevanceAgent] Failed to parse AI output: {e}")
-                logger.debug(f"[RootRelevanceAgent] Raw output (first 500 chars): {output[:500]}")
-                # Fallback to no filtering
-                return _create_fallback_analysis(keywords)
-        
-        elif hasattr(output, 'model_dump'):
-            return output.model_dump()
-        
-        else:
-            raise Exception("Unexpected AI output format")
-            
-    except Exception as e:
-        logger.error(f"[RootRelevanceAgent] AI analysis failed: {e}")
-        # Graceful fallback - apply basic filtering
+        loop = asyncio.get_running_loop()
+        logger.warning(f"[RootRelevanceAgent] Event loop running, using fallback analysis")
         return _create_fallback_analysis(keywords)
+    except RuntimeError:
+        pass  # No event loop - safe to use run_sync
+    
+    # ========================================================================
+    # BATCHING: Split keywords to prevent token limits and timeouts
+    # ========================================================================
+    BATCH_SIZE = 100  # Keywords per batch (root analysis is lighter than full categorization)
+    total_keywords = len(keywords)
+    num_batches = (total_keywords + BATCH_SIZE - 1) // BATCH_SIZE
+    
+    if total_keywords > BATCH_SIZE:
+        logger.info(f"[RootRelevanceAgent] 📦 Processing {total_keywords} keywords in {num_batches} batch(es) (size: {BATCH_SIZE})")
+    
+    # Aggregated results from all batches
+    combined_root_volumes = defaultdict(int)
+    combined_root_analysis = {}
+    total_volume_before = 0
+    total_volume_after = 0
+    
+    for batch_idx in range(num_batches):
+        start_idx = batch_idx * BATCH_SIZE
+        end_idx = min(start_idx + BATCH_SIZE, total_keywords)
+        batch_keywords = keywords[start_idx:end_idx]
+        batch_label = f"Batch {batch_idx + 1}/{num_batches}"
+        
+        if total_keywords > BATCH_SIZE:
+            logger.info(f"[RootRelevanceAgent] 🔄 {batch_label}: Processing {len(batch_keywords)} keywords")
+        
+        try:
+            # Rate limiting between batches
+            if batch_idx > 0:
+                time.sleep(1)
+            
+            # Prepare prompt for this batch
+            keywords_json = json.dumps(batch_keywords, indent=2)
+            prompt = USER_PROMPT_TEMPLATE.format(keywords_json=keywords_json)
+            
+            # Run AI agent for this batch
+            result = _Runner.run_sync(root_relevance_agent, prompt)
+            output = getattr(result, "final_output", None)
+            
+            # Parse AI response
+            batch_result = None
+            if isinstance(output, str):
+                try:
+                    cleaned_output = strip_markdown_code_fences(output)
+                    batch_result = json.loads(cleaned_output)
+                except json.JSONDecodeError as e:
+                    logger.warning(f"[RootRelevanceAgent] {batch_label} JSON parse failed: {e}")
+                    raise
+            elif hasattr(output, 'model_dump'):
+                batch_result = output.model_dump()
+            else:
+                raise Exception("Unexpected AI output format")
+            
+            # Merge batch results into combined results
+            if batch_result:
+                # Merge filtered root volumes
+                batch_volumes = batch_result.get("filtered_root_volumes", {})
+                for root, volume in batch_volumes.items():
+                    combined_root_volumes[root] += volume
+                
+                # Merge root analysis (for detailed breakdown)
+                batch_analysis = batch_result.get("root_volume_analysis", {})
+                for root, analysis in batch_analysis.items():
+                    if root not in combined_root_analysis:
+                        combined_root_analysis[root] = analysis
+                    else:
+                        # Merge analysis for same root from different batches
+                        existing = combined_root_analysis[root]
+                        existing["total_keywords"] = existing.get("total_keywords", 0) + analysis.get("total_keywords", 0)
+                        existing["included_volume"] = existing.get("included_volume", 0) + analysis.get("included_volume", 0)
+                        existing["excluded_volume"] = existing.get("excluded_volume", 0) + analysis.get("excluded_volume", 0)
+                        existing["final_volume"] = existing.get("final_volume", 0) + analysis.get("final_volume", 0)
+                        existing.setdefault("relevant_keywords", []).extend(analysis.get("relevant_keywords", []))
+                        existing.setdefault("irrelevant_keywords", []).extend(analysis.get("irrelevant_keywords", []))
+                
+                # Aggregate summary stats
+                batch_summary = batch_result.get("summary", {})
+                total_volume_before += batch_summary.get("total_volume_before", 0)
+                total_volume_after += batch_summary.get("total_volume_after", 0)
+                
+                if total_keywords > BATCH_SIZE:
+                    logger.info(f"[RootRelevanceAgent] ✅ {batch_label} complete ({len(batch_volumes)} roots analyzed)")
+            else:
+                raise ValueError("Batch parsing failed")
+        
+        except Exception as e:
+            logger.error(f"[RootRelevanceAgent] ❌ {batch_label} failed: {e}")
+            # Fallback: Use programmatic filtering for failed batch
+            logger.warning(f"[RootRelevanceAgent] ⚠️  {batch_label} using fallback filtering")
+            fallback_result = _create_fallback_analysis(batch_keywords)
+            fallback_volumes = fallback_result.get("filtered_root_volumes", {})
+            for root, volume in fallback_volumes.items():
+                combined_root_volumes[root] += volume
+            total_volume_before += fallback_result.get("summary", {}).get("total_volume_before", 0)
+            total_volume_after += fallback_result.get("summary", {}).get("total_volume_after", 0)
+    
+    # Build final combined result
+    final_result = {
+        "root_volume_analysis": combined_root_analysis,
+        "filtered_root_volumes": dict(combined_root_volumes),
+        "summary": {
+            "total_roots_analyzed": len(combined_root_volumes),
+            "roots_included": len(combined_root_volumes),
+            "total_volume_before": total_volume_before,
+            "total_volume_after": total_volume_after,
+            "volume_filtered_out": total_volume_before - total_volume_after,
+            "batches_processed": num_batches
+        }
+    }
+    
+    logger.info(f"[RootRelevanceAgent] ✅ All batches complete: {len(combined_root_volumes)} roots included, {final_result['summary']['volume_filtered_out']} volume filtered out")
+    
+    return final_result
 
 def _create_fallback_analysis(keywords: List[Dict[str, Any]]) -> Dict[str, Any]:
     """Create a fallback analysis when AI fails, using basic programmatic filtering"""

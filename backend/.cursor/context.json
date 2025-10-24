@@ -162,6 +162,24 @@
         "why": "File-based storage doesn't persist on serverless platforms (Vercel/Railway/Render) causing completed jobs to lose results. Redis provides persistent, fast storage that works across deployments and multiple server instances.",
         "when": "2025-10-23",
         "impact": "JobManager now supports Redis (primary) with file storage fallback (dev only). Added upstash-redis dependency. Jobs stored with 24h TTL. Auto-detects Redis config and falls back gracefully. See backend/REDIS_SETUP.md for setup instructions."
+      },
+      {
+        "what": "Batching for root_relevance_agent (100 keywords/batch)",
+        "why": "Root relevance analysis was sending ALL keywords (500+) in a single AI request, causing token limit exceeded, timeouts, and JSON parsing failures. This was the last unbatched AI agent in Step 3.",
+        "when": "2025-10-24",
+        "impact": "Root relevance now processes in batches of 100 with aggregated results. Merges filtered_root_volumes across batches. Fallback per batch if AI fails. Prevents token limits for large keyword sets (500 keywords = 5 batches)."
+      },
+      {
+        "what": "Batching for opportunity_agent (100 keywords/batch)",
+        "why": "Opportunity detection was sending ALL keywords (500+) in a single AI request to determine zero-title-density opportunities, causing potential token limits and timeouts on large datasets.",
+        "when": "2025-10-24",
+        "impact": "Opportunity agent now processes in batches of 100 with aggregated updates. Merges opportunity_decision and opportunity_reason across batches. Continues processing other batches if one fails. Prevents token limits for large keyword sets (500 keywords = 5 batches)."
+      },
+      {
+        "what": "Batching for root_extraction_agent (200 keywords/batch)",
+        "why": "Root extraction AI was sending ALL keywords (1000+) in a single AI request for semantic root analysis, causing token limit exceeded and timeouts. This agent runs in the Research step and is non-fatal, but failures prevent valuable root analysis.",
+        "when": "2025-10-24",
+        "impact": "Root extraction now processes in batches of 200 (larger batch since root analysis is lighter). Merges keyword_roots across batches, combining variants and frequencies. Fallback per batch if AI fails. Prevents token limits for large keyword sets (1000 keywords = 5 batches)."
       }
     ]
   },
@@ -197,6 +215,41 @@
       "timeout": 240,
       "state": "active",
       "notes": "Adds root field to keywords. Batching enabled (100 items/batch) to prevent JSON corruption. 214 keywords = 3 batches. Fallback per batch on parse error."
+    },
+    "intent_scoring_agent": {
+      "files": ["app/local_agents/scoring/runner.py"],
+      "model": "gpt-5-2025-08-07",
+      "batch_size": 75,
+      "timeout": 240,
+      "state": "active",
+      "notes": "Adds intent_score (0-3) to keywords. Batching enabled (75 items/batch) to prevent timeouts. Merges results across batches. Fallback per batch with default scores. 549 keywords = 8 batches."
+    },
+    "root_relevance_agent": {
+      "files": ["app/local_agents/scoring/subagents/root_relevance_agent.py"],
+      "model": "gpt-5-2025-08-07",
+      "batch_size": 100,
+      "timeout": 240,
+      "state": "active",
+      "notes": "Filters root volumes to exclude irrelevant categories. Batching enabled (100 keywords/batch) to prevent token limits. Aggregates filtered_root_volumes across batches. Fallback per batch. 500 keywords = 5 batches."
+    },
+    "opportunity_agent": {
+      "files": [
+        "app/local_agents/scoring/subagents/opportunity_agent.py",
+        "app/local_agents/scoring/runner.py"
+      ],
+      "model": "gpt-5-2025-08-07",
+      "batch_size": 100,
+      "timeout": 240,
+      "state": "active",
+      "notes": "Detects zero-title-density opportunities. Batching enabled (100 keywords/batch) to prevent token limits. Merges opportunity annotations across batches. Continues on batch failure. 500 keywords = 5 batches."
+    },
+    "root_extraction_agent": {
+      "files": ["app/local_agents/keyword/subagents/root_extraction_agent.py"],
+      "model": "gpt-5-2025-08-07",
+      "batch_size": 200,
+      "timeout": 240,
+      "state": "active",
+      "notes": "AI-powered semantic root extraction in Research step. Batching enabled (200 keywords/batch) - larger batch size since root analysis is lightweight. Merges keyword_roots and category_breakdown across batches. Fallback per batch. 1000 keywords = 5 batches."
     },
     "seo_analysis": {
       "files": [
