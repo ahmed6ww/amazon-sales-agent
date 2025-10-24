@@ -8,6 +8,7 @@ rather than just keyword stuffing for search volume.
 
 from agents import Agent, ModelSettings
 from typing import Dict, List, Any, Optional
+from openai.types.shared.reasoning import Reasoning
 import json
 import logging
 
@@ -199,8 +200,10 @@ Return ONLY the JSON response in the exact format specified.
 competitor_title_analysis_agent = Agent(
     name="CompetitorTitleAnalysisAgent",
     instructions=COMPETITOR_TITLE_ANALYSIS_INSTRUCTIONS,
-    model="gpt-5-nano-2025-08-07",  # gpt-5-mini for competitor analysis
-    model_settings=ModelSettings(),
+    model="gpt-5-mini-2025-08-07",  # gpt-5-mini for competitor analysis
+    model_settings=ModelSettings(
+        reasoning=Reasoning(effort="medium"),
+    ),
     output_type=None,
 )
 

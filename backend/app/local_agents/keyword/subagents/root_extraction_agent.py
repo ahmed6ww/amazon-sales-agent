@@ -7,6 +7,7 @@ Uses AI to understand semantic roots and keyword relationships with superior acc
 
 from agents import Agent, ModelSettings
 from typing import Dict, List, Any, Optional
+from openai.types.shared.reasoning import Reasoning
 import json
 import logging
 from dataclasses import dataclass, asdict
@@ -204,8 +205,10 @@ Return ONLY the JSON response in the exact format specified.
 root_extraction_agent = Agent(
     name="RootExtractionAgent", 
     instructions=ROOT_EXTRACTION_INSTRUCTIONS,
-    model="gpt-5-nano-2025-08-07",  # gpt-5-mini for root extraction
-    model_settings=ModelSettings(),
+    model="gpt-5-mini-2025-08-07",  # gpt-5-mini for root extraction
+    model_settings=ModelSettings(
+        reasoning=Reasoning(effort="medium"),
+    ),
     output_type=None,
 )
 

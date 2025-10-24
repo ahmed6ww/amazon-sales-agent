@@ -7,6 +7,7 @@ Uses AI to understand purchase intent with superior accuracy vs hardcoded rules.
 
 from agents import Agent, ModelSettings
 from typing import Dict, List, Any, Optional
+from openai.types.shared.reasoning import Reasoning
 import json
 import logging
 
@@ -137,8 +138,10 @@ Return ONLY the JSON response.
 intent_classification_agent = Agent(
     name="IntentClassificationAgent",
     instructions=INTENT_CLASSIFICATION_INSTRUCTIONS,
-    model="gpt-5-nano-2025-08-07",
-    model_settings=ModelSettings(),
+    model="gpt-5-mini-2025-08-07",
+    model_settings=ModelSettings(
+        reasoning=Reasoning(effort="medium"),
+    ),
     output_type=None,
 )
 

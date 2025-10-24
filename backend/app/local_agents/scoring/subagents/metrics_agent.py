@@ -1,6 +1,7 @@
 from typing import Any, Dict, List, Optional, Tuple
 
 from agents import Agent, ModelSettings
+from openai.types.shared.reasoning import Reasoning
 
 # Minimal placeholder Agent so this module exports `metrics_agent` for package imports.
 # Actual metrics logic is deterministic via the helper functions below.
@@ -12,8 +13,10 @@ METRICS_AGENT_INSTRUCTIONS = (
 metrics_agent = Agent(
     name="MetricsSubagent",
     instructions=METRICS_AGENT_INSTRUCTIONS,
-    model="gpt-5-nano-2025-08-07",
-    model_settings=ModelSettings(),
+    model="gpt-5-mini-2025-08-07",
+    model_settings=ModelSettings(
+        reasoning=Reasoning(effort="medium"),
+    ),
     output_type=None,
 )
 
