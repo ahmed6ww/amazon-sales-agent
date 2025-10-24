@@ -186,6 +186,12 @@
         "why": "Root extraction was processing ALL 5,126 deduplicated keywords instead of the 230 filtered keywords (after relevancy threshold). This caused unnecessary processing of 26 batches instead of 2 batches, wasting API calls and time on low-quality keywords.",
         "when": "2025-10-24",
         "impact": "Root extraction now uses high_relevancy_keywords (filtered) instead of unique_keywords (all). Reduces processing from 5126 keywords (26 batches) to 230 keywords (2 batches). Improved log clarity: shows deduplication stats separately from filtering stats."
+      },
+      {
+        "what": "Disabled opportunity_agent in scoring pipeline",
+        "why": "Opportunity agent was redundant with existing metrics: title_density already shows competitor usage, category filtering already removes Spanish/Irrelevant keywords, relevancy scoring ranks quality, and SEO agent makes final decisions. Agent also had output format issues (returned 'Yes' instead of 'Opportunity').",
+        "when": "2025-10-24",
+        "impact": "Saves 5+ API calls per run (500 keywords = 5 batches eliminated). Faster processing with no loss of functionality. title_density metric provides same information. Code commented out for easy re-enabling if needed."
       }
     ]
   },
@@ -246,8 +252,8 @@
       "model": "gpt-5-2025-08-07",
       "batch_size": 100,
       "timeout": 240,
-      "state": "active",
-      "notes": "Detects zero-title-density opportunities. Batching enabled (100 keywords/batch) to prevent token limits. Merges opportunity annotations across batches. Continues on batch failure. 500 keywords = 5 batches."
+      "state": "disabled",
+      "notes": "DISABLED: Redundant with title_density metric and category filtering. Code commented out in runner.py. To re-enable: uncomment block and fix output format ('Yes' -> 'Opportunity'). Savings: 5+ API calls per run."
     },
     "root_extraction_agent": {
       "files": ["app/local_agents/keyword/subagents/root_extraction_agent.py"],
