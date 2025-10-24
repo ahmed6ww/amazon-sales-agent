@@ -206,7 +206,7 @@ def analyze_root_relevance_ai(keywords: List[Dict[str, Any]]) -> Dict[str, Any]:
     # ========================================================================
     # BATCHING: Split keywords to prevent token limits and timeouts
     # ========================================================================
-    BATCH_SIZE = 100  # Keywords per batch (root analysis is lighter than full categorization)
+    BATCH_SIZE = 60  # Keywords per batch (root analysis is lighter than full categorization)
     total_keywords = len(keywords)
     num_batches = (total_keywords + BATCH_SIZE - 1) // BATCH_SIZE
     
