@@ -12,5 +12,5 @@ Return: original items with `opportunity_decision` and `opportunity_reason`.
 opportunity_agent = Agent(
     name="OpportunitySubagent",
     instructions=OPPORTUNITY_INSTRUCTIONS,
-    model="gpt-5-2025-08-07",
+    model="gpt-5-nano-2025-08-07",
 )

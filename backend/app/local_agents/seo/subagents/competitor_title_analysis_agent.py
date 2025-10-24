@@ -199,7 +199,9 @@ Return ONLY the JSON response in the exact format specified.
 competitor_title_analysis_agent = Agent(
     name="CompetitorTitleAnalysisAgent",
     instructions=COMPETITOR_TITLE_ANALYSIS_INSTRUCTIONS,
-    model="gpt-5-2025-08-07",  # gpt-5-mini for competitor analysis
+    model="gpt-5-nano-2025-08-07",  # gpt-5-mini for competitor analysis
+    reasoning_effort="medium",
+    output_type=None,
 )
 
 def analyze_competitor_titles_for_benefits(
