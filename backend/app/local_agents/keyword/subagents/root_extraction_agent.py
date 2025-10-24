@@ -212,8 +212,9 @@ def extract_roots_ai(
     product_context: Optional[Dict] = None
 ) -> Dict[str, Any]:
     """
-    Use AI to extract meaningful semantic roots from keywords.
+    Use AI to extract meaningful semantic roots from keywords with batching support.
     Replaces the programmatic root extraction with intelligent semantic analysis.
+    Implements batching to handle large keyword lists (1000+) without token limits.
     
     Args:
         keyword_list: List of keyword phrases to analyze
@@ -234,9 +235,6 @@ def extract_roots_ai(
             "category_breakdown": {}
         }
     
-    # Prepare input data
-    keywords_json = json.dumps(keyword_list, indent=2)
-    
     # Extract product context
     context = {}
     if product_context:
@@ -247,41 +245,135 @@ def extract_roots_ai(
             "key_features": product_context.get("key_features", [])
         }
     
-    # Format prompt
-    prompt = USER_PROMPT_TEMPLATE.format(
-        keywords_json=keywords_json,
-        product_context=json.dumps(context, indent=2)
-    )
+    # ========================================================================
+    # BATCHING: Split keywords to prevent token limits
+    # ========================================================================
+    BATCH_SIZE = 200  # Root extraction can handle more keywords per batch
+    total_keywords = len(keyword_list)
+    num_batches = (total_keywords + BATCH_SIZE - 1) // BATCH_SIZE
     
-    try:
-        # Run AI agent
-        from agents import Runner
-        result = Runner.run_sync(root_extraction_agent, prompt)
-        output = getattr(result, "final_output", None)
+    if total_keywords > BATCH_SIZE:
+        logger.info(f"[RootExtractionAgent] 📦 Processing {total_keywords} keywords in {num_batches} batch(es) (size: {BATCH_SIZE})")
+    
+    # Aggregated results from all batches
+    combined_keyword_roots = {}
+    combined_category_breakdown = {}
+    total_processed = 0
+    
+    for batch_idx in range(num_batches):
+        start_idx = batch_idx * BATCH_SIZE
+        end_idx = min(start_idx + BATCH_SIZE, total_keywords)
+        batch_keywords = keyword_list[start_idx:end_idx]
+        batch_label = f"Batch {batch_idx + 1}/{num_batches}"
         
-        # Parse AI response
-        if isinstance(output, str):
-            try:
-                # Strip markdown code fences (GPT-4o compatibility)
-                clean_output = strip_markdown_code_fences(output)
-                parsed = json.loads(clean_output)
-                roots_count = len(parsed.get("keyword_roots", {}))
-                logger.info(f"[RootExtractionAgent] AI extracted {roots_count} meaningful roots from {len(keyword_list)} keywords")
-                return parsed
-            except json.JSONDecodeError as e:
-                logger.error(f"[RootExtractionAgent] Failed to parse AI output: {output[:200]}...")
-                logger.error(f"[RootExtractionAgent] JSON decode error: {e}")
-                return _create_fallback_root_analysis(keyword_list)
+        if total_keywords > BATCH_SIZE:
+            logger.info(f"[RootExtractionAgent] 🔄 {batch_label}: Processing {len(batch_keywords)} keywords")
         
-        elif hasattr(output, 'model_dump'):
-            return output.model_dump()
-        
-        else:
-            raise Exception("Unexpected AI output format")
+        try:
+            # Rate limiting between batches
+            if batch_idx > 0:
+                import time
+                time.sleep(1)
             
-    except Exception as e:
-        logger.error(f"[RootExtractionAgent] AI analysis failed: {e}")
-        return _create_fallback_root_analysis(keyword_list)
+            # Prepare prompt for this batch
+            keywords_json = json.dumps(batch_keywords, indent=2)
+            prompt = USER_PROMPT_TEMPLATE.format(
+                keywords_json=keywords_json,
+                product_context=json.dumps(context, indent=2)
+            )
+            
+            # Run AI agent for this batch
+            from agents import Runner
+            result = Runner.run_sync(root_extraction_agent, prompt)
+            output = getattr(result, "final_output", None)
+            
+            # Parse AI response
+            batch_result = None
+            if isinstance(output, str):
+                try:
+                    clean_output = strip_markdown_code_fences(output)
+                    batch_result = json.loads(clean_output)
+                except json.JSONDecodeError as e:
+                    logger.warning(f"[RootExtractionAgent] {batch_label} JSON parse failed: {e}")
+                    raise
+            elif hasattr(output, 'model_dump'):
+                batch_result = output.model_dump()
+            else:
+                raise Exception("Unexpected AI output format")
+            
+            # Merge batch results into combined results
+            if batch_result:
+                # Merge keyword roots
+                batch_roots = batch_result.get("keyword_roots", {})
+                for root_name, root_data in batch_roots.items():
+                    if root_name in combined_keyword_roots:
+                        # Merge existing root - combine variants and update frequency
+                        existing = combined_keyword_roots[root_name]
+                        existing_variants = set(existing.get("variants", []))
+                        new_variants = set(root_data.get("variants", []))
+                        combined_variants = list(existing_variants | new_variants)
+                        
+                        existing["variants"] = combined_variants
+                        existing["frequency"] = existing.get("frequency", 0) + root_data.get("frequency", 0)
+                        existing["consolidation_potential"] = len(combined_variants)
+                        # Keep higher semantic strength
+                        existing["semantic_strength"] = max(
+                            existing.get("semantic_strength", 0),
+                            root_data.get("semantic_strength", 0)
+                        )
+                    else:
+                        # New root
+                        combined_keyword_roots[root_name] = root_data
+                
+                # Merge category breakdown
+                batch_categories = batch_result.get("category_breakdown", {})
+                for category, roots in batch_categories.items():
+                    if category not in combined_category_breakdown:
+                        combined_category_breakdown[category] = []
+                    # Add new roots, avoiding duplicates
+                    existing_roots = set(combined_category_breakdown[category])
+                    for root in roots:
+                        if root not in existing_roots:
+                            combined_category_breakdown[category].append(root)
+                            existing_roots.add(root)
+                
+                total_processed += len(batch_keywords)
+                
+                if total_keywords > BATCH_SIZE:
+                    logger.info(f"[RootExtractionAgent] ✅ {batch_label} complete ({len(batch_roots)} roots extracted)")
+            else:
+                raise ValueError("Batch parsing failed")
+        
+        except Exception as e:
+            logger.error(f"[RootExtractionAgent] ❌ {batch_label} failed: {e}")
+            # Fallback: Use programmatic extraction for failed batch
+            logger.warning(f"[RootExtractionAgent] ⚠️  {batch_label} using fallback extraction")
+            fallback_result = _create_fallback_root_analysis(batch_keywords)
+            fallback_roots = fallback_result.get("keyword_roots", {})
+            for root_name, root_data in fallback_roots.items():
+                if root_name not in combined_keyword_roots:
+                    combined_keyword_roots[root_name] = root_data
+            total_processed += len(batch_keywords)
+    
+    # Build final combined result
+    meaningful_roots = sum(1 for root in combined_keyword_roots.values() if root.get("is_meaningful", False))
+    reduction_percentage = ((total_keywords - meaningful_roots) / total_keywords * 100) if total_keywords > 0 else 0
+    
+    final_result = {
+        "keyword_roots": combined_keyword_roots,
+        "analysis_summary": {
+            "total_keywords_processed": total_processed,
+            "total_roots_identified": len(combined_keyword_roots),
+            "meaningful_roots": meaningful_roots,
+            "efficiency_gain": f"{reduction_percentage:.1f}% keyword reduction achieved",
+            "batches_processed": num_batches
+        },
+        "category_breakdown": combined_category_breakdown
+    }
+    
+    logger.info(f"[RootExtractionAgent] ✅ All batches complete: {len(combined_keyword_roots)} roots extracted, {reduction_percentage:.1f}% reduction")
+    
+    return final_result
 
 def _create_fallback_root_analysis(keyword_list: List[str]) -> Dict[str, Any]:
     """Create a basic fallback root analysis when AI fails"""
