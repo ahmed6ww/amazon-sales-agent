@@ -16,7 +16,6 @@ research_agent = Agent(
     # model_settings=ModelSettings(
     #     max_tokens=4000,
     # ),
-    reasoning_effort="medium",
     # Enforce structured output; keep schema non-strict to allow additive fields
     output_type=AgentOutputSchema(ResearchOutput, strict_json_schema=False),
 )

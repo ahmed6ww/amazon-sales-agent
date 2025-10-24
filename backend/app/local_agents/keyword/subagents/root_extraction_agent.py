@@ -205,7 +205,6 @@ root_extraction_agent = Agent(
     name="RootExtractionAgent", 
     instructions=ROOT_EXTRACTION_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",  # gpt-5-mini for root extraction
-    reasoning_effort="medium",
     output_type=None,
 )
 

@@ -117,7 +117,6 @@ broad_volume_agent = Agent(
         max_tokens=16000,  # Handle 200+ items without truncation
         timeout=240.0,
     ),
-    reasoning_effort="medium",
     output_type=None,
 )
 

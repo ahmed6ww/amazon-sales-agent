@@ -162,7 +162,6 @@ root_relevance_agent = Agent(
     name="RootRelevanceAgent", 
     instructions=ROOT_RELEVANCE_INSTRUCTIONS,
     model="gpt-5-nano-2025-08-07",  # gpt-5-mini
-    reasoning_effort="medium",
     output_type=None,
 )
 

@@ -14,7 +14,6 @@ keyword_agent = Agent(
 		max_tokens=12000,  # Sufficient for 75 keywords per batch
 		timeout=240.0,      # 4 minute timeout for large requests
 	),
-	reasoning_effort="medium",
 	output_type=AgentOutputSchema(KeywordAnalysisResult, strict_json_schema=False),
 )
 
