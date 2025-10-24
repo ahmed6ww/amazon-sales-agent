@@ -180,6 +180,12 @@
         "why": "Root extraction AI was sending ALL keywords (1000+) in a single AI request for semantic root analysis, causing token limit exceeded and timeouts. This agent runs in the Research step and is non-fatal, but failures prevent valuable root analysis.",
         "when": "2025-10-24",
         "impact": "Root extraction now processes in batches of 200 (larger batch since root analysis is lighter). Merges keyword_roots across batches, combining variants and frequencies. Fallback per batch if AI fails. Prevents token limits for large keyword sets (1000 keywords = 5 batches)."
+      },
+      {
+        "what": "Fixed root_extraction_agent to use filtered keywords instead of all keywords",
+        "why": "Root extraction was processing ALL 5,126 deduplicated keywords instead of the 230 filtered keywords (after relevancy threshold). This caused unnecessary processing of 26 batches instead of 2 batches, wasting API calls and time on low-quality keywords.",
+        "when": "2025-10-24",
+        "impact": "Root extraction now uses high_relevancy_keywords (filtered) instead of unique_keywords (all). Reduces processing from 5126 keywords (26 batches) to 230 keywords (2 batches). Improved log clarity: shows deduplication stats separately from filtering stats."
       }
     ]
   },

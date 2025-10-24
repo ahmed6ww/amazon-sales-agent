@@ -320,10 +320,10 @@ class ResearchRunner:
         
         base_relevancy = filtered_base_relevancy
         
-        logger.info(f"📊 [FINAL STATS] Processing {len(unique_keywords)} deduplicated and filtered keywords")
+        logger.info(f"📊 [DEDUPLICATION COMPLETE] Processing {len(unique_keywords)} deduplicated keywords")
         
         # ==================================================================================
-        # END OF FILTERING AND DEDUPLICATION
+        # RELEVANCY FILTERING: Apply dynamic threshold to focus on high-quality keywords
         # ==================================================================================
         
         # Filter keywords by relevancy score (dynamic threshold based on dataset size)
@@ -351,6 +351,12 @@ class ResearchRunner:
         # Use filtered keywords with PRESERVED scores for agents
         full_base_relevancy = base_relevancy.copy()
         base_relevancy = high_relevancy_scores  # ✅ KEEPS ORIGINAL SCORES (3, 4, etc.)
+        
+        logger.info(f"📊 [FINAL STATS] Processing {len(high_relevancy_keywords)} filtered keywords for AI agents (from {len(unique_keywords)} total)")
+        
+        # ==================================================================================
+        # END OF FILTERING AND DEDUPLICATION
+        # ==================================================================================
 
         # Perform AI-powered root extraction for richer analysis context (non-blocking if fails)
         ai_keyword_root_analysis: Dict[str, Any] = {}
@@ -362,7 +368,8 @@ class ResearchRunner:
                 _title_text = _title_text[0] if _title_text else ""
             _brand = (((scraped_data.get("elements") or {}).get("productOverview_feature_div") or {}).get("kv") or {}).get("Brand", "")
             product_context = {"title": _title_text, "category": scraped_data.get("category", ""), "brand": _brand}
-            ai_keyword_root_analysis = extract_roots_ai(unique_keywords, product_context)
+            # Use FILTERED keywords for root extraction (not all unique_keywords)
+            ai_keyword_root_analysis = extract_roots_ai(high_relevancy_keywords, product_context)
         except Exception:
             # Non-fatal: continue without AI root analysis
             ai_keyword_root_analysis = {}
