@@ -94,7 +94,9 @@ Return ONLY the JSON response in the exact format specified.
 keyword_variant_agent = Agent(
     name="KeywordVariantAgent",
     instructions=KEYWORD_VARIANT_INSTRUCTIONS,
-    model="gpt-5-2025-08-07",
+    model="gpt-5-nano-2025-08-07",
+    reasoning_effort="medium",
+    output_type=None,
 )
 
 def analyze_keyword_variants_ai(keywords: List[Dict[str, Any]]) -> Dict[str, Any]:

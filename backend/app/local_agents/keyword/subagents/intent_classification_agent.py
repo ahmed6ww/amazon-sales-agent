@@ -137,7 +137,9 @@ Return ONLY the JSON response.
 intent_classification_agent = Agent(
     name="IntentClassificationAgent",
     instructions=INTENT_CLASSIFICATION_INSTRUCTIONS,
-    model="gpt-5-2025-08-07",
+    model="gpt-5-nano-2025-08-07",
+    reasoning_effort="medium",
+    output_type=None,
 )
 
 def classify_intent_ai(
