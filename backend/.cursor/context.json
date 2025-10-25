@@ -192,6 +192,12 @@
         "why": "Opportunity agent was redundant with existing metrics: title_density already shows competitor usage, category filtering already removes Spanish/Irrelevant keywords, relevancy scoring ranks quality, and SEO agent makes final decisions. Agent also had output format issues (returned 'Yes' instead of 'Opportunity').",
         "when": "2025-10-24",
         "impact": "Saves 5+ API calls per run (500 keywords = 5 batches eliminated). Faster processing with no loss of functionality. title_density metric provides same information. Code commented out for easy re-enabling if needed."
+      },
+      {
+        "what": "Enhanced Amazon scraper anti-blocking with title validation and retries",
+        "why": "Scraper was accepting blocked pages as successful when Amazon returned 200 status but empty content (missing title/bullets). This caused 'Original title: 0 chars' in results. Added: 1) Title validation in SmartRetryMiddleware to trigger retries if #productTitle missing, 2) Early failure in parse() if title_text empty, 3) Increased retry attempts from 3→5, 4) Increased random delays from 2-5s to 3-7s.",
+        "when": "2025-10-25",
+        "impact": "Scraper now automatically retries up to 5 times when Amazon blocks with empty content. Slower delays (3-7s) reduce blocking. Logs HTML size and blocking reason for debugging. Prevents false-positive 'success' when title is missing."
       }
     ]
   },
@@ -271,11 +277,35 @@
       ],
       "state": "active",
       "notes": "Advanced keyword matching (sub-phrase, plural, hyphen). Validation removed to preserve matched keywords. Null-safe search_volume check added. FIX #4: Title allocation uses STRICT volume sorting (8 keyword limit, ignores relevancy) to guarantee highest-volume keywords in titles."
+    },
+    "proxy_rotation": {
+      "files": [
+        "app/services/amazon/anti_blocking/proxy_manager.py",
+        "app/services/amazon/anti_blocking/middlewares.py",
+        "test_proxies.py",
+        "test_more_proxies.py"
+      ],
+      "state": "active",
+      "working_proxies": 6,
+      "tested_proxies": 70,
+      "success_rate": "8.5%",
+      "strategies": ["random", "rotating", "sequential"],
+      "default": "random",
+      "proxy_list": "Germany, Brazil, Italy, Russia, India, Singapore (all HTTPS, 2-3s response)",
+      "notes": "Fully configured with 6 working proxies tested from 70+ candidates. Random rotation (default) provides best Amazon results. Auto-switches proxy on failure. Average response time: 2.7s. Expected scraping success rate: 50-60% (vs 30% single proxy). See .env.proxies for complete config, SETUP_COMPLETE.md for guide."
     }
   },
   "debt": [],
   "env": {
     "OPENAI_API_KEY": "Required for all AI agents",
-    "KEYWORD_BATCH_SIZE": "500 (for root extraction, separate from categorization batching)"
+    "KEYWORD_BATCH_SIZE": "500 (for root extraction, separate from categorization batching)",
+    "SCRAPER_RETRY_TIMES": "7 (increased from 3→5→7, each retry uses different proxy)",
+    "RANDOM_DELAY_MIN": "5.0 (increased from 2.0→3.0→5.0, minimum delay between requests)",
+    "RANDOM_DELAY_MAX": "10.0 (increased from 5.0→7.0→10.0, maximum delay between requests)",
+    "SCRAPER_LOG_LEVEL": "INFO (set to see proxy rotation: 'Using proxy: http://...')",
+    "SCRAPER_PROXY_LIST": "Comma-separated proxy list (6 working proxies configured: Germany, Brazil, Italy, Russia, India, Singapore)",
+    "SCRAPER_TIMEOUT": "60 (increased from 45, allows slower proxies to respond)",
+    "UPSTASH_REDIS_URL": "Required for persistent job storage on serverless platforms",
+    "UPSTASH_REDIS_TOKEN": "Required for Redis authentication"
   }
 }

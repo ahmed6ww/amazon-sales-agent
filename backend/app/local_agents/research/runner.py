@@ -331,7 +331,9 @@ class ResearchRunner:
         total_keywords = len(base_relevancy)
 
 
-        if total_keywords > 1000:
+        if total_keywords > 1100:
+            min_relevancy_threshold = 9  # Very strict for large datasets (2000+)
+        elif total_keywords > 1000:
             min_relevancy_threshold = 8  # Very strict for large datasets (500+)
         elif total_keywords > 750:
             min_relevancy_threshold = 7  # Strict for large datasets (750-1000)
