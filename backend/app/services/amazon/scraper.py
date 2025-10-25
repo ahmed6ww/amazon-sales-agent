@@ -21,7 +21,15 @@ import os
 import re
 import sys
 import json
+from pathlib import Path
 from typing import Optional, Dict, Any, List, Tuple
+
+# Add backend directory to Python path for imports when running directly
+# This allows: python3 app/services/amazon/scraper.py <url>
+if __name__ == "__main__":
+    backend_dir = Path(__file__).resolve().parent.parent.parent.parent
+    if str(backend_dir) not in sys.path:
+        sys.path.insert(0, str(backend_dir))
 
 import scrapy
 from scrapy.crawler import CrawlerProcess
@@ -157,29 +165,9 @@ class AmazonScraperSpider(scrapy.Spider):
     name = "amazon_scraper_spider"
     scraped: Dict[str, Any] = {}
 
-    custom_settings = {
-        "ROBOTSTXT_OBEY": False,
-        "LOG_LEVEL": "ERROR",
-        "RETRY_ENABLED": True,
-        "RETRY_TIMES": int(os.getenv("SCRAPER_RETRY_TIMES", "3")),
-        "RETRY_HTTP_CODES": [429, 500, 502, 503, 504, 522, 524, 408],
-        "DOWNLOAD_TIMEOUT": int(os.getenv("SCRAPER_TIMEOUT", "45")),
-        "DOWNLOAD_DELAY": float(os.getenv("SCRAPER_DOWNLOAD_DELAY", "1.0")),
-        "COOKIES_ENABLED": True,
-        "AUTOTHROTTLE_ENABLED": True,
-        "AUTOTHROTTLE_START_DELAY": 0.5,
-        "AUTOTHROTTLE_MAX_DELAY": 10.0,
-        "DEFAULT_REQUEST_HEADERS": {
-            "User-Agent": os.getenv(
-                "SCRAPER_USER_AGENT",
-                "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
-            ),
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7",
-            "Accept-Language": os.getenv("SCRAPER_ACCEPT_LANGUAGE", "en-US,en;q=0.9,ar;q=0.8"),
-            "Upgrade-Insecure-Requests": "1",
-        },
-        "ITEM_PIPELINES": {},
-    }
+    # Custom settings removed - now loaded from anti_blocking.py module
+    # This allows centralized configuration and better anti-blocking features
+    custom_settings = {}
 
     def __init__(self, url: str, proxy_url: Optional[str] = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -483,46 +471,57 @@ class AmazonScraperSpider(scrapy.Spider):
 
 def scrape_amazon_product(url: str, proxy_url: Optional[str] = None) -> Dict[str, Any]:
     """
-    Synchronous scraper with optional anti-blocking features
-    Falls back gracefully if anti-blocking module has issues
+    Synchronous scraper with anti-blocking features based on Scrapy documentation
     
-    Features (when enabled):
-    - User Agent Rotation
-    - Header Randomization
-    - Proxy Rotation (if configured)
-    - Random Delays (2-5s between requests)
-    - Smart Retry Logic
+    Anti-Blocking Features (from Scrapy docs):
+    1. User Agent Rotation - RandomUserAgentMiddleware (priority 400)
+    2. Smart Retry Logic - EnhancedRetryMiddleware (priority 550)
+       - Retries on HTTP 500, 503 (Amazon blocking)
+       - Retries on non-text responses (CAPTCHA detection)
+       - Retries on CAPTCHA keywords in HTML
+    3. Cookie Handling - CookiesMiddleware (priority 700)
+    4. Random Delays - RandomDelayMiddleware (2-5s)
+    5. Proper Referers - RefererMiddleware (priority 450)
+    6. Auto Throttle - Adaptive rate limiting
+    
+    References:
+    - RetryMiddleware: https://docs.scrapy.org/topics/downloader-middleware.html#retry-middleware
+    - UserAgentMiddleware: https://docs.scrapy.org/topics/downloader-middleware.html#useragentmiddleware
+    - CookiesMiddleware: https://docs.scrapy.org/topics/downloader-middleware.html#cookiesmiddleware
     """
     import sys
     import traceback
     
-    # Try to load anti-blocking settings with detailed error handling
+    # Load anti-blocking settings with fallback
     settings = None
     anti_blocking_enabled = False
     
     try:
         from app.services.amazon.anti_blocking import get_anti_blocking_settings
         settings = get_anti_blocking_settings()
-        settings["LOG_LEVEL"] = os.getenv("SCRAPER_LOG_LEVEL", "ERROR")
+        # Override log level from environment
+        settings["LOG_LEVEL"] = os.getenv("SCRAPER_LOG_LEVEL", "INFO")
         anti_blocking_enabled = True
-        print(f"✅ Anti-blocking features enabled", file=sys.stderr)
+        print(f"✅ Anti-blocking enabled: User Agent Rotation, Smart Retry, Random Delays (2-5s)", file=sys.stderr)
     except ImportError as e:
         print(f"⚠️ Anti-blocking module not found: {e}", file=sys.stderr)
+        print(f"⚠️ Using minimal fallback settings (may get blocked)", file=sys.stderr)
         settings = {
             "ROBOTSTXT_OBEY": False,
-            "LOG_LEVEL": os.getenv("SCRAPER_LOG_LEVEL", "ERROR"),
-            "DOWNLOAD_DELAY": 2.0,  # Still add basic delay
+            "LOG_LEVEL": os.getenv("SCRAPER_LOG_LEVEL", "INFO"),
+            "DOWNLOAD_DELAY": 3.0,
             "COOKIES_ENABLED": True,
             "RETRY_ENABLED": True,
             "RETRY_TIMES": 3,
+            "RETRY_HTTP_CODES": [500, 502, 503, 504, 429, 403],
         }
     except Exception as e:
-        print(f"❌ Error loading anti-blocking (using fallback): {e}", file=sys.stderr)
+        print(f"❌ Error loading anti-blocking: {e}", file=sys.stderr)
         traceback.print_exc(file=sys.stderr)
         settings = {
             "ROBOTSTXT_OBEY": False,
-            "LOG_LEVEL": os.getenv("SCRAPER_LOG_LEVEL", "ERROR"),
-            "DOWNLOAD_DELAY": 2.0,
+            "LOG_LEVEL": os.getenv("SCRAPER_LOG_LEVEL", "INFO"),
+            "DOWNLOAD_DELAY": 3.0,
             "COOKIES_ENABLED": True,
         }
     
@@ -533,16 +532,22 @@ def scrape_amazon_product(url: str, proxy_url: Optional[str] = None) -> Dict[str
         process.crawl(crawler, url=url, proxy_url=proxy_url)
         process.start()
         
-        # Get result
+        # Get result from spider
         result = crawler.stats.get_value("scraped", 
                                          crawler.spider.scraped if hasattr(crawler, "spider") else {})
         
         if not result:
             result = {"success": False, "error": "No result returned from spider", "data": {}}
         
-        # Add anti-blocking status to result
+        # Add debugging info
         if anti_blocking_enabled and result.get("success"):
             result["anti_blocking_used"] = True
+            print(f"✅ Scraping successful with anti-blocking features", file=sys.stderr)
+        elif not result.get("success"):
+            error = result.get("error", "Unknown error")
+            print(f"❌ Scraping failed: {error}", file=sys.stderr)
+            if "Blocked" in error or "captcha" in error.lower():
+                print(f"💡 Tip: Consider using a proxy or ScraperAPI for better success rates", file=sys.stderr)
         
         return result
         
