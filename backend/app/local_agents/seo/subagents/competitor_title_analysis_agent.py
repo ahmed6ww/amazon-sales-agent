@@ -202,7 +202,7 @@ competitor_title_analysis_agent = Agent(
     instructions=COMPETITOR_TITLE_ANALYSIS_INSTRUCTIONS,
     model="gpt-5-mini-2025-08-07",  # gpt-5-mini for competitor analysis
     model_settings=ModelSettings(
-        reasoning=Reasoning(effort="medium"),
+        reasoning=Reasoning(effort="minimal"),
     ),
     output_type=None,
 )

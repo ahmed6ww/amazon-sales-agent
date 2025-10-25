@@ -117,7 +117,7 @@ broad_volume_agent = Agent(
     model_settings=ModelSettings(
         max_tokens=16000,  # Handle 200+ items without truncation
         timeout=240.0,
-        reasoning=Reasoning(effort="medium"),
+        reasoning=Reasoning(effort="minimal"),
     ),
     output_type=None,
 )
