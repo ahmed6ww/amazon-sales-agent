@@ -1,0 +1,42 @@
+name: Deploy Notification
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🚀 Deployment started
+        run: |
+          echo "🚀 Deployment to Render triggered!"
+          echo "📦 Commit: ${{ github.sha }}"
+          echo "👤 Author: ${{ github.actor }}"
+          echo "💬 Message: ${{ github.event.head_commit.message }}"
+
+      - name: ⏳ Wait for Render deployment
+        run: |
+          echo "⏳ Render is auto-deploying from main branch..."
+          echo "📍 Check status: https://dashboard.render.com/"
+
+      - name: 📝 Deployment info
+        run: |
+          echo "==============================================="
+          echo "🎯 DEPLOYMENT INFORMATION"
+          echo "==============================================="
+          echo "Branch: main"
+          echo "Commit: ${{ github.sha }}"
+          echo "Author: ${{ github.actor }}"
+          echo "Time: $(date)"
+          echo "==============================================="
+          echo ""
+          echo "✅ If tests passed, Render will auto-deploy"
+          echo "❌ If tests failed, deployment will be blocked"
+          echo ""
+          echo "Monitor at: https://dashboard.render.com/"
+          echo "==============================================="

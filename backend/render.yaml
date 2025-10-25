@@ -1,0 +1,103 @@
+services:
+  # FastAPI Backend Service
+  - type: web
+    name: amazon-sales-agent-api
+    runtime: python
+    region: oregon # Change to your preferred region
+    plan: free # Change to 'starter' or 'standard' for production
+    branch: main
+
+    # Build configuration
+    buildCommand: |
+      pip install uv
+      uv pip install --system -e .
+
+    # Start command
+    startCommand: |
+      uvicorn app.main:app --host 0.0.0.0 --port $PORT --timeout-keep-alive 300
+
+    # Health check
+    healthCheckPath: /health
+
+    # Auto-deploy settings
+    autoDeploy: true # Auto-deploy on push to main
+
+    # Environment variables
+    envVars:
+      # Python configuration
+      - key: PYTHON_VERSION
+        value: "3.12"
+
+      # Application settings
+      - key: ENVIRONMENT
+        value: production
+
+      - key: PORT
+        generateValue: true
+
+      # OpenAI API
+      - key: OPENAI_API_KEY
+        sync: false # Must be set in Render dashboard
+
+      # Redis (Upstash)
+      - key: UPSTASH_REDIS_URL
+        sync: false # Must be set in Render dashboard
+
+      - key: UPSTASH_REDIS_TOKEN
+        sync: false # Must be set in Render dashboard
+
+      - key: USE_REDIS_FOR_JOBS
+        value: "true"
+
+      - key: JOB_TTL_HOURS
+        value: "24"
+
+      # Scraper configuration
+      - key: SCRAPER_RETRY_TIMES
+        value: "7"
+
+      - key: RANDOM_DELAY_MIN
+        value: "5.0"
+
+      - key: RANDOM_DELAY_MAX
+        value: "10.0"
+
+      - key: SCRAPER_TIMEOUT
+        value: "60"
+
+      - key: SCRAPER_LOG_LEVEL
+        value: INFO
+
+      - key: SCRAPER_PROXY_LIST
+        sync: false # Must be set in Render dashboard (too long for yaml)
+
+      # CORS origins (update with your frontend URLs)
+      - key: CORS_ORIGINS
+        value: http://localhost:3000,http://localhost:5173,https://your-frontend.vercel.app
+
+    # Disk storage (for logs, temp files)
+    disk:
+      name: temp-storage
+      mountPath: /tmp
+      sizeGB: 1
+# Background worker (optional - uncomment if needed)
+# - type: worker
+#   name: amazon-sales-agent-worker
+#   runtime: python
+#   region: oregon
+#   plan: free
+#   branch: main
+#
+#   buildCommand: |
+#     pip install uv
+#     uv pip install --system -e .
+#
+#   startCommand: |
+#     python -m app.workers.background_jobs
+#
+#   envVars:
+#     # Inherit same env vars as web service
+#     - fromService:
+#         type: web
+#         name: amazon-sales-agent-api
+

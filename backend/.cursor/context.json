@@ -1,311 +1,108 @@
 {
   "arch": {
-    "stack": ["FastAPI", "Next.js", "OpenAI Agents", "Scrapy"],
+    "stack": [
+      "FastAPI",
+      "Python 3.12",
+      "OpenAI Agents SDK",
+      "Scrapy",
+      "Upstash Redis",
+      "Render (deployment)",
+      "GitHub Actions (CI/CD)"
+    ],
     "decisions": [
       {
-        "what": "Batch processing for keyword categorization (75 keywords/batch)",
-        "why": "ALL models (gpt-4o, gpt-4o-mini, gpt-5-mini) fail with JSON truncation at 200+ keywords in a single request. Batching splits large sets into manageable chunks.",
-        "when": "2025-10-21"
+        "what": "Dynamic relevancy threshold",
+        "why": "Filter keywords based on dataset size (2/3/5 threshold)",
+        "when": "2025-10-24"
       },
       {
-        "what": "Include branded keywords in current SEO analysis",
-        "why": "Frontend needs to show ALL keywords found in original content (including branded). Branded keywords are still excluded from optimization to avoid competing with brands.",
-        "when": "2025-10-21"
+        "what": "Redis for job storage",
+        "why": "Ephemeral file systems in deployed environments",
+        "when": "2025-10-24"
       },
       {
-        "what": "Batching for broad_volume_agent (100 items/batch)",
-        "why": "Even with max_tokens=16000, LLM generates malformed JSON for 214 items (missing commas, truncation). Batching prevents JSON corruption like keyword_agent.",
-        "when": "2025-10-22"
+        "what": "Batching for AI agents",
+        "why": "Prevent API timeouts with large datasets (100-200 keywords per batch)",
+        "when": "2025-10-24"
       },
       {
-        "what": "Removed strict validation in SEO content analysis",
-        "why": "Simple substring validation was rejecting keywords found by advanced matching (sub-phrase, plural/singular, hyphen variations). extract_keywords_from_content already validates.",
-        "when": "2025-10-22"
+        "what": "Disabled Opportunity Agent",
+        "why": "User requested to skip this scoring step",
+        "when": "2025-10-24"
       },
       {
-        "what": "Filter 0-volume keywords in SEO analysis",
-        "why": "Keywords with search_volume = 0 or None waste space in titles/bullets. Added if search_volume > 0 filter before categorization in prepare_keyword_data_for_analysis().",
-        "when": "2025-10-22"
+        "what": "Proxy rotation with 6 working proxies",
+        "why": "Amazon blocking - added geographic diversity and rotation",
+        "when": "2025-10-25"
       },
       {
-        "what": "Mandatory design-specific keywords in title (2-3 from highest volume root)",
-        "why": "AI was ignoring design keywords. Strengthened prompts with MANDATORY markers, 3-step instructions, and 4 enforcement points across Title Optimization, Design Keywords section, and CRITICAL REQUIREMENTS.",
-        "when": "2025-10-22"
-      },
-      {
-        "what": "Deduplicate keywords across title, bullets, and backend (post-AI generation)",
-        "why": "Keywords were appearing multiple times (e.g., in title + bullets + backend), wasting space. Added _deduplicate_keywords_across_content() with priority: Title > Bullets > Backend. Case-insensitive matching.",
-        "when": "2025-10-22"
-      },
-      {
-        "what": "Handle None values in search_volume for sorting and calculations",
-        "why": "broad_volume_agent drops items when JSON parsing fails, leaving search_volume=None. This caused TypeError in keyword_validator sorting and root_relevance_agent calculations. Added 'or 0' to treat None as 0.",
-        "when": "2025-10-22"
-      },
-      {
-        "what": "Fix METHOD 2 keyword matching to require sequential order + tight proximity",
-        "why": "METHOD 2 was matching scattered words (e.g., 'makeup sponges foundation' matched 'makeup sponge...sponges for foundation'). Changed to require: 1) exact sequential order, 2) max 20 chars between adjacent tokens, 3) no reverse/scattered matching.",
-        "when": "2025-10-22"
-      },
-      {
-        "what": "Fix brand extraction path in Task 7 AI agent (runner.py line 448)",
-        "why": "Brand was extracted at line 279 (productOverview_feature_div > kv > Brand) but re-extracted incorrectly at line 448 (elements > brand > text - wrong path!). Changed to use already-extracted current_content['brand'].",
-        "when": "2025-10-22"
-      },
-      {
-        "what": "Fix keyword sorting to use VOLUME instead of RELEVANCY in amazon_compliance_agent.py",
-        "why": "main_keyword_root and design_keyword_root were selected by max(relevancy_score), not max(search_volume). All 'Relevant' keywords have relevancy=10, so this was meaningless. Changed to sort by search_volume for maximum SEO impact.",
-        "when": "2025-10-22"
-      },
-      {
-        "what": "Add post-generation validation for brand and top keywords in amazon_compliance_agent.py",
-        "why": "AI was ignoring brand and high-volume keyword requirements despite prompt instructions. Added validation after AI generation: 1) Reject if brand missing (when brand exists), 2) Reject if top 2 keywords missing, 3) Use fallback with brand if validation fails.",
-        "when": "2025-10-22"
-      },
-      {
-        "what": "Strengthen RULE 3 prompt to emphasize VOLUME IS KING in amazon_compliance_agent.py",
-        "why": "AI was using low-volume keywords (e.g., 'makeup soft sponge' 32 vol) instead of high-volume ones ('beauty blender' 71K vol). Added explicit examples showing volume hierarchy and made keyword #1 (HIGHEST VOLUME) MANDATORY in title.",
-        "when": "2025-10-22"
-      },
-      {
-        "what": "ROOT FIX: Sort keywords by VOLUME (not relevancy) across ALL 7 allocation/sorting points",
-        "why": "High-volume keywords were missing from titles because sorting used relevancy_score or keyword_value (relevancy×volume) instead of pure search_volume. User said 'i don't think you caught the root solution'. Fixed: 1) keyword_validator allocation, 2-3) relevant/design keyword sorting, 4-5) all_keywords_for_ai sorting (both paths), 6) stricter validation for #1 keyword, 7) improved fallback to use top volume keywords.",
-        "when": "2025-10-22",
-        "impact": "Guarantees highest-volume keywords appear first in allocation, AI input, validation, and fallback - solving Issue #3 at its root"
-      },
-      {
-        "what": "Brand preservation via prompt (not Python regex) in amazon_compliance_agent.py",
-        "why": "User wants EXACT brand form from current title (e.g., 'GWT' not 'Gold Water Trading', 'so coll' not 'So Coll'). Complex regex patterns would break on edge cases. Solution: Show AI the current_title in prompt with explicit instructions to preserve exact brand form at start of title.",
-        "when": "2025-10-22",
-        "impact": "AI naturally extracts brand form from context, handles all cases (abbreviations, lowercase, mixed case) without brittle parsing logic"
-      },
-      {
-        "what": "Increased minimum character requirements: 155 chars for titles AND bullets",
-        "why": "User requested minimum 155 characters (was 150 for titles, no minimum for bullets) to maximize Amazon listing space and keyword density. Updated: 1) All prompt instructions, 2) Validation checklists, 3) Python padding logic (break conditions), 4) Examples and guidelines.",
-        "when": "2025-10-22",
-        "impact": "Ensures every title and bullet uses full space for maximum SEO value and keyword coverage"
-      },
-      {
-        "what": "STRICT keyword matching: Adjacent-only multi-word phrases (no intervening words)",
-        "why": "False positives: 'beauty sponges' matched 'beauty blender sponges'. Replaced 20-char proximity matching with strict regex adjacency (\\s+ between tokens). Only plural/singular variants allowed (e.g., 'makeup sponge' matches 'makeup sponges').",
-        "when": "2025-10-22",
-        "impact": "Eliminates false keyword matches in content analysis - only exact phrases or adjacent variants counted"
-      },
-      {
-        "what": "Preserve duplicate keyword fields (keywords_duplicated_from_other_bullets) in deduplication",
-        "why": "Deduplication was creating new OptimizedContent objects without copying keywords_duplicated_from_other_bullets, unique_keywords_count, total_search_volume. Frontend needs these for yellow badge display (⚠️).",
-        "when": "2025-10-22",
-        "impact": "Frontend can now show which keywords are duplicates with yellow badges"
-      },
-      {
-        "what": "FIX #1: Recalculate stats after cross-content deduplication in runner.py",
-        "why": "After _deduplicate_keywords_across_content removed duplicates from bullets, it was copying OLD stats from before deduplication (unique_keywords_count, total_search_volume). This caused UI to show '0 unique' when keywords were present. Now builds keyword volume map and recalculates stats for each bullet's final keyword list.",
-        "when": "2025-10-23",
-        "impact": "Stats accurately reflect actual keywords shown. Frontend displays correct '4 unique' and volume badges matching visible keywords."
-      },
-      {
-        "what": "FIX #2: Mandatory 2+ keywords per bullet with post-generation validation",
-        "why": "Bullets 4 & 5 had 0 keywords - AI prioritized 'natural language' over keyword inclusion. Added RULE 5 in prompt requiring EVERY bullet to have 2-3 keywords. Added _validate_bullet_keyword_count() function to check after AI generation. Triggers fallback if any bullet has <2 keywords.",
-        "when": "2025-10-23",
-        "impact": "All bullets will now have at least 2 keywords. AI output rejected if validation fails. Better keyword coverage across all bullets."
-      },
-      {
-        "what": "FIX #3: Mandatory 2-3 design-specific keywords in title with validation",
-        "why": "Optimized title had only 1 design keyword ('mini beauty blender') when 2-3 were required. Added RULE 5B in prompt with examples showing correct (3 design keywords) vs wrong (1 keyword). Added _count_design_keywords_in_title() validation. Triggers fallback if title has <2 design keywords.",
-        "when": "2025-10-23",
-        "impact": "Titles will include 2-3 design keywords like 'mini beauty blender', 'beauty blender set', 'soft makeup sponges' for better SEO targeting."
-      },
-      {
-        "what": "FIX #4: STRICT VOLUME-BASED allocation for title keywords (keyword_validator.py)",
-        "why": "High-volume keywords ('beauty blender' 71K, 'makeup sponges' 16K) were going to bullets instead of title. Root cause: title allocation was using get_top_keywords_by_relevancy() which sorts by volume BUT had limit of only 3 keywords, and AI might ignore allocated keywords. Solution: 1) Increase title limit from 3 to 8, 2) Add get_top_keywords_by_volume_strict() that ONLY sorts by volume (ignores relevancy/intent), 3) Use strict volume sorting specifically for title allocation, 4) Enhanced post-generation validation to check top 5 keywords by volume and reject if top 2 are missing.",
-        "when": "2025-10-23",
-        "impact": "GUARANTEES highest-volume keywords appear in titles. 'beauty blender' (71K) and 'makeup sponges' (16K) will ALWAYS be allocated to title and validated. Fallback triggers if AI ignores them."
-      },
-      {
-        "what": "Standardized all AI agents to use gpt-5-mini-2025-08-07 (gpt-5-mini)",
-        "why": "Unified model across all agents for consistency. Changed from mixed gpt-4o/gpt-4o-mini to gpt-5-mini everywhere: keyword_agent, intent_agent, broad_volume_agent, root_relevance_agent, seo_agent, amazon_compliance_agent, competitor_title_analysis_agent, root_extraction_agent. Already using gpt-5-mini: opportunity_agent, metrics_agent, research_agent, keyword_variant_agent, intent_classification_agent.",
-        "when": "2025-10-23",
-        "impact": "Consistent AI model across entire pipeline. Better quality and reasoning with latest gpt-5-mini model."
-      },
-      {
-        "what": "CRITICAL: Disabled content filter in Research agent (runner.py:284-313)",
-        "why": "Content filter was removing ALL keywords not in current listing (6944 → 142), preventing SEO optimization from adding NEW high-volume keywords. SEO's entire purpose is to ADD keywords like 'beauty blender' (71K vol) that aren't in current title. Filter defeated this by only keeping existing keywords.",
-        "when": "2025-10-23",
-        "impact": "Now passing ALL deduplicated keywords to categorization & SEO. Can optimize with new high-volume keywords. Expected: 6944 keywords → categorization → SEO optimization (vs previous 142)."
-      },
-      {
-        "what": "Batching for intent_scoring_agent (75 items/batch)",
-        "why": "Intent scoring was processing all 549 keywords in one AI request, causing timeouts (Request timed out) and connection errors. Large datasets (500+) overwhelm the model and cause failures.",
-        "when": "2025-10-23",
-        "impact": "Intent scoring now processes in batches of 75. Prevents timeouts, improves reliability. 549 keywords = 8 batches. Each batch has fallback if AI fails."
-      },
-      {
-        "what": "Extended uvicorn timeout to 5 hours (18000 seconds)",
-        "why": "Background jobs processing 549 keywords take ~2 hours (keyword cat: 8 batches, intent: 8 batches, broad_volume: 11 batches, SEO). Default 30-second timeout was cutting jobs short. Created uvicorn_config.py and added scripts to pyproject.toml for easy startup with proper timeout.",
-        "when": "2025-10-23",
-        "impact": "Background jobs can now run up to 5 hours without timeout. Use 'python uvicorn_config.py' or 'uv run dev' to start server with extended timeout."
-      },
-      {
-        "what": "Dynamic relevancy threshold based on dataset size",
-        "why": "Static threshold=2 was too lenient for large datasets (500+ keywords) and too strict for small ones. Large datasets need stricter filtering to focus on highest-quality keywords and reduce AI processing time.",
-        "when": "2025-10-23",
-        "impact": "Threshold auto-adjusts: ≤100 keywords → threshold=2, 101-200 keywords → threshold=3, 201+ keywords → threshold=4. For 549 keywords, now uses threshold=4 instead of 2, filtering out low-traction keywords to improve quality and performance."
-      },
-      {
-        "what": "Enhanced logging for background job result persistence",
-        "why": "User reported issue: jobs complete but results not visible in frontend. Added detailed logging to diagnose file storage issues (ephemeral file systems, permission errors, race conditions).",
-        "when": "2025-10-23",
-        "impact": "JobManager now logs: directory initialization, write permissions, file creation, file size, file retrieval. background_jobs.py now wraps save/update in try-catch with detailed error logging. Makes it easy to diagnose if file storage is ephemeral (Vercel/Railway) or has permission issues."
-      },
-      {
-        "what": "Redis (Upstash) integration for background job storage",
-        "why": "File-based storage doesn't persist on serverless platforms (Vercel/Railway/Render) causing completed jobs to lose results. Redis provides persistent, fast storage that works across deployments and multiple server instances.",
-        "when": "2025-10-23",
-        "impact": "JobManager now supports Redis (primary) with file storage fallback (dev only). Added upstash-redis dependency. Jobs stored with 24h TTL. Auto-detects Redis config and falls back gracefully. See backend/REDIS_SETUP.md for setup instructions."
-      },
-      {
-        "what": "Batching for root_relevance_agent (100 keywords/batch)",
-        "why": "Root relevance analysis was sending ALL keywords (500+) in a single AI request, causing token limit exceeded, timeouts, and JSON parsing failures. This was the last unbatched AI agent in Step 3.",
-        "when": "2025-10-24",
-        "impact": "Root relevance now processes in batches of 100 with aggregated results. Merges filtered_root_volumes across batches. Fallback per batch if AI fails. Prevents token limits for large keyword sets (500 keywords = 5 batches)."
-      },
-      {
-        "what": "Batching for opportunity_agent (100 keywords/batch)",
-        "why": "Opportunity detection was sending ALL keywords (500+) in a single AI request to determine zero-title-density opportunities, causing potential token limits and timeouts on large datasets.",
-        "when": "2025-10-24",
-        "impact": "Opportunity agent now processes in batches of 100 with aggregated updates. Merges opportunity_decision and opportunity_reason across batches. Continues processing other batches if one fails. Prevents token limits for large keyword sets (500 keywords = 5 batches)."
-      },
-      {
-        "what": "Batching for root_extraction_agent (200 keywords/batch)",
-        "why": "Root extraction AI was sending ALL keywords (1000+) in a single AI request for semantic root analysis, causing token limit exceeded and timeouts. This agent runs in the Research step and is non-fatal, but failures prevent valuable root analysis.",
-        "when": "2025-10-24",
-        "impact": "Root extraction now processes in batches of 200 (larger batch since root analysis is lighter). Merges keyword_roots across batches, combining variants and frequencies. Fallback per batch if AI fails. Prevents token limits for large keyword sets (1000 keywords = 5 batches)."
-      },
-      {
-        "what": "Fixed root_extraction_agent to use filtered keywords instead of all keywords",
-        "why": "Root extraction was processing ALL 5,126 deduplicated keywords instead of the 230 filtered keywords (after relevancy threshold). This caused unnecessary processing of 26 batches instead of 2 batches, wasting API calls and time on low-quality keywords.",
-        "when": "2025-10-24",
-        "impact": "Root extraction now uses high_relevancy_keywords (filtered) instead of unique_keywords (all). Reduces processing from 5126 keywords (26 batches) to 230 keywords (2 batches). Improved log clarity: shows deduplication stats separately from filtering stats."
-      },
-      {
-        "what": "Disabled opportunity_agent in scoring pipeline",
-        "why": "Opportunity agent was redundant with existing metrics: title_density already shows competitor usage, category filtering already removes Spanish/Irrelevant keywords, relevancy scoring ranks quality, and SEO agent makes final decisions. Agent also had output format issues (returned 'Yes' instead of 'Opportunity').",
-        "when": "2025-10-24",
-        "impact": "Saves 5+ API calls per run (500 keywords = 5 batches eliminated). Faster processing with no loss of functionality. title_density metric provides same information. Code commented out for easy re-enabling if needed."
-      },
-      {
-        "what": "Enhanced Amazon scraper anti-blocking with title validation and retries",
-        "why": "Scraper was accepting blocked pages as successful when Amazon returned 200 status but empty content (missing title/bullets). This caused 'Original title: 0 chars' in results. Added: 1) Title validation in SmartRetryMiddleware to trigger retries if #productTitle missing, 2) Early failure in parse() if title_text empty, 3) Increased retry attempts from 3→5, 4) Increased random delays from 2-5s to 3-7s.",
-        "when": "2025-10-25",
-        "impact": "Scraper now automatically retries up to 5 times when Amazon blocks with empty content. Slower delays (3-7s) reduce blocking. Logs HTML size and blocking reason for debugging. Prevents false-positive 'success' when title is missing."
+        "what": "CI/CD with GitHub Actions + Render",
+        "why": "Auto-deploy on push to main, run tests before deployment",
+        "when": "2025-10-25"
       }
     ]
   },
   "features": {
-    "background_jobs": {
+    "dynamic_relevancy": {
+      "files": ["backend/app/local_agents/research/runner.py"],
+      "deps": [],
+      "state": "active",
+      "notes": "Adjusts min_relevancy_threshold: 2 (≤100 keywords), 3 (100-200), 5 (200+)"
+    },
+    "redis_job_storage": {
+      "files": ["backend/app/services/job_manager.py"],
+      "deps": ["upstash-redis"],
+      "state": "active",
+      "notes": "Persistent job storage with file-based fallback"
+    },
+    "ai_agent_batching": {
       "files": [
-        "app/api/v1/endpoints/background_jobs.py",
-        "app/services/job_manager.py",
-        "app/core/config.py"
+        "backend/app/local_agents/keyword/subagents/root_extraction_agent.py",
+        "backend/app/local_agents/scoring/subagents/root_relevance_agent.py",
+        "backend/app/local_agents/scoring/runner.py"
       ],
-      "storage": "redis (upstash) with file fallback",
-      "ttl": "24 hours",
+      "deps": [],
       "state": "active",
-      "notes": "Redis-based job tracking prevents result loss on serverless platforms. Auto-detects config, falls back to files for dev. See REDIS_SETUP.md"
+      "notes": "Batch sizes: 200 (root extraction), 100 (root relevance)"
     },
-    "keyword_categorization": {
+    "anti_blocking": {
       "files": [
-        "app/local_agents/keyword/runner.py",
-        "app/local_agents/keyword/agent.py"
+        "backend/app/services/amazon/anti_blocking/middlewares.py",
+        "backend/app/services/amazon/scraper.py"
       ],
-      "model": "gpt-5-mini-2025-08-07",
-      "batch_size": 75,
-      "max_tokens": 12000,
-      "timeout": 240,
+      "deps": [],
       "state": "active",
-      "notes": "Batching enabled with gpt-5-mini. 75 kw/batch prevents truncation. 214 keywords = 3 batches"
-    },
-    "broad_volume_agent": {
-      "files": ["app/local_agents/scoring/subagents/broad_volume_agent.py"],
-      "model": "gpt-5-mini-2025-08-07",
-      "batch_size": 100,
-      "max_tokens": 16000,
-      "timeout": 240,
-      "state": "active",
-      "notes": "Adds root field to keywords. Batching enabled (100 items/batch) to prevent JSON corruption. 214 keywords = 3 batches. Fallback per batch on parse error."
-    },
-    "intent_scoring_agent": {
-      "files": ["app/local_agents/scoring/runner.py"],
-      "model": "gpt-5-mini-2025-08-07",
-      "batch_size": 75,
-      "timeout": 240,
-      "state": "active",
-      "notes": "Adds intent_score (0-3) to keywords. Batching enabled (75 items/batch) to prevent timeouts. Merges results across batches. Fallback per batch with default scores. 549 keywords = 8 batches."
-    },
-    "root_relevance_agent": {
-      "files": ["app/local_agents/scoring/subagents/root_relevance_agent.py"],
-      "model": "gpt-5-mini-2025-08-07",
-      "batch_size": 100,
-      "timeout": 240,
-      "state": "active",
-      "notes": "Filters root volumes to exclude irrelevant categories. Batching enabled (100 keywords/batch) to prevent token limits. Aggregates filtered_root_volumes across batches. Fallback per batch. 500 keywords = 5 batches."
-    },
-    "opportunity_agent": {
-      "files": [
-        "app/local_agents/scoring/subagents/opportunity_agent.py",
-        "app/local_agents/scoring/runner.py"
-      ],
-      "model": "gpt-5-mini-2025-08-07",
-      "batch_size": 100,
-      "timeout": 240,
-      "state": "disabled",
-      "notes": "DISABLED: Redundant with title_density metric and category filtering. Code commented out in runner.py. To re-enable: uncomment block and fix output format ('Yes' -> 'Opportunity'). Savings: 5+ API calls per run."
-    },
-    "root_extraction_agent": {
-      "files": ["app/local_agents/keyword/subagents/root_extraction_agent.py"],
-      "model": "gpt-5-mini-2025-08-07",
-      "batch_size": 200,
-      "timeout": 240,
-      "state": "active",
-      "notes": "AI-powered semantic root extraction in Research step. Batching enabled (200 keywords/batch) - larger batch size since root analysis is lightweight. Merges keyword_roots and category_breakdown across batches. Fallback per batch. 1000 keywords = 5 batches."
-    },
-    "seo_analysis": {
-      "files": [
-        "app/local_agents/seo/runner.py",
-        "app/local_agents/seo/helper_methods.py",
-        "app/local_agents/seo/keyword_validator.py"
-      ],
-      "state": "active",
-      "notes": "Advanced keyword matching (sub-phrase, plural, hyphen). Validation removed to preserve matched keywords. Null-safe search_volume check added. FIX #4: Title allocation uses STRICT volume sorting (8 keyword limit, ignores relevancy) to guarantee highest-volume keywords in titles."
+      "notes": "User-Agent rotation, proxy rotation, smart retry, delay randomization"
     },
     "proxy_rotation": {
-      "files": [
-        "app/services/amazon/anti_blocking/proxy_manager.py",
-        "app/services/amazon/anti_blocking/middlewares.py",
-        "test_proxies.py",
-        "test_more_proxies.py"
-      ],
+      "files": ["backend/app/services/amazon/anti_blocking/middlewares.py"],
+      "deps": [],
       "state": "active",
-      "working_proxies": 6,
-      "tested_proxies": 70,
-      "success_rate": "8.5%",
-      "strategies": ["random", "rotating", "sequential"],
-      "default": "random",
-      "proxy_list": "Germany, Brazil, Italy, Russia, India, Singapore (all HTTPS, 2-3s response)",
-      "notes": "Fully configured with 6 working proxies tested from 70+ candidates. Random rotation (default) provides best Amazon results. Auto-switches proxy on failure. Average response time: 2.7s. Expected scraping success rate: 50-60% (vs 30% single proxy). See .env.proxies for complete config, SETUP_COMPLETE.md for guide."
+      "notes": "6 working proxies (DE, BR, IT, RU, IN, SG), random rotation strategy"
+    },
+    "ci_cd_pipeline": {
+      "files": [
+        "backend/.github/workflows/test.yml",
+        "backend/.github/workflows/deploy-notification.yml",
+        "backend/render.yaml",
+        "backend/Dockerfile",
+        "backend/tests/"
+      ],
+      "deps": ["pytest", "pytest-cov", "ruff", "mypy"],
+      "state": "active",
+      "notes": "Auto-deploy on push to main after tests pass"
     }
   },
-  "debt": [],
+  "debt": [
+    "Free proxies unreliable - consider paid proxy service for production"
+  ],
   "env": {
-    "OPENAI_API_KEY": "Required for all AI agents",
-    "KEYWORD_BATCH_SIZE": "500 (for root extraction, separate from categorization batching)",
-    "SCRAPER_RETRY_TIMES": "7 (increased from 3→5→7, each retry uses different proxy)",
-    "RANDOM_DELAY_MIN": "5.0 (increased from 2.0→3.0→5.0, minimum delay between requests)",
-    "RANDOM_DELAY_MAX": "10.0 (increased from 5.0→7.0→10.0, maximum delay between requests)",
-    "SCRAPER_LOG_LEVEL": "INFO (set to see proxy rotation: 'Using proxy: http://...')",
-    "SCRAPER_PROXY_LIST": "Comma-separated proxy list (6 working proxies configured: Germany, Brazil, Italy, Russia, India, Singapore)",
-    "SCRAPER_TIMEOUT": "60 (increased from 45, allows slower proxies to respond)",
-    "UPSTASH_REDIS_URL": "Required for persistent job storage on serverless platforms",
-    "UPSTASH_REDIS_TOKEN": "Required for Redis authentication"
+    "OPENAI_API_KEY": "OpenAI API access",
+    "UPSTASH_REDIS_URL": "Redis connection URL",
+    "UPSTASH_REDIS_TOKEN": "Redis authentication",
+    "SCRAPER_PROXY_LIST": "Comma-separated proxy list (6 working proxies)",
+    "SCRAPER_RETRY_TIMES": "Max retry attempts (7)",
+    "RANDOM_DELAY_MIN": "Min delay between requests (5.0s)",
+    "RANDOM_DELAY_MAX": "Max delay between requests (10.0s)"
   }
 }

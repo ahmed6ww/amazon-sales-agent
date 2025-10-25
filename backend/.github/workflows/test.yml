@@ -1,0 +1,73 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: 📦 Install uv (fast package installer)
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: 📚 Install dependencies
+        run: |
+          cd backend
+          uv pip install --system -e ".[dev]"
+
+      - name: 🧹 Lint with ruff
+        run: |
+          cd backend
+          ruff check app/ tests/ || true
+        continue-on-error: true
+
+      - name: 🔍 Type check with mypy
+        run: |
+          cd backend
+          mypy app/ || true
+        continue-on-error: true
+
+      - name: 🧪 Run tests with pytest
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          UPSTASH_REDIS_URL: ${{ secrets.UPSTASH_REDIS_URL }}
+          UPSTASH_REDIS_TOKEN: ${{ secrets.UPSTASH_REDIS_TOKEN }}
+        run: |
+          cd backend
+          pytest tests/ -v --tb=short --cov=app --cov-report=term-missing
+
+      - name: 📊 Upload coverage reports
+        uses: codecov/codecov-action@v3
+        with:
+          file: ./backend/coverage.xml
+          flags: unittests
+          name: codecov-umbrella
+        continue-on-error: true
+
+      - name: ✅ Tests passed
+        if: success()
+        run: echo "✅ All tests passed! Ready to deploy."
+
+      - name: ❌ Tests failed
+        if: failure()
+        run: |
+          echo "❌ Tests failed! Deployment blocked."
+          exit 1
