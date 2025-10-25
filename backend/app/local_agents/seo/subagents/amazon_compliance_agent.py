@@ -44,6 +44,32 @@ def strip_markdown_code_fences(text: str) -> str:
     return text.strip()
 
 
+def validate_bullet_keyword_usage(bullets: List[Dict], title_keywords: List[str], min_unique_per_bullet: int = 2) -> Tuple[bool, str]:
+    """
+    Validate that each bullet has sufficient UNIQUE keywords (not in title).
+    
+    Args:
+        bullets: List of bullet point dicts
+        title_keywords: Keywords already used in title
+        min_unique_per_bullet: Minimum unique keywords required per bullet
+        
+    Returns:
+        Tuple of (is_valid, error_message)
+    """
+    title_kws_lower = set(kw.lower() for kw in title_keywords)
+    
+    for i, bullet in enumerate(bullets):
+        keywords_in_bullet = bullet.get("keywords_included", [])
+        
+        # Count UNIQUE keywords (not in title)
+        unique_count = sum(1 for kw in keywords_in_bullet if kw.lower() not in title_kws_lower)
+        
+        if unique_count < min_unique_per_bullet:
+            return False, f"Bullet {i+1} has only {unique_count} unique keywords (minimum {min_unique_per_bullet} required)"
+    
+    return True, ""
+
+
 AMAZON_COMPLIANCE_INSTRUCTIONS = """
 You are an Amazon Title Optimization Expert creating high-converting, compliant titles that maximize SEO while following strict quality rules.
 
@@ -566,8 +592,8 @@ TASK 3 - CRITICAL TITLE RULES (ALL MANDATORY):
 
 ### RULE 5: FIRST 80 CHARACTERS
 - Must contain: Brand + Main keyword + Design keyword + Pack/size info
-- Main keyword root: "{main_root}"
-- Design-specific root: "{design_root}"
+   - Main keyword root: "{main_root}"
+   - Design-specific root: "{design_root}" 
 - Pack/size info: Look for quantity/weight in product data
 
 ### RULE 6: GRAMMAR & READABILITY
@@ -607,8 +633,31 @@ When building your title, use this process:
    - Check: dried ✗ (already present), strawberries ✗ (already present)
    - Decision: SKIP "dried strawberries" - use different keyword like "organic" or "no sugar"
 
-**MANDATORY KEYWORD USAGE:**
-- You MUST use at least 2 keywords from the allocated arrays in EACH bullet point (REQUIRED)
+**🚨🚨🚨 MANDATORY KEYWORD USAGE - REJECTION CRITERIA 🚨🚨🚨**
+
+**YOUR OUTPUT WILL BE AUTOMATICALLY REJECTED AND DISCARDED IF:**
+❌ ANY bullet has empty keywords_included: []
+❌ ANY bullet has less than 2 keywords in keywords_included
+❌ ANY bullet keywords are not from the bullet_keywords list provided
+
+**BEFORE YOU SUBMIT YOUR JSON - COMPLETE THIS VALIDATION:**
+
+Step 1: Count your bullets → You created ___ bullets (must equal {bullet_count})
+Step 2: For EACH bullet, count keywords in keywords_included array:
+  - Bullet 1: ___ keywords (minimum 2) ← If < 2, ADD MORE NOW!
+  - Bullet 2: ___ keywords (minimum 2) ← If < 2, ADD MORE NOW!
+  - Bullet 3: ___ keywords (minimum 2) ← If < 2, ADD MORE NOW!
+  - Bullet 4: ___ keywords (minimum 2) ← If < 2, ADD MORE NOW!
+  - Bullet 5: ___ keywords (minimum 2) ← If < 2, ADD MORE NOW!
+  - Bullet 6: ___ keywords (minimum 2) ← If < 2, ADD MORE NOW!
+
+Step 3: Check distribution → You have bullet_keywords provided
+  - Distribute EVENLY: ~2-3 keywords per bullet across {bullet_count} bullets
+  - Example for 10 keywords / 6 bullets: [2, 2, 2, 2, 1, 1] ✅
+  - Example for 10 keywords / 6 bullets: [3, 3, 2, 2, 0, 0] ❌ WRONG! Bullets 5-6 are empty!
+
+**CRITICAL REQUIREMENTS:**
+- You MUST use at least 2 keywords from the allocated bullet_keywords array in EACH bullet point
 - You MUST create exactly {bullet_count} bullet points, each with minimum 2 keywords
 - You MUST list the exact keywords used in the "keywords_included" field for each bullet
 - FAILURE TO USE AT LEAST 2 KEYWORDS PER BULLET WILL RESULT IN REJECTION
@@ -620,9 +669,26 @@ When building your title, use this process:
 **STRICT REQUIREMENT - BULLETS:**
 - Create exactly {bullet_count} bullet points (MANDATORY)
 - EVERY bullet point MUST contain at least 2 keywords from bullet_keywords array
-- Distribute keywords evenly: 10 bullet keywords = 2-3 per bullet across {bullet_count} bullets
+- Distribute keywords evenly across all {bullet_count} bullets
 - You MUST naturally integrate the keywords into the bullet text
 - Each of the {bullet_count} bullets must have minimum 2 keywords for Amazon SEO effectiveness
+
+**DISTRIBUTION EXAMPLE ({bullet_count} bullets):**
+If you have 10 bullet_keywords, distribute them like:
+- Bullet 1: 2 keywords ✅ (e.g., ["freeze dried strawberries", "organic strawberries"])
+- Bullet 2: 2 keywords ✅ (e.g., ["bulk strawberries", "strawberry snack"])
+- Bullet 3: 2 keywords ✅ (e.g., ["dried fruit", "no sugar"])
+- Bullet 4: 2 keywords ✅ (e.g., ["healthy snack", "natural fruit"])
+- Bullet 5: 1 keyword ⚠️ (e.g., ["kids snack"] - acceptable if keywords run out)
+- Bullet 6: 1 keyword ⚠️ (e.g., ["travel food"] - acceptable if keywords run out)
+
+❌ NEVER DO THIS (will be rejected):
+- Bullet 1: 3 keywords
+- Bullet 2: 2 keywords
+- Bullet 3: [] ← EMPTY! REJECTED! ❌
+- Bullet 4: [] ← EMPTY! REJECTED! ❌
+- Bullet 5: [] ← EMPTY! REJECTED! ❌
+- Bullet 6: [] ← EMPTY! REJECTED! ❌
 
 **TASK 4 - BULLET POINT RULES (MANDATORY):**
 
@@ -944,6 +1010,19 @@ def optimize_amazon_compliance_ai(
                 return _create_fallback_optimization(current_content, main_keyword_root, design_keyword_root, key_benefits, brand, relevant_keywords)
             else:
                 logger.info(f"✅ Bullet keyword count validation PASSED: All {len(optimized_bullets)} bullets have ≥2 keywords")
+        
+        # ADDITIONAL VALIDATION: Check each bullet has at least 2 UNIQUE keywords (not in title)
+        title_keywords_list = result.get("optimized_title", {}).get("keywords_included", [])
+        if optimized_bullets and title_keywords_list:
+            is_valid, error_msg = validate_bullet_keyword_usage(optimized_bullets, title_keywords_list, min_unique_per_bullet=2)
+            
+            if not is_valid:
+                logger.error(f"❌ UNIQUE KEYWORD VALIDATION FAILED: {error_msg}")
+                logger.error(f"   Bullets must have unique keywords, not just title repeats!")
+                logger.warning(f"⚠️  Using AI output anyway, but expect low unique keyword counts")
+                # Don't reject - just warn, as this is a softer requirement
+            else:
+                logger.info(f"✅ Unique keyword validation PASSED: All bullets have ≥2 unique keywords (not in title)")
         
         # NEW VALIDATION: Check title has 2-3 design-specific keywords
         if design_keywords:

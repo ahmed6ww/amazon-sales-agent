@@ -54,6 +54,13 @@ def validate_and_correct_keywords_included(seo_output: Dict[str, Any], keyword_d
         
         logger.info(f"   Title has {len(actual)} keywords")
     
+    # Track title keywords for title-to-bullet duplicate detection
+    title_keywords_used = set()
+    if "optimized_title" in corrected:
+        title_kws = corrected["optimized_title"].get("keywords_included", [])
+        title_keywords_used = set(kw.lower() for kw in title_kws)
+        logger.info(f"   Tracking {len(title_keywords_used)} title keywords for duplicate detection")
+    
     # Track keywords used in bullets for bullet-to-bullet deduplication
     bullet_keywords_used = {}  # Maps keyword -> bullet index
     
@@ -62,33 +69,61 @@ def validate_and_correct_keywords_included(seo_output: Dict[str, Any], keyword_d
         for i, bullet in enumerate(corrected["optimized_bullets"]):
             content = bullet.get("content", "")
             claimed = bullet.get("keywords_included", [])
+            
+            # OPTION 2: If AI returned empty keywords_included, try to auto-detect from content
+            if not claimed and keyword_data:
+                logger.warning(f"⚠️  Bullet {i+1}: AI returned empty keywords_included - attempting auto-detection")
+                
+                # Build list of all possible keyword phrases to search for
+                all_possible_phrases = []
+                for item in keyword_data.get("relevant_keywords", []) + keyword_data.get("design_keywords", []):
+                    phrase = item.get("phrase", "")
+                    if phrase:
+                        all_possible_phrases.append(phrase)
+                
+                # Try to find keywords in the bullet content
+                if all_possible_phrases:
+                    auto_detected, _ = extract_keywords_from_content(content, all_possible_phrases, keyword_volumes)
+                    if auto_detected:
+                        claimed = auto_detected
+                        logger.info(f"   ✅ Auto-detected {len(auto_detected)} keywords: {auto_detected}")
+                    else:
+                        logger.error(f"   ❌ No keywords auto-detected in bullet content - bullet may show 0 volume")
+                else:
+                    logger.error(f"   ❌ No keyword list available for auto-detection")
+            
             actual, volume = extract_keywords_from_content(content, claimed, keyword_volumes)
             
-            # Separate into first-use keywords and duplicates from other bullets
+            # Separate into unique, title duplicates, and bullet duplicates
             unique_to_bullet = []
+            duplicated_from_title = []
             duplicated_from_other_bullets = []
             unique_volume = 0
             
             for kw in actual:
                 kw_lower = kw.lower()
                 
-                if kw_lower not in bullet_keywords_used:
-                    # First time seeing this keyword across all bullets - KEEP and COUNT
-                    unique_to_bullet.append(kw)
-                    bullet_keywords_used[kw_lower] = i
-                else:
-                    # Already used in another bullet - SHOW but DON'T COUNT
+                # Check if it's a title duplicate FIRST (priority over bullet duplicates)
+                if kw_lower in title_keywords_used:
+                    duplicated_from_title.append(kw)
+                    logger.debug(f"   Bullet {i+1}: Keyword '{kw}' already in title (show yellow)")
+                # Then check bullet-to-bullet duplicates
+                elif kw_lower in bullet_keywords_used:
                     duplicated_from_other_bullets.append(kw)
                     stats["bullet_to_bullet_duplicates"] += 1
                     logger.debug(f"   Bullet {i+1}: Keyword '{kw}' already in Bullet {bullet_keywords_used[kw_lower] + 1} (show yellow)")
+                # Otherwise it's unique to this bullet
+                else:
+                    unique_to_bullet.append(kw)
+                    bullet_keywords_used[kw_lower] = i
+                    # Calculate volume for unique keywords only
+                    unique_volume += keyword_volumes.get(kw_lower, 0)
             
-            # Calculate volume for UNIQUE keywords only
-            unique_volume = sum(keyword_volumes.get(kw.lower(), 0) for kw in unique_to_bullet)
-            
-            # All keywords shown (including duplicates), but duplicates marked yellow
-            final_keywords = unique_to_bullet + duplicated_from_other_bullets
+            # All keywords shown (unique + title duplicates + bullet duplicates)
+            final_keywords = unique_to_bullet + duplicated_from_title + duplicated_from_other_bullets
             
             corrected["optimized_bullets"][i]["keywords_included"] = final_keywords
+            corrected["optimized_bullets"][i]["keywords_duplicated_from_title"] = duplicated_from_title  # NEW FIELD
             corrected["optimized_bullets"][i]["keywords_duplicated_from_other_bullets"] = duplicated_from_other_bullets
             corrected["optimized_bullets"][i]["unique_keywords_count"] = len(unique_to_bullet)
             corrected["optimized_bullets"][i]["total_search_volume"] = unique_volume
@@ -99,8 +134,12 @@ def validate_and_correct_keywords_included(seo_output: Dict[str, Any], keyword_d
             
             logger.debug(f"   Bullet {i+1}: {len(unique_to_bullet)} unique + {len(duplicated_from_other_bullets)} duplicates = {len(final_keywords)} total")
     
+    # Calculate title duplicate count
+    title_dupe_count = sum(len(b.get('keywords_duplicated_from_title', [])) for b in corrected.get('optimized_bullets', []))
+    
     logger.info(f"✅ [SEO VALIDATION] Title: {stats['title']['actual']}/{stats['title']['claimed']}, " +
                 f"Bullets: {stats['bullets']['actual']}/{stats['bullets']['claimed']} ({stats['bullets']['unique']} unique), " +
-                f"Bullet-to-bullet duplicates (shown yellow): {stats['bullet_to_bullet_duplicates']}")
+                f"Title duplicates: {title_dupe_count}, " +
+                f"Bullet-to-bullet duplicates: {stats['bullet_to_bullet_duplicates']}")
     
     return corrected, stats

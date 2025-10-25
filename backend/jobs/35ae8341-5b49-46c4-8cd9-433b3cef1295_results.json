@@ -38,7 +38,7 @@
   "source": "amazon_sales_intelligence_pipeline",
   "monitoring_stats": {
     "overall": {
-      "elapsed_time": 58.211700439453125,
+      "elapsed_time": 246.96093797683716,
       "total_requests": 0,
       "successful_requests": 0,
       "failed_requests": 0,
