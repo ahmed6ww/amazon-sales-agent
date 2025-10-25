@@ -192,6 +192,10 @@ class AmazonScraperSpider(scrapy.Spider):
             return
 
         include_html = os.getenv("ID_ONLY_INCLUDE_HTML", "0").lower() in {"1", "true", "yes"}
+        
+        # Log response details for debugging
+        import sys
+        print(f"📊 [SCRAPER] Response size: {html_len} bytes", file=sys.stderr)
 
         out: Dict[str, Any] = {
             "url": response.url,
@@ -207,6 +211,19 @@ class AmazonScraperSpider(scrapy.Spider):
         if include_html:
             elem["html"] = title_sel.get() or ""
         out["elements"]["productTitle"] = elem
+        
+        # ✅ CRITICAL: Fail early if title is empty (page is blocked or invalid)
+        if not title_text:
+            import sys
+            print(f"❌ [SCRAPER] Product title not found - page likely blocked or invalid ASIN", file=sys.stderr)
+            self.scraped = {
+                "success": False,
+                "error": "Product title not found",
+                "blocked_reason": "missing_title_element",
+                "html_size": len(response.text),
+                "url": response.url,
+            }
+            return
 
         # productOverview_feature_div -> table rows as key/value
         pov_rows: List[Tuple[str, str]] = []

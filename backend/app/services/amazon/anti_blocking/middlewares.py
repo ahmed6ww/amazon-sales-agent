@@ -179,6 +179,18 @@ class SmartRetryMiddleware(RetryMiddleware):
                 reason = "insufficient_content"
                 return self._retry(request, reason, spider) or response
             
+            # ✅ NEW: Check if product title exists (critical Amazon product page element)
+            # If title is missing, the page is likely blocked or invalid
+            from scrapy import Selector
+            try:
+                title = response.css("#productTitle::text").get()
+                if not title or not title.strip():
+                    safe_log(spider, 'warning', f"⚠️ Product title not found (#productTitle missing) - page likely blocked or invalid")
+                    reason = "missing_product_title"
+                    return self._retry(request, reason, spider) or response
+            except Exception as e:
+                safe_log(spider, 'debug', f"Could not check for product title: {e}")
+            
             return response
         except Exception as e:
             safe_log(spider, 'error', f"Error in SmartRetryMiddleware: {e}")

@@ -60,16 +60,17 @@ def get_anti_blocking_settings() -> dict:
         "CONCURRENT_REQUESTS_PER_DOMAIN": 1,
         
         # Random delays (CRITICAL for avoiding detection)
-        "RANDOM_DELAY_MIN": float(os.getenv("RANDOM_DELAY_MIN", "2.0")),
-        "RANDOM_DELAY_MAX": float(os.getenv("RANDOM_DELAY_MAX", "5.0")),
+        # Increased defaults to 3-7s for better blocking avoidance
+        "RANDOM_DELAY_MIN": float(os.getenv("RANDOM_DELAY_MIN", "3.0")),
+        "RANDOM_DELAY_MAX": float(os.getenv("RANDOM_DELAY_MAX", "7.0")),
         
         # Use Scrapy's native download delay (non-blocking)
-        "DOWNLOAD_DELAY": 2.0,  # Base delay
+        "DOWNLOAD_DELAY": 3.0,  # Base delay (increased from 2.0)
         "RANDOMIZE_DOWNLOAD_DELAY": True,  # Scrapy randomizes it
         
-        # Retry settings
+        # Retry settings (increased from 3 to 5 attempts)
         "RETRY_ENABLED": True,
-        "RETRY_TIMES": int(os.getenv("SCRAPER_RETRY_TIMES", "3")),
+        "RETRY_TIMES": int(os.getenv("SCRAPER_RETRY_TIMES", "5")),
         "RETRY_HTTP_CODES": [429, 500, 502, 503, 504, 522, 524, 408, 403],
         
         # Disable AutoThrottle (conflicts with delay middleware)
