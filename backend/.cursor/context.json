@@ -39,6 +39,41 @@
         "what": "CI/CD with GitHub Actions + Render",
         "why": "Auto-deploy on push to main, run tests before deployment",
         "when": "2025-10-25"
+      },
+      {
+        "what": "Dual-layer keyword enforcement for SEO bullets",
+        "why": "AI ignoring validation rules - added stronger prompts + auto-detection fallback",
+        "when": "2025-10-25"
+      },
+      {
+        "what": "Increased bullet keyword allocation from 12 to 30",
+        "why": "AI had too few keywords to work with (2 per bullet → 5 per bullet)",
+        "when": "2025-10-25"
+      },
+      {
+        "what": "Title duplicate tracking in bullets",
+        "why": "Show all keywords including title duplicates with yellow badges",
+        "when": "2025-10-25"
+      },
+      {
+        "what": "Unique keyword validation for bullets",
+        "why": "Enforce minimum 2 unique keywords (not in title) per bullet",
+        "when": "2025-10-25"
+      },
+      {
+        "what": "Unicode escape sanitization in scoring agent",
+        "why": "Fix JSON parse errors from malformed \\uXXXX sequences",
+        "when": "2025-10-25"
+      },
+      {
+        "what": "Keyword reuse between title and bullets",
+        "why": "Allow high-volume title keywords in bullets for SEO reinforcement and natural copy",
+        "when": "2025-10-25"
+      },
+      {
+        "what": "Modified deduplication to preserve title keywords in bullets",
+        "why": "Previous logic removed title keywords from bullets, causing 0-keyword issues despite allocation working",
+        "when": "2025-10-25"
       }
     ]
   },
@@ -91,6 +126,22 @@
       "deps": ["pytest", "pytest-cov", "ruff", "mypy"],
       "state": "active",
       "notes": "Auto-deploy on push to main after tests pass"
+    },
+    "seo_bullet_keyword_enforcement": {
+      "files": [
+        "backend/app/local_agents/seo/subagents/amazon_compliance_agent.py",
+        "backend/app/local_agents/seo/seo_keyword_filter.py",
+        "backend/app/local_agents/seo/keyword_validator.py"
+      ],
+      "deps": [],
+      "state": "active",
+      "notes": "30 keywords per 6 bullets, keyword reuse between title/bullets for SEO reinforcement, title duplicate tracking with yellow badges, unique keyword validation, auto-detection fallback"
+    },
+    "scoring_unicode_sanitization": {
+      "files": ["backend/app/local_agents/scoring/runner.py"],
+      "deps": [],
+      "state": "active",
+      "notes": "Fixes invalid \\uXXXX escape sequences from AI output before JSON parsing"
     }
   },
   "debt": [

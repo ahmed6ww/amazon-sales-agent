@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, List
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +54,56 @@ def strip_markdown_code_fences(text: str) -> str:
 			return extracted
 	
 	# If no JSON pattern found, return cleaned text as-is
+	return text
+
+
+def sanitize_json_unicode(text: str) -> str:
+	"""
+	Fix or remove invalid Unicode escape sequences from AI-generated JSON.
+	
+	Common AI errors:
+	- Incomplete escapes: \\u201 → \\u0201 (pad with zeros)
+	- Invalid hex: \\uGGGG → removed
+	- Wrong format: \\u{...} → removed
+	
+	Args:
+		text: JSON string that may contain invalid Unicode escapes
+		
+	Returns:
+		Sanitized JSON string with fixed/removed invalid escapes
+	"""
+	if not text:
+		return text
+	
+	def fix_incomplete_escape(match):
+		escape_seq = match.group(0)
+		hex_part = escape_seq[2:]  # Remove \\u prefix
+		
+		# If hex part has invalid characters, remove the whole sequence
+		if not all(c in '0123456789abcdefABCDEF' for c in hex_part):
+			logger.debug(f"Removing invalid Unicode escape: {escape_seq}")
+			return ''  # Remove invalid escape
+		
+		# Pad with leading zeros to make it 4 digits
+		padded = hex_part.zfill(4)
+		logger.debug(f"Fixed incomplete Unicode escape: {escape_seq} → \\u{padded}")
+		return f'\\u{padded}'
+	
+	# Fix incomplete Unicode escapes (\\u + 1-3 hex digits)
+	text = re.sub(r'\\u([0-9a-fA-F]{1,3})(?![0-9a-fA-F])', fix_incomplete_escape, text)
+	
+	# Remove completely invalid Unicode escapes (\\u + non-hex characters)
+	invalid_count = len(re.findall(r'\\u[^0-9a-fA-F]', text))
+	if invalid_count > 0:
+		logger.debug(f"Removing {invalid_count} completely invalid Unicode escapes")
+		text = re.sub(r'\\u[^0-9a-fA-F]{1,4}', '', text)
+	
+	# Remove wrong format escapes like \\u{...}
+	brace_count = len(re.findall(r'\\u\{[^}]*\}', text))
+	if brace_count > 0:
+		logger.debug(f"Removing {brace_count} brace-format Unicode escapes")
+		text = re.sub(r'\\u\{[^}]*\}', '', text)
+	
 	return text
 
 
@@ -151,6 +202,7 @@ class ScoringRunner:
 					if output:
 						try:
 							clean_output = strip_markdown_code_fences(output)
+							clean_output = sanitize_json_unicode(clean_output)
 							parsed_result = _json.loads(clean_output)
 							if isinstance(parsed_result, list):
 								scored = parsed_result
@@ -161,6 +213,7 @@ class ScoringRunner:
 				elif result and hasattr(result, 'content'):
 					try:
 						clean_content = strip_markdown_code_fences(result.content)
+						clean_content = sanitize_json_unicode(clean_content)
 						parsed_result = _json.loads(clean_content)
 						if isinstance(parsed_result, list):
 							scored = parsed_result

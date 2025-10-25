@@ -184,13 +184,14 @@ class SEOKeywordValidator:
         
         return top_keywords
     
-    def allocate_keywords_for_content_type(self, keywords: List[str], content_type: str) -> List[str]:
+    def allocate_keywords_for_content_type(self, keywords: List[str], content_type: str, allow_reuse: bool = False) -> List[str]:
         """
-        Allocate keywords for specific content type, preventing duplication.
+        Allocate keywords for specific content type, with optional reuse.
         
         Args:
             keywords: List of valid keywords
             content_type: 'title', 'bullets', or 'backend'
+            allow_reuse: If True, allows keywords already used in other content types
             
         Returns:
             List of allocated keywords for the content type
@@ -199,8 +200,14 @@ class SEOKeywordValidator:
             logger.error(f"❌ Unknown content type: {content_type}")
             return []
         
-        # Filter out already used keywords
-        available_keywords = [kw for kw in keywords if kw.lower() not in self.used_keywords]
+        # Filter out already used keywords (unless allow_reuse is True)
+        if allow_reuse:
+            # For bullets: allow title keywords to be reused (good for SEO reinforcement)
+            available_keywords = keywords
+            logger.info(f"🔄 Allowing keyword reuse for {content_type} (SEO reinforcement)")
+        else:
+            # For title/backend: strictly prevent duplication
+            available_keywords = [kw for kw in keywords if kw.lower() not in self.used_keywords]
         
         # Get allocation limit
         limit = self.keyword_allocation[content_type]
@@ -208,7 +215,7 @@ class SEOKeywordValidator:
         # Allocate keywords
         allocated_keywords = available_keywords[:limit]
         
-        # Track usage
+        # Track usage (for within-type deduplication)
         self.used_keywords.update([kw.lower() for kw in allocated_keywords])
         
         logger.info(f"🎯 Allocated {len(allocated_keywords)} keywords for {content_type} (limit: {limit})")
@@ -307,21 +314,23 @@ class SEOKeywordValidator:
         # Dynamic allocation for bullets based on bullet count
         if content_type == 'bullets' and bullet_count:
             # Allocate 2-3 keywords per bullet point
-            dynamic_limit = max(4, bullet_count * 2)  # Minimum 4, or 2 per bullet
+            dynamic_limit = max(20, bullet_count * 5)  # Minimum 20, or 5 per bullet
             logger.info(f"🎯 Dynamic bullet allocation: {bullet_count} bullets → {dynamic_limit} keywords")
             
             # Temporarily adjust allocation limit
             original_limit = self.keyword_allocation['bullets']
             self.keyword_allocation['bullets'] = dynamic_limit
             
-            # Allocate for the specific content type
-            allocated_keywords = self.allocate_keywords_for_content_type(top_keywords, content_type)
+            # Allocate for bullets with reuse enabled (allows title keywords for SEO reinforcement)
+            allocated_keywords = self.allocate_keywords_for_content_type(top_keywords, content_type, allow_reuse=True)
             
             # Restore original limit
             self.keyword_allocation['bullets'] = original_limit
         else:
             # Allocate for the specific content type
-            allocated_keywords = self.allocate_keywords_for_content_type(top_keywords, content_type)
+            # Bullets allow reuse, title/backend do not
+            allow_reuse = (content_type == 'bullets')
+            allocated_keywords = self.allocate_keywords_for_content_type(top_keywords, content_type, allow_reuse=allow_reuse)
         
         # Convert to keyword dicts with full data
         allocated_keyword_dicts = []
@@ -331,6 +340,11 @@ class SEOKeywordValidator:
                 allocated_keyword_dicts.append(keyword_data)
         
         logger.info(f"🎯 Allocated {len(allocated_keyword_dicts)} keywords for {content_type} AI agent")
+        
+        # Debug: Show first 10 keywords for transparency
+        if allocated_keyword_dicts:
+            keyword_phrases = [k.get('phrase') for k in allocated_keyword_dicts[:10]]
+            logger.info(f"📋 First 10 keywords for {content_type}: {keyword_phrases}")
         
         return allocated_keyword_dicts
     
