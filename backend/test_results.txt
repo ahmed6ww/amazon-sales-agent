@@ -1,0 +1,50 @@
+[1m============================= test session starts ==============================[0m
+platform linux -- Python 3.13.3, pytest-8.4.2, pluggy-1.6.0 -- /usr/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/ahmed/Desktop/code/Freelance/amazon-sales-agent/backend
+configfile: pytest.ini
+plugins: timeout-2.4.0, mock-3.15.1, typeguard-4.4.2
+timeout: 300.0s
+timeout method: signal
+timeout func_only: False
+[1mcollecting ... [0mcollected 23 items
+
+tests/test_production_anti_blocking.py::TestProductionAntiBlockingModule::test_anti_blocking_module_exists [32mPASSED[0m[33m [  4%][0m
+tests/test_production_anti_blocking.py::TestProductionAntiBlockingModule::test_get_anti_blocking_settings_returns_dict [32mPASSED[0m[33m [  8%][0m
+tests/test_production_anti_blocking.py::TestProductionAntiBlockingModule::test_retry_settings_configured [32mPASSED[0m[33m [ 13%][0m
+tests/test_production_anti_blocking.py::TestProductionAntiBlockingModule::test_cookies_enabled [32mPASSED[0m[33m [ 17%][0m
+tests/test_production_anti_blocking.py::TestProductionAntiBlockingModule::test_robotstxt_obey_disabled [32mPASSED[0m[33m [ 21%][0m
+tests/test_production_anti_blocking.py::TestProductionAntiBlockingModule::test_concurrent_requests_limited [32mPASSED[0m[33m [ 26%][0m
+tests/test_production_anti_blocking.py::TestProductionAntiBlockingModule::test_production_middlewares_configured [32mPASSED[0m[33m [ 30%][0m
+tests/test_production_anti_blocking.py::TestProductionAntiBlockingModule::test_download_delay_configured [32mPASSED[0m[33m [ 34%][0m
+tests/test_production_anti_blocking.py::TestProductionMiddlewares::test_rotate_user_agent_middleware_exists [32mPASSED[0m[33m [ 39%][0m
+tests/test_production_anti_blocking.py::TestProductionMiddlewares::test_smart_retry_middleware_exists [32mPASSED[0m[33m [ 43%][0m
+tests/test_production_anti_blocking.py::TestProductionMiddlewares::test_random_delay_middleware_exists [32mPASSED[0m[33m [ 47%][0m
+tests/test_production_anti_blocking.py::TestProductionMiddlewares::test_rotate_user_agent_sets_header [32mPASSED[0m[33m [ 52%][0m
+tests/test_production_anti_blocking.py::TestScraperIntegration::test_scraper_module_can_be_imported [32mPASSED[0m[33m [ 56%][0m
+tests/test_production_anti_blocking.py::TestScraperIntegration::test_scraper_loads_anti_blocking_settings [32mPASSED[0m[33m [ 60%][0m
+tests/test_production_anti_blocking.py::TestScraperIntegration::test_scraper_has_fallback_settings [32mPASSED[0m[33m [ 65%][0m
+tests/test_production_anti_blocking.py::TestUserAgentFunctionality::test_user_agent_functions_exist [32mPASSED[0m[33m [ 69%][0m
+tests/test_production_anti_blocking.py::TestUserAgentFunctionality::test_has_user_agent_data [32mPASSED[0m[33m [ 73%][0m
+tests/test_production_anti_blocking.py::TestAntiBlockingFeatures::test_anti_blocking_settings_have_all_required_keys [32mPASSED[0m[33m [ 78%][0m
+tests/test_production_anti_blocking.py::TestAntiBlockingFeatures::test_retry_codes_include_blocking_statuses [32mPASSED[0m[33m [ 82%][0m
+tests/test_production_anti_blocking.py::TestAntiBlockingFeatures::test_settings_are_scrapy_compatible 
+[1m-------------------------------- live log call ---------------------------------[0m
+2025-10-25 07:55:06 [[32m    INFO[0m] Scrapy 2.13.3 started (bot: scrapybot)
+2025-10-25 07:55:06 [[32m    INFO[0m] Versions:
+{'lxml': '5.3.2',
+ 'libxml2': '2.9.14',
+ 'cssselect': '1.3.0',
+ 'parsel': '1.10.0',
+ 'w3lib': '2.3.1',
+ 'Twisted': '25.5.0',
+ 'Python': '3.13.3 (main, Aug 14 2025, 11:53:40) [GCC 14.2.0]',
+ 'pyOpenSSL': '25.3.0 (OpenSSL 3.5.3 16 Sep 2025)',
+ 'cryptography': '46.0.1',
+ 'Platform': 'Linux-6.14.0-34-generic-x86_64-with-glibc2.41'}
+[32mPASSED[0m[33m                                                                   [ 86%][0m
+tests/test_production_anti_blocking.py::TestRealWorldScenarios::test_settings_help_avoid_detection [32mPASSED[0m[33m [ 91%][0m
+tests/test_production_anti_blocking.py::TestRealWorldScenarios::test_middleware_priorities_are_logical [32mPASSED[0m[33m [ 95%][0m
+tests/test_production_anti_blocking.py::TestLiveIntegration::test_can_scrape_with_anti_blocking [33mSKIPPED[0m[33m [100%][0m
+
+[33m=================== [32m22 passed[0m, [33m[1m1 skipped[0m, [33m[1m1 warning[0m[33m in 0.28s[0m[33m ===================[0m

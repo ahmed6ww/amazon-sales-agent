@@ -1,0 +1,1112 @@
+{
+  "timestamp": "2025-10-25T08:05:45.053388",
+  "summary": {
+    "total": 10,
+    "successful": 10,
+    "failed": 0,
+    "success_rate": 100.0,
+    "total_time": 42.24807095527649,
+    "avg_time_per_request": 2.424645709991455
+  },
+  "results": [
+    {
+      "url": "https://www.amazon.com/dp/B0BSHF7WHW",
+      "result": {
+        "success": true,
+        "data": {
+          "url": "https://www.amazon.com/dp/B0BSHF7WHW",
+          "status": 200,
+          "response_size": 301235,
+          "elements": {
+            "productTitle": {
+              "present": false,
+              "text": []
+            },
+            "productOverview_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "feature-bullets": {
+              "present": false,
+              "bullets": []
+            },
+            "productDescription": {
+              "present": false,
+              "paragraphs": []
+            },
+            "prodDetails": {
+              "present": false,
+              "tech_specs": {},
+              "additional_info": {}
+            },
+            "detailBullets_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "aplus": {
+              "present": false,
+              "headings": [],
+              "paragraphs": [],
+              "list_items": []
+            }
+          },
+          "images": {
+            "present": false,
+            "main_image": "",
+            "all_images": [],
+            "image_count": 0
+          },
+          "title": "",
+          "reviews": {
+            "present": false,
+            "sample_reviews": [],
+            "review_highlights": [
+              "",
+              ""
+            ]
+          },
+          "qa_section": {
+            "present": false,
+            "qa_pairs": [],
+            "questions": []
+          },
+          "price": {
+            "present": false,
+            "raw": "",
+            "amount": null,
+            "currency": null,
+            "source": ""
+          }
+        },
+        "anti_blocking_used": true
+      },
+      "time": 1.7635483741760254
+    },
+    {
+      "url": "https://www.amazon.com/dp/B073TY2GTF",
+      "result": {
+        "success": true,
+        "data": {
+          "url": "https://www.amazon.com/dp/B073TY2GTF",
+          "status": 200,
+          "response_size": 2352608,
+          "elements": {
+            "productTitle": {
+              "present": true,
+              "text": [
+                "Cuisinart Garlic Press, One Size, Silver"
+              ]
+            },
+            "productOverview_feature_div": {
+              "present": true,
+              "kv": {
+                "Material": "Stainless Steel",
+                "Color": "Silver",
+                "Brand": "Cuisinart",
+                "Product Dimensions": "9.38\"L x 4.13\"W",
+                "Item Weight": "0.49 Pounds"
+              }
+            },
+            "feature-bullets": {
+              "present": true,
+              "bullets": [
+                "Professional-quality features:",
+                "Stylish stainless steel handles",
+                "Sturdy nylon heads resist heat up to 400 DegreeF",
+                "Safe for nonstick cookware",
+                "Dishwasher safe"
+              ]
+            },
+            "productDescription": {
+              "present": true,
+              "paragraphs": [
+                "Durable, versatile and beautiful, Cuisinart new line of chef-caliber kitchen tools is a fusion of the fi nest features and materials. Stainless steel handles contrast with black nylon heads, while the Red ring in the middle of each tool adds a dash of Color. The contemporary design adds an on-trend touch to any kitchen. These dishwasher-safe utensils and gadgets cover nearly every prepping, cooking and serving task, blending sophisticated form and function with superior ease and convenience. Features: Stylish stainless steel handle|Dishwasher safe|Lifetime warranty"
+              ]
+            },
+            "prodDetails": {
+              "present": true,
+              "tech_specs": {},
+              "additional_info": {
+                "Material": "Stainless Steel",
+                "Color": "Silver",
+                "Brand": "Cuisinart",
+                "Product Dimensions": "9.38\"L x 4.13\"W",
+                "Item Weight": "7.8 ounces",
+                "Is Dishwasher Safe": "Yes",
+                "Manufacturer": "Cuisinart",
+                "UPC": "086279116369",
+                "Global Trade Identification Number": "00086279116369, 20086279116363",
+                "ASIN": "B073TY2GTF",
+                "Item model number": "CTG-14-GP",
+                "Customer Reviews": "4.4 4.4 out of 5 stars 394 ratings var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); }); 4.4 out of 5 stars",
+                "Best Sellers Rank": "#33,764 in Kitchen & Dining ( See Top 100 in Kitchen & Dining ) #101 in Garlic Presses",
+                "Is Discontinued By Manufacturer": "No",
+                "Date First Available": "July 9, 2017"
+              }
+            },
+            "detailBullets_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "aplus": {
+              "present": true,
+              "headings": [
+                "From the manufacturer",
+                "Savor the Good Life.",
+                "Cookware - Cooking Pots And Pans",
+                "Bakeware and Baking Tools",
+                "Cooking Knives and Kitchen Cutlery",
+                "Kitchen Countertop Appliances"
+              ],
+              "paragraphs": [
+                "Cuisinart brand is not limited to food processors. Plugged or unplugged, nobody covers the kitchen like Cuisinart. The company is a full-service culinary resource with a wide array of products, preferred by chefs and favored by consumers.",
+                "Create amazing meals using our high-quality cookware. With a full range of sets, sauce pans, skillets, fry pans and more, cooking for your family or a crowd is accessible and elegant.",
+                "No cooking task is too complex for these durable products.",
+                "Savor the Good Life with Cuisinart's cookware!"
+              ],
+              "list_items": []
+            }
+          },
+          "images": {
+            "present": true,
+            "main_image": "https://m.media-amazon.com/images/I/51k-PoRiwvL.jpg",
+            "all_images": [
+              "https://m.media-amazon.com/images/I/51k-PoRiwvL.jpg",
+              "https://m.media-amazon.com/images/I/31e9hsrLiEL.jpg",
+              "https://m.media-amazon.com/images/I/41SCVO4siRL.jpg",
+              "https://m.media-amazon.com/images/I/51sj8Kj2ZcL.SS125_PKplay-button-mb-image-grid-small_.jpg"
+            ],
+            "image_count": 4
+          },
+          "title": "Cuisinart Garlic Press, One Size, Silver",
+          "reviews": {
+            "present": true,
+            "sample_reviews": [
+              "A good garlic press is hard to find but dont hesitate buying this one. It's strong and the self-cleaning feature works well.",
+              "Great product! It is sturdy and extremely well made and easy to use. I purchased this one as a back up to one that I already have just in case my current one grows feet and disappears.",
+              "I bought one of these because my daughter had one. I have never peeled potatoes so easy in my life and I am 65. Very nice. Does a great job.",
+              "Not my fav, def look for better.",
+              "FANTASTIC TOOL, LIGHT WEIGHT, EASY TO USE, SHARP AND OVERALL VERY GOOD INVESTMENT!"
+            ],
+            "review_highlights": [
+              "4.4 out of 5 stars",
+              "394 ratings"
+            ]
+          },
+          "qa_section": {
+            "present": false,
+            "qa_pairs": [],
+            "questions": []
+          },
+          "price": {
+            "present": true,
+            "raw": "$21.99",
+            "amount": 21.99,
+            "currency": "$",
+            "source": "apex_offscreen"
+          }
+        },
+        "anti_blocking_used": true
+      },
+      "time": 2.9898738861083984
+    },
+    {
+      "url": "https://www.amazon.com/dp/B0D1XD1ZV3",
+      "result": {
+        "success": true,
+        "data": {
+          "url": "https://www.amazon.com/dp/B0D1XD1ZV3",
+          "status": 200,
+          "response_size": 1181835,
+          "elements": {
+            "productTitle": {
+              "present": true,
+              "text": [
+                "Apple AirPods Pro 2 Wireless Earbuds, Active Noise Cancellation, Hearing Aid Feature, Bluetooth Headphones, Transparency, Personalized Spatial Audio, High-Fidelity Sound, H2 Chip, USB-C Charging"
+              ]
+            },
+            "productOverview_feature_div": {
+              "present": true,
+              "kv": {
+                "Brand": "Apple",
+                "Color": "White",
+                "Ear Placement": "In Ear",
+                "Form Factor": "In Ear",
+                "Impedance": "24 Ohm"
+              }
+            },
+            "feature-bullets": {
+              "present": true,
+              "bullets": [
+                "PIONEERING HEARING \u2014 AirPods Pro 2 unlock the world\u2019s first all-in-one hearing health experience: a scientifically validated Hearing Test,* clinical-grade and active Hearing Protection.*",
+                "INTELLIGENT NOISE CONTROL \u2014 Active Noise Cancellation removes up to 2x more background noise.* Transparency mode lets you hear the world around you, and Adaptive Audio seamlessly blends Active Noise Cancellation and Transparency mode for the best listening experience in any environment.* And when you\u2019re speaking with someone nearby, Conversation Awareness automatically lowers the volume of what\u2019s playing.*",
+                "IMPROVED SOUND AND CALL QUALITY \u2014 The Apple-designed H2 chip helps to create deeply immersive sound. The low-distortion, custom-built driver delivers crisp, clear high notes and full, rich bass in stunning definition. Voice Isolation improves the quality of phone calls in loud conditions.*",
+                "CUSTOMIZABLE FIT \u2014 Includes four pairs of silicone tips (XS, S, M, L) to fit a wide range of ear shapes and provide all-day comfort. The tips create an acoustic seal to help keep out noise and secure AirPods Pro 2 in place.",
+                "DUST, SWEAT, AND WATER RESISTANT \u2014 Both AirPods Pro and the MagSafe Charging Case are IP54 dust, sweat, and water resistant, so you can listen comfortably in more conditions.*",
+                "PERSONALIZED SPATIAL AUDIO \u2014 With sound that suits your unique ear shape along with dynamic head tracking, AirPods Pro 2 deliver an immersive listening experience that places sound all around you.* You can also listen to select songs, shows, and movies in Dolby Atmos.",
+                "A HIGHER LEVEL OF CONTROL \u2014 Simply swipe, press, and hold the stem to manage playback functions using Touch control. And with Siri Interactions, simply nod your head yes or shake your head no when Siri asks if you\u2019d like to hear a message, answer a call, or manage a notification.*",
+                "LONG BATTERY LIFE \u2014 Get up to 6 hours of listening time with Active Noise Cancellation enabled. And get up to 30 hours of total listening time with Active Noise Cancellation enabled, using the case.*",
+                "A MORE CAPABLE CASE\u2014 Keep track of AirPods Pro 2 with Precision Finding and a built-in speaker.* A lanyard loop helps keep your AirPods Pro 2 close. Charge with an Apple Watch or MagSafe Charger, USB-C Charge Cable, or Qi-certified charger.",
+                "LEGAL DISCLAIMERS \u2014 This is a summary of the main product features. See \u201cAdditional information\u201d to learn more."
+              ]
+            },
+            "productDescription": {
+              "present": false,
+              "paragraphs": []
+            },
+            "prodDetails": {
+              "present": true,
+              "tech_specs": {
+                "Noise Control": "\u200eActive Noise Cancellation",
+                "Model Name": "\u200eAirPods Pro (2nd Gen, 2023)",
+                "Connectivity Technology": "\u200eApple H2 Chip, Bluetooth, Wireless",
+                "Wireless Communication Technology": "\u200eApple H2 Chip, Bluetooth, NFC",
+                "Included Components": "\u200eCable, Wireless Charging Case",
+                "Age Range (Description)": "\u200eAdult",
+                "Material": "\u200ePlastic",
+                "Specific Uses For Product": "\u200eGaming, Music, Sport",
+                "Recommended Uses For Product": "\u200eCalling, Exercising, Gaming, Recording, Running",
+                "Compatible Devices": "\u200eCellphones, Desktops, Gaming Consoles, Laptops, Tablets",
+                "Control Type": "\u200eCall Control, Volume Control, Media Control, App Control, Voice Control, Noise Control, Siri",
+                "Cable Feature": "\u200eWith USB-C Cable",
+                "Item Weight": "\u200e1.6 ounces",
+                "Water Resistance Level": "\u200eWater Resistant",
+                "Customer Package Type": "\u200eStandard Packaging",
+                "Unit Count": "\u200e1.0 Count",
+                "Style": "\u200eWithout AppleCare+",
+                "Control Method": "\u200eVoice",
+                "Number of Items": "\u200e1",
+                "Controller Type": "\u200eSiri",
+                "Battery Life": "\u200e6 Hours",
+                "Earpiece Shape": "\u200eOval",
+                "Series Number": "\u200e3",
+                "UPC": "\u200e195949704529",
+                "Special Feature": "\u200eLightweight, Microphone Included, Phone Control, Sports & Exercise, Volume Control",
+                "Manufacturer": "\u200eApple",
+                "Product Dimensions": "\u200e0.94 x 0.86 x 1.22 inches",
+                "ASIN": "\u200eB0D1XD1ZV3",
+                "Item model number": "\u200eMTJV3LL/A",
+                "Batteries": "\u200e3 Lithium Ion batteries required. (included)",
+                "Date First Available": "\u200eApril 23, 2024"
+              },
+              "additional_info": {}
+            },
+            "detailBullets_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "aplus": {
+              "present": false,
+              "headings": [],
+              "paragraphs": [],
+              "list_items": []
+            }
+          },
+          "images": {
+            "present": true,
+            "main_image": "https://m.media-amazon.com/images/I/61SUj2aKoEL.jpg",
+            "all_images": [
+              "https://m.media-amazon.com/images/I/61SUj2aKoEL.jpg",
+              "https://m.media-amazon.com/images/I/2110TEYPKnL.jpg",
+              "https://m.media-amazon.com/images/I/317cK2pqGgL.jpg",
+              "https://m.media-amazon.com/images/I/51L718az4kL.jpg",
+              "https://m.media-amazon.com/images/I/21h1wxTIGwL.jpg",
+              "https://m.media-amazon.com/images/I/41jR-PnrqqL.jpg",
+              "https://m.media-amazon.com/images/I/31bRcDw4HnL.jpg"
+            ],
+            "image_count": 7
+          },
+          "title": "Apple AirPods Pro 2 Wireless Earbuds, Active Noise Cancellation, Hearing Aid Feature, Bluetooth Headphones, Transparency, Personalized Spatial Audio, High-Fidelity Sound, H2 Chip, USB-C Charging",
+          "reviews": {
+            "present": true,
+            "sample_reviews": [
+              "The AirPods Pro 2 sound amazing\u2014clear vocals, deep bass, and a nice balance overall. The active noise cancellation works surprisingly well, blocking out most background noise when I\u2019m on the bus or at the gym. Transparency mode feels very natural too. They connect instantly with my iPhone, and the fit is comfortable enough to wear for hours without slipping. Battery life is solid, and the charging case is compact and easy to carry. A bit pricey, but definitely worth it for the quality and convenience.",
+              "I\u2019ve tried several hearing aid substitutes over the years, my past favorite being the now unavailable Bose Hearphones and costing $500. Rather than just a sound amplifier, these had several functions allowing you to filter and focus sounds in various ways and for various situations. They were pretty good.",
+              "But now Apple has added some great features to their AirPods 2\u2014features that function like far more expensive hearing aids and at less than half the price of the Bose product. I\u2019ve owned these for a month or so and am now just getting the hang of how to use them. If there is a downside to these earbuds it is the rather deep and confusing tech included in them (or, at least confusing for a grandfatherly type like me). Once they are Bluetooth connected to your iPhone (They connect very easily with the button on the front of the EarPod\u2019s charging case.) they should automatically connect every time you put them in your ears. You will then be able to access all the functions by tapping the \u201csettings\u201d app on your phone. You will find a heading near the top of the list just below the box with your name and iCloud options. Tapping on this will allow you to drill down through several pages of options. There are a lot of options there and it can be confusing, but experimenting with the various functions will help you figure out their purpose.",
+              "The key here is to drill down to find the hearing test. This will quickly test for hearing loss by leading you through a series of tones of varying in pitch and volume. The end result will be an audiogram that can be used to program your EarPods as hearing aids. As stated before, it took me several weeks to find and activate this feature, but when I did a whole new experience dawned. Just be patient and search around for this function. It works very well.",
+              "Of course, these things also serve as EarPods to listen to music or podcasts. (May I recommend \u201cPat Gray Unleashed!\u201d if your bent is conservative commentary and just plain fooling around). The quality of sound is phenomenal and the buds are more comfortable than most to keep in your ears for an extended time. To control the volume for this function you can TRY to use the external control buttons located on those silly looking stems that hang out of your ears (good luck) OR just open the \u201cControl Center\u201d page (slide one finger upward on your iPhone screen to access this page) where you\u2019ll find the volume slider. If your EarPods are connected and in your ears you\u2019ll see the slider is marked as controlling the AirPods."
+            ],
+            "review_highlights": [
+              "4.6 out of 5 stars",
+              "40,079 ratings"
+            ]
+          },
+          "qa_section": {
+            "present": false,
+            "qa_pairs": [],
+            "questions": []
+          },
+          "price": {
+            "present": false,
+            "raw": "",
+            "amount": null,
+            "currency": null,
+            "source": ""
+          }
+        },
+        "anti_blocking_used": true
+      },
+      "time": 2.377739429473877
+    },
+    {
+      "url": "https://www.amazon.com/dp/B09B93ZDG4",
+      "result": {
+        "success": true,
+        "data": {
+          "url": "https://www.amazon.com/dp/B09B93ZDG4",
+          "status": 200,
+          "response_size": 1505557,
+          "elements": {
+            "productTitle": {
+              "present": true,
+              "text": [
+                "Amazon Echo Dot (newest model), Vibrant sounding Alexa speaker, Great for bedrooms, dining rooms and offices, Deep Sea Blue"
+              ]
+            },
+            "productOverview_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "feature-bullets": {
+              "present": true,
+              "bullets": [
+                "Our best sounding Echo Dot yet \u2013 Enjoy an improved audio experience compared to any previous Echo Dot with Alexa for clearer vocals, deeper bass and vibrant sound in any room.",
+                "Your favorite music and content \u2013 Play music, audiobooks, and podcasts from Amazon Music, Apple Music, Spotify and others or via Bluetooth throughout your home.",
+                "Alexa is happy to help \u2013 Ask Alexa for weather updates and to set hands-free timers, get answers to your questions and even hear jokes. Need a few extra minutes in the morning? Just tap your Echo Dot to snooze your alarm.",
+                "Keep your home comfortable \u2013 Control compatible smart home devices with your voice and routines triggered by built-in motion or indoor temperature sensors. Create routines to automatically turn on lights when you walk into a room, or start a fan if the inside temperature goes above your comfort zone.",
+                "Designed to protect your privacy \u2013 Amazon is not in the business of selling your personal information to others. Built with multiple layers of privacy controls, including a mic off button.",
+                "Do more with device pairing\u2013 Fill your home with music using compatible Echo devices in different rooms, create a home theatre system with Fire TV, or extend wifi coverage with a compatible eero network so you can say goodbye to drop-offs and buffering."
+              ]
+            },
+            "productDescription": {
+              "present": false,
+              "paragraphs": []
+            },
+            "prodDetails": {
+              "present": false,
+              "tech_specs": {},
+              "additional_info": {}
+            },
+            "detailBullets_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "aplus": {
+              "present": false,
+              "headings": [],
+              "paragraphs": [],
+              "list_items": []
+            }
+          },
+          "images": {
+            "present": true,
+            "main_image": "https://m.media-amazon.com/images/I/41hdqR0-58L.jpg",
+            "all_images": [
+              "https://m.media-amazon.com/images/I/41hdqR0-58L.jpg",
+              "https://m.media-amazon.com/images/I/41C50rAycqL.jpg",
+              "https://m.media-amazon.com/images/I/416cLOwd8LL.jpg",
+              "https://m.media-amazon.com/images/I/41twOW1hMpL.jpg",
+              "https://m.media-amazon.com/images/I/419tViZriBL.jpg",
+              "https://m.media-amazon.com/images/I/410MGVWajyL.jpg",
+              "https://m.media-amazon.com/images/I/41qIg8mVN6L.jpg"
+            ],
+            "image_count": 7
+          },
+          "title": "Amazon Echo Dot (newest model), Vibrant sounding Alexa speaker, Great for bedrooms, dining rooms and offices, Deep Sea Blue",
+          "reviews": {
+            "present": true,
+            "sample_reviews": [
+              "The newest Amazon Echo Dot has been a great addition to my kids\u2019 bedroom. The sound quality is excellent for such a small device. It is clear, vibrant, and powerful enough to fill the room. It\u2019s also perfect for our daily routines; we use Alexa for reminders, chore announcements, and even quick drop-ins between rooms, which makes family communication so much easier. For a very busy household, this little speaker feels like a real helper. The routines and voice control features make it simple for the kids to interact with, and it helps keep things running smoothly without me needing to call out reminders constantly.",
+              "The only frustration we\u2019ve had is with Apple Music connectivity. Alexa usually needs to be reminded which service to use, and we occasionally have to repeat commands. Still, for the price, convenience, and overall performance, it\u2019s an excellent addition to our Echo smart system.",
+              "I'm absolutely thrilled with my new Echo Dot. Its design is compact and stylish, and it fits perfectly into any corner of my home. The sound quality is astonishing for its size; the bass is deep and the overall sound is clear and vibrant.",
+              "Setup was a breeze, and now using Alexa has become a key part of my daily routine. I ask it to play music, give me the weather forecast, set alarms, and even control my smart lights with just my voice.",
+              "It works seamlessly and its microphone is very sensitive, so it hears me without any trouble from across the room. It's, without a doubt, a great investment to make life a little easier and more connected."
+            ],
+            "review_highlights": [
+              "4.7 out of 5 stars",
+              "174,286 ratings"
+            ]
+          },
+          "qa_section": {
+            "present": false,
+            "qa_pairs": [],
+            "questions": []
+          },
+          "price": {
+            "present": false,
+            "raw": "",
+            "amount": null,
+            "currency": null,
+            "source": ""
+          }
+        },
+        "anti_blocking_used": true
+      },
+      "time": 2.4446194171905518
+    },
+    {
+      "url": "https://www.amazon.com/dp/B09SWW583J",
+      "result": {
+        "success": true,
+        "data": {
+          "url": "https://www.amazon.com/dp/B09SWW583J",
+          "status": 200,
+          "response_size": 1287183,
+          "elements": {
+            "productTitle": {
+              "present": true,
+              "text": [
+                "Amazon Kindle \u2013 The lightest and most compact Kindle, with extended battery life, adjustable front light, and 16 GB storage \u2013 Black"
+              ]
+            },
+            "productOverview_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "feature-bullets": {
+              "present": true,
+              "bullets": [
+                "The lightest and most compact Kindle, now with a 300 ppi high-resolution display for sharp text and images.",
+                "Read comfortably with a glare-free, paper-like display. The adjustable front light and dark mode make reading effortless, day and night.",
+                "Get lost in your story. Tune out messages, emails, and social media with a distraction-free device specifically made for reading.",
+                "Now with extended battery life \u2013 A single charge via USB-C lasts up to 6 weeks.",
+                "Now with 16 GB to store thousands of books \u2013 Double the storage capacity of the previous generation.",
+                "Find new stories \u2013 With Kindle Unlimited, get unlimited access to over 2 million titles, thousands of audiobooks, and more.",
+                "Designed with sustainability in mind. This Kindle uses 30-75% recycled plastics and 90% recycled magnesium and has 100% recyclable device packaging."
+              ]
+            },
+            "productDescription": {
+              "present": false,
+              "paragraphs": []
+            },
+            "prodDetails": {
+              "present": false,
+              "tech_specs": {},
+              "additional_info": {}
+            },
+            "detailBullets_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "aplus": {
+              "present": false,
+              "headings": [],
+              "paragraphs": [],
+              "list_items": []
+            }
+          },
+          "images": {
+            "present": true,
+            "main_image": "https://m.media-amazon.com/images/I/81bYjg-2NGL.jpg",
+            "all_images": [
+              "https://m.media-amazon.com/images/I/81bYjg-2NGL.jpg",
+              "https://m.media-amazon.com/images/I/513k8KOMm1L.jpg",
+              "https://m.media-amazon.com/images/I/4127coewnQL.jpg",
+              "https://m.media-amazon.com/images/I/41GSOajwTcL.jpg",
+              "https://m.media-amazon.com/images/I/51IpqkBe7lL.jpg",
+              "https://m.media-amazon.com/images/I/51mUXptrzvL.jpg",
+              "https://m.media-amazon.com/images/I/51aubKr72pL.jpg",
+              "https://m.media-amazon.com/images/I/513u+55lLyL.jpg"
+            ],
+            "image_count": 8
+          },
+          "title": "Amazon Kindle \u2013 The lightest and most compact Kindle, with extended battery life, adjustable front light, and 16 GB storage \u2013 Black",
+          "reviews": {
+            "present": true,
+            "sample_reviews": [
+              "I picked up the Kindle for its compact size and lightweight feel, and it\u2019s quickly become my go-to reading companion. The 6-inch glare-free display with 300 ppi is so crisp,it really does feel like reading real paper, but with the convenience of digital. Adjusting the front light and switching to dark mode makes it easy to read whether I\u2019m in bed or out in bright sunlight. The 16 GB storage holds thousands of books, so I never run out of options on the go. USB\u2011C charging is now a reality, and the battery easily lasts for weeks between charges. For such a sleek and simple device, it delivers an amazing reading experience.",
+              "I\u2019ve been buying Kindles ever since the second model came out way back in 2009 or so. The Kindle is a marvelous invention that got me reading again and reading 3-4 times as much as I ever did with paper books. I have no romantic notions about paper and glue anymore.",
+              "I\u2019d go as far as saying the Kindle is arguably the most underrated invention of the early 21st century. But you\u2019re here for the review, so\u2026",
+              "As for why I like THIS Kindle so much, well, I love the fact that all of the most important features have finally trickled down to the base model. I can afford to buy any Kindle I want and I usually buy one of the middle or high-end Kindles. This one was actually replacing an older Paperwhite, but I wanted to give the base model a try since it checked all the right boxes, aside from color temperature adjustment.",
+              "The fact that all the best features are present on the base model now makes me feel better about Kindles and Amazon in general honestly. My first Kindle was $399, so I love the fact that this one is so affordable and within reach of a lot more people now."
+            ],
+            "review_highlights": [
+              "4.6 out of 5 stars",
+              "23,777 ratings"
+            ]
+          },
+          "qa_section": {
+            "present": false,
+            "qa_pairs": [],
+            "questions": []
+          },
+          "price": {
+            "present": false,
+            "raw": "",
+            "amount": null,
+            "currency": null,
+            "source": ""
+          }
+        },
+        "anti_blocking_used": true
+      },
+      "time": 2.278033494949341
+    },
+    {
+      "url": "https://www.amazon.com/dp/B0CHX7R6WJ",
+      "result": {
+        "success": true,
+        "data": {
+          "url": "https://www.amazon.com/dp/B0CHX7R6WJ",
+          "status": 200,
+          "response_size": 760235,
+          "elements": {
+            "productTitle": {
+              "present": true,
+              "text": [
+                "Apple Watch SE (2nd Gen) [GPS 40mm] Smartwatch with Starlight Aluminum Case with Starlight Sport Band S/M. Fitness & Sleep Tracker, Crash Detection, Heart Rate Monitor"
+              ]
+            },
+            "productOverview_feature_div": {
+              "present": true,
+              "kv": {
+                "Special Feature": "Activity Tracker, Cycle Tracking, GPS, Heart Rate Monitor, Voice Control",
+                "Connectivity Technology": "Wi-Fi",
+                "Battery Cell Composition": "Lithium Ion",
+                "GPS": "Built-in GPS",
+                "Shape": "Rectangular",
+                "Screen Size": "40 Millimeters",
+                "Brand": "Apple",
+                "Model Name": "Apple Watch SE (2nd Generation, GPS)",
+                "Style": "S/M - fits 130\u2013180mm wrists",
+                "Color": "Starlight Aluminum Case with Starlight Sport Band"
+              }
+            },
+            "feature-bullets": {
+              "present": true,
+              "bullets": [
+                "WHY APPLE WATCH SE \u2014 All the essentials to help you be motivated and active, keep connected, track your health, and stay safe. watchOS 11 brings more intelligence, personalization, and connectivity. With features like Fall Detection and enhanced workout metrics, Apple Watch SE is an incredible value.",
+                "STAY CONNECTED \u2014 Send a text, take a call, listen to music and podcasts, use Siri, or call for help with Emergency SOS.* Apple Watch SE (GPS) works with your iPhone or Wi-Fi to keep you connected.",
+                "HEALTH AND SAFETY FEATURES \u2014 Get insights into your health, including notifications if you have an irregular heart rhythm* or an unusually high or low heart rate. Get help when you need it with Fall Detection, Crash Detection, and Emergency SOS.* Automatically notify loved ones when you arrive at your destination with Check In.*",
+                "SIMPLY COMPATIBLE \u2014 It works seamlessly with your Apple devices and services.* Unlock your Mac automatically. Find your devices easily. Pay and send money with Apple Pay.",
+                "SWIMPROOF AND FASHIONABLE \u2014 50m water resistance.* Three finishes. And a color-matched back case made with a production process that reduces its carbon emissions.",
+                "EASILY CUSTOMIZABLE \u2014 With watch bands in a range of styles, materials, and colors and fully customizable watch faces, you can change your watch to fit your mood or the moment.",
+                "A GREAT FITNESS PARTNER \u2014 The Workout app gives you a range of ways to train plus advanced metrics for more insights into your workout performance. And Apple Watch comes with three months of Apple Fitness+ free.*",
+                "APPLE WATCH FOR YOUR KIDS \u2014 Set up Apple Watch for those who don\u2019t yet have their own iPhone, so everyone can stay connected, active, healthy, and safe.*",
+                "CARBON NEUTRAL \u2014 Apple Watch SE (2nd generation) is carbon neutral when paired with select bands. Learn more about Apple\u2019s commitment to the environment at apple.com/2030.",
+                "* LEGAL DISCLAIMERS \u2014 This is a summary of the main product features. See below to learn more."
+              ]
+            },
+            "productDescription": {
+              "present": false,
+              "paragraphs": []
+            },
+            "prodDetails": {
+              "present": true,
+              "tech_specs": {
+                "Product Dimensions": "\u200e9.25 x 3 x 1.25 inches",
+                "Item Weight": "\u200e9.1 ounces",
+                "Department": "\u200emens",
+                "Manufacturer": "\u200eApple",
+                "ASIN": "\u200eB0CHX7R6WJ",
+                "Item model number": "\u200eMR9U3LL/A",
+                "Batteries": "\u200e1 Lithium Ion batteries required. (included)",
+                "Date First Available": "\u200eOctober 1, 2023"
+              },
+              "additional_info": {}
+            },
+            "detailBullets_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "aplus": {
+              "present": false,
+              "headings": [],
+              "paragraphs": [],
+              "list_items": []
+            }
+          },
+          "images": {
+            "present": true,
+            "main_image": "https://m.media-amazon.com/images/I/61umEhyV-UL.jpg",
+            "all_images": [
+              "https://m.media-amazon.com/images/I/61umEhyV-UL.jpg",
+              "https://m.media-amazon.com/images/I/316IR-VGDlL.jpg",
+              "https://m.media-amazon.com/images/I/31Qp0rWPqrL.jpg",
+              "https://m.media-amazon.com/images/I/41yjB6XiAmL.jpg",
+              "https://m.media-amazon.com/images/I/41Y9NZElXoL.jpg",
+              "https://m.media-amazon.com/images/I/41f0APVaXwL.jpg",
+              "https://m.media-amazon.com/images/I/31rxGF0-sGL.jpg"
+            ],
+            "image_count": 7
+          },
+          "title": "Apple Watch SE (2nd Gen) [GPS 40mm] Smartwatch with Starlight Aluminum Case with Starlight Sport Band S/M. Fitness & Sleep Tracker, Crash Detection, Heart Rate Monitor",
+          "reviews": {
+            "present": true,
+            "sample_reviews": [
+              "Absolutely love this watch! It\u2019s my first smart watch, so I decided to start with the SE and if I wanted to upgrade to the Series 9/10 I could later. But this little watch does everything I need it to. I don\u2019t work out a lot, but I enjoy using it when I dance and go on walks. I like that you can text or answer calls quickly when you\u2019re away from your phone. I have a very hands-on job, but the screen looks good, some scratches if you look reallly hard, but no large cracks. I also really like the starlight color, it\u2019s a nice warmer silver that matches more of my outfits/jewelry. Vernal, very happy with it.",
+              "Genuine product. Durable and works well.",
+              "I am loving this watch, I\u2019m so glad I went with this one and saved the money I would have spent get the EKG included in the series 8 or 9. My cardiologist said it\u2019s not reliable anyways, so I\u2019m glad I asked her first.",
+              "Pros- It is very fast and hasn\u2019t missed a call or notification yet.",
+              "There are tons of features included as well that I love!"
+            ],
+            "review_highlights": [
+              "4.6 out of 5 stars",
+              "3,909 ratings"
+            ]
+          },
+          "qa_section": {
+            "present": false,
+            "qa_pairs": [],
+            "questions": []
+          },
+          "price": {
+            "present": false,
+            "raw": "",
+            "amount": null,
+            "currency": null,
+            "source": ""
+          }
+        },
+        "anti_blocking_used": true
+      },
+      "time": 2.2930281162261963
+    },
+    {
+      "url": "https://www.amazon.com/dp/B09G9FPHY6",
+      "result": {
+        "success": true,
+        "data": {
+          "url": "https://www.amazon.com/dp/B09G9FPHY6",
+          "status": 200,
+          "response_size": 1263232,
+          "elements": {
+            "productTitle": {
+              "present": true,
+              "text": [
+                "Apple iPad (9th Generation): with A13 Bionic chip, 10.2-inch Retina Display, 64GB, Wi-Fi, 12MP front/8MP Back Camera, Touch ID, All-Day Battery Life \u2013 Space Gray"
+              ]
+            },
+            "productOverview_feature_div": {
+              "present": true,
+              "kv": {
+                "Brand": "Apple",
+                "Model Name": "iPad",
+                "Memory Storage Capacity": "64 GB",
+                "Screen Size": "10.2 Inches",
+                "Display Resolution Maximum": "2160x1620 Pixels"
+              }
+            },
+            "feature-bullets": {
+              "present": true,
+              "bullets": [
+                "WHY IPAD \u2014 All the essentials in the most affordable iPad, with a beautiful 10.2-inch Retina display, powerful A13 Bionic chip, and an Ultra Wide front camera with Center Stage. Work, play, create, learn, stay connected, and more.",
+                "IPADOS + APPS \u2014 iPadOS makes iPad more productive, intuitive, and versatile. With iPadOS, run multiple apps at once, use Apple Pencil to write in any text field with Scribble, and edit and share photos. iPad comes with essential apps like Safari, Messages, and Keynote, with over a million more apps available on the App Store.",
+                "FAST WI-FI CONNECTIVITY \u2014 Fast Wi-Fi keeps you connected at home, work, school, or wherever you go with your iPad.",
+                "PERFORMANCE AND STORAGE \u2014 The A13 Bionic chip gives you the graphics performance you need. And with all-day battery life, iPad is perfect for playing immersive games and more. Choose from 64GB or 256GB storage options.",
+                "APPLE PENCIL AND SMART KEYBOARD \u2014 Apple Pencil (1st generation) transforms iPad into an immersive drawing canvas and the world\u2019s best note\u2011taking device. The Smart Keyboard features a comfortable typing experience and folds into a slim, lightweight cover for protection. Accessories sold separately",
+                "10.2-INCH RETINA DISPLAY \u2014 With incredible detail and vivid colors, it\u2019s perfect for watching movies or drawing your next masterpiece. True Tone adjusts the display to the color temperature of the room to make viewing comfortable in any light.",
+                "UNLOCK AND PAY WITH TOUCH ID \u2014 Touch ID is built in, so you can use your fingerprint to unlock your iPad, sign in to apps, and make payments securely with Apple Pay.",
+                "FRONT AND BACK CAMERAS \u2014 iPad features a 12MP Ultra Wide front camera that supports Center Stage for videoconferencing and selfies. The 8MP Wide back camera is perfect for capturing photos, 1080p HD video, and scanning documents.",
+                "LEGAL DISCLAIMERS \u2014 This is a summary of the main product features."
+              ]
+            },
+            "productDescription": {
+              "present": false,
+              "paragraphs": []
+            },
+            "prodDetails": {
+              "present": true,
+              "tech_specs": {
+                "Product Dimensions": "\u200e9.87 x 6.85 x 0.3 inches",
+                "Item Weight": "\u200e1.07 pounds",
+                "Manufacturer": "\u200eApple",
+                "ASIN": "\u200eB09G9FPHY6",
+                "Item model number": "\u200eMK2K3LL/A",
+                "Batteries": "\u200e1 Lithium Ion batteries required. (included)",
+                "Date First Available": "\u200eSeptember 14, 2021"
+              },
+              "additional_info": {}
+            },
+            "detailBullets_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "aplus": {
+              "present": false,
+              "headings": [],
+              "paragraphs": [],
+              "list_items": []
+            }
+          },
+          "images": {
+            "present": true,
+            "main_image": "https://m.media-amazon.com/images/I/61NGnpjoRDL.jpg",
+            "all_images": [
+              "https://m.media-amazon.com/images/I/61NGnpjoRDL.jpg",
+              "https://m.media-amazon.com/images/I/31+KEhn35VL.jpg",
+              "https://m.media-amazon.com/images/I/41A67yeDecL.jpg",
+              "https://m.media-amazon.com/images/I/31zWSAS-EAL.jpg",
+              "https://m.media-amazon.com/images/I/31wFxVqwUsL.jpg",
+              "https://m.media-amazon.com/images/I/31-K+HVOv9L.jpg"
+            ],
+            "image_count": 6
+          },
+          "title": "Apple iPad (9th Generation): with A13 Bionic chip, 10.2-inch Retina Display, 64GB, Wi-Fi, 12MP front/8MP Back Camera, Touch ID, All-Day Battery Life \u2013 Space Gray",
+          "reviews": {
+            "present": true,
+            "sample_reviews": [
+              "The iPad 9th Gen is a great all-around tablet. The screen is sharp and bright, perfect for watching movies, reading, or browsing. Performance is smooth \u2014 apps open quickly, multitasking works well, and it handles games without issues.",
+              "Battery life easily lasts a full day of normal use. It also works with the Apple Pencil (1st gen), which is great for notes or drawing. Build quality feels premium, even though this is Apple\u2019s entry-level iPad.",
+              "Overall, it\u2019s the perfect choice if you want an affordable iPad that still feels fast, reliable, and premium. Definitely worth it.",
+              "I bought two of the Apple iPad (9th Generation) tablets for my younger kids, and they\u2019ve both been fantastic. The performance is smooth and reliable thanks to the A13 Bionic chip, and the 10.2-inch Retina display is crisp and bright \u2014 perfect for schoolwork, games, and videos.",
+              "I love that they have Touch ID for security, and the front camera is great for video calls with family. The battery life easily lasts all day, and they\u2019ve held up well so far."
+            ],
+            "review_highlights": [
+              "4.8 out of 5 stars",
+              "77,065 ratings"
+            ]
+          },
+          "qa_section": {
+            "present": false,
+            "qa_pairs": [],
+            "questions": []
+          },
+          "price": {
+            "present": false,
+            "raw": "",
+            "amount": null,
+            "currency": null,
+            "source": ""
+          }
+        },
+        "anti_blocking_used": true
+      },
+      "time": 2.1830034255981445
+    },
+    {
+      "url": "https://www.amazon.com/dp/B08J5F3G18",
+      "result": {
+        "success": true,
+        "data": {
+          "url": "https://www.amazon.com/dp/B08J5F3G18",
+          "status": 200,
+          "response_size": 1744141,
+          "elements": {
+            "productTitle": {
+              "present": true,
+              "text": [
+                "EVGA GeForce RTX 3090 FTW3 Ultra Gaming, 24GB GDDR6X, iCX3 Technology, ARGB LED, Metal Backplate, 24G-P5-3987-KR"
+              ]
+            },
+            "productOverview_feature_div": {
+              "present": true,
+              "kv": {
+                "Graphics Coprocessor": "NVIDIA GeForce RTX 3090",
+                "Brand": "EVGA",
+                "Graphics Ram Size": "24 GB",
+                "Video Output Interface": "DisplayPort",
+                "Graphics Processor Manufacturer": "NVIDIA"
+              }
+            },
+            "feature-bullets": {
+              "present": true,
+              "bullets": [
+                "Digital Max Resolution:7680 x 4320.590.4GT/s Texture Fill Rate",
+                "Real boost clock: 1800 MHz; Memory detail: 24576 MB GDDR6X.",
+                "Real-time ray tracing in games for cutting-edge, hyper-realistic graphics.",
+                "Triple HDB fans 9 iCX3 thermal sensors offer higher performance cooling and much quieter acoustic noiseAvoid using unofficial software",
+                "All-metal backplate & adjustable ARGB"
+              ]
+            },
+            "productDescription": {
+              "present": true,
+              "paragraphs": [
+                "EVGA GeForce RTX 3090 FTW3 Ultra Gaming, 24G-P5-3987-KR, 24GB GDDR6X, iCX3 Technology, ARGB LED, Metal Backplate, 24G-P5-3978-KR."
+              ]
+            },
+            "prodDetails": {
+              "present": true,
+              "tech_specs": {
+                "Max Screen Resolution": "\u200e7680 x 4320",
+                "Memory Speed": "\u200e1.95E+4 MHz",
+                "Graphics Coprocessor": "\u200eNVIDIA GeForce RTX 3090",
+                "Chipset Brand": "\u200eNVIDIA",
+                "Card Description": "\u200eNVIDIA GeForce RTX 3090 with 24 GB GDDR6 graphics memory",
+                "Graphics Card Ram Size": "\u200e24 GB"
+              },
+              "additional_info": {
+                "Customer Reviews": "4.5 4.5 out of 5 stars 981 ratings var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); }); 4.5 out of 5 stars",
+                "Best Sellers Rank": "#745 in Computer Graphics Cards"
+              }
+            },
+            "detailBullets_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "aplus": {
+              "present": true,
+              "headings": [
+                "From the manufacturer"
+              ],
+              "paragraphs": [],
+              "list_items": []
+            }
+          },
+          "images": {
+            "present": true,
+            "main_image": "https://m.media-amazon.com/images/I/81QuOSSvYAS.jpg",
+            "all_images": [
+              "https://m.media-amazon.com/images/I/81QuOSSvYAS.jpg",
+              "https://m.media-amazon.com/images/I/51DRLHAa2AS.jpg",
+              "https://m.media-amazon.com/images/I/41hyPuJUwlL.jpg",
+              "https://m.media-amazon.com/images/I/41hKzIS2T7S.jpg",
+              "https://m.media-amazon.com/images/I/416cPJM0uDL.jpg",
+              "https://m.media-amazon.com/images/I/41sKDktwpsS.jpg",
+              "https://m.media-amazon.com/images/I/41KQ3r1V51S.jpg",
+              "https://m.media-amazon.com/images/I/41blwdxYpyL.jpg"
+            ],
+            "image_count": 8
+          },
+          "title": "EVGA GeForce RTX 3090 FTW3 Ultra Gaming, 24GB GDDR6X, iCX3 Technology, ARGB LED, Metal Backplate, 24G-P5-3987-KR",
+          "reviews": {
+            "present": true,
+            "sample_reviews": [
+              "EVGA makes some of the best designs & cooling solutions for the Nvidia RTX 3000 Series of Graphics Cards. The RTX 3090 FTW3 Ultra is no exception. It's well-built, robust, quiet, cool, and a proven performer.",
+              "Pros:",
+              "- Dual BIOS",
+              "- Minimal Coil Whine",
+              "- Excellent Cooling Solution"
+            ],
+            "review_highlights": [
+              "4.5 out of 5 stars",
+              "981 ratings"
+            ]
+          },
+          "qa_section": {
+            "present": false,
+            "qa_pairs": [],
+            "questions": []
+          },
+          "price": {
+            "present": true,
+            "raw": "PKR 166,667.36 PKR 204,679.88 PKR 46,781.72 PKR 40,921.94 PKR 8,766.27 PKR 20,465.36 PKR 30,991.90 PKR 31,284.30 PKR1,413.17 PKR83,541.17 PKR3,961.97 PKR4,330.13 PKR 23,389.40 PKR 1,751.50 PKR 9,731.21 PKR 1,947.41 PKR 5,842.23 PKR 8,766.27 PKR 192,980.79 PKR 166,667.36 PKR 204,679.88 PKR 8,766.27 PKR 23,389.40",
+            "amount": 166667.36204679,
+            "currency": null,
+            "source": "generic_offscreen"
+          }
+        },
+        "anti_blocking_used": true
+      },
+      "time": 2.6186296939849854
+    },
+    {
+      "url": "https://www.amazon.com/dp/B07ZPKN6YR",
+      "result": {
+        "success": true,
+        "data": {
+          "url": "https://www.amazon.com/dp/B07ZPKN6YR",
+          "status": 200,
+          "response_size": 1910674,
+          "elements": {
+            "productTitle": {
+              "present": true,
+              "text": [
+                "Apple iPhone 11, 64GB, Black - Unlocked (Renewed)"
+              ]
+            },
+            "productOverview_feature_div": {
+              "present": true,
+              "kv": {
+                "Brand": "Apple",
+                "Operating System": "iOS 16",
+                "Ram Memory Installed Size": "4 GB",
+                "CPU Model": "Intel Core 5",
+                "CPU Speed": "2.65 GHz",
+                "Memory Storage Capacity": "64 GB",
+                "Screen Size": "6.1 Inches",
+                "Refresh Rate": "60 Hz",
+                "Model Name": "iPhone 11",
+                "Wireless Carrier": "Unlocked"
+              }
+            },
+            "feature-bullets": {
+              "present": true,
+              "bullets": [
+                "This phone is unlocked and compatible with any carrier of choice on GSM and CDMA networks (e.g. AT&T, T-Mobile, Sprint, Verizon, US Cellular, Cricket, Metro, Tracfone, Mint Mobile, etc.).",
+                "Tested for battery health and guaranteed to have a minimum battery capacity of 80%.",
+                "Successfully passed a full diagnostic test which ensures like-new functionality and removal of any prior-user personal information."
+              ]
+            },
+            "productDescription": {
+              "present": true,
+              "paragraphs": [
+                "The iPhone 11 features a 6.1-inch LCD display that Apple calls a \"Liquid Retina HD Display.\" It features a 1792 x 828 resolution at 326ppi, a 1400:1 contrast ratio, 625 nits max brightness, True Tone support for adjusting the white balance to the ambient lighting, and wide color support for true-to-life colors. The iPhone 11 is available in six different colors: White, Black, Yellow, (PRODUCT)RED, Purple, and Green."
+              ]
+            },
+            "prodDetails": {
+              "present": true,
+              "tech_specs": {},
+              "additional_info": {
+                "Product Dimensions": "7 x 5 x 4 inches",
+                "Item Weight": "6.7 ounces",
+                "ASIN": "B07ZPKN6YR",
+                "Item model number": "MWKM2LL/A",
+                "Batteries": "1 Lithium Ion batteries required. (included)",
+                "Customer Reviews": "4.2 4.2 out of 5 stars 56,701 ratings var dpAcrHasRegisteredArcLinkClickAction; P.when('A', 'ready').execute(function(A) { if (dpAcrHasRegisteredArcLinkClickAction !== true) { dpAcrHasRegisteredArcLinkClickAction = true; A.declarative( 'acrLink-click-metrics', 'click', { \"allowLinkDefault\": true }, function (event) { if (window.ue) { ue.count(\"acrLinkClickCount\", (ue.count(\"acrLinkClickCount\") || 0) + 1); } } ); } }); P.when('A', 'cf').execute(function(A) { A.declarative('acrStarsLink-click-metrics', 'click', { \"allowLinkDefault\" : true }, function(event){ if(window.ue) { ue.count(\"acrStarsLinkWithPopoverClickCount\", (ue.count(\"acrStarsLinkWithPopoverClickCount\") || 0) + 1); } }); }); 4.2 out of 5 stars",
+                "Best Sellers Rank": "#328 in Cell Phones & Accessories ( See Top 100 in Cell Phones & Accessories ) #4 in Renewed Smartphones #6 in Cell Phones",
+                "OS": "iOS 16",
+                "RAM": "4 GB",
+                "Wireless communication technologies": "Cellular",
+                "Connectivity technologies": "Bluetooth, NFC, USB, Wi-Fi",
+                "GPS": "True",
+                "Special features": "touchscreen",
+                "Other display features": "Wireless",
+                "Human Interface Input": "Touchscreen",
+                "Other camera features": "Front, Rear",
+                "Form Factor": "Bar",
+                "Color": "Black",
+                "Battery Power Rating": "3600 Amp Hours",
+                "Whats in the box": "Apple iPhone, USB Data Cable",
+                "Manufacturer": "Apple Computer",
+                "Date First Available": "October 28, 2019",
+                "Memory Storage Capacity": "64 GB",
+                "Standing screen display size": "6.1 Inches",
+                "Ram Memory Installed Size": "4 GB",
+                "Battery Capacity": "3110 Milliamp Hours",
+                "Weight": "0.19 Kilograms"
+              }
+            },
+            "detailBullets_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "aplus": {
+              "present": true,
+              "headings": [
+                "From the manufacturer"
+              ],
+              "paragraphs": [],
+              "list_items": []
+            }
+          },
+          "images": {
+            "present": true,
+            "main_image": "https://m.media-amazon.com/images/I/61MG3m5FhIL.jpg",
+            "all_images": [
+              "https://m.media-amazon.com/images/I/61MG3m5FhIL.jpg",
+              "https://m.media-amazon.com/images/I/3149MqKi0LL.jpg",
+              "https://m.media-amazon.com/images/I/21mX6qOfQbL.jpg",
+              "https://m.media-amazon.com/images/I/21kVtnUShLL.jpg",
+              "https://m.media-amazon.com/images/I/31yR0XQKlcL.jpg",
+              "https://m.media-amazon.com/images/I/31tL+GqMv1L.jpg"
+            ],
+            "image_count": 6
+          },
+          "title": "Apple iPhone 11, 64GB, Black - Unlocked (Renewed)",
+          "reviews": {
+            "present": true,
+            "sample_reviews": [
+              "I honestly can\u2019t say enough amazing things about my experience buying a renewed iPhone 11 from this seller and dealing with their customer service! I would 1000/10 recommend anyone and everyone even considering purchasing a phone from them to absolutely do so because you won\u2019t be disappointed!!! But read below for the full story/review, both good and bad opinions.",
+              "My oldest daughter dropped her iPhone XR in the toilet and it completely died. This seller had the best priced renewed iPhone I found with next day delivery and good reviews, so I purchased the phone. It was my first time buying a phone that wasn\u2019t brand new, so I was nervous about what condition the phone and battery would be in.",
+              "The phone was sent via UPS, which I didn\u2019t love because they left the package at the gate on the street instead of driving into our ranch and delivering it to our house in the back corner like Amazon and USPS do. Not to mention it was supposed to be here between by like 1:45 or 2:45 and they didn\u2019t deliver it until 10pm! But that\u2019s an issue with UPS, not the seller.",
+              "When we opened the package I was pleased to see that there were very minimal dents or scuff marks on the phone and it appeared to be in really good condition. One thing I wasn\u2019t pleased with was the fact that the phone arrived dead. I worried that meant the battery wasn\u2019t great, but I was wrong. After charging for a bit I checked the battery health and it was 100%, so they clearly installed a brand new battery! I was really happy with my purchase, but upon setting up the phone I noticed there was this awful high pitched screech/glitching sound coming from the speaker, so I reached out to the seller to try and get a replacement sent instead of going thru the hassle and delay of returning it and having to order a new one once the refund posted.",
+              "The seller responded almost immediately (they did so every single time we communicated over the course of a week, even when I reached out at almost 8pm their time!) and offered to send me the shipping label and then they\u2019d overnight a replacement to me once they received the phone. I asked them if I could pay to overnight the phone to them so there wouldn\u2019t be as long of a wait without a phone, and they said they would do me one better and as soon as I took the phone to the post office to send them a copy of my receipt and they\u2019d overnight me the replacement then! This took place on a Friday and I didn\u2019t want the shipping delay the weekend would cause, so I told them I\u2019d reach out Monday for the shipping label and that I had out a brand new screen protector on the phone when I got it so I\u2019d be sending it back with it on."
+            ],
+            "review_highlights": [
+              "4.2 out of 5 stars",
+              "56,701 ratings"
+            ]
+          },
+          "qa_section": {
+            "present": false,
+            "qa_pairs": [],
+            "questions": []
+          },
+          "price": {
+            "present": true,
+            "raw": "$196.99 $7.99 $9.99 $24.99 $7.99 $4.00 $8.99 $9.99 $8.99 $139.99 $15.99 $18.99",
+            "amount": 196.997,
+            "currency": "$",
+            "source": "generic_offscreen"
+          }
+        },
+        "anti_blocking_used": true
+      },
+      "time": 2.688837766647339
+    },
+    {
+      "url": "https://www.amazon.com/dp/B0BP9SNVH9",
+      "result": {
+        "success": true,
+        "data": {
+          "url": "https://www.amazon.com/dp/B0BP9SNVH9",
+          "status": 200,
+          "response_size": 1457621,
+          "elements": {
+            "productTitle": {
+              "present": false,
+              "text": []
+            },
+            "productOverview_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "feature-bullets": {
+              "present": true,
+              "bullets": [
+                "Elevate your entertainment experience with a powerful processor for lightning-fast app starts and fluid navigation.",
+                "Play Xbox games with no console required - Stream Forza Motorsport, Starfield, Palworld, and discover hundreds of other high-quality games directly on your Fire TV Stick 4K Max with Xbox Game Pass Ultimate via cloud gaming.",
+                "Smarter searching starts here \u2013 Find movies by actor, plot, and even iconic quotes with AI-powered Fire TV Search. Try saying, \"Alexa show me action movies with car chases.\"",
+                "Enjoy the show in 4K Ultra HD, with support for Dolby Vision, HDR10+, and immersive Dolby Atmos audio.",
+                "The first-ever streaming stick with Fire TV Ambient Experience lets you display over 2,000 pieces of museum-quality art and photography.",
+                "Fire TV Stick 4K Max has 16GB of storage\u2014double that of Fire TV Stick 4K and our other streaming sticks, for even more apps, games and downloads.",
+                "Stream more than 1.8 million movies and TV episodes. Watch favorites from Netflix, Prime Video, Disney+, Max, and more, plus listen to millions of songs. Subscription fees may apply.",
+                "Control your TV and connected devices with an upgraded remote that includes voice control, a recents button, and dedicated channel buttons to surf live TV.",
+                "Enjoy fluid gameplay and fast-rendering graphics with a lightning-fast processor. Access popular games with an Amazon Luna subscription\u2014no console required."
+              ]
+            },
+            "productDescription": {
+              "present": false,
+              "paragraphs": []
+            },
+            "prodDetails": {
+              "present": false,
+              "tech_specs": {},
+              "additional_info": {}
+            },
+            "detailBullets_feature_div": {
+              "present": false,
+              "kv": {}
+            },
+            "aplus": {
+              "present": false,
+              "headings": [],
+              "paragraphs": [],
+              "list_items": []
+            }
+          },
+          "images": {
+            "present": false,
+            "main_image": "",
+            "all_images": [],
+            "image_count": 0
+          },
+          "title": "",
+          "reviews": {
+            "present": false,
+            "sample_reviews": [],
+            "review_highlights": [
+              "",
+              ""
+            ]
+          },
+          "qa_section": {
+            "present": false,
+            "qa_pairs": [],
+            "questions": []
+          },
+          "price": {
+            "present": false,
+            "raw": "",
+            "amount": null,
+            "currency": null,
+            "source": ""
+          }
+        },
+        "anti_blocking_used": true
+      },
+      "time": 2.6089110374450684
+    }
+  ]
+}
