@@ -140,7 +140,7 @@ intent_classification_agent = Agent(
     instructions=INTENT_CLASSIFICATION_INSTRUCTIONS,
     model="gpt-5-mini-2025-08-07",
     model_settings=ModelSettings(
-        reasoning=Reasoning(effort="medium"),
+        reasoning=Reasoning(effort="minimal"),
     ),
     output_type=None,
 )

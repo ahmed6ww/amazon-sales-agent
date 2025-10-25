@@ -329,12 +329,20 @@ class ResearchRunner:
         # Filter keywords by relevancy score (dynamic threshold based on dataset size)
         # More keywords = stricter threshold to focus on highest quality
         total_keywords = len(base_relevancy)
-        if total_keywords > 200:
-            min_relevancy_threshold = 5  # Very strict for large datasets (200+)
-        elif total_keywords > 100:
-            min_relevancy_threshold = 3  # Moderate for medium datasets (100-200)
+
+
+        if total_keywords > 1000:
+            min_relevancy_threshold = 8  # Very strict for large datasets (500+)
+        elif total_keywords > 750:
+            min_relevancy_threshold = 7  # Strict for large datasets (750-1000)
+        elif total_keywords > 500:
+            min_relevancy_threshold = 6  # Strict for large datasets (500-750)
+        elif total_keywords > 350:
+            min_relevancy_threshold = 5  # Strict for large datasets (350-500)
+        elif total_keywords > 200:
+            min_relevancy_threshold = 4  # Strict for large datasets (200-350)
         else:
-            min_relevancy_threshold = 2  # Default for small datasets (≤100)
+            min_relevancy_threshold = 3  # Default for small datasets (≤200)
 
         logger.info(f"📊 Dynamic relevancy threshold: {min_relevancy_threshold} (based on {total_keywords} total keywords)")
         

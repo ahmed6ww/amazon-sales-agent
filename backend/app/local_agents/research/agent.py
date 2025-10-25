@@ -16,7 +16,7 @@ research_agent = Agent(
     model="gpt-5-mini-2025-08-07",
     model_settings=ModelSettings(
         max_tokens=4000,
-        reasoning=Reasoning(effort="medium"),
+        reasoning=Reasoning(effort="minimal"),
     ),
     # Enforce structured output; keep schema non-strict to allow additive fields
     output_type=AgentOutputSchema(ResearchOutput, strict_json_schema=False),

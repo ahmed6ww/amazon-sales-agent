@@ -166,7 +166,7 @@ root_relevance_agent = Agent(
     model_settings=ModelSettings(
         max_tokens=8000,  # Handle large keyword lists
         timeout=240.0,     # 4 minutes for complex analysis
-        reasoning=Reasoning(effort="medium"),
+        reasoning=Reasoning(effort="minimal"),
     ),
     output_type=None,
 )

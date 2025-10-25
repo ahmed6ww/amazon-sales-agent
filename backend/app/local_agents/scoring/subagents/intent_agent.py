@@ -36,7 +36,7 @@ intent_scoring_agent = Agent(
     instructions=INTENT_SCORING_INSTRUCTIONS,
     model="gpt-5-mini-2025-08-07",  # gpt-5-mini for better accuracy
     model_settings=ModelSettings(
-        reasoning=Reasoning(effort="medium"),
+        reasoning=Reasoning(effort="minimal"),
     ),
     # Let the runner return raw text; ScoringRunner will parse JSON list leniently.
     output_type=None,

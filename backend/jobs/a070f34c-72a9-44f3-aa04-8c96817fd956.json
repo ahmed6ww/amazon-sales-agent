@@ -1,0 +1,10 @@
+{
+  "job_id": "a070f34c-72a9-44f3-aa04-8c96817fd956",
+  "status": "complete",
+  "progress": 100,
+  "message": "Pipeline completed successfully",
+  "created_at": "2025-10-25T20:26:00.064785",
+  "updated_at": "2025-10-25T20:49:29.927038",
+  "completed_at": "2025-10-25T20:49:29.927105",
+  "error": null
+}
