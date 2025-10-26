@@ -119,6 +119,16 @@
         "what": "Fixed frontend to display both title and bullet duplicates with yellow badges",
         "why": "Frontend was only checking keywords_duplicated_from_other_bullets, missing title duplicates. Now checks both and shows appropriate tooltips ('Also in title' vs 'Already in another bullet')",
         "when": "2025-10-26"
+      },
+      {
+        "what": "Fixed image structure in all scrapers to match frontend expectations",
+        "why": "Frontend expects images.all_images nested structure but scrapers returned flat array. Updated SERP API, Playwright, and CloudScraper to return {all_images, main_image, image_count}",
+        "when": "2025-10-26"
+      },
+      {
+        "what": "Added wake-up health check for Render cold start",
+        "why": "Render puts backend to sleep after inactivity. First request times out while waking up. Added wakeUpBackend() method that sends 2-3 health checks before main API call to ensure backend is ready",
+        "when": "2025-10-26"
       }
     ]
   },

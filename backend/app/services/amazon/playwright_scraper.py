@@ -392,7 +392,11 @@ def _extract_from_beautifulsoup(soup, url: str) -> Dict[str, Any]:
         main_img = soup.select_one("#landingImage, #imgTagWrapperId img")
         if main_img and main_img.get("src"):
             images.append(main_img["src"])
-        out["images"] = images
+        out["images"] = {
+            "all_images": images,
+            "main_image": images[0] if images else None,
+            "image_count": len(images)
+        }
         
         # Brand
         brand_elem = soup.select_one("#bylineInfo, #brand")
@@ -577,7 +581,11 @@ async def _extract_amazon_data(page, url: str) -> Dict[str, Any]:
             if src and src not in images:
                 images.append(src)
         
-        out["images"] = images
+        out["images"] = {
+            "all_images": images,
+            "main_image": images[0] if images else None,
+            "image_count": len(images)
+        }
         
         # 10. Brand (from byline or details)
         brand = ""

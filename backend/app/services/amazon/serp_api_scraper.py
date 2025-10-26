@@ -82,7 +82,11 @@ def scrape_amazon_with_serpapi(asin: str, api_key: str) -> Dict[str, Any]:
                 "amount": _parse_price(price_str),
                 "currency": "$"
             },
-            "images": product.get("images", [])[:5],  # First 5 images
+            "images": {
+                "all_images": product.get("images", [])[:5],
+                "main_image": product.get("images", [None])[0],
+                "image_count": len(product.get("images", [])[:5])
+            },
             "brand": product.get("brand", ""),
             "method": "serpapi"
         }
