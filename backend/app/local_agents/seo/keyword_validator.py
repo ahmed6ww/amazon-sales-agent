@@ -302,6 +302,17 @@ class SEOKeywordValidator:
         # Get available keywords (not yet used)
         available_keywords = self.get_available_keywords()
         
+        # Calculate how many keywords we need for bullets FIRST
+        dynamic_limit = None
+        fetch_limit = 20
+        
+        if content_type == 'bullets' and bullet_count:
+            # Allocate 8 keywords per bullet (allows 5-10 natural integration)
+            dynamic_limit = max(40, bullet_count * 8)
+            # Fetch MORE to account for title keywords that will be filtered out
+            fetch_limit = dynamic_limit + 20  # Extra buffer
+            logger.info(f"🎯 Dynamic bullet allocation: {bullet_count} bullets → targeting {dynamic_limit} keywords (fetching {fetch_limit} with buffer)")
+        
         # For TITLE: sort by VOLUME ONLY to ensure highest-volume keywords go to title
         # For other content types: use relevancy + volume + intent
         if content_type == 'title':
@@ -309,13 +320,11 @@ class SEOKeywordValidator:
             logger.info(f"🔥 Title allocation using STRICT VOLUME sorting (ensures top keywords in title)")
         else:
             # For bullets/backend: use relevancy + volume + intent
-            top_keywords = self.get_top_keywords_by_relevancy(available_keywords, 20)
+            top_keywords = self.get_top_keywords_by_relevancy(available_keywords, fetch_limit)
         
         # Dynamic allocation for bullets based on bullet count
-        if content_type == 'bullets' and bullet_count:
-            # Allocate 2-3 keywords per bullet point
-            dynamic_limit = max(20, bullet_count * 5)  # Minimum 20, or 5 per bullet
-            logger.info(f"🎯 Dynamic bullet allocation: {bullet_count} bullets → {dynamic_limit} keywords")
+        if content_type == 'bullets' and bullet_count and dynamic_limit:
+            logger.info(f"🎯 Processing dynamic bullet allocation with {len(top_keywords)} keywords available")
             
             # Temporarily adjust allocation limit
             original_limit = self.keyword_allocation['bullets']

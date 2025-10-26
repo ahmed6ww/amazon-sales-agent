@@ -135,10 +135,20 @@ class SEORunner:
             
             logger.info(f"📊 Allocating keywords for optimization...")
             title_keywords = keyword_validator.get_allocated_keywords_for_ai("title")
-            bullet_keywords = keyword_validator.get_allocated_keywords_for_ai("bullets", actual_bullet_count)
+            
+            # Get bullet keywords and FILTER OUT title keywords to ensure NEW keywords only
+            all_bullet_keywords = keyword_validator.get_allocated_keywords_for_ai("bullets", actual_bullet_count)
+            title_phrases_set = set(kw.get('phrase', '').lower() for kw in title_keywords)
+            bullet_keywords = [
+                kw for kw in all_bullet_keywords 
+                if kw.get('phrase', '').lower() not in title_phrases_set
+            ]
+            filtered_count = len(all_bullet_keywords) - len(bullet_keywords)
+            logger.info(f"   🔥 Filtered out {filtered_count} title keywords from bullets → {len(bullet_keywords)} NEW keywords for bullets")
+            
             backend_keywords = keyword_validator.get_allocated_keywords_for_ai("backend")
             
-            logger.info(f"   ✅ Allocated {len(title_keywords)} title, {len(bullet_keywords)} bullet, {len(backend_keywords)} backend keywords")
+            logger.info(f"   ✅ Allocated {len(title_keywords)} title, {len(bullet_keywords)} bullet (NEW only), {len(backend_keywords)} backend keywords")
             
             # Step 6: Generate AI-powered optimization suggestions
             logger.info(f"🤖 Generating AI optimization suggestions...")
