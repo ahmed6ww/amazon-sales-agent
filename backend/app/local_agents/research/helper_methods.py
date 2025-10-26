@@ -46,7 +46,7 @@ def scrape_amazon_listing(asin_or_url: str, marketplace: str = "US") -> Dict[str
             [sys.executable, str(scraper_script), url],
             capture_output=True,
             text=True,
-            timeout=120,
+            timeout=240,  # 4 minutes - allows all 7 scraping layers to complete
             cwd=str(backend_dir),
         )
 
@@ -98,7 +98,7 @@ def scrape_amazon_listing(asin_or_url: str, marketplace: str = "US") -> Dict[str
     except subprocess.TimeoutExpired:
         return {
             "success": False,
-            "error": "Scraper process timed out (120 seconds)",
+            "error": "Scraper process timed out (240 seconds) - Amazon may be blocking all methods",
             "data": {},
             "url": url,
         }

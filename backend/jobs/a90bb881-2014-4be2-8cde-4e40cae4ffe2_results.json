@@ -20,7 +20,7 @@
               "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
               "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
               "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
-              "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
+              "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that\u2019s cruelty-free and safe for sensitive skin",
               "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
               "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals."
             ]
@@ -832,7 +832,7 @@
           }
         },
         {
-          "phrase": "",
+          "phrase": "\u007f\u007f\u007f\u007f\u007f\u007f\u007f",
           "category": "Irrelevant",
           "relevancy_score": 10,
           "intent_score": 0,
@@ -5553,7 +5553,7 @@
         "Irrelevant": {
           "count": 3,
           "examples": [
-            "",
+            "\u007f\u007f\u007f\u007f\u007f\u007f\u007f",
             "spongas makf up",
             "makeup sp"
           ]
@@ -5615,7 +5615,7 @@
             "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
             "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
             "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
-            "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
+            "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that\u2019s cruelty-free and safe for sensitive skin",
             "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
             "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals."
           ]

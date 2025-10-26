@@ -1,0 +1,10 @@
+{
+  "job_id": "90fe4999-8398-4191-9f7e-a357dcf242c1",
+  "status": "failed",
+  "progress": 10,
+  "message": "Scraping product...",
+  "created_at": "2025-10-26T16:10:17.643704",
+  "updated_at": "2025-10-26T16:12:24.530078",
+  "completed_at": "2025-10-26T16:12:24.530094",
+  "error": "500: Scraping failed: Scraper process timed out (120 seconds)"
+}
