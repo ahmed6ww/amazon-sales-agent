@@ -1,0 +1,57 @@
+{
+  "success": true,
+  "asin": "https://www.amazon.com/dp/B0D9C28SVB",
+  "marketplace": "US",
+  "ai_analysis_keywords": {
+    "structured_data": {
+      "product_context": {},
+      "items": [],
+      "stats": {}
+    },
+    "source": "keyword_agent",
+    "total_keywords": 0
+  },
+  "seo_analysis": {
+    "success": false,
+    "error": "Insufficient data for SEO analysis",
+    "summary": {
+      "current_coverage": "N/A",
+      "optimization_opportunities": 0,
+      "method": "skipped"
+    }
+  },
+  "keyword_root_optimization": {
+    "analysis_summary": {
+      "total_keywords_processed": 0,
+      "total_roots_identified": 0,
+      "meaningful_roots": 0,
+      "priority_roots_selected": 0
+    },
+    "efficiency_metrics": {},
+    "priority_roots": [],
+    "keyword_categorization": {},
+    "recommendations": {
+      "amazon_search_terms": [],
+      "optimization_notes": []
+    }
+  },
+  "source": "amazon_sales_intelligence_pipeline",
+  "monitoring_stats": {
+    "overall": {
+      "elapsed_time": 3124.5113818645477,
+      "total_requests": 0,
+      "successful_requests": 0,
+      "failed_requests": 0,
+      "total_retries": 0,
+      "total_errors": 0,
+      "success_rate": 0,
+      "retry_rate": 0,
+      "error_rate": 0,
+      "requests_per_minute": 0.0,
+      "active_requests": 0,
+      "agent_count": 0
+    },
+    "agents": {},
+    "recent_requests": []
+  }
+}

@@ -85,7 +85,8 @@ def get_anti_blocking_settings() -> dict:
             "app.services.amazon.anti_blocking.middlewares.RotateUserAgentMiddleware": 400,
             "app.services.amazon.anti_blocking.middlewares.RotateHeadersMiddleware": 410,
             "app.services.amazon.anti_blocking.middlewares.BrowserFingerprintMiddleware": 420,
-            "app.services.amazon.anti_blocking.middlewares.RotateProxyMiddleware": 500,
+            # Proxy middleware disabled - enable only when proxies configured
+            # "app.services.amazon.anti_blocking.middlewares.RotateProxyMiddleware": 500,
             "app.services.amazon.anti_blocking.middlewares.RandomDelayMiddleware": 550,
             "app.services.amazon.anti_blocking.middlewares.SmartRetryMiddleware": 600,
         },

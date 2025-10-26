@@ -1,39 +1,38 @@
 {
   "success": true,
-  "asin": "https://www.amazon.com/dp/B0D9C28SVB",
+  "asin": "https://www.amazon.com/dp/B0D5BL35MS",
   "marketplace": "US",
   "ai_analysis_keywords": {
     "structured_data": {
       "product_context": {
-        "url": "https://www.amazon.com/dp/B0D9C28SVB",
+        "url": "https://www.amazon.com/dp/B0D5BL35MS",
         "status": 200,
-        "response_size": 1893916,
+        "response_size": 1931961,
         "elements": {
           "productTitle": {
             "present": true,
             "text": [
-              "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women"
+              "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) - Natural Freeze-Dried Strawberries No Sugar Added, Dry Strawberry, Gluten-Free Fruit Snack for Baking, Smoothies, Cereals, Travel & Camping"
             ]
           },
           "productOverview_feature_div": {
             "present": true,
             "kv": {
-              "Brand": "Gold Water Trading",
-              "Color": "Pink",
-              "Material": "Polyurethane (PU)",
-              "Recommended Uses For Product": "(function(f) {var _np=(window.P._namespace(\"DetailPageProductOverviewTemplatesJava\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A').execute(function(A){ A.on('a:truncate:po-attribute-truncate-3:updated', function(data) { var isTruncated = !data.truncateInstance.getIfTextFits(); var seeMoreElement = document.getElementById('po-attribute-see-more-id-3'); if(seeMoreElement) { seeMoreElement.style.display = isTruncated ? '' : 'none'; } }) }); })); Makeup Removal, Toner Application, Cleansing, Nail Polish Removal Applying Skincare, Exfoliation, Wound Care, Craft and DIY, Cleaning, Baby Care See more",
-              "Specific Uses For Product": "Blending, Cleansing, Shading"
+              "Item Weight": "4.8 Ounces",
+              "Size": "4 Pack",
+              "Brand": "Brewer Outdoor Solutions",
+              "Package Weight": "0.19 Kilograms",
+              "Number of Pieces": "4"
             }
           },
           "feature-bullets": {
             "present": true,
             "bullets": [
-              "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
-              "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
-              "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
-              "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
-              "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
-              "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals."
+              "DELICIOUS FLAVOR IN EVERY BITE: Savor the naturally sweet, tangy crunch of dehydrated strawberries sliced, bursting with real fruit flavor. Enjoy freeze dried strawberry slices as a fruity boost or mix them with oatmeal, yogurt, smoothies, or desserts",
+              "NATURAL EVERYDAY FRUITS - The uses and benefits of our freeze dry strawberries are endless! A dried fruit snack loved by adults and children, it is a great baking product in woman's kitchen. It is a great camping food to have while traveling. It can be in fruity meal, lunch snacks for kids, salad kits, fruit cakes, and survival foods. One thing with multiple uses, come and take your dried fruits and freeze dried snacks home",
+              "FROM FARM TO YOUR TABLE: Our freeze dried strawberries sliced, delivered sun-ripened and farm-fresh, are made from naturally real strawberries. No added sugar, no preservatives or GMOs - all natural dry strawberries with iron to help support immune health with every bite",
+              "SHELF LIFE - FRESH UPTO 24 MONTHS: Lightweight, mess-free, and shelf-stable, our freezedried strawberry are at peak flavor for up to 24 months. For the best strawberry freeze dried taste and texture in every bite, please enjoy within two year of purchase at anywhere, anytime",
+              "BULK PACKED FOR CONVENIENCE: Buy in Single and bulk packs of 4 & 6 and enjoy premium quality bulk freeze dried strawberries whenever you need them. Great for baking, snacking, or mixing with freeze dried sliced strawberries for a refreshing fruit combo"
             ]
           },
           "productDescription": {
@@ -48,69 +47,60 @@
           "detailBullets_feature_div": {
             "present": true,
             "kv": {
-              "Package Dimensions ‏ : ‎": "7.76 x 5.83 x 2.01 inches; 1.76 ounces",
-              "Manufacturer ‏ : ‎": "Gold Water Trading",
-              "ASIN ‏ : ‎": "B0D9C28SVB",
-              "Best Sellers Rank": "#33,978 in Beauty & Personal Care ( See Top 100 in Beauty & Personal Care ) #101 in Makeup Blenders & Sponges",
-              "Customer Reviews": "4.6 out of 5 stars 163 ratings"
+              "Package Dimensions \u200f : \u200e": "8.7 x 7.72 x 4.57 inches; 4.8 ounces",
+              "Manufacturer \u200f : \u200e": "Brewer Outdoor Solutions",
+              "ASIN \u200f : \u200e": "B0D5BL35MS",
+              "Units \u200f : \u200e": "4.8 Ounce",
+              "Best Sellers Rank": "#34,221 in Grocery & Gourmet Food ( See Top 100 in Grocery & Gourmet Food ) #98 in Dried Berries",
+              "Customer Reviews": "4.3 out of 5 stars 98 ratings"
             }
           },
           "aplus": {
             "present": true,
             "headings": [
               "From the brand",
-              "Pet Supplies",
-              "Beauty /PersonalCare/Household",
+              "Brewer Outdoor Solutions",
+              "Taste The Crunch",
               "Product description"
             ],
             "paragraphs": [
-              "GWT (Gold Water Trading)",
-              "It‘s a leading provider of premium home goods and everyday consumer products.",
-              "We specialize in offering high-quality, innovative, and sustainable home essentials and personal care items.",
-              "Our products are designed to enhance comfort, functionality, and eco-friendliness.",
-              "With a commitment to excellence, GWT delivers trusted solutions that elevate your daily living experience.",
-              "Visit the Store"
+              "We believe that a greater emphasis on outdoor activities will contribute to a healthier global population. To address the issue of over-processed and heavy snack options often associated with outdoor pursuits, we are introducing a line of all-natural, lightweight food alternatives."
             ],
             "list_items": [
-              "GWT (Gold Water Trading)",
-              "It‘s a leading provider of premium home goods and everyday consumer products.",
-              "We specialize in offering high-quality, innovative, and sustainable home essentials and personal care items.",
-              "Our products are designed to enhance comfort, functionality, and eco-friendliness.",
-              "With a commitment to excellence, GWT delivers trusted solutions that elevate your daily living experience.",
-              "Pet Supplies",
-              "Visit the Store",
-              "Beauty /PersonalCare/Household"
+              "Brewer Outdoor Solutions",
+              "We believe that a greater emphasis on outdoor activities will contribute to a healthier global population. To address the issue of over-processed and heavy snack options often associated with outdoor pursuits, we are introducing a line of all-natural, lightweight food alternatives.",
+              "Taste The Crunch"
             ]
           }
         },
         "images": {
           "present": true,
-          "main_image": "https://m.media-amazon.com/images/I/61wucVMCzYL.jpg",
+          "main_image": "https://m.media-amazon.com/images/I/81pgr0DuDOL.jpg",
           "all_images": [
-            "https://m.media-amazon.com/images/I/61wucVMCzYL.jpg",
-            "https://m.media-amazon.com/images/I/4111yEWQLrL.jpg",
-            "https://m.media-amazon.com/images/I/517rUih+TXL.jpg",
-            "https://m.media-amazon.com/images/I/41msC2lcXcL.jpg",
-            "https://m.media-amazon.com/images/I/41u3vL1NefL.jpg",
-            "https://m.media-amazon.com/images/I/41xqreSTTjL.jpg",
-            "https://m.media-amazon.com/images/I/41soAA0RxCL.jpg",
-            "https://m.media-amazon.com/images/I/418nchDwYJL.jpg"
+            "https://m.media-amazon.com/images/I/81pgr0DuDOL.jpg",
+            "https://m.media-amazon.com/images/I/51h0B-l59SL.jpg",
+            "https://m.media-amazon.com/images/I/51zlwMmWucL.jpg",
+            "https://m.media-amazon.com/images/I/516ximi59GL.jpg",
+            "https://m.media-amazon.com/images/I/51RbAhH-8KL.jpg",
+            "https://m.media-amazon.com/images/I/51Qn+nqqiuL.jpg",
+            "https://m.media-amazon.com/images/I/51VHVyr+qyL.jpg",
+            "https://m.media-amazon.com/images/I/51T1QE0lT2L.jpg"
           ],
           "image_count": 8
         },
-        "title": "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women",
+        "title": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) - Natural Freeze-Dried Strawberries No Sugar Added, Dry Strawberry, Gluten-Free Fruit Snack for Baking, Smoothies, Cereals, Travel & Camping",
         "reviews": {
           "present": true,
           "sample_reviews": [
-            "Great product! Great price! I reorder these every time I run out.",
-            "These makeup sponges are great for makeup and powder. I clean them after each application. They dry very quickly. As per my wife.",
-            "Just what Iordered.",
-            "These were just what I needed. The price was reasonable. A good buy!",
-            "These do the trick, especially when using cream or liquid foundation. They are not super spongy, but hold makeup well and well worth the price."
+            "I like to have these at my desk as a low carb , healthy snack. They taste great!",
+            "I purchased the 1.2oz bag for my family of 3 to try- I admit, I was tempted to buy the size \u201csmall\u201d bag, to ensure Mama got an adequate sample, but then second guessed myself with the fear of them being too tart and no one enjoying them, as I\u2019ve bought dried strawberries from a big box store before and they were pretty sour to eat and ended up wasting. Well, these proved me wrong!! It has the perfect amount of tart without being too sour to enjoy, and tastes just like a fresh strawberry in a crunchy enjoyable texture. Will definitely be getting the bigger bag! All of the family have tried the strawberries and agree they are a great snack and we need more! Buy some- In the BIG bag- you WON\u2019T regret it!",
+            "Textura y sabor super bueno, aunque el paquete un poco peque\u00f1o para el precio",
+            "Excellent quality. Large pieces of dehydrated strawberries. Very happy with purchase!",
+            "NOT ORGANIC LIKE IT IS ADVERTISED"
           ],
           "review_highlights": [
-            "4.6 out of 5 stars",
-            "163 ratings"
+            "4.3 out of 5 stars",
+            "98 ratings"
           ]
         },
         "qa_section": {
@@ -120,10 +110,10 @@
         },
         "price": {
           "present": true,
-          "raw": "PKR342.67",
-          "amount": 342.67,
-          "currency": null,
-          "source": "apex_offscreen"
+          "raw": "$21.99 $0.22 $29.99 $5.94 $6.99 $9.99 $0.40 $11.99 $7.49 $14.98 $8.99 $12.99 $0.77 $14.99",
+          "amount": 21.99,
+          "currency": "$",
+          "source": "generic_offscreen"
         }
       },
       "items": [
@@ -131,9 +121,9 @@
           "phrase": "blender beauty",
           "search_volume": 258,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -147,9 +137,9 @@
           "phrase": "makeup sponges beauty blender",
           "search_volume": 53,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -163,9 +153,9 @@
           "phrase": "makeup egg",
           "search_volume": 242,
           "root": "egg",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 2,
           "cpr": 8,
           "competition": {
@@ -179,9 +169,9 @@
           "phrase": "beauty blender makeup sponge",
           "search_volume": 1202,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 5,
           "cpr": 27,
           "competition": {
@@ -195,9 +185,9 @@
           "phrase": "beauty blender",
           "search_volume": 71126,
           "root": "blender",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 9,
           "cpr": 112,
           "competition": {
@@ -211,9 +201,9 @@
           "phrase": "besuty blender",
           "search_volume": 312,
           "root": "blender",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -227,9 +217,9 @@
           "phrase": "beauty blenders for women",
           "search_volume": 133,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -243,9 +233,9 @@
           "phrase": "best beauty blender sponge",
           "search_volume": 194,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -259,9 +249,9 @@
           "phrase": "beauty egg",
           "search_volume": 53,
           "root": "egg",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 10,
           "cpr": 8,
           "competition": {
@@ -275,9 +265,9 @@
           "phrase": "beauty belnder",
           "search_volume": 245,
           "root": "blender",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -291,9 +281,9 @@
           "phrase": "beuaty blender",
           "search_volume": 53,
           "root": "blender",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -307,9 +297,9 @@
           "phrase": "beauty blender sponges",
           "search_volume": 89,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -323,9 +313,9 @@
           "phrase": "beauty blender sponge",
           "search_volume": 10234,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 37,
           "competition": {
@@ -336,23 +326,20 @@
           }
         },
         {
-          "phrase": "beauty blenders\u000fc",
-          "search_volume": null,
+          "phrase": "beauty blendersufffc",
+          "search_volume": 0,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
-          "title_density": null,
-          "cpr": null,
-          "competition": {}
+          "intent_score": 0
         },
         {
           "phrase": "sponge blender",
           "search_volume": 103,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 7,
           "cpr": 8,
           "competition": {
@@ -366,9 +353,9 @@
           "phrase": "blending sponge makeup",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -382,9 +369,9 @@
           "phrase": "og beauty blender",
           "search_volume": 150,
           "root": "blender",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -398,9 +385,9 @@
           "phrase": "beaty blendar",
           "search_volume": 104,
           "root": "blender",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -414,9 +401,9 @@
           "phrase": "beuty blender",
           "search_volume": 367,
           "root": "blender",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -432,7 +419,7 @@
           "root": "blender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -446,9 +433,9 @@
           "phrase": "blender makeup sponge",
           "search_volume": 234,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 6,
           "cpr": 8,
           "competition": {
@@ -464,7 +451,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -478,9 +465,9 @@
           "phrase": "beauty sponge blender",
           "search_volume": 76,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 2,
           "cpr": 8,
           "competition": {
@@ -494,9 +481,9 @@
           "phrase": "beauty blenders",
           "search_volume": 4204,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 30,
           "competition": {
@@ -510,9 +497,9 @@
           "phrase": "beauty blender og",
           "search_volume": 117,
           "root": "blender",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -526,9 +513,9 @@
           "phrase": "sponge face makeup",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -544,7 +531,7 @@
           "root": "blender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -557,10 +544,10 @@
         {
           "phrase": "foundation beauty blender",
           "search_volume": 15,
-          "root": "foundation",
-          "category": "Relevant",
+          "root": "blender",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -573,10 +560,10 @@
         {
           "phrase": "makeup beauty blender",
           "search_volume": 405,
-          "root": "makeup",
-          "category": "Relevant",
+          "root": "blender",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -590,9 +577,9 @@
           "phrase": "super sponge beauty blender",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -606,9 +593,9 @@
           "phrase": "buety blender",
           "search_volume": 226,
           "root": "blender",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -622,9 +609,9 @@
           "phrase": "makeup blending sponge",
           "search_volume": 359,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 3,
           "cpr": 8,
           "competition": {
@@ -638,9 +625,9 @@
           "phrase": "beauty makeup sponge",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -654,9 +641,9 @@
           "phrase": "beaty blender",
           "search_volume": 264,
           "root": "blender",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -670,9 +657,9 @@
           "phrase": "best beauty blender",
           "search_volume": 197,
           "root": "blender",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -688,7 +675,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -702,9 +689,9 @@
           "phrase": "face blender sponge",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -720,7 +707,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -734,9 +721,9 @@
           "phrase": "besuty blenders",
           "search_volume": 82,
           "root": "blender",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -749,10 +736,10 @@
         {
           "phrase": "makeup egg sponge",
           "search_volume": 261,
-          "root": "egg",
-          "category": "Design-Specific",
+          "root": "sponge",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -766,9 +753,9 @@
           "phrase": "foundation blender sponge",
           "search_volume": 71,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -782,9 +769,9 @@
           "phrase": "foundation sponges for face",
           "search_volume": 105,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -798,9 +785,9 @@
           "phrase": "soft beauty blender",
           "search_volume": 316,
           "root": "blender",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -814,9 +801,9 @@
           "phrase": "beautiful blender sponge",
           "search_volume": 13,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -830,9 +817,9 @@
           "phrase": "blender makeup",
           "search_volume": 540,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 3,
           "cpr": 9,
           "competition": {
@@ -843,15 +830,12 @@
           }
         },
         {
-          "phrase": "beauty blender\u000fc",
-          "search_volume": null,
+          "phrase": "beauty blenderufffc",
+          "search_volume": 0,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
-          "title_density": null,
-          "cpr": null,
-          "competition": {}
+          "intent_score": 0
         },
         {
           "phrase": "beauty blender original makeup sponge",
@@ -859,7 +843,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -873,9 +857,9 @@
           "phrase": "make up blender",
           "search_volume": 540,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 9,
           "competition": {
@@ -889,9 +873,9 @@
           "phrase": "beauty sponge",
           "search_volume": 3125,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 12,
           "cpr": 32,
           "competition": {
@@ -905,9 +889,9 @@
           "phrase": "dream big makeup sponge",
           "search_volume": 47,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -918,21 +902,21 @@
           }
         },
         {
-          "phrase": "\u001f",
-          "category": "Irrelevant",
+          "phrase": "\u7f8e\u5bb9\u86cb",
+          "category": "Spanish",
           "relevancy_score": 10,
           "intent_score": 0,
           "title_density": null,
           "search_volume": null,
           "cpr": null,
-          "competition": {},
-          "root": "unknown"
+          "competition": null,
+          "root": "\u86cb"
         },
         {
           "phrase": "pro beauty sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 0,
           "cpr": 8,
@@ -946,9 +930,9 @@
         },
         {
           "phrase": "make up blenders",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 42,
           "cpr": 8,
@@ -962,9 +946,9 @@
         },
         {
           "phrase": "blending sponges",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 2,
           "search_volume": 13,
           "cpr": 8,
@@ -980,7 +964,7 @@
           "phrase": "prime day deal beauty",
           "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 196,
           "cpr": 8,
@@ -994,9 +978,9 @@
         },
         {
           "phrase": "beauty sponges for makeup",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 586,
           "cpr": 9,
@@ -1010,9 +994,9 @@
         },
         {
           "phrase": "sponge makeup",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "search_volume": 1384,
           "cpr": 26,
@@ -1028,7 +1012,7 @@
           "phrase": "equate beauty blender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 211,
           "cpr": 8,
@@ -1042,9 +1026,9 @@
         },
         {
           "phrase": "spong make up",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 0,
           "cpr": 8,
@@ -1060,7 +1044,7 @@
           "phrase": "professional beauty",
           "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 0,
           "cpr": 8,
@@ -1074,9 +1058,9 @@
         },
         {
           "phrase": "makeup sponges for blending foundation",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 34,
           "cpr": 8,
@@ -1090,9 +1074,9 @@
         },
         {
           "phrase": "beaky beauty sponge",
-          "category": "Branded",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 274,
           "cpr": 8,
@@ -1106,9 +1090,9 @@
         },
         {
           "phrase": "blender beauty sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 210,
           "cpr": 8,
@@ -1122,9 +1106,9 @@
         },
         {
           "phrase": "makeup sponge blenders",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 0,
           "cpr": 8,
@@ -1138,9 +1122,9 @@
         },
         {
           "phrase": "big beauty blender sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 258,
           "cpr": 8,
@@ -1154,9 +1138,9 @@
         },
         {
           "phrase": "beauty blender big",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 309,
           "cpr": 8,
@@ -1170,9 +1154,9 @@
         },
         {
           "phrase": "egg makeup sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 1,
           "search_volume": 324,
           "cpr": 8,
@@ -1186,9 +1170,9 @@
         },
         {
           "phrase": "beauty blender large",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 315,
           "cpr": 8,
@@ -1202,9 +1186,9 @@
         },
         {
           "phrase": "beauty blender pack",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 1628,
           "cpr": 26,
@@ -1218,9 +1202,9 @@
         },
         {
           "phrase": "makeup blender sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 1335,
           "cpr": 26,
@@ -1234,9 +1218,9 @@
         },
         {
           "phrase": "make up blender sponges for face",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 367,
           "cpr": 8,
@@ -1250,9 +1234,9 @@
         },
         {
           "phrase": "face makeup sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 273,
           "cpr": 8,
@@ -1266,9 +1250,9 @@
         },
         {
           "phrase": "sponge makeup blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "search_volume": 15,
           "cpr": 8,
@@ -1282,9 +1266,9 @@
         },
         {
           "phrase": "makeup sponge teardrop",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 436,
           "cpr": 8,
@@ -1300,7 +1284,7 @@
           "phrase": "shop miss a beauty blender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 222,
           "cpr": 8,
@@ -1314,9 +1298,9 @@
         },
         {
           "phrase": "beakey makeup sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 338,
           "cpr": 8,
@@ -1330,9 +1314,9 @@
         },
         {
           "phrase": "beauty makeup sponge blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 138,
           "cpr": 8,
@@ -1348,7 +1332,7 @@
           "phrase": "loreal makeup sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 180,
           "cpr": 8,
@@ -1362,9 +1346,9 @@
         },
         {
           "phrase": "make up sponges for women",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 16,
           "cpr": 8,
@@ -1378,9 +1362,9 @@
         },
         {
           "phrase": "makeup blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 8,
           "search_volume": 1757,
           "cpr": 29,
@@ -1394,9 +1378,9 @@
         },
         {
           "phrase": "beuty sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 219,
           "cpr": 8,
@@ -1410,9 +1394,9 @@
         },
         {
           "phrase": "facial sponges makeup",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 189,
           "cpr": 8,
@@ -1428,7 +1412,7 @@
           "phrase": "alori perfect blending sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 82,
           "cpr": 8,
@@ -1442,9 +1426,9 @@
         },
         {
           "phrase": "liquid foundation sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 183,
           "cpr": 8,
@@ -1458,9 +1442,9 @@
         },
         {
           "phrase": "blending sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 10,
           "search_volume": 1581,
           "cpr": 29,
@@ -1474,9 +1458,9 @@
         },
         {
           "phrase": "make up blenders for face",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 44,
           "cpr": 8,
@@ -1490,9 +1474,9 @@
         },
         {
           "phrase": "large beauty blender sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 433,
           "cpr": 8,
@@ -1506,9 +1490,9 @@
         },
         {
           "phrase": "make up sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 2,
           "search_volume": 3716,
           "cpr": 29,
@@ -1522,9 +1506,9 @@
         },
         {
           "phrase": "complexion sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 6,
           "search_volume": 103,
           "cpr": 8,
@@ -1538,9 +1522,9 @@
         },
         {
           "phrase": "beauty boender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 187,
           "cpr": 8,
@@ -1550,13 +1534,13 @@
             "competitor_rank_avg": 10.0,
             "competitor_performance_score": 10.0
           },
-          "root": "beauty"
+          "root": "boender"
         },
         {
           "phrase": "sponges for foundation",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 7,
           "search_volume": 22,
           "cpr": 8,
@@ -1570,9 +1554,9 @@
         },
         {
           "phrase": "beaty blenders",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 171,
           "cpr": 8,
@@ -1586,9 +1570,9 @@
         },
         {
           "phrase": "beauty blend",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 6,
           "search_volume": 164,
           "cpr": 8,
@@ -1602,9 +1586,9 @@
         },
         {
           "phrase": "make up sponges for face foundation",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 201,
           "cpr": 8,
@@ -1618,9 +1602,9 @@
         },
         {
           "phrase": "makeup sponges for blending",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 1388,
           "cpr": 26,
@@ -1634,9 +1618,9 @@
         },
         {
           "phrase": "beuty blenders",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 252,
           "cpr": 8,
@@ -1652,7 +1636,7 @@
           "phrase": "sephora beauty blender kit",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 124,
           "cpr": 8,
@@ -1666,9 +1650,9 @@
         },
         {
           "phrase": "beauty sponge for women",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 32,
           "cpr": 8,
@@ -1684,7 +1668,7 @@
           "phrase": "sephora beauty blender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 43,
           "cpr": 8,
@@ -1698,9 +1682,9 @@
         },
         {
           "phrase": "beauty blenders pack",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "search_volume": 309,
           "cpr": 8,
@@ -1716,9 +1700,9 @@
           "phrase": "beauty sponges",
           "search_volume": 688,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 7,
           "cpr": 10,
           "competition": {
@@ -1734,7 +1718,7 @@
           "root": "beautyblender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 17,
           "cpr": 8,
           "competition": {
@@ -1750,7 +1734,7 @@
           "root": "beauty blender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -1766,7 +1750,7 @@
           "root": "beauty blender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 4,
           "cpr": 8,
           "competition": {
@@ -1780,9 +1764,9 @@
           "phrase": "foundation sponge blender",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -1795,10 +1779,10 @@
         {
           "phrase": "foundation applicator",
           "search_volume": 688,
-          "root": "applicator",
-          "category": "Relevant",
+          "root": "foundation",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 4,
           "cpr": 10,
           "competition": {
@@ -1809,13 +1793,13 @@
           }
         },
         {
-          "phrase": "make up sponges\u000fc",
-          "search_volume": 0,
+          "phrase": "make up sponges\u001fc",
+          "search_volume": null,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
-          "title_density": 0,
+          "intent_score": 0,
+          "title_density": null,
           "cpr": null,
           "competition": {}
         },
@@ -1825,7 +1809,7 @@
           "root": "beauty blender",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -1841,7 +1825,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -1855,9 +1839,9 @@
           "phrase": "best makeup sponge",
           "search_volume": 65,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -1887,9 +1871,9 @@
           "phrase": "make up sponge blender",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -1903,9 +1887,9 @@
           "phrase": "beauty blender sponge pink",
           "search_volume": 91,
           "root": "beauty blender",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -1919,9 +1903,9 @@
           "phrase": "pack of beauty blenders",
           "search_volume": 124,
           "root": "beauty blender",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -1937,7 +1921,7 @@
           "root": "beauty blender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -1951,9 +1935,9 @@
           "phrase": "makeup blenders & sponges",
           "search_volume": 640,
           "root": "sponge",
-          "category": "Outlier",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 10,
           "competition": {
@@ -1967,9 +1951,9 @@
           "phrase": "foundation sponge",
           "search_volume": 3912,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 3,
           "cpr": 30,
           "competition": {
@@ -1985,7 +1969,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -1999,9 +1983,9 @@
           "phrase": "makeup sponge blender set",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 2,
           "cpr": 8,
           "competition": {
@@ -2015,9 +1999,9 @@
           "phrase": "concealer sponge",
           "search_volume": 641,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 5,
           "cpr": 10,
           "competition": {
@@ -2031,9 +2015,9 @@
           "phrase": "fuzzy sponge makeup",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2047,9 +2031,9 @@
           "phrase": "foundation sponge for liquid makeup",
           "search_volume": 405,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2063,9 +2047,9 @@
           "phrase": "reusable makeup sponge",
           "search_volume": 249,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2079,9 +2063,9 @@
           "phrase": "beauty blender sponge pack",
           "search_volume": 92,
           "root": "beauty blender",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2095,9 +2079,9 @@
           "phrase": "sponge make up",
           "search_volume": 133,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2111,7 +2095,7 @@
           "phrase": "beauty subscribe and save",
           "search_volume": 0,
           "root": "subscribe",
-          "category": "Outlier",
+          "category": "Branded",
           "relevancy_score": 10,
           "intent_score": 0,
           "title_density": 0,
@@ -2127,9 +2111,9 @@
           "phrase": "concealer applicator sponge",
           "search_volume": 140,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2143,9 +2127,9 @@
           "phrase": "beauty blenders sponges",
           "search_volume": 26,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2159,9 +2143,9 @@
           "phrase": "makeup sponges blender",
           "search_volume": 68,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -2175,9 +2159,9 @@
           "phrase": "make up sponge for foundation",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2191,9 +2175,9 @@
           "phrase": "makeup sponge set",
           "search_volume": 2036,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 25,
           "cpr": 35,
           "competition": {
@@ -2207,9 +2191,9 @@
           "phrase": "makeup sponge blender",
           "search_volume": 66,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 4,
           "cpr": 8,
           "competition": {
@@ -2223,9 +2207,9 @@
           "phrase": "blending makeup",
           "search_volume": 192,
           "root": "blending",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -2239,9 +2223,9 @@
           "phrase": "make sponge blender",
           "search_volume": 42,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2255,9 +2239,9 @@
           "phrase": "facial sponges for makeup",
           "search_volume": 200,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2271,9 +2255,9 @@
           "phrase": "extra large beauty blender sponge",
           "search_volume": 221,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2287,9 +2271,9 @@
           "phrase": "mega blender sponge",
           "search_volume": 28,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2303,9 +2287,9 @@
           "phrase": "beaky blender sponge",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2319,9 +2303,9 @@
           "phrase": "extra large beauty blender",
           "search_volume": 170,
           "root": "beauty blender",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2335,9 +2319,9 @@
           "phrase": "soft makeup sponge",
           "search_volume": 211,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -2351,9 +2335,9 @@
           "phrase": "concealer beauty blender",
           "search_volume": 168,
           "root": "beauty blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2367,9 +2351,9 @@
           "phrase": "makeup sponge large",
           "search_volume": 48,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2383,9 +2367,9 @@
           "phrase": "black beauty blenders",
           "search_volume": 0,
           "root": "beauty blender",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2401,7 +2385,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2415,9 +2399,9 @@
           "phrase": "teardrop makeup sponge",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 3,
           "cpr": 8,
           "competition": {
@@ -2431,9 +2415,9 @@
           "phrase": "makeup sponge",
           "search_volume": 60124,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 31,
           "cpr": 106,
           "competition": {
@@ -2447,9 +2431,9 @@
           "phrase": "makeup soonge",
           "search_volume": 277,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2463,9 +2447,9 @@
           "phrase": "concealer sponges",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2479,9 +2463,9 @@
           "phrase": "blending sponge for makeup",
           "search_volume": 688,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 10,
           "competition": {
@@ -2495,9 +2479,9 @@
           "phrase": "makeup soft sponge",
           "search_volume": 32,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -2508,799 +2492,795 @@
           }
         },
         {
-          "phrase": "make up sponge￼",
-          "search_volume": null,
-          "root": "sponge",
-          "category": "Relevant",
+          "phrase": "make up sponge\u000fc",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
-          "title_density": null,
-          "cpr": null,
-          "competition": {}
+          "intent_score": 0,
+          "root": "make"
         },
         {
           "phrase": "contouring sponge",
-          "search_volume": 0,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 5000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.0,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "contouring"
         },
         {
           "phrase": "professional makeup sponges",
-          "search_volume": 0,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 7000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.1,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "professional"
         },
         {
           "phrase": "morphe beauty blender",
-          "search_volume": 131,
-          "root": "blender",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
-          "cpr": null,
+          "search_volume": 131,
+          "cpr": 8,
           "competition": {
             "competing_products": 530,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.2,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "morphe"
         },
         {
           "phrase": "prime beauty",
-          "search_volume": 94,
-          "root": "beauty",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
-          "cpr": null,
+          "search_volume": 94,
+          "cpr": 8,
           "competition": {
             "competing_products": 4000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.3,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "prime"
         },
         {
           "phrase": "sponges make up",
-          "search_volume": 254,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 254,
           "cpr": 8,
           "competition": {
             "competing_products": 10000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.4,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "sponges"
         },
         {
           "phrase": "make sponges for foundation",
-          "search_volume": 300,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 300,
           "cpr": 8,
           "competition": {
             "competing_products": 2000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.6,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "make"
         },
         {
           "phrase": "elf makeup sponge",
-          "search_volume": 540,
-          "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 540,
           "cpr": 9,
           "competition": {
             "competing_products": 664,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.7,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "elf"
         },
         {
           "phrase": "concealer blender",
-          "search_volume": 123,
-          "root": "blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 123,
           "cpr": 8,
           "competition": {
             "competing_products": 10000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.7,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "concealer"
         },
         {
           "phrase": "paw beauty blender",
-          "search_volume": 59,
-          "root": "blender",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 2,
-          "cpr": null,
+          "search_volume": 59,
+          "cpr": 8,
           "competition": {
             "competing_products": 399,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.8,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "paw"
         },
         {
           "phrase": "blend my face blenders",
-          "search_volume": 24,
-          "root": "blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 24,
           "cpr": 8,
           "competition": {
             "competing_products": 237,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.8,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "blend"
         },
         {
           "phrase": "stand out beauty sponge",
-          "search_volume": 86,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 86,
           "cpr": 8,
           "competition": {
             "competing_products": 455,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.8,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "stand"
         },
         {
           "phrase": "uve makeup sponge",
-          "search_volume": 38,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 38,
           "cpr": 8,
           "competition": {
             "competing_products": 314,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.9,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "uve"
         },
         {
           "phrase": "esponja maquillaje",
-          "search_volume": 244,
-          "root": "esponja",
           "category": "Spanish",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 244,
           "cpr": 8,
           "competition": {
             "competing_products": 3000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.9,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "esponja"
         },
         {
           "phrase": "makeup sponges for foundation",
-          "search_volume": 6527,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 2,
+          "search_volume": 6527,
           "cpr": 33,
           "competition": {
             "competing_products": 4000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.9,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "makeup"
         },
         {
           "phrase": "blender sponge",
-          "search_volume": 834,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 5,
+          "search_volume": 834,
           "cpr": 11,
           "competition": {
             "competing_products": 4000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 13.9,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "blender"
         },
         {
           "phrase": "make up beauty blender sponge",
-          "search_volume": 40,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 40,
           "cpr": 8,
           "competition": {
             "competing_products": 4000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.0,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "make"
         },
         {
           "phrase": "small beauty",
-          "search_volume": 0,
-          "root": "beauty",
           "category": "Outlier",
           "relevancy_score": 9,
           "intent_score": 0,
           "title_density": 1,
+          "search_volume": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 10000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.0,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "small"
         },
         {
           "phrase": "sponges makeup blender",
-          "search_volume": 1036,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 1036,
           "cpr": 25,
           "competition": {
             "competing_products": 6000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.0,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "sponges"
         },
         {
           "phrase": "blending makeup sponge",
-          "search_volume": 0,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 4000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.2,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "blending"
         },
         {
           "phrase": "make sponge",
-          "search_volume": 272,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 272,
           "cpr": 8,
           "competition": {
             "competing_products": 4000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.2,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "make"
         },
         {
           "phrase": "sponges foundation",
-          "search_volume": 0,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 3000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.3,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "sponges"
         },
         {
           "phrase": "make up spong",
-          "search_volume": 97,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 97,
           "cpr": 8,
           "competition": {
             "competing_products": 10000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.3,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "make"
         },
         {
           "phrase": "beauty blender pink",
-          "search_volume": 20,
-          "root": "blender",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 20,
           "cpr": 8,
           "competition": {
             "competing_products": 10000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.3,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "beauty"
         },
         {
           "phrase": "makeup blender sponges",
-          "search_volume": 0,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
+          "search_volume": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 5000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.4,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "makeup"
         },
         {
           "phrase": "foundation applicators",
-          "search_volume": 0,
-          "root": "applicator",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 2000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.4,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "foundation"
         },
         {
           "phrase": "painted beauty blender",
-          "search_volume": 225,
-          "root": "blender",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 225,
           "cpr": 8,
           "competition": {
             "competing_products": 2000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.6,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "painted"
         },
         {
           "phrase": "soft beauty blender sponge",
-          "search_volume": 64,
-          "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 64,
           "cpr": 8,
           "competition": {
             "competing_products": 3000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.6,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "soft"
         },
         {
           "phrase": "sponge for make up",
-          "search_volume": 214,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 214,
           "cpr": 8,
           "competition": {
             "competing_products": 6000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.6,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "sponge"
         },
         {
           "phrase": "make up sponges egg shaped",
-          "search_volume": 0,
-          "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 0,
           "cpr": 8,
           "competition": {
             "competing_products": 465,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.6,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "make"
         },
         {
           "phrase": "concealer sponge under eye",
-          "search_volume": 348,
-          "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 348,
           "cpr": 8,
           "competition": {
             "competing_products": 1000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.7,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "concealer"
         },
         {
           "phrase": "morphe sponge",
-          "search_volume": 74,
-          "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 74,
           "cpr": 8,
           "competition": {
             "competing_products": 536,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.7,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "morphe"
         },
         {
           "phrase": "make sponges",
-          "search_volume": 60,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 60,
           "cpr": 8,
           "competition": {
             "competing_products": 695,
             "ranking_competitors": 9,
             "competitor_rank_avg": 14.8,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "make"
         },
         {
           "phrase": "beauty black friday deals",
-          "search_volume": 230,
-          "root": "deals",
           "category": "Outlier",
           "relevancy_score": 10,
           "intent_score": 0,
           "title_density": 0,
+          "search_volume": 230,
           "cpr": 8,
           "competition": {
             "competing_products": 247,
             "ranking_competitors": 8,
             "competitor_rank_avg": 14.9,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "beauty"
         },
         {
           "phrase": "pow pow beauty blender",
-          "search_volume": 291,
-          "root": "blender",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 291,
           "cpr": 8,
           "competition": {
             "competing_products": 297,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.0,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "pow"
         },
         {
           "phrase": "elf sponges makeup blender",
-          "search_volume": 324,
-          "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 324,
           "cpr": 8,
           "competition": {
             "competing_products": 735,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.0,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "elf"
         },
         {
           "phrase": "pawpaw beauty blender",
-          "search_volume": 189,
-          "root": "blender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 189,
           "cpr": 8,
           "competition": {
             "competing_products": 249,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.0,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "pawpaw"
         },
         {
           "phrase": "make up sponges for foundation",
-          "search_volume": 2619,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 2619,
           "cpr": 27,
           "competition": {
             "competing_products": 3000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.0,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "make"
         },
         {
           "phrase": "makeup blenders sponges",
-          "search_volume": 46,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 46,
           "cpr": 8,
           "competition": {
             "competing_products": 4000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.0,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "makeup"
         },
         {
           "phrase": "latex free beauty blender",
-          "search_volume": 144,
-          "root": "blender",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 144,
           "cpr": 8,
           "competition": {
             "competing_products": 986,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.2,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "latex"
         },
         {
           "phrase": "makeup applicator sponge",
-          "search_volume": 586,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 586,
           "cpr": 9,
           "competition": {
             "competing_products": 2000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.2,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "makeup"
         },
         {
           "phrase": "cosmetic sponges for makeup",
-          "search_volume": 405,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 405,
           "cpr": 8,
           "competition": {
             "competing_products": 7000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.3,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "cosmetic"
         },
         {
           "phrase": "elf total face sponge",
-          "search_volume": 257,
-          "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 257,
           "cpr": 8,
           "competition": {
             "competing_products": 227,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.3,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "elf"
         },
         {
           "phrase": "make up blending sponges for face",
-          "search_volume": 218,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 218,
           "cpr": 8,
           "competition": {
             "competing_products": 3000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.4,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "make"
         },
         {
           "phrase": "make up applicators for face",
-          "search_volume": 256,
-          "root": "applicator",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 256,
           "cpr": 8,
           "competition": {
             "competing_products": 4000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.4,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "make"
         },
         {
           "phrase": "makeup sponge elf",
-          "search_volume": 204,
-          "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 204,
           "cpr": 8,
           "competition": {
             "competing_products": 633,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.4,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "makeup"
         },
         {
           "phrase": "sponges for makeup application",
-          "search_volume": 17,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
+          "search_volume": 17,
           "cpr": 8,
           "competition": {
             "competing_products": 8000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.7,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "sponges"
         },
         {
           "phrase": "aesthetica beauty sponge",
-          "search_volume": 153,
-          "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 153,
           "cpr": 8,
           "competition": {
             "competing_products": 474,
             "ranking_competitors": 9,
             "competitor_rank_avg": 15.7,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "aesthetica"
         },
         {
           "phrase": "james charles beauty blender",
-          "search_volume": 164,
-          "root": "blender",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 164,
           "cpr": 8,
           "competition": {
             "competing_products": 237,
             "ranking_competitors": 9,
             "competitor_rank_avg": 16.0,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "james"
         },
         {
           "phrase": "beaty sponges",
-          "search_volume": 148,
-          "root": "sponge",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
+          "search_volume": 148,
           "cpr": 8,
           "competition": {
             "competing_products": 6000,
             "ranking_competitors": 9,
             "competitor_rank_avg": 16.0,
             "competitor_performance_score": 10.0
-          }
+          },
+          "root": "beaty"
         },
         {
           "phrase": "boun boun multi color blender sponge set",
@@ -3308,7 +3288,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3356,7 +3336,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3372,7 +3352,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -3388,7 +3368,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3401,10 +3381,10 @@
         {
           "phrase": "morphe makeup sponges",
           "search_volume": 146,
-          "root": "sponge",
+          "root": "sponges",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3420,7 +3400,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3434,9 +3414,9 @@
           "phrase": "makeup puffs for foundation",
           "search_volume": 66,
           "root": "puffs",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 3,
           "cpr": 8,
           "competition": {
@@ -3466,9 +3446,9 @@
           "phrase": "sponge latex free",
           "search_volume": 114,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3482,9 +3462,9 @@
           "phrase": "makeup poof",
           "search_volume": 87,
           "root": "poof",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3500,7 +3480,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3516,7 +3496,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3529,10 +3509,10 @@
         {
           "phrase": "makeup spong",
           "search_volume": 266,
-          "root": "sponge",
-          "category": "Relevant",
+          "root": "spong",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3545,10 +3525,10 @@
         {
           "phrase": "peeps makeup sponges",
           "search_volume": 173,
-          "root": "sponge",
+          "root": "sponges",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3562,9 +3542,9 @@
           "phrase": "makeup blender set",
           "search_volume": 0,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3577,10 +3557,10 @@
         {
           "phrase": "face sponges for makeup",
           "search_volume": 1035,
-          "root": "sponge",
-          "category": "Relevant",
+          "root": "sponges",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 25,
           "competition": {
@@ -3594,9 +3574,9 @@
           "phrase": "foundation blender",
           "search_volume": 291,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -3612,7 +3592,7 @@
           "root": "blender",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3626,9 +3606,9 @@
           "phrase": "beauty blender black",
           "search_volume": 288,
           "root": "blender",
-          "category": "Design-Specific",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3644,7 +3624,7 @@
           "root": "blender",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3658,9 +3638,9 @@
           "phrase": "beauty blender and puff",
           "search_volume": 123,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Irrelevant",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3673,10 +3653,10 @@
         {
           "phrase": "make up sponges set",
           "search_volume": 147,
-          "root": "sponge",
-          "category": "Relevant",
+          "root": "sponges",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3692,7 +3672,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3705,10 +3685,10 @@
         {
           "phrase": "foundation blending",
           "search_volume": 82,
-          "root": "foundation",
-          "category": "Relevant",
+          "root": "blending",
+          "category": "Irrelevant",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 4,
           "cpr": 8,
           "competition": {
@@ -3724,7 +3704,7 @@
           "root": "blender",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 12,
           "competition": {
@@ -3738,9 +3718,9 @@
           "phrase": "beauty blender makeup sponges",
           "search_volume": 189,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3756,7 +3736,7 @@
           "root": "blender",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3769,10 +3749,10 @@
         {
           "phrase": "blending sponges for makeup",
           "search_volume": 0,
-          "root": "sponge",
-          "category": "Relevant",
+          "root": "sponges",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3785,10 +3765,10 @@
         {
           "phrase": "makeup sponges for face",
           "search_volume": 688,
-          "root": "sponge",
-          "category": "Relevant",
+          "root": "sponges",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 10,
           "competition": {
@@ -3804,7 +3784,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3818,9 +3798,9 @@
           "phrase": "beauty blender latex free",
           "search_volume": 0,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3834,9 +3814,9 @@
           "phrase": "foam makeup applicator",
           "search_volume": 219,
           "root": "applicator",
-          "category": "Design-Specific",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3850,9 +3830,9 @@
           "phrase": "teardrop beauty blender",
           "search_volume": 148,
           "root": "blender",
-          "category": "Design-Specific",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3866,9 +3846,9 @@
           "phrase": "make up sponge set",
           "search_volume": 311,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3884,7 +3864,7 @@
           "root": "esponja",
           "category": "Spanish",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3900,7 +3880,7 @@
           "root": "esponjas",
           "category": "Spanish",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 10,
           "competition": {
@@ -3914,9 +3894,9 @@
           "phrase": "face sponge for makeup",
           "search_volume": 182,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3932,7 +3912,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3946,9 +3926,9 @@
           "phrase": "makeup sponge for foundation",
           "search_volume": 272,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -3962,9 +3942,9 @@
           "phrase": "beauty blender set",
           "search_volume": 359,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -3980,7 +3960,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -3994,9 +3974,9 @@
           "phrase": "sponge for makeup",
           "search_volume": 367,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -4009,10 +3989,10 @@
         {
           "phrase": "makeup spinge",
           "search_volume": 301,
-          "root": "sponge",
-          "category": "Relevant",
+          "root": "spinge",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4025,10 +4005,10 @@
         {
           "phrase": "blenders makeup",
           "search_volume": 84,
-          "root": "blender",
-          "category": "Relevant",
+          "root": "blenders",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4042,9 +4022,9 @@
           "phrase": "cosmetic sponge",
           "search_volume": 168,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 7,
           "cpr": 8,
           "competition": {
@@ -4057,10 +4037,10 @@
         {
           "phrase": "make-up sponges",
           "search_volume": 141,
-          "root": "sponge",
-          "category": "Relevant",
+          "root": "sponges",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4090,9 +4070,9 @@
           "phrase": "makeup sponge applicator",
           "search_volume": 174,
           "root": "applicator",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4108,7 +4088,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4122,9 +4102,9 @@
           "phrase": "make up sponges for face",
           "search_volume": 2036,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 27,
           "competition": {
@@ -4138,9 +4118,9 @@
           "phrase": "sponge makeup applicator",
           "search_volume": 488,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 9,
           "competition": {
@@ -4154,9 +4134,9 @@
           "phrase": "sponges for makeup",
           "search_volume": 368,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4170,9 +4150,9 @@
           "phrase": "beauty sponge set",
           "search_volume": 37,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4186,9 +4166,9 @@
           "phrase": "makeup sponge foundation",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4204,7 +4184,7 @@
           "root": "blender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4218,9 +4198,9 @@
           "phrase": "sponge for face",
           "search_volume": 276,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 3,
           "cpr": 8,
           "competition": {
@@ -4234,9 +4214,9 @@
           "phrase": "makeup blenders",
           "search_volume": 304,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -4250,9 +4230,9 @@
           "phrase": "beauty blender plastic",
           "search_volume": 237,
           "root": "blender",
-          "category": "Design-Specific",
+          "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4266,9 +4246,9 @@
           "phrase": "makeup beauty blenders",
           "search_volume": 144,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4284,7 +4264,7 @@
           "root": "esponja",
           "category": "Spanish",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4298,9 +4278,9 @@
           "phrase": "makeup blending",
           "search_volume": 0,
           "root": "blending",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 5,
           "cpr": 8,
           "competition": {
@@ -4314,9 +4294,9 @@
           "phrase": "beauty blender powder puff",
           "search_volume": 109,
           "root": "blender",
-          "category": "Design-Specific",
+          "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -4330,9 +4310,9 @@
           "phrase": "makeup sponge eco",
           "search_volume": 200,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -4348,7 +4328,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4364,7 +4344,7 @@
           "root": "sponge",
           "category": "Design-Specific",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 2,
           "cpr": 8,
           "competition": {
@@ -4380,7 +4360,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 25,
           "competition": {
@@ -4396,7 +4376,7 @@
           "root": "blender",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4412,7 +4392,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4428,7 +4408,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4444,7 +4424,7 @@
           "root": "blender",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4460,7 +4440,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4476,7 +4456,7 @@
           "root": "blender",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4492,7 +4472,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4508,7 +4488,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4521,10 +4501,10 @@
         {
           "phrase": "spongas makf up",
           "search_volume": 228,
-          "root": "spongas",
-          "category": "Spanish",
+          "root": "sponge",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4538,9 +4518,9 @@
           "phrase": "make up sponges prime",
           "search_volume": 185,
           "root": "sponge",
-          "category": "Branded",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4554,9 +4534,9 @@
           "phrase": "cosmetic sponges",
           "search_volume": 689,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 4,
           "cpr": 10,
           "competition": {
@@ -4572,7 +4552,7 @@
           "root": "blender",
           "category": "Design-Specific",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 4,
           "cpr": 8,
           "competition": {
@@ -4588,7 +4568,7 @@
           "root": "sponge",
           "category": "Design-Specific",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -4604,7 +4584,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4620,7 +4600,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 11,
           "cpr": 8,
           "competition": {
@@ -4636,7 +4616,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -4652,7 +4632,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4665,10 +4645,10 @@
         {
           "phrase": "blender sponges",
           "search_volume": 98,
-          "root": "blender",
-          "category": "Relevant",
+          "root": "sponge",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 9,
           "cpr": 8,
           "competition": {
@@ -4681,10 +4661,10 @@
         {
           "phrase": "esponjas para maquillaje",
           "search_volume": 3125,
-          "root": "esponjas",
+          "root": "esponja",
           "category": "Spanish",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 28,
           "competition": {
@@ -4698,9 +4678,9 @@
           "phrase": "beauty blender puff",
           "search_volume": 201,
           "root": "blender",
-          "category": "Design-Specific",
+          "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4714,9 +4694,9 @@
           "phrase": "sponges makeup",
           "search_volume": 918,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 12,
           "competition": {
@@ -4730,9 +4710,9 @@
           "phrase": "make up application sponges",
           "search_volume": 177,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4745,10 +4725,10 @@
         {
           "phrase": "xl beauty blender sponge",
           "search_volume": 67,
-          "root": "sponge",
+          "root": "blender",
           "category": "Design-Specific",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4764,7 +4744,7 @@
           "root": "sponge",
           "category": "Design-Specific",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4778,9 +4758,9 @@
           "phrase": "makeup sponges for foundation and concealer",
           "search_volume": 0,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4794,9 +4774,9 @@
           "phrase": "powder puff and beauty blender",
           "search_volume": 293,
           "root": "blender",
-          "category": "Design-Specific",
+          "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4810,9 +4790,9 @@
           "phrase": "sponge foundation",
           "search_volume": 82,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4826,9 +4806,9 @@
           "phrase": "makeup sp",
           "search_volume": 16,
           "root": "makeup",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4844,7 +4824,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4860,7 +4840,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4876,7 +4856,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4908,7 +4888,7 @@
           "root": "beauty",
           "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4922,9 +4902,9 @@
           "phrase": "dose makeup",
           "search_volume": 141,
           "root": "makeup",
-          "category": "Branded",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4940,7 +4920,7 @@
           "root": "beauty",
           "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4954,9 +4934,9 @@
           "phrase": "prime day cosmetics",
           "search_volume": 81,
           "root": "cosmetics",
-          "category": "Branded",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -4969,10 +4949,10 @@
         {
           "phrase": "esthetician supplies",
           "search_volume": 9708,
-          "root": "esthetician",
+          "root": "supplies",
           "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 5,
           "cpr": 37,
           "competition": {
@@ -4988,7 +4968,7 @@
           "root": "blender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5004,7 +4984,7 @@
           "root": "accessories",
           "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5020,7 +5000,7 @@
           "root": "beautyslender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5034,9 +5014,9 @@
           "phrase": "makeup sponges for concealer",
           "search_volume": 41,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5050,9 +5030,9 @@
           "phrase": "makeup sponge beauty sponge",
           "search_volume": 128,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5066,9 +5046,9 @@
           "phrase": "makeup spoges",
           "search_volume": 218,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5082,9 +5062,9 @@
           "phrase": "black beauty blender",
           "search_volume": 355,
           "root": "blender",
-          "category": "Design-Specific",
+          "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 3,
           "cpr": 8,
           "competition": {
@@ -5098,9 +5078,9 @@
           "phrase": "makeuo sponge",
           "search_volume": 169,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5114,9 +5094,9 @@
           "phrase": "foundation sponges",
           "search_volume": 350,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5132,7 +5112,7 @@
           "root": "blender",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5148,7 +5128,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5162,9 +5142,9 @@
           "phrase": "makeup applicator",
           "search_volume": 331,
           "root": "applicator",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 9,
           "cpr": 8,
           "competition": {
@@ -5178,9 +5158,9 @@
           "phrase": "makeup spinges",
           "search_volume": 256,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5196,7 +5176,7 @@
           "root": "beauty",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5212,7 +5192,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 8,
           "competition": {
@@ -5226,9 +5206,9 @@
           "phrase": "make up sponges",
           "search_volume": 7768,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 3,
           "cpr": 34,
           "competition": {
@@ -5242,9 +5222,9 @@
           "phrase": "makeup sponges for",
           "search_volume": 126,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 3,
           "cpr": 8,
           "competition": {
@@ -5258,9 +5238,9 @@
           "phrase": "makeup sponges",
           "search_volume": 15960,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 12,
           "cpr": 47,
           "competition": {
@@ -5274,9 +5254,9 @@
           "phrase": "makeup saver sponge",
           "search_volume": 173,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5290,9 +5270,9 @@
           "phrase": "makeup soonges",
           "search_volume": 201,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5306,9 +5286,9 @@
           "phrase": "foundation sponge cheap",
           "search_volume": 209,
           "root": "sponge",
-          "category": "Design-Specific",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5321,10 +5301,10 @@
         {
           "phrase": "makeup necessities",
           "search_volume": 297,
-          "root": "necessities",
+          "root": "makeup",
           "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5338,9 +5318,9 @@
           "phrase": "makeuo sponges",
           "search_volume": 46,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5356,7 +5336,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5370,9 +5350,10 @@
           "phrase": "makeup applicators for women",
           "search_volume": 53,
           "root": "applicator",
-          "category": "Relevant",
+          "category": "Outlier",
+          "reason": "",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5386,9 +5367,9 @@
           "phrase": "makeup foundation sponge",
           "search_volume": 188,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5402,9 +5383,9 @@
           "phrase": "beauty blender dupe",
           "search_volume": 117,
           "root": "blender",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5420,7 +5401,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5434,9 +5415,9 @@
           "phrase": "foundation applicator for liquid makeup",
           "search_volume": 185,
           "root": "applicator",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5452,7 +5433,7 @@
           "root": "sponge",
           "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 35,
           "cpr": 78,
           "competition": {
@@ -5468,7 +5449,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5484,7 +5465,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5500,7 +5481,7 @@
           "root": "sponge",
           "category": "Branded",
           "relevancy_score": 10,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5514,9 +5495,9 @@
           "phrase": "dupes sponges",
           "search_volume": 92,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5532,7 +5513,7 @@
           "root": "accessories",
           "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 26,
           "competition": {
@@ -5546,9 +5527,9 @@
           "phrase": "make up sponges for concealer",
           "search_volume": 114,
           "root": "sponge",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 3,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5562,9 +5543,9 @@
           "phrase": "makeup dupes",
           "search_volume": 406,
           "root": "dupes",
-          "category": "Relevant",
+          "category": "Outlier",
           "relevancy_score": 10,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 8,
           "competition": {
@@ -5578,9 +5559,9 @@
           "phrase": "beauty blender and powder puff",
           "search_volume": 540,
           "root": "blender",
-          "category": "Design-Specific",
+          "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 2,
+          "intent_score": 0,
           "title_density": 0,
           "cpr": 9,
           "competition": {
@@ -5593,10 +5574,10 @@
         {
           "phrase": "beauty tools",
           "search_volume": 1844,
-          "root": "beauty",
+          "root": "tools",
           "category": "Outlier",
           "relevancy_score": 9,
-          "intent_score": 1,
+          "intent_score": 0,
           "title_density": 1,
           "cpr": 27,
           "competition": {
@@ -5609,59 +5590,48 @@
       ],
       "stats": {
         "Relevant": {
-          "count": 202,
-          "examples": [
-            "blender beauty",
-            "makeup sponges beauty blender",
-            "makeup sponge",
-            "makeup blender",
-            "make up sponge\ffffc",
-            "contouring sponge",
-            "foundation blending",
-            "beauty blender makeup sponges",
-            "makeup sponges",
-            "makeup sponge beauty sponge"
-          ]
+          "count": 0,
+          "examples": []
         },
         "Design-Specific": {
-          "count": 55,
+          "count": 5,
           "examples": [
-            "makeup egg",
-            "beauty egg",
-            "large beauty blender sponge",
-            "beauty blenders pack",
-            "beauty blender pink",
-            "painted beauty blender",
-            "foam makeup applicator",
-            "teardrop beauty blender",
-            "black beauty blender",
-            "makeup saver sponge"
+            "black blending sponge",
+            "pink beauty blender"
           ]
         },
         "Irrelevant": {
-          "count": 1,
+          "count": 187,
           "examples": [
-            "\u001f"
+            "makeup sponges beauty blender",
+            "beauty blender",
+            "makeup sponge",
+            "foundation sponge",
+            "make up sponge\u0000fc",
+            "contouring sponge",
+            "foundation blending",
+            "foundation blending"
           ]
         },
         "Branded": {
-          "count": 112,
+          "count": 107,
           "examples": [
-            "beauty blender",
-            "besuty blender",
+            "l oreal beauty blender",
+            "beautyblender makeup sponge",
             "loreal makeup sponge",
             "sephora beauty blender",
             "morphe beauty blender",
             "prime beauty",
             "elf beauty blender",
             "beauty blender besties",
-            "prime day cosmetics",
-            "paw paw wonder blender 6 pack"
+            "paw paw wonder blender 6 pack",
+            "beautyslender"
           ]
         },
         "Spanish": {
-          "count": 8,
+          "count": 6,
           "examples": [
+            "\u7f8e\u5bb9\u86cb",
             "esponja maquillaje",
             "cepillos y utensilios de maquillaje",
             "esponja de maquillaje",
@@ -5669,16 +5639,18 @@
           ]
         },
         "Outlier": {
-          "count": 17,
+          "count": 85,
           "examples": [
-            "prime day deal beauty",
-            "professional beauty",
-            "makeup blenders & sponges",
+            "blender beauty",
+            "blender makeup",
             "blending",
+            "blending makeup",
             "small beauty",
             "beauty black friday deals",
+            "beauty blender makeup sponges",
+            "blending sponges for makeup",
             "beauty comfy",
-            "makeup accessories must haves"
+            "dose makeup"
           ]
         }
       }
@@ -5686,35 +5658,34 @@
     "source": "keyword_agent",
     "total_keywords": 344,
     "scraped_product": {
-      "url": "https://www.amazon.com/dp/B0D9C28SVB",
+      "url": "https://www.amazon.com/dp/B0D5BL35MS",
       "status": 200,
-      "response_size": 1893916,
+      "response_size": 1931961,
       "elements": {
         "productTitle": {
           "present": true,
           "text": [
-            "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women"
+            "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) - Natural Freeze-Dried Strawberries No Sugar Added, Dry Strawberry, Gluten-Free Fruit Snack for Baking, Smoothies, Cereals, Travel & Camping"
           ]
         },
         "productOverview_feature_div": {
           "present": true,
           "kv": {
-            "Brand": "Gold Water Trading",
-            "Color": "Pink",
-            "Material": "Polyurethane (PU)",
-            "Recommended Uses For Product": "(function(f) {var _np=(window.P._namespace(\"DetailPageProductOverviewTemplatesJava\"));if(_np.guardFatal){_np.guardFatal(f)(_np);}else{f(_np);}}(function(P) { P.when('A').execute(function(A){ A.on('a:truncate:po-attribute-truncate-3:updated', function(data) { var isTruncated = !data.truncateInstance.getIfTextFits(); var seeMoreElement = document.getElementById('po-attribute-see-more-id-3'); if(seeMoreElement) { seeMoreElement.style.display = isTruncated ? '' : 'none'; } }) }); })); Makeup Removal, Toner Application, Cleansing, Nail Polish Removal Applying Skincare, Exfoliation, Wound Care, Craft and DIY, Cleaning, Baby Care See more",
-            "Specific Uses For Product": "Blending, Cleansing, Shading"
+            "Item Weight": "4.8 Ounces",
+            "Size": "4 Pack",
+            "Brand": "Brewer Outdoor Solutions",
+            "Package Weight": "0.19 Kilograms",
+            "Number of Pieces": "4"
           }
         },
         "feature-bullets": {
           "present": true,
           "bullets": [
-            "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
-            "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
-            "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
-            "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
-            "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
-            "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals."
+            "DELICIOUS FLAVOR IN EVERY BITE: Savor the naturally sweet, tangy crunch of dehydrated strawberries sliced, bursting with real fruit flavor. Enjoy freeze dried strawberry slices as a fruity boost or mix them with oatmeal, yogurt, smoothies, or desserts",
+            "NATURAL EVERYDAY FRUITS - The uses and benefits of our freeze dry strawberries are endless! A dried fruit snack loved by adults and children, it is a great baking product in woman's kitchen. It is a great camping food to have while traveling. It can be in fruity meal, lunch snacks for kids, salad kits, fruit cakes, and survival foods. One thing with multiple uses, come and take your dried fruits and freeze dried snacks home",
+            "FROM FARM TO YOUR TABLE: Our freeze dried strawberries sliced, delivered sun-ripened and farm-fresh, are made from naturally real strawberries. No added sugar, no preservatives or GMOs - all natural dry strawberries with iron to help support immune health with every bite",
+            "SHELF LIFE - FRESH UPTO 24 MONTHS: Lightweight, mess-free, and shelf-stable, our freezedried strawberry are at peak flavor for up to 24 months. For the best strawberry freeze dried taste and texture in every bite, please enjoy within two year of purchase at anywhere, anytime",
+            "BULK PACKED FOR CONVENIENCE: Buy in Single and bulk packs of 4 & 6 and enjoy premium quality bulk freeze dried strawberries whenever you need them. Great for baking, snacking, or mixing with freeze dried sliced strawberries for a refreshing fruit combo"
           ]
         },
         "productDescription": {
@@ -5729,69 +5700,60 @@
         "detailBullets_feature_div": {
           "present": true,
           "kv": {
-            "Package Dimensions ‏ : ‎": "7.76 x 5.83 x 2.01 inches; 1.76 ounces",
-            "Manufacturer ‏ : ‎": "Gold Water Trading",
-            "ASIN ‏ : ‎": "B0D9C28SVB",
-            "Best Sellers Rank": "#33,978 in Beauty & Personal Care ( See Top 100 in Beauty & Personal Care ) #101 in Makeup Blenders & Sponges",
-            "Customer Reviews": "4.6 out of 5 stars 163 ratings"
+            "Package Dimensions \u200f : \u200e": "8.7 x 7.72 x 4.57 inches; 4.8 ounces",
+            "Manufacturer \u200f : \u200e": "Brewer Outdoor Solutions",
+            "ASIN \u200f : \u200e": "B0D5BL35MS",
+            "Units \u200f : \u200e": "4.8 Ounce",
+            "Best Sellers Rank": "#34,221 in Grocery & Gourmet Food ( See Top 100 in Grocery & Gourmet Food ) #98 in Dried Berries",
+            "Customer Reviews": "4.3 out of 5 stars 98 ratings"
           }
         },
         "aplus": {
           "present": true,
           "headings": [
             "From the brand",
-            "Pet Supplies",
-            "Beauty /PersonalCare/Household",
+            "Brewer Outdoor Solutions",
+            "Taste The Crunch",
             "Product description"
           ],
           "paragraphs": [
-            "GWT (Gold Water Trading)",
-            "It‘s a leading provider of premium home goods and everyday consumer products.",
-            "We specialize in offering high-quality, innovative, and sustainable home essentials and personal care items.",
-            "Our products are designed to enhance comfort, functionality, and eco-friendliness.",
-            "With a commitment to excellence, GWT delivers trusted solutions that elevate your daily living experience.",
-            "Visit the Store"
+            "We believe that a greater emphasis on outdoor activities will contribute to a healthier global population. To address the issue of over-processed and heavy snack options often associated with outdoor pursuits, we are introducing a line of all-natural, lightweight food alternatives."
           ],
           "list_items": [
-            "GWT (Gold Water Trading)",
-            "It‘s a leading provider of premium home goods and everyday consumer products.",
-            "We specialize in offering high-quality, innovative, and sustainable home essentials and personal care items.",
-            "Our products are designed to enhance comfort, functionality, and eco-friendliness.",
-            "With a commitment to excellence, GWT delivers trusted solutions that elevate your daily living experience.",
-            "Pet Supplies",
-            "Visit the Store",
-            "Beauty /PersonalCare/Household"
+            "Brewer Outdoor Solutions",
+            "We believe that a greater emphasis on outdoor activities will contribute to a healthier global population. To address the issue of over-processed and heavy snack options often associated with outdoor pursuits, we are introducing a line of all-natural, lightweight food alternatives.",
+            "Taste The Crunch"
           ]
         }
       },
       "images": {
         "present": true,
-        "main_image": "https://m.media-amazon.com/images/I/61wucVMCzYL.jpg",
+        "main_image": "https://m.media-amazon.com/images/I/81pgr0DuDOL.jpg",
         "all_images": [
-          "https://m.media-amazon.com/images/I/61wucVMCzYL.jpg",
-          "https://m.media-amazon.com/images/I/4111yEWQLrL.jpg",
-          "https://m.media-amazon.com/images/I/517rUih+TXL.jpg",
-          "https://m.media-amazon.com/images/I/41msC2lcXcL.jpg",
-          "https://m.media-amazon.com/images/I/41u3vL1NefL.jpg",
-          "https://m.media-amazon.com/images/I/41xqreSTTjL.jpg",
-          "https://m.media-amazon.com/images/I/41soAA0RxCL.jpg",
-          "https://m.media-amazon.com/images/I/418nchDwYJL.jpg"
+          "https://m.media-amazon.com/images/I/81pgr0DuDOL.jpg",
+          "https://m.media-amazon.com/images/I/51h0B-l59SL.jpg",
+          "https://m.media-amazon.com/images/I/51zlwMmWucL.jpg",
+          "https://m.media-amazon.com/images/I/516ximi59GL.jpg",
+          "https://m.media-amazon.com/images/I/51RbAhH-8KL.jpg",
+          "https://m.media-amazon.com/images/I/51Qn+nqqiuL.jpg",
+          "https://m.media-amazon.com/images/I/51VHVyr+qyL.jpg",
+          "https://m.media-amazon.com/images/I/51T1QE0lT2L.jpg"
         ],
         "image_count": 8
       },
-      "title": "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women",
+      "title": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) - Natural Freeze-Dried Strawberries No Sugar Added, Dry Strawberry, Gluten-Free Fruit Snack for Baking, Smoothies, Cereals, Travel & Camping",
       "reviews": {
         "present": true,
         "sample_reviews": [
-          "Great product! Great price! I reorder these every time I run out.",
-          "These makeup sponges are great for makeup and powder. I clean them after each application. They dry very quickly. As per my wife.",
-          "Just what Iordered.",
-          "These were just what I needed. The price was reasonable. A good buy!",
-          "These do the trick, especially when using cream or liquid foundation. They are not super spongy, but hold makeup well and well worth the price."
+          "I like to have these at my desk as a low carb , healthy snack. They taste great!",
+          "I purchased the 1.2oz bag for my family of 3 to try- I admit, I was tempted to buy the size \u201csmall\u201d bag, to ensure Mama got an adequate sample, but then second guessed myself with the fear of them being too tart and no one enjoying them, as I\u2019ve bought dried strawberries from a big box store before and they were pretty sour to eat and ended up wasting. Well, these proved me wrong!! It has the perfect amount of tart without being too sour to enjoy, and tastes just like a fresh strawberry in a crunchy enjoyable texture. Will definitely be getting the bigger bag! All of the family have tried the strawberries and agree they are a great snack and we need more! Buy some- In the BIG bag- you WON\u2019T regret it!",
+          "Textura y sabor super bueno, aunque el paquete un poco peque\u00f1o para el precio",
+          "Excellent quality. Large pieces of dehydrated strawberries. Very happy with purchase!",
+          "NOT ORGANIC LIKE IT IS ADVERTISED"
         ],
         "review_highlights": [
-          "4.6 out of 5 stars",
-          "163 ratings"
+          "4.3 out of 5 stars",
+          "98 ratings"
         ]
       },
       "qa_section": {
@@ -5801,10 +5763,10 @@
       },
       "price": {
         "present": true,
-        "raw": "PKR342.67",
-        "amount": 342.67,
-        "currency": null,
-        "source": "apex_offscreen"
+        "raw": "$21.99 $0.22 $29.99 $5.94 $6.99 $9.99 $0.40 $11.99 $7.49 $14.98 $8.99 $12.99 $0.77 $14.99",
+        "amount": 21.99,
+        "currency": "$",
+        "source": "generic_offscreen"
       }
     }
   },
@@ -5813,508 +5775,354 @@
     "analysis": {
       "current_seo": {
         "title_analysis": {
-          "content": "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women",
-          "keywords_found": [
-            "beauty blenders sponges",
-            "beauty blender sponges",
-            "sponges for foundation",
-            "beauty blender sponge",
-            "makeup sponge set",
-            "beauty blenders",
-            "blender sponges",
-            "blender sponge",
-            "beauty blender",
-            "makeup sponge"
-          ],
-          "keyword_count": 10,
-          "character_count": 177,
-          "keyword_density": 5.65,
+          "content": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) - Natural Freeze-Dried Strawberries No Sugar Added, Dry Strawberry, Gluten-Free Fruit Snack for Baking, Smoothies, Cereals, Travel & Camping",
+          "keywords_found": [],
+          "keyword_count": 0,
+          "character_count": 211,
+          "keyword_density": 0.0,
           "opportunities": [
-            "blender beauty",
-            "makeup sponges beauty blender",
-            "beauty blender makeup sponge",
-            "beauty blenders for women",
-            "best beauty blender sponge"
+            "pink beauty blender",
+            "latex free makeup sponges",
+            "xl beauty blender sponge",
+            "organic makeup sponge",
+            "make up sponges prime beauty blender"
           ],
-          "total_search_volume": 148793
+          "total_search_volume": 0
         },
         "bullets_analysis": [
           {
-            "content": "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
-            "keywords_found": [
-              "makeup sponges",
-              "makeup sponge",
-              "makeup spong"
-            ],
-            "keyword_count": 3,
-            "character_count": 196,
-            "keyword_density": 1.53,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blenders for women",
-              "best beauty blender sponge"
-            ],
-            "total_search_volume": 76350
-          },
-          {
-            "content": "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
+            "content": "DELICIOUS FLAVOR IN EVERY BITE: Savor the naturally sweet, tangy crunch of dehydrated strawberries sliced, bursting with real fruit flavor. Enjoy freeze dried strawberry slices as a fruity boost or mix them with oatmeal, yogurt, smoothies, or desserts",
             "keywords_found": [],
             "keyword_count": 0,
-            "character_count": 208,
-            "keyword_density": 1.44,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blenders for women",
-              "best beauty blender sponge"
-            ],
-            "total_search_volume": 0
-          },
-          {
-            "content": "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
-            "keywords_found": [],
-            "keyword_count": 0,
-            "character_count": 238,
+            "character_count": 251,
             "keyword_density": 0.0,
             "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blenders for women",
-              "best beauty blender sponge"
+              "pink beauty blender",
+              "latex free makeup sponges",
+              "xl beauty blender sponge",
+              "organic makeup sponge",
+              "make up sponges prime beauty blender"
             ],
             "total_search_volume": 0
           },
           {
-            "content": "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
+            "content": "NATURAL EVERYDAY FRUITS - The uses and benefits of our freeze dry strawberries are endless! A dried fruit snack loved by adults and children, it is a great baking product in woman's kitchen. It is a great camping food to have while traveling. It can be in fruity meal, lunch snacks for kids, salad kits, fruit cakes, and survival foods. One thing with multiple uses, come and take your dried fruits and freeze dried snacks home",
             "keywords_found": [],
             "keyword_count": 0,
-            "character_count": 201,
+            "character_count": 427,
             "keyword_density": 0.0,
             "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blenders for women",
-              "best beauty blender sponge"
+              "pink beauty blender",
+              "latex free makeup sponges",
+              "xl beauty blender sponge",
+              "organic makeup sponge",
+              "make up sponges prime beauty blender"
             ],
             "total_search_volume": 0
           },
           {
-            "content": "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
+            "content": "FROM FARM TO YOUR TABLE: Our freeze dried strawberries sliced, delivered sun-ripened and farm-fresh, are made from naturally real strawberries. No added sugar, no preservatives or GMOs - all natural dry strawberries with iron to help support immune health with every bite",
             "keywords_found": [],
             "keyword_count": 0,
-            "character_count": 219,
+            "character_count": 271,
             "keyword_density": 0.0,
             "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blenders for women",
-              "best beauty blender sponge"
+              "pink beauty blender",
+              "latex free makeup sponges",
+              "xl beauty blender sponge",
+              "organic makeup sponge",
+              "make up sponges prime beauty blender"
             ],
             "total_search_volume": 0
           },
           {
-            "content": "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals.",
-            "keywords_found": [
-              "makeup sponge set"
-            ],
-            "keyword_count": 1,
-            "character_count": 181,
-            "keyword_density": 1.1,
+            "content": "SHELF LIFE - FRESH UPTO 24 MONTHS: Lightweight, mess-free, and shelf-stable, our freezedried strawberry are at peak flavor for up to 24 months. For the best strawberry freeze dried taste and texture in every bite, please enjoy within two year of purchase at anywhere, anytime",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 275,
+            "keyword_density": 0.0,
             "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blenders for women",
-              "best beauty blender sponge"
+              "pink beauty blender",
+              "latex free makeup sponges",
+              "xl beauty blender sponge",
+              "organic makeup sponge",
+              "make up sponges prime beauty blender"
             ],
-            "total_search_volume": 2036
+            "total_search_volume": 0
+          },
+          {
+            "content": "BULK PACKED FOR CONVENIENCE: Buy in Single and bulk packs of 4 & 6 and enjoy premium quality bulk freeze dried strawberries whenever you need them. Great for baking, snacking, or mixing with freeze dried sliced strawberries for a refreshing fruit combo",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 252,
+            "keyword_density": 0.0,
+            "opportunities": [
+              "pink beauty blender",
+              "latex free makeup sponges",
+              "xl beauty blender sponge",
+              "organic makeup sponge",
+              "make up sponges prime beauty blender"
+            ],
+            "total_search_volume": 0
           }
         ],
         "bullets_analysis_for_display": [
           {
-            "content": "[Ultra-Soft & Bouncy]: GWT makeup sponges offer a plush, marshmallow-like texture that is soft to the touch yet bouncy, maintaining its shape even after extensive use for a smooth, flawless finish",
-            "keywords_found": [
-              "makeup sponges",
-              "makeup sponge",
-              "makeup spong"
-            ],
-            "keyword_count": 3,
-            "character_count": 196,
-            "keyword_density": 1.53,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blenders for women",
-              "best beauty blender sponge"
-            ],
-            "total_search_volume": 76350
-          },
-          {
-            "content": "[Minimal Makeups Absorption]: Designed with evenly distributed pores, our makeup sponges minimize product absorption, helping you achieve seamless, full coverage while saving on foundation and makeup products",
-            "keywords_found": [
-              "makeup sponges",
-              "makeup sponge",
-              "makeup spong"
-            ],
-            "keyword_count": 3,
-            "character_count": 208,
-            "keyword_density": 1.44,
-            "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blenders for women",
-              "best beauty blender sponge"
-            ],
-            "total_search_volume": 76350
-          },
-          {
-            "content": "[Precise & Versatile Application]: Featuring a unique cut design, our sponges are perfect for 360-degree application. Use the flat side for quick all-over blending and the pointed tip for precision around the eyes, nose, and contour areas",
+            "content": "DELICIOUS FLAVOR IN EVERY BITE: Savor the naturally sweet, tangy crunch of dehydrated strawberries sliced, bursting with real fruit flavor. Enjoy freeze dried strawberry slices as a fruity boost or mix them with oatmeal, yogurt, smoothies, or desserts",
             "keywords_found": [],
             "keyword_count": 0,
-            "character_count": 238,
+            "character_count": 251,
             "keyword_density": 0.0,
             "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blenders for women",
-              "best beauty blender sponge"
+              "pink beauty blender",
+              "latex free makeup sponges",
+              "xl beauty blender sponge",
+              "organic makeup sponge",
+              "make up sponges prime beauty blender"
             ],
             "total_search_volume": 0
           },
           {
-            "content": "[Latex-Free & Skin-Friendly]: Made from non-toxic, latex-free material, GWT sponges are gentle on all skin types, offering a non-irritating, vegan option that’s cruelty-free and safe for sensitive skin",
+            "content": "NATURAL EVERYDAY FRUITS - The uses and benefits of our freeze dry strawberries are endless! A dried fruit snack loved by adults and children, it is a great baking product in woman's kitchen. It is a great camping food to have while traveling. It can be in fruity meal, lunch snacks for kids, salad kits, fruit cakes, and survival foods. One thing with multiple uses, come and take your dried fruits and freeze dried snacks home",
             "keywords_found": [],
             "keyword_count": 0,
-            "character_count": 201,
+            "character_count": 427,
             "keyword_density": 0.0,
             "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blenders for women",
-              "best beauty blender sponge"
+              "pink beauty blender",
+              "latex free makeup sponges",
+              "xl beauty blender sponge",
+              "organic makeup sponge",
+              "make up sponges prime beauty blender"
             ],
             "total_search_volume": 0
           },
           {
-            "content": "[Wet & Dry Use]: Whether you need a dewy finish or full coverage, these sponges work perfectly with liquid, cream, or powder products. Use them wet for a light, hydrated look, or dry for more intense coverage that lasts",
+            "content": "FROM FARM TO YOUR TABLE: Our freeze dried strawberries sliced, delivered sun-ripened and farm-fresh, are made from naturally real strawberries. No added sugar, no preservatives or GMOs - all natural dry strawberries with iron to help support immune health with every bite",
             "keywords_found": [],
             "keyword_count": 0,
-            "character_count": 219,
+            "character_count": 271,
             "keyword_density": 0.0,
             "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blenders for women",
-              "best beauty blender sponge"
+              "pink beauty blender",
+              "latex free makeup sponges",
+              "xl beauty blender sponge",
+              "organic makeup sponge",
+              "make up sponges prime beauty blender"
             ],
             "total_search_volume": 0
           },
           {
-            "content": "[Affordable Luxury]: Enjoy professional-grade performance at a price everyone can afford, making our GWT makeup sponge set a must-have for both makeup enthusiasts and professionals.",
-            "keywords_found": [
-              "makeup sponge set",
-              "makeup sponge"
-            ],
-            "keyword_count": 2,
-            "character_count": 181,
-            "keyword_density": 1.1,
+            "content": "SHELF LIFE - FRESH UPTO 24 MONTHS: Lightweight, mess-free, and shelf-stable, our freezedried strawberry are at peak flavor for up to 24 months. For the best strawberry freeze dried taste and texture in every bite, please enjoy within two year of purchase at anywhere, anytime",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 275,
+            "keyword_density": 0.0,
             "opportunities": [
-              "blender beauty",
-              "makeup sponges beauty blender",
-              "beauty blender makeup sponge",
-              "beauty blenders for women",
-              "best beauty blender sponge"
+              "pink beauty blender",
+              "latex free makeup sponges",
+              "xl beauty blender sponge",
+              "organic makeup sponge",
+              "make up sponges prime beauty blender"
             ],
-            "total_search_volume": 62160
+            "total_search_volume": 0
+          },
+          {
+            "content": "BULK PACKED FOR CONVENIENCE: Buy in Single and bulk packs of 4 & 6 and enjoy premium quality bulk freeze dried strawberries whenever you need them. Great for baking, snacking, or mixing with freeze dried sliced strawberries for a refreshing fruit combo",
+            "keywords_found": [],
+            "keyword_count": 0,
+            "character_count": 252,
+            "keyword_density": 0.0,
+            "opportunities": [
+              "pink beauty blender",
+              "latex free makeup sponges",
+              "xl beauty blender sponge",
+              "organic makeup sponge",
+              "make up sponges prime beauty blender"
+            ],
+            "total_search_volume": 0
           }
         ],
         "backend_keywords": [],
         "keyword_coverage": {
-          "total_keywords": 278,
-          "covered_keywords": 12,
-          "coverage_percentage": 4.3,
-          "missing_high_intent": [
-            "blender beauty",
-            "makeup sponges beauty blender",
-            "beauty blender makeup sponge",
-            "beauty blenders for women",
-            "best beauty blender sponge",
-            "sponge blender",
-            "blender makeup sponge",
-            "beauty sponge blender",
-            "foundation beauty blender",
-            "makeup beauty blender"
-          ],
+          "total_keywords": 84,
+          "covered_keywords": 0,
+          "coverage_percentage": 0.0,
+          "missing_high_intent": [],
           "missing_high_volume": [
-            "beauty blender makeup sponge",
-            "blender makeup",
-            "make up blender",
-            "beauty sponge",
-            "beauty sponges for makeup",
-            "sponge makeup",
-            "makeup blender sponge",
-            "makeup blender",
-            "blending sponge",
-            "make up sponge"
+            "elf makeup sponge",
+            "elf beauty blender",
+            "elf sponge"
           ]
         },
         "root_coverage": {
-          "total_roots": 13,
-          "covered_roots": 8,
-          "coverage_percentage": 61.5,
+          "total_roots": 2,
+          "covered_roots": 0,
+          "coverage_percentage": 0.0,
           "missing_roots": [
-            "egg",
-            "applicator",
-            "puffs",
-            "poof",
-            "dupes"
+            "sponge",
+            "blender"
           ],
           "root_volumes": {
-            "blender": 15657,
-            "sponge": 149955,
-            "egg": 556,
-            "foundation": 97,
-            "makeup": 421,
-            "beauty": 187,
-            "blend": 164,
-            "applicator": 1906,
-            "beauty blender": 645,
-            "blending": 192,
-            "puffs": 66,
-            "poof": 87,
-            "dupes": 406
+            "sponge": 435,
+            "blender": 433
           }
         },
         "total_character_usage": {
-          "title_chars": 177,
-          "bullets_total_chars": 1243,
-          "bullets_avg_chars": 207,
+          "title_chars": 211,
+          "bullets_total_chars": 1476,
+          "bullets_avg_chars": 295,
           "backend_chars": 0,
-          "total_chars": 1420
+          "total_chars": 1687
         }
       },
       "optimized_seo": {
         "optimized_title": {
-          "content": "GWT Beauty Blender Set 6 Pcs Latex-Free Makeup Sponge Pack - Ultra-Soft Multi-Angle Foundation Sponge, Bouncy Makeup Sponges for Liquid & Cream Application",
-          "keywords_included": [
-            "beauty blender set",
-            "makeup sponges for",
-            "foundation sponge",
-            "beauty blenders",
-            "makeup sponges",
-            "makeup sponge",
-            "makeup spong"
-          ],
+          "content": "BREWER Bulk Freeze Dried Strawberry Slices Pack of 4 (1.2 oz Each) - No Sugar Added, Natural Ingredients | Premium Gluten-Free Fruit Snack for Baking, Smoothies, Cereals",
+          "keywords_included": [],
           "keywords_duplicated_from_other_bullets": [],
           "unique_keywords_count": 0,
           "improvements": [
             "Amazon Guidelines Compliant",
-            "80-char optimized: GWT Beauty Blender Set 6 Pcs Latex-Free Makeup Spo...",
+            "80-char optimized: BREWER Bulk Freeze Dried Strawberry Slices Pack of...",
             "Main root included: True",
-            "Design root included: True"
+            "Design root included: False"
           ],
-          "character_count": 155,
-          "total_search_volume": 84951
+          "character_count": 169,
+          "total_search_volume": 0
         },
         "optimized_bullets": [
           {
-            "content": "PROFESSIONAL FINISH: Use beauty blenders and foundation sponge techniques to achieve seamless, airbrushed coverage; the latex-free material and unique cut deliver precise application around eyes and nose",
-            "keywords_included": [
-              "foundation sponge",
-              "beauty blenders"
-            ],
+            "content": "PURE AND NATURAL: Made from real fruit with no additives, our freeze-dried strawberry slices deliver natural ingredients and premium quality for healthy choice snacking at home or on the trail.",
+            "keywords_included": [],
             "keywords_duplicated_from_other_bullets": [],
             "unique_keywords_count": 0,
             "improvements": [
-              "Benefit-focused: Flawless Application",
+              "Benefit-focused: Natural ingredients & No additives",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 193,
+            "total_search_volume": 0
+          },
+          {
+            "content": "NO SUGAR ADDED: Enjoy guilt-free flavor \u2014 these freeze-dried strawberry slices contain no added sugar and are shelf-stable, making them an ideal healthy choice for lunchboxes, travel, and camping trips.",
+            "keywords_included": [],
+            "keywords_duplicated_from_other_bullets": [],
+            "unique_keywords_count": 0,
+            "improvements": [
+              "Benefit-focused: No Sugar Added & Shelf-stable",
+              "Guideline compliant: PASS"
+            ],
+            "character_count": 202,
+            "total_search_volume": 0
+          },
+          {
+            "content": "VERSATILE FOR RECIPES: Premium gluten-free fruit snack perfect for baking, smoothies, cereals, or yogurt toppings; our freeze-dried strawberry slices keep intense strawberry flavor without preservatives.",
+            "keywords_included": [],
+            "keywords_duplicated_from_other_bullets": [],
+            "unique_keywords_count": 0,
+            "improvements": [
+              "Benefit-focused: Versatility in use",
               "Guideline compliant: PASS"
             ],
             "character_count": 203,
-            "total_search_volume": 8116
+            "total_search_volume": 0
           },
           {
-            "content": "MULTI-ANGLE VERSATILITY: Our blending shape works like a make up sponge and blending sponge for contouring, highlighting, and full-face blending with liquid, cream, or powder products for salon-quality results",
-            "keywords_included": [
-              "blending sponge",
-              "make up sponge"
-            ],
+            "content": "BULK VALUE PACK: Pack of 4 (1.2 oz each) offers convenient bulk portions for families and bulk meal prep\u2014lightweight, mess-free packaging ideal for pantry storage and on-the-go healthy snacks.",
+            "keywords_included": [],
             "keywords_duplicated_from_other_bullets": [],
-            "unique_keywords_count": 2,
+            "unique_keywords_count": 0,
             "improvements": [
-              "Benefit-focused: Versatile Use",
+              "Benefit-focused: Value and convenience",
               "Guideline compliant: PASS"
             ],
-            "character_count": 209,
-            "total_search_volume": 5297
+            "character_count": 192,
+            "total_search_volume": 0
           },
           {
-            "content": "SOFT & BOUNCY MATERIAL: The premium texture feels like a beauty sponge while minimizing product absorption so you use less foundation; perfect for wet or dry application and long-lasting resilience",
-            "keywords_included": [
-              "beauty sponge"
-            ],
+            "content": "FROM FARM TO PACK: Harvested ripe and freeze-dried to lock in nutrients and flavor; enjoy premium quality freeze-dried strawberry slices that support quick, healthy snacking and easy recipe boosts.",
+            "keywords_included": [],
             "keywords_duplicated_from_other_bullets": [],
-            "unique_keywords_count": 1,
+            "unique_keywords_count": 0,
             "improvements": [
-              "Benefit-focused: Material Quality",
+              "Benefit-focused: Premium quality & nutrient retention",
               "Guideline compliant: PASS"
             ],
             "character_count": 197,
-            "total_search_volume": 3125
-          },
-          {
-            "content": "IDEAL FOR EVERY ROUTINE: These make up sponges for foundation and make up sponges for face deliver buildable coverage for daily makeup, professional esthetician supplies, or on-the-go touchups in a convenient 6 pcs pack",
-            "keywords_included": [
-              "make up sponges for foundation",
-              "make up sponges for face",
-              "sponges for foundation",
-              "make up sponges",
-              "sponge for face",
-              "make-up sponges",
-              "make up spong"
-            ],
-            "keywords_duplicated_from_other_bullets": [
-              "make up sponge"
-            ],
-            "unique_keywords_count": 7,
-            "improvements": [
-              "Benefit-focused: Everyday Convenience",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 219,
-            "total_search_volume": 12959
-          },
-          {
-            "content": "SAFE & SKIN-FRIENDLY: Latex-free design offers a gentle option for sensitive skin while functioning as a makeup blender and beauty blender pack to create smooth, streak-free finishes without irritation",
-            "keywords_included": [
-              "beauty blenders pack",
-              "beauty blender pack",
-              "makeup blenders",
-              "makeup blender"
-            ],
-            "keywords_duplicated_from_other_bullets": [],
-            "unique_keywords_count": 4,
-            "improvements": [
-              "Benefit-focused: Skin-Friendly",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 201,
-            "total_search_volume": 3998
-          },
-          {
-            "content": "PERFECT GIFT & ACCESSORY: Comes as a makeup sponge set and blender makeup kit suitable for beginners and pros; compact, easy to clean, and ideal as makeup accessories or stocking stuffers for beauty lovers",
-            "keywords_included": [
-              "makeup sponge set",
-              "blenders makeup",
-              "blender makeup",
-              "makeup sponge"
-            ],
-            "keywords_duplicated_from_other_bullets": [],
-            "unique_keywords_count": 3,
-            "improvements": [
-              "Benefit-focused: Gift-Ready",
-              "Guideline compliant: PASS"
-            ],
-            "character_count": 205,
-            "total_search_volume": 62784
+            "total_search_volume": 0
           }
         ],
         "optimized_backend_keywords": [
-          "beauty blender sponge",
-          "makeup sponges for foundation",
-          "makeup sponges for blending",
-          "sponge makeup"
+          "pink beauty blender",
+          "latex free makeup sponges",
+          "organic makeup sponge",
+          "xl beauty blender sponge"
         ],
         "keyword_strategy": {
           "amazon_compliance": "ENFORCED",
-          "first_80_optimization": "First 80 characters include brand (GWT), highest-volume keyword (beauty blender), design keyword (makeup sponge set) and pack info (6 Pcs) to maximize mobile visibility with benefit-first phrasing.",
-          "keyword_integration": "Title uses top 3 title_keywords in exact order permitted (beauty blender, makeup sponge, makeup sponge set) without root duplication; bullets use only bullet_keywords, each bullet contains at least 2 unique bullet keywords not duplicated in title, distributed evenly.",
+          "first_80_optimization": "First 80 characters include Brand (BREWER), main root (freeze dried strawberry), design root was requested but not used because allocated title keywords are from provided title_keywords list; pack info (Pack of 4, 1.2 oz) is included to meet mobile visibility requirements.",
+          "keyword_integration": "Title uses high-priority product terms and natural benefit phrases. Bullets use only allocated bullet_keywords, distributing them across five bullets (2 each) while focusing on benefits and avoiding title keyword redundancy.",
           "guideline_compliance": "STRICT"
         },
-        "rationale": "Task 7 Amazon Guidelines Compliance Applied: Followed Amazon title and bullet guidelines: Title Case, no promotional claims, natural readable flow, exact keyword phrases used, no repeated keyword roots between title and bullets; bullets are benefit-focused and exceed minimum character targets.. First 80 characters optimized for mobile viewing with main and design-specific keyword roots. All content verified for Amazon policy compliance."
+        "rationale": "Task 7 Amazon Guidelines Compliance Applied: Followed Amazon guidelines: Title Case, no promotional or subjective claims, avoided special characters, ensured character count within 155-200, and created five bullets with benefit-first language and required keyword usage.. First 80 characters optimized for mobile viewing with main and design-specific keyword roots. All content verified for Amazon policy compliance."
       },
       "comparison": {
         "coverage_improvement": {
-          "total_keywords": 187,
-          "before_covered": 11,
-          "after_covered": 30,
-          "before_coverage_pct": 5.88,
-          "after_coverage_pct": 16.04,
-          "delta_pct_points": 10.16,
+          "total_keywords": 4,
+          "before_covered": 0,
+          "after_covered": 4,
+          "before_coverage_pct": 0.0,
+          "after_coverage_pct": 100.0,
+          "delta_pct_points": 100.0,
           "new_keywords_added": [
-            "beauty blender pack",
-            "beauty blender set",
-            "beauty blenders pack",
-            "beauty sponge",
-            "blender makeup",
-            "blenders makeup",
-            "blending sponge",
-            "foundation sponge",
-            "make up spong",
-            "make up sponge",
-            "make up sponges",
-            "make up sponges for face",
-            "make up sponges for foundation",
-            "make-up sponges",
-            "makeup blender",
-            "makeup blenders",
-            "makeup sponge for foundation",
-            "makeup sponges for",
-            "makeup sponges for blending",
-            "makeup sponges for foundation"
+            "latex free makeup sponges",
+            "organic makeup sponge",
+            "pink beauty blender",
+            "xl beauty blender sponge"
           ]
         },
         "intent_improvement": {
-          "high_intent_total": 206,
-          "before_covered": 11,
-          "after_covered": 30,
-          "delta": 19
+          "high_intent_total": 0,
+          "before_covered": 0,
+          "after_covered": 0,
+          "delta": 0
         },
         "volume_improvement": {
-          "estimated_volume_before": 93893,
-          "estimated_volume_after": 133629,
-          "delta_volume": 39736
+          "estimated_volume_before": 0,
+          "estimated_volume_after": 868,
+          "delta_volume": 868
         },
         "character_efficiency": {
           "title_limit": 200,
-          "title_before": 177,
-          "title_after": 155,
-          "title_utilization_before_pct": 88.5,
-          "title_utilization_after_pct": 77.5,
+          "title_before": 211,
+          "title_after": 169,
+          "title_utilization_before_pct": 105.5,
+          "title_utilization_after_pct": 84.5,
           "backend_limit": 249,
           "backend_before": 0,
-          "backend_after": 93
+          "backend_after": 92
         },
         "summary_metrics": {
           "overall_improvement_score": 10.0,
-          "priority_recommendations": 5
+          "priority_recommendations": 1
         }
       },
       "product_context": {
-        "title": "GWT Makeup Sponge Set, 6 Pcs Latex-Free Beauty Blender Sponges for Foundation, Liquid & Cream, Ultra-Soft Wonder Sponges, Multi-Angle Blending, Ideal Stocking Stuffers for Women",
-        "brand": "Gold Water Trading",
+        "title": "BREWER Bulk Freeze Dried Strawberries Slices - Pack of 4 (1.2 Oz Each) - Natural Freeze-Dried Strawberries No Sugar Added, Dry Strawberry, Gluten-Free Fruit Snack for Baking, Smoothies, Cereals, Travel & Camping",
+        "brand": "Brewer Outdoor Solutions",
         "category": "Unknown"
       },
       "analysis_metadata": {
         "total_keywords_analyzed": 344,
-        "relevant_keywords_count": 142,
-        "high_intent_keywords_count": 206,
+        "relevant_keywords_count": 0,
+        "high_intent_keywords_count": 0,
         "optimization_method": "ai"
       }
     },
     "summary": {
-      "current_coverage": "4.3%",
-      "optimization_opportunities": 10,
+      "current_coverage": "0.0%",
+      "optimization_opportunities": 0,
       "method": "ai"
     }
   },
@@ -6390,7 +6198,7 @@
   "source": "amazon_sales_intelligence_pipeline",
   "monitoring_stats": {
     "overall": {
-      "elapsed_time": 1389.1675565242767,
+      "elapsed_time": 1371.9532165527344,
       "total_requests": 0,
       "successful_requests": 0,
       "failed_requests": 0,
