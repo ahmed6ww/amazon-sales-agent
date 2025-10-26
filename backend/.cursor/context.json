@@ -99,6 +99,26 @@
         "what": "Fixed missing title and bullets fields for SEO runner",
         "why": "SEO runner expects top-level 'title' field and 'feature-bullets.bullets' key, but Playwright/CloudScraper only returned nested title in elements and used 'text' key. Added title extraction and bullets key to both scrapers, updated wrapper to preserve title field",
         "when": "2025-10-26"
+      },
+      {
+        "what": "Integrated SERP API as primary scraping method",
+        "why": "SERP API provides 1-2 second response time vs 60+ seconds for Playwright, no blocking/CAPTCHAs, and 100% reliability. Falls back to Playwright then Scrapy if SERP API fails",
+        "when": "2025-10-26"
+      },
+      {
+        "what": "Fixed malformed relevancy_score JSON validation error",
+        "why": "AI occasionally generates 'relevancy_score': ': 10' instead of 'relevancy_score': 10, causing Pydantic validation errors. Added field_validator to sanitize malformed scores",
+        "when": "2025-10-26"
+      },
+      {
+        "what": "Added keywords_duplicated_from_title field to OptimizedContent schema",
+        "why": "Frontend needs to display keywords that are duplicated from title (for SEO reinforcement) separately from unique keywords. Field was being set but Pydantic was stripping it",
+        "when": "2025-10-26"
+      },
+      {
+        "what": "Fixed frontend to display both title and bullet duplicates with yellow badges",
+        "why": "Frontend was only checking keywords_duplicated_from_other_bullets, missing title duplicates. Now checks both and shows appropriate tooltips ('Also in title' vs 'Already in another bullet')",
+        "when": "2025-10-26"
       }
     ]
   },
@@ -190,6 +210,7 @@
   ],
   "env": {
     "OPENAI_API_KEY": "OpenAI API access",
+    "SERPAPI_API_KEY": "SERP API key for fast Amazon scraping (optional, enables 1-2s scraping vs 60+s)",
     "UPSTASH_REDIS_URL": "Redis connection URL",
     "UPSTASH_REDIS_TOKEN": "Redis authentication",
     "SCRAPER_PROXY_LIST": "Comma-separated proxy list (6 working proxies)",

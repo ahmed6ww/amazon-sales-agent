@@ -52,6 +52,7 @@ class OptimizedContent(BaseModel):
     """Optimized content suggestion."""
     content: str = Field(..., description="Optimized content")
     keywords_included: List[str] = Field(default_factory=list, description="Keywords included in optimization")
+    keywords_duplicated_from_title: List[str] = Field(default_factory=list, description="Keywords already in title (shown in UI, counted for SEO reinforcement)")
     keywords_duplicated_from_other_bullets: List[str] = Field(default_factory=list, description="Keywords already in other bullets (shown with yellow badge, not counted)")
     unique_keywords_count: int = Field(default=0, description="Count of keywords unique to this bullet (excludes duplicates from other bullets)")
     improvements: List[str] = Field(default_factory=list, description="List of improvements made")

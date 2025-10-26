@@ -1,7 +1,7 @@
 from enum import Enum
-from typing import Dict, List
+from typing import Dict, List, Union
 
-from pydantic import BaseModel, Field, ConfigDict
+from pydantic import BaseModel, Field, ConfigDict, field_validator
 
 
 class KeywordCategory(str, Enum):
@@ -25,6 +25,23 @@ class KeywordData(BaseModel):
 	base_relevancy_score: int = Field(
 		None, ge=0, le=10, description="Alternative field name for relevancy score"
 	)
+
+	@field_validator('relevancy_score', 'base_relevancy_score', mode='before')
+	@classmethod
+	def sanitize_score(cls, v: Union[int, str, None]) -> Union[int, None]:
+		"""Sanitize malformed relevancy scores from AI (e.g., ': 10' → 10)"""
+		if v is None:
+			return None
+		if isinstance(v, int):
+			return v
+		if isinstance(v, str):
+			# Fix malformed scores like ": 10" or ":10"
+			v = v.strip().lstrip(':').strip()
+			try:
+				return int(v)
+			except (ValueError, AttributeError):
+				return None
+		return None
 
 
 class CategoryStats(BaseModel):
