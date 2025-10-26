@@ -242,6 +242,44 @@ class ApiClient {
   }
 
   /**
+   * Wake up backend (for Render cold starts)
+   * Sends 2-3 health check requests to ensure backend is awake
+   */
+  async wakeUpBackend(): Promise<void> {
+    const maxAttempts = 3;
+    const delayMs = 2000; // 2 seconds between attempts
+
+    debugLog("Waking up backend...", { attempts: maxAttempts });
+
+    for (let attempt = 1; attempt <= maxAttempts; attempt++) {
+      try {
+        debugLog(`Wake-up attempt ${attempt}/${maxAttempts}`);
+
+        // Use a lightweight endpoint to wake up the backend
+        const response = await fetch(getFullApiUrl("/health"), {
+          method: "GET",
+          signal: AbortSignal.timeout(10000), // 10 second timeout per attempt
+        });
+
+        if (response.ok) {
+          debugLog("Backend is awake!", { attempt });
+          return; // Backend is awake, exit
+        }
+      } catch (error) {
+        debugLog(`Wake-up attempt ${attempt} failed`, { error });
+
+        // If not the last attempt, wait before retrying
+        if (attempt < maxAttempts) {
+          await new Promise((resolve) => setTimeout(resolve, delayMs));
+        }
+      }
+    }
+
+    // After all attempts, log warning but continue anyway
+    debugLog("Wake-up attempts completed, proceeding with main request");
+  }
+
+  /**
    * Upload CSV files
    */
   async uploadCSV(file: File): Promise<ApiResponse<unknown>> {
@@ -333,6 +371,16 @@ class ApiClient {
     },
     onProgress?: (progress: number, message: string) => void
   ): Promise<ApiResponse<unknown>> {
+    // Wake up backend first (Render cold start fix)
+    if (onProgress) {
+      onProgress(0, "Waking up backend...");
+    }
+    await this.wakeUpBackend();
+
+    if (onProgress) {
+      onProgress(5, "Starting analysis...");
+    }
+
     const { runAnalysisWithPolling } = await import("./api-client-background");
 
     const formData = new FormData();
@@ -435,6 +483,7 @@ export const api = {
   deleteAnalysis: (analysisId: string) => apiClient.deleteAnalysis(analysisId),
   listAnalyses: () => apiClient.listAnalyses(),
   testConnection: () => apiClient.testConnection(),
+  wakeUpBackend: () => apiClient.wakeUpBackend(),
   uploadCSV: (file: File) => apiClient.uploadCSV(file),
   scrapeProduct: (asin: string, marketplace?: string) =>
     apiClient.scrapeProduct(asin, marketplace),
