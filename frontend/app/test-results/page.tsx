@@ -1341,10 +1341,23 @@ const TestResultsPage = () => {
                                 <div className="flex flex-wrap gap-1 mt-1">
                                   {toArr(o?.keywords_included).map(
                                     (kw: string, j: number) => {
-                                      const isDuplicate =
-                                        o?.keywords_duplicated_from_other_bullets?.includes(
-                                          kw
-                                        );
+                                      const isDuplicateFromTitle =
+                                        o?.keywords_duplicated_from_title?.includes(kw);
+                                      const isDuplicateFromOtherBullets =
+                                        o?.keywords_duplicated_from_other_bullets?.includes(kw);
+                                      
+                                      const isDuplicate = isDuplicateFromTitle || isDuplicateFromOtherBullets;
+                                      
+                                      // Determine tooltip text
+                                      let tooltipText = "Unique to this bullet";
+                                      if (isDuplicateFromTitle && isDuplicateFromOtherBullets) {
+                                        tooltipText = "Also in title and other bullets";
+                                      } else if (isDuplicateFromTitle) {
+                                        tooltipText = "Also in title";
+                                      } else if (isDuplicateFromOtherBullets) {
+                                        tooltipText = "Already in another bullet";
+                                      }
+                                      
                                       return (
                                         <Badge
                                           key={j}
@@ -1353,11 +1366,7 @@ const TestResultsPage = () => {
                                               ? "bg-yellow-400 text-yellow-900"
                                               : "bg-green-600 text-white"
                                           }`}
-                                          title={
-                                            isDuplicate
-                                              ? "Already in another bullet (not counted here)"
-                                              : "Unique to this bullet"
-                                          }
+                                          title={tooltipText}
                                         >
                                           {isDuplicate && (
                                             <span className="mr-1">⚠️</span>

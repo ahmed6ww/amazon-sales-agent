@@ -488,26 +488,91 @@ class AmazonScraperSpider(scrapy.Spider):
 
 def scrape_amazon_product(url: str, proxy_url: Optional[str] = None) -> Dict[str, Any]:
     """
-    Synchronous scraper with anti-blocking features based on Scrapy documentation
+    Triple-strategy Amazon scraper with SERP API primary and fallbacks
     
-    Anti-Blocking Features (from Scrapy docs):
-    1. User Agent Rotation - RandomUserAgentMiddleware (priority 400)
-    2. Smart Retry Logic - EnhancedRetryMiddleware (priority 550)
-       - Retries on HTTP 500, 503 (Amazon blocking)
-       - Retries on non-text responses (CAPTCHA detection)
-       - Retries on CAPTCHA keywords in HTML
-    3. Cookie Handling - CookiesMiddleware (priority 700)
-    4. Random Delays - RandomDelayMiddleware (2-5s)
-    5. Proper Referers - RefererMiddleware (priority 450)
-    6. Auto Throttle - Adaptive rate limiting
+    Strategy 1 (Primary): SERP API - Fast, reliable API scraping
+    - Professional scraping service
+    - No blocking or CAPTCHAs
+    - ~1-2 second response time
+    - Requires API key
     
-    References:
-    - RetryMiddleware: https://docs.scrapy.org/topics/downloader-middleware.html#retry-middleware
-    - UserAgentMiddleware: https://docs.scrapy.org/topics/downloader-middleware.html#useragentmiddleware
-    - CookiesMiddleware: https://docs.scrapy.org/topics/downloader-middleware.html#cookiesmiddleware
+    Strategy 2 (Fallback): Playwright - Real browser rendering
+    - Uses Chromium/Firefox (same as working RSS scraper)
+    - Stealth JavaScript injection
+    - Proper browser fingerprints
+    - Very hard to detect
+    
+    Strategy 3 (Final Fallback): Scrapy - Fast HTTP scraping
+    - User Agent Rotation
+    - Smart Retry Logic
+    - Random Delays (2-5s)
+    - Used only if all else fails
     """
     import sys
     import traceback
+    
+    # ========================================
+    # STRATEGY 1: Try SERP API First (Fastest & Most Reliable)
+    # ========================================
+    
+    serpapi_key = os.getenv("SERPAPI_API_KEY")
+    if serpapi_key:
+        try:
+            from app.services.amazon.serp_api_scraper import scrape_amazon_with_serpapi, extract_asin_from_url
+            
+            print(f"🔍 [PRIMARY] Trying SERP API (fastest method)...", file=sys.stderr)
+            
+            asin = extract_asin_from_url(url)
+            serpapi_result = scrape_amazon_with_serpapi(asin, serpapi_key)
+            
+            if serpapi_result.get("success"):
+                print(f"✅ [PRIMARY] SERP API succeeded! (1-2 seconds)", file=sys.stderr)
+                serpapi_result["scraping_method"] = "serpapi_primary"
+                return serpapi_result
+            else:
+                error = serpapi_result.get("error", "Unknown")
+                print(f"⚠️ [PRIMARY] SERP API failed: {error}", file=sys.stderr)
+                print(f"🔄 [FALLBACK] Trying Playwright as backup...", file=sys.stderr)
+        
+        except Exception as e:
+            print(f"⚠️ SERP API error: {e}", file=sys.stderr)
+            print(f"🔄 [FALLBACK] Trying Playwright...", file=sys.stderr)
+    else:
+        print(f"ℹ️  SERP API key not found (set SERPAPI_API_KEY to enable)", file=sys.stderr)
+        print(f"🔄 Using Playwright instead...", file=sys.stderr)
+    
+    # ========================================
+    # STRATEGY 2: Try Playwright (Real Browser)
+    # ========================================
+    
+    try:
+        from app.services.amazon.playwright_scraper import scrape_amazon_product_playwright
+        
+        print(f"🎭 [FALLBACK] Trying Playwright (real browser, same as RSS scraper)...", file=sys.stderr)
+        
+        playwright_result = scrape_amazon_product_playwright(url)
+        
+        if playwright_result.get("success"):
+            print(f"✅ [FALLBACK] Playwright succeeded! Using real browser data.", file=sys.stderr)
+            playwright_result["scraping_method"] = "playwright_fallback"
+            return playwright_result
+        else:
+            error = playwright_result.get("error", "Unknown")
+            print(f"⚠️ [FALLBACK] Playwright failed: {error}", file=sys.stderr)
+            print(f"🔄 [FINAL FALLBACK] Trying Scrapy as last resort...", file=sys.stderr)
+    
+    except ImportError as e:
+        print(f"⚠️ Playwright not installed: {e}", file=sys.stderr)
+        print(f"💡 Install with: pip install playwright && playwright install chromium", file=sys.stderr)
+        print(f"🔄 [FINAL FALLBACK] Using Scrapy...", file=sys.stderr)
+    
+    except Exception as e:
+        print(f"⚠️ Playwright error: {e}", file=sys.stderr)
+        print(f"🔄 [FINAL FALLBACK] Using Scrapy...", file=sys.stderr)
+    
+    # ========================================
+    # STRATEGY 3: Scrapy Final Fallback
+    # ========================================
     
     # Load anti-blocking settings with fallback
     settings = None
@@ -559,12 +624,15 @@ def scrape_amazon_product(url: str, proxy_url: Optional[str] = None) -> Dict[str
         # Add debugging info
         if anti_blocking_enabled and result.get("success"):
             result["anti_blocking_used"] = True
-            print(f"✅ Scraping successful with anti-blocking features", file=sys.stderr)
+            result["scraping_method"] = "scrapy_fallback"
+            print(f"✅ [FALLBACK] Scrapy succeeded with anti-blocking features", file=sys.stderr)
         elif not result.get("success"):
             error = result.get("error", "Unknown error")
-            print(f"❌ Scraping failed: {error}", file=sys.stderr)
+            print(f"❌ [FALLBACK] Scrapy also failed: {error}", file=sys.stderr)
             if "Blocked" in error or "captcha" in error.lower():
-                print(f"💡 Tip: Consider using a proxy or ScraperAPI for better success rates", file=sys.stderr)
+                print(f"💡 Tip: Both Playwright and Scrapy failed. Consider ScraperAPI or better proxies.", file=sys.stderr)
+        else:
+            result["scraping_method"] = "scrapy_fallback"
         
         return result
         

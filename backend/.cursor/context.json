@@ -74,6 +74,51 @@
         "what": "Modified deduplication to preserve title keywords in bullets",
         "why": "Previous logic removed title keywords from bullets, causing 0-keyword issues despite allocation working",
         "when": "2025-10-25"
+      },
+      {
+        "what": "Fixed SmartRetryMiddleware text decode error",
+        "why": "Amazon returns binary CAPTCHA images - added try-except for response.text access",
+        "when": "2025-10-26"
+      },
+      {
+        "what": "Replaced Scrapy with Playwright for Amazon scraping",
+        "why": "Scrapy easily detected by Amazon - copied working RSS scraper strategy (real browser, stealth mode)",
+        "when": "2025-10-26"
+      },
+      {
+        "what": "Optimized scraper timeouts for 7-layer fallback strategy",
+        "why": "Original 60s per attempt * 7 layers = 420s total, but subprocess timeout was 120s. Reduced to 30s per attempt, increased subprocess to 240s",
+        "when": "2025-10-26"
+      },
+      {
+        "what": "Fixed data structure mismatch between Playwright and pipeline",
+        "why": "Playwright returns flat structure with 'elements', but pipeline expects Scrapy's wrapped 'data' structure. Added normalization in standalone_scraper.py",
+        "when": "2025-10-26"
+      },
+      {
+        "what": "Fixed missing title and bullets fields for SEO runner",
+        "why": "SEO runner expects top-level 'title' field and 'feature-bullets.bullets' key, but Playwright/CloudScraper only returned nested title in elements and used 'text' key. Added title extraction and bullets key to both scrapers, updated wrapper to preserve title field",
+        "when": "2025-10-26"
+      },
+      {
+        "what": "Integrated SERP API as primary scraping method",
+        "why": "SERP API provides 1-2 second response time vs 60+ seconds for Playwright, no blocking/CAPTCHAs, and 100% reliability. Falls back to Playwright then Scrapy if SERP API fails",
+        "when": "2025-10-26"
+      },
+      {
+        "what": "Fixed malformed relevancy_score JSON validation error",
+        "why": "AI occasionally generates 'relevancy_score': ': 10' instead of 'relevancy_score': 10, causing Pydantic validation errors. Added field_validator to sanitize malformed scores",
+        "when": "2025-10-26"
+      },
+      {
+        "what": "Added keywords_duplicated_from_title field to OptimizedContent schema",
+        "why": "Frontend needs to display keywords that are duplicated from title (for SEO reinforcement) separately from unique keywords. Field was being set but Pydantic was stripping it",
+        "when": "2025-10-26"
+      },
+      {
+        "what": "Fixed frontend to display both title and bullet duplicates with yellow badges",
+        "why": "Frontend was only checking keywords_duplicated_from_other_bullets, missing title duplicates. Now checks both and shows appropriate tooltips ('Also in title' vs 'Already in another bullet')",
+        "when": "2025-10-26"
       }
     ]
   },
@@ -107,7 +152,20 @@
       ],
       "deps": [],
       "state": "active",
-      "notes": "User-Agent rotation, proxy rotation, smart retry, delay randomization"
+      "notes": "User-Agent rotation, proxy rotation, smart retry, delay randomization (Scrapy fallback only)"
+    },
+    "playwright_scraper": {
+      "files": [
+        "backend/app/services/amazon/playwright_scraper.py",
+        "backend/app/services/amazon/scraper.py"
+      ],
+      "deps": [
+        "playwright>=1.40.0",
+        "cloudscraper>=1.2.71",
+        "beautifulsoup4>=4.12.0"
+      ],
+      "state": "active",
+      "notes": "Triple-layer scraping: 3 Playwright configs + Scrapy + 3 CloudScraper configs. Random delays, content validation, advanced headers - fully matches RSS scraper approach"
     },
     "proxy_rotation": {
       "files": ["backend/app/services/amazon/anti_blocking/middlewares.py"],
@@ -145,15 +203,21 @@
     }
   },
   "debt": [
-    "Free proxies unreliable - consider paid proxy service for production"
+    "Free proxies unreliable - consider paid proxy service for production",
+    "Scraper needs correct product URL - ensure ASIN matches CSV keywords (makeup sponge vs strawberries)",
+    "Playwright needs browser installation after pip install (playwright install chromium)",
+    "7-layer scraping takes ~120-180s total - consider reducing layers or parallelizing for faster results"
   ],
   "env": {
     "OPENAI_API_KEY": "OpenAI API access",
+    "SERPAPI_API_KEY": "SERP API key for fast Amazon scraping (optional, enables 1-2s scraping vs 60+s)",
     "UPSTASH_REDIS_URL": "Redis connection URL",
     "UPSTASH_REDIS_TOKEN": "Redis authentication",
     "SCRAPER_PROXY_LIST": "Comma-separated proxy list (6 working proxies)",
     "SCRAPER_RETRY_TIMES": "Max retry attempts (7)",
     "RANDOM_DELAY_MIN": "Min delay between requests (5.0s)",
-    "RANDOM_DELAY_MAX": "Max delay between requests (10.0s)"
+    "RANDOM_DELAY_MAX": "Max delay between requests (10.0s)",
+    "PLAYWRIGHT_HEADLESS": "Headless mode: true/false/new (default: new for best stealth)",
+    "PLAYWRIGHT_TIMEOUT_MS": "Page load timeout per attempt (default: 30000ms = 30s)"
   }
 }

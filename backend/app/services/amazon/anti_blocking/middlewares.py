@@ -167,15 +167,23 @@ class SmartRetryMiddleware(RetryMiddleware):
                 reason = "non_text_response"
                 return self._retry(request, reason, spider) or response
             
-            # Check for captcha in response body (only if text-based)
-            if "captcha" in response.text.lower():
+            # ✅ FIX: Safely access response.text - even with text content-type, it might fail
+            try:
+                response_text = response.text
+            except Exception as text_error:
+                safe_log(spider, 'error', f"🚫 Cannot decode response as text: {text_error}")
+                reason = "text_decode_error"
+                return self._retry(request, reason, spider) or response
+            
+            # Check for captcha in response body
+            if "captcha" in response_text.lower():
                 safe_log(spider, 'error', "🚫 CAPTCHA detected - consider using better proxies or slower rate")
                 reason = "captcha_detected"
                 return self._retry(request, reason, spider) or response
             
             # Check for insufficient content (might be blocked)
-            if len(response.text) < 5000:
-                safe_log(spider, 'warning', f"⚠️ Response too small ({len(response.text)} bytes) - might be blocked")
+            if len(response_text) < 5000:
+                safe_log(spider, 'warning', f"⚠️ Response too small ({len(response_text)} bytes) - might be blocked")
                 reason = "insufficient_content"
                 return self._retry(request, reason, spider) or response
             
