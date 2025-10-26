@@ -1254,26 +1254,17 @@ const TestResultsPage = () => {
                   toArr(b?.keywords_included)
                 );
 
-                // Calculate bullets total: exclude keywords already in title to avoid double-counting
-                const currentBulletsTotal = sumVolumes(
-                  currentAllKeywords.filter(
-                    (kw: string) =>
-                      !currentTitleKeywordsList.some(
-                        (titleKw: string) =>
-                          String(kw).toLowerCase() ===
-                          String(titleKw).toLowerCase()
-                      )
-                  )
+                // Calculate bullets total: Use backend's pre-calculated total_search_volume
+                // Backend already filters and calculates volumes correctly per bullet
+                const currentBulletsTotal = curr.reduce(
+                  (sum: number, bullet: any) =>
+                    sum + (bullet?.total_search_volume || 0),
+                  0
                 );
-                const optimizedBulletsTotal = sumVolumes(
-                  optimizedAllKeywords.filter(
-                    (kw: string) =>
-                      !optimizedTitleKeywordsList.some(
-                        (titleKw: string) =>
-                          String(kw).toLowerCase() ===
-                          String(titleKw).toLowerCase()
-                      )
-                  )
+                const optimizedBulletsTotal = opt.reduce(
+                  (sum: number, bullet: any) =>
+                    sum + (bullet?.total_search_volume || 0),
+                  0
                 );
                 // Track suggestions we have already shown across current bullets to avoid repeats
                 const _seenCurrentSuggestions = new Set<string>();
@@ -1342,22 +1333,33 @@ const TestResultsPage = () => {
                                   {toArr(o?.keywords_included).map(
                                     (kw: string, j: number) => {
                                       const isDuplicateFromTitle =
-                                        o?.keywords_duplicated_from_title?.includes(kw);
+                                        o?.keywords_duplicated_from_title?.includes(
+                                          kw
+                                        );
                                       const isDuplicateFromOtherBullets =
-                                        o?.keywords_duplicated_from_other_bullets?.includes(kw);
-                                      
-                                      const isDuplicate = isDuplicateFromTitle || isDuplicateFromOtherBullets;
-                                      
+                                        o?.keywords_duplicated_from_other_bullets?.includes(
+                                          kw
+                                        );
+
+                                      const isDuplicate =
+                                        isDuplicateFromTitle ||
+                                        isDuplicateFromOtherBullets;
+
                                       // Determine tooltip text
                                       let tooltipText = "Unique to this bullet";
-                                      if (isDuplicateFromTitle && isDuplicateFromOtherBullets) {
-                                        tooltipText = "Also in title and other bullets";
+                                      if (
+                                        isDuplicateFromTitle &&
+                                        isDuplicateFromOtherBullets
+                                      ) {
+                                        tooltipText =
+                                          "Also in title and other bullets";
                                       } else if (isDuplicateFromTitle) {
                                         tooltipText = "Also in title";
                                       } else if (isDuplicateFromOtherBullets) {
-                                        tooltipText = "Already in another bullet";
+                                        tooltipText =
+                                          "Already in another bullet";
                                       }
-                                      
+
                                       return (
                                         <Badge
                                           key={j}

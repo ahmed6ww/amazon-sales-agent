@@ -283,23 +283,33 @@ Based on https://sellercentral.amazon.com/help/hub/reference/external/GX5L8BF8GL
 
 ## TASK 4: ADVANCED BULLET POINT RULES (MANDATORY)
 
-### RULE 1: NO TITLE REDUNDANCY (CRITICAL)
-**DO NOT repeat keywords that are already in the optimized title!**
+### RULE 1: NEW KEYWORDS MANDATORY (CRITICAL FOR COVERAGE & VOLUME)
+**EACH bullet MUST use 4-6 NEW keywords from bullet_keywords list (NOT in title)**
 
-**Title keywords to AVOID in bullets**: {title_keywords_used}
+**STRICT SEQUENTIAL ALLOCATION (NON-NEGOTIABLE):**
+The bullet_keywords array is PRE-SORTED BY SEARCH VOLUME (highest first).
+You MUST use them in SEQUENTIAL ORDER:
 
-**Why**: Each bullet should add NEW keywords, not repeat title keywords. This maximizes total keyword coverage.
+- Bullet 1: Use keywords #0, #1, #2, #3 from bullet_keywords (indices 0-3)
+- Bullet 2: Use keywords #4, #5, #6, #7 from bullet_keywords (indices 4-7)
+- Bullet 3: Use keywords #8, #9, #10, #11 from bullet_keywords (indices 8-11)
+- Bullet 4: Use keywords #12, #13, #14, #15 from bullet_keywords (indices 12-15)
+- Bullet 5: Use keywords #16, #17, #18, #19 from bullet_keywords (indices 16-19)
+- Bullet 6: Use keywords #20, #21, #22, #23 from bullet_keywords (indices 20-23)
+
+**WHY SEQUENTIAL?** This ensures highest-volume NEW keywords appear first for maximum SEO impact.
 
 **Example**:
-❌ BAD:
-- Title: "Organic Freeze Dried Strawberry Slices Bulk Pack"
-- Bullet 1: "Made from organic freeze dried strawberries..." ← REPEATS "organic freeze dried"
-- Bullet 2: "Perfect strawberry slices for snacking..." ← REPEATS "strawberry slices"
+✅ CORRECT (Sequential Allocation):
+- bullet_keywords[0-3] = ["foundation sponge" 8K, "makeup blender" 1.7K, "beauty sponge" 3K, "latex free" 277]
+- Bullet 1: "Professional foundation sponge and makeup blender with beauty sponge quality, latex free material for flawless coverage" ← Uses keywords #0-3 in order
 
-✅ GOOD:
-- Title: "Organic Freeze Dried Strawberry Slices Bulk Pack"
-- Bullet 1: "Made from 100% natural fruit with no preservatives..." ← NEW keywords: "natural fruit", "preservatives"
-- Bullet 2: "Perfect healthy snack for kids and adults..." ← NEW keywords: "healthy snack", "kids", "adults"
+❌ WRONG (Random Selection):
+- Bullet 1: Uses keywords #5, #12, #3 ← OUT OF ORDER! REJECTED!
+
+**OPTIONAL:** After including 4+ NEW keywords, you MAY add 1 title keyword for natural flow, but NEW keywords are PRIMARY
+
+**Title keywords available for OPTIONAL reinforcement**: {title_keywords_used}
 
 ### RULE 2: NATURAL, BENEFIT-FOCUSED LANGUAGE
 **Write in natural English, not keyword lists!**
@@ -619,6 +629,15 @@ KEYWORD DATA (PRE-ALLOCATED TO PREVENT DUPLICATION):
 - DO NOT use the same keyword in multiple content types
 - Each keyword can only be used ONCE across all content
 
+**🔥 VOLUME PRIORITIZATION (CRITICAL FOR SEO):**
+- Keywords in bullet_keywords are SORTED BY SEARCH VOLUME (highest first)
+- Use keywords in sequential order across bullets:
+  - Bullet 1: Use first 3-4 keywords from bullet_keywords list
+  - Bullet 2: Use next 3-4 keywords from bullet_keywords list
+  - Bullet 3: Use next 3-4 keywords from bullet_keywords list
+  - Continue pattern for all bullets
+- This ensures highest-volume keywords appear first for maximum SEO impact
+
 **TASK 3 - RULE 4 ENFORCEMENT (NO ROOT DUPLICATION)**:
 When building your title, use this process:
 1. Start with highest value keyword: "{keywords_json[0]}"
@@ -643,24 +662,25 @@ When building your title, use this process:
 **BEFORE YOU SUBMIT YOUR JSON - COMPLETE THIS VALIDATION:**
 
 Step 1: Count your bullets → You created ___ bullets (must equal {bullet_count})
-Step 2: For EACH bullet, count keywords in keywords_included array:
-  - Bullet 1: ___ keywords (minimum 2) ← If < 2, ADD MORE NOW!
-  - Bullet 2: ___ keywords (minimum 2) ← If < 2, ADD MORE NOW!
-  - Bullet 3: ___ keywords (minimum 2) ← If < 2, ADD MORE NOW!
-  - Bullet 4: ___ keywords (minimum 2) ← If < 2, ADD MORE NOW!
-  - Bullet 5: ___ keywords (minimum 2) ← If < 2, ADD MORE NOW!
-  - Bullet 6: ___ keywords (minimum 2) ← If < 2, ADD MORE NOW!
+Step 2: For EACH bullet, count NEW keywords (NOT in title) in keywords_included array:
+  - Bullet 1: ___ NEW keywords (minimum 4) ← If < 4, ADD MORE NOW!
+  - Bullet 2: ___ NEW keywords (minimum 4) ← If < 4, ADD MORE NOW!
+  - Bullet 3: ___ NEW keywords (minimum 4) ← If < 4, ADD MORE NOW!
+  - Bullet 4: ___ NEW keywords (minimum 4) ← If < 4, ADD MORE NOW!
+  - Bullet 5: ___ NEW keywords (minimum 4) ← If < 4, ADD MORE NOW!
+  - Bullet 6: ___ NEW keywords (minimum 4) ← If < 4, ADD MORE NOW!
 
-Step 3: Check distribution → You have bullet_keywords provided
-  - Distribute EVENLY: ~2-3 keywords per bullet across {bullet_count} bullets
-  - Example for 10 keywords / 6 bullets: [2, 2, 2, 2, 1, 1] ✅
-  - Example for 10 keywords / 6 bullets: [3, 3, 2, 2, 0, 0] ❌ WRONG! Bullets 5-6 are empty!
+Step 3: Check SEQUENTIAL distribution → You have bullet_keywords provided
+  - Distribute SEQUENTIALLY: 4 keywords per bullet across {bullet_count} bullets
+  - Example for 48 keywords / 6 bullets: [4, 4, 4, 4, 4, 4] ✅ (keywords #0-3, #4-7, #8-11, etc.)
+  - Example for 48 keywords / 6 bullets: [2, 6, 0, 8, 2, 0] ❌ WRONG! Not sequential, some bullets empty!
 
 **CRITICAL REQUIREMENTS:**
-- You MUST use at least 2 keywords from the allocated bullet_keywords array in EACH bullet point
-- You MUST create exactly {bullet_count} bullet points, each with minimum 2 keywords
+- You MUST use at least 4 NEW keywords from bullet_keywords array in EACH bullet point
+- Use keywords in SEQUENTIAL ORDER: Bullet 1 gets #0-3, Bullet 2 gets #4-7, etc.
+- You MUST create exactly {bullet_count} bullet points, each with minimum 4 NEW keywords
 - You MUST list the exact keywords used in the "keywords_included" field for each bullet
-- FAILURE TO USE AT LEAST 2 KEYWORDS PER BULLET WILL RESULT IN REJECTION
+- FAILURE TO USE AT LEAST 4 NEW KEYWORDS PER BULLET WILL RESULT IN REJECTION
 
 **STRICT REQUIREMENT - TITLE:**
 - Title MUST contain at least 2 keywords from title_keywords array
@@ -668,19 +688,22 @@ Step 3: Check distribution → You have bullet_keywords provided
 
 **STRICT REQUIREMENT - BULLETS:**
 - Create exactly {bullet_count} bullet points (MANDATORY)
-- EVERY bullet point MUST contain at least 2 keywords from bullet_keywords array
-- Distribute keywords evenly across all {bullet_count} bullets
+- EVERY bullet point MUST contain at least 4 NEW keywords from bullet_keywords array (NOT in title)
+- Use keywords in SEQUENTIAL ORDER (Bullet 1: #0-3, Bullet 2: #4-7, etc.)
 - You MUST naturally integrate the keywords into the bullet text
-- Each of the {bullet_count} bullets must have minimum 2 keywords for Amazon SEO effectiveness
+- Each of the {bullet_count} bullets must have minimum 4 NEW keywords for maximum SEO volume
 
 **DISTRIBUTION EXAMPLE ({bullet_count} bullets):**
-If you have 10 bullet_keywords, distribute them like:
-- Bullet 1: 2 keywords ✅ (e.g., ["freeze dried strawberries", "organic strawberries"])
-- Bullet 2: 2 keywords ✅ (e.g., ["bulk strawberries", "strawberry snack"])
-- Bullet 3: 2 keywords ✅ (e.g., ["dried fruit", "no sugar"])
-- Bullet 4: 2 keywords ✅ (e.g., ["healthy snack", "natural fruit"])
-- Bullet 5: 1 keyword ⚠️ (e.g., ["kids snack"] - acceptable if keywords run out)
-- Bullet 6: 1 keyword ⚠️ (e.g., ["travel food"] - acceptable if keywords run out)
+If you have 48 bullet_keywords sorted by volume, distribute them sequentially (4 per bullet):
+- Bullet 1: Use keywords #0-3 ✅ (highest volume: "foundation sponge" 8116, "makeup blender" 1757, "beauty sponge" 3125, "latex free" 277)
+- Bullet 2: Use keywords #4-7 ✅ (next highest: "face sponge" 1200, "concealer" 841, "blending tools" 650, "soft sponge" 400)
+- Bullet 3: Use keywords #8-11 ✅ (next highest volume keywords)
+- Bullet 4: Use keywords #12-15 ✅
+- Bullet 5: Use keywords #16-19 ✅
+- Bullet 6: Use keywords #20-23 ✅
+
+**CRITICAL:** Use keywords in the EXACT ORDER they appear in bullet_keywords array (they're pre-sorted by volume)
+**MINIMUM:** 4 NEW keywords per bullet (can use 5-6 if natural)
 
 ❌ NEVER DO THIS (will be rejected):
 - Bullet 1: 3 keywords

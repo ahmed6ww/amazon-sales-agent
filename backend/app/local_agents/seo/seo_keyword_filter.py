@@ -30,8 +30,10 @@ def validate_and_correct_keywords_included(seo_output: Dict[str, Any], keyword_d
     # Build keyword volumes map for volume calculation
     keyword_volumes = {}
     if keyword_data:
-        # Extract volumes from relevant and design keywords
-        for item in keyword_data.get("relevant_keywords", []) + keyword_data.get("design_keywords", []):
+        # Extract volumes from relevant, design-specific, and branded keywords
+        for item in (keyword_data.get("relevant_keywords", []) + 
+                     keyword_data.get("design_keywords", []) +
+                     keyword_data.get("branded_keywords", [])):
             phrase = item.get("phrase", "")
             volume = item.get("search_volume", 0)
             if phrase:
@@ -44,13 +46,32 @@ def validate_and_correct_keywords_included(seo_output: Dict[str, Any], keyword_d
     if "optimized_title" in corrected:
         title_content = corrected["optimized_title"].get("content", "")
         claimed = corrected["optimized_title"].get("keywords_included", [])
-        actual, _ = extract_keywords_from_content(title_content, claimed)
+        
+        # ALWAYS check ALL keywords in title (Relevant + Design-Specific + Branded)
+        if keyword_data:
+            # Build complete list of keywords to check (including branded)
+            all_possible_phrases = []
+            for item in (keyword_data.get("relevant_keywords", []) + 
+                         keyword_data.get("design_keywords", []) +
+                         keyword_data.get("branded_keywords", [])):
+                phrase = item.get("phrase", "")
+                if phrase:
+                    all_possible_phrases.append(phrase)
+            
+            # Detect ALL keywords actually present in title
+            if all_possible_phrases:
+                actual, _ = extract_keywords_from_content(title_content, all_possible_phrases, keyword_volumes)
+            else:
+                actual, _ = extract_keywords_from_content(title_content, claimed)
+        else:
+            # Fallback: use what AI claimed if no keyword_data available
+            actual, _ = extract_keywords_from_content(title_content, claimed)
         
         corrected["optimized_title"]["keywords_included"] = actual
         stats["title"] = {"claimed": len(claimed), "actual": len(actual)}
         
         if len(claimed) != len(actual):
-            logger.warning(f"⚠️  Title: Removed {len(claimed) - len(actual)} invalid keywords")
+            logger.info(f"   Title: Detected {len(actual)} keywords (AI claimed {len(claimed)})")
         
         logger.info(f"   Title has {len(actual)} keywords")
     
@@ -70,29 +91,28 @@ def validate_and_correct_keywords_included(seo_output: Dict[str, Any], keyword_d
             content = bullet.get("content", "")
             claimed = bullet.get("keywords_included", [])
             
-            # OPTION 2: If AI returned empty keywords_included, try to auto-detect from content
-            if not claimed and keyword_data:
-                logger.warning(f"⚠️  Bullet {i+1}: AI returned empty keywords_included - attempting auto-detection")
-                
-                # Build list of all possible keyword phrases to search for
+            # ALWAYS check ALL keywords in content (Relevant + Design-Specific + Branded)
+            # Don't rely on what AI claimed - detect everything actually present
+            if keyword_data:
+                # Build complete list of keywords to check (including branded)
                 all_possible_phrases = []
-                for item in keyword_data.get("relevant_keywords", []) + keyword_data.get("design_keywords", []):
+                for item in (keyword_data.get("relevant_keywords", []) + 
+                             keyword_data.get("design_keywords", []) +
+                             keyword_data.get("branded_keywords", [])):
                     phrase = item.get("phrase", "")
                     if phrase:
                         all_possible_phrases.append(phrase)
                 
-                # Try to find keywords in the bullet content
+                # Detect ALL keywords actually present in content
                 if all_possible_phrases:
-                    auto_detected, _ = extract_keywords_from_content(content, all_possible_phrases, keyword_volumes)
-                    if auto_detected:
-                        claimed = auto_detected
-                        logger.info(f"   ✅ Auto-detected {len(auto_detected)} keywords: {auto_detected}")
-                    else:
-                        logger.error(f"   ❌ No keywords auto-detected in bullet content - bullet may show 0 volume")
+                    actual, volume = extract_keywords_from_content(content, all_possible_phrases, keyword_volumes)
+                    logger.debug(f"   Bullet {i+1}: Detected {len(actual)} keywords in content")
                 else:
-                    logger.error(f"   ❌ No keyword list available for auto-detection")
-            
-            actual, volume = extract_keywords_from_content(content, claimed, keyword_volumes)
+                    logger.error(f"   ❌ No keyword list available for detection")
+                    actual, volume = [], 0
+            else:
+                # Fallback: use what AI claimed if no keyword_data available
+                actual, volume = extract_keywords_from_content(content, claimed, keyword_volumes)
             
             # Separate into unique, title duplicates, and bullet duplicates
             unique_to_bullet = []
